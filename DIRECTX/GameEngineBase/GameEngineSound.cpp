@@ -3,15 +3,14 @@
 #include "GameEngineDebug.h"
 #include "GameEngineString.h"
 
-
 #pragma comment(lib, "fmod_vc.lib")
 
 FMOD::System* SoundSystem_ = nullptr;
 
-class SoundSystemCreater 
+class SoundSystemCreater
 {
 public:
-	SoundSystemCreater() 
+	SoundSystemCreater()
 	{
 		FMOD::System_Create(&SoundSystem_);
 
@@ -33,16 +32,16 @@ public:
 
 SoundSystemCreater CreateInst = SoundSystemCreater();
 
-GameEngineSound::GameEngineSound() 
+GameEngineSound::GameEngineSound()
 {
 	// FMOD::System_Create();
 }
 
-GameEngineSound::~GameEngineSound() 
+GameEngineSound::~GameEngineSound()
 {
 }
 
-bool GameEngineSound::Load(const std::string& _Path) 
+bool GameEngineSound::Load(const std::string& _Path)
 {
 	if (FMOD_OK != SoundSystem_->createSound(_Path.c_str(), FMOD_LOOP_NORMAL, nullptr, &Sound))
 	{
@@ -59,7 +58,7 @@ GameEngineSoundPlayer GameEngineSound::SoundPlayControl(const std::string& _Name
 {
 	std::string UpperName = GameEngineString::ToUpperReturn(_Name);
 
-	GameEngineSound* FindSound = FindRes(UpperName);
+	GameEngineSound* FindSound = FindRessource(UpperName);
 
 	if (nullptr == FindSound)
 	{
@@ -79,7 +78,7 @@ void GameEngineSound::SoundPlayOneShot(const std::string& _Name, int LoopCount /
 {
 	std::string UpperName = GameEngineString::ToUpperReturn(_Name);
 
-	GameEngineSound* FindSound = FindRes(UpperName);
+	GameEngineSound* FindSound = FindRessource(UpperName);
 
 	if (nullptr == FindSound)
 	{
@@ -93,7 +92,7 @@ void GameEngineSound::SoundPlayOneShot(const std::string& _Name, int LoopCount /
 
 	PlayControl->setLoopCount(LoopCount);
 
-	
+
 
 }
 
@@ -111,7 +110,7 @@ void GameEngineSound::Update()
 std::map<std::string, GameEngineSound*> GameEngineSound::AllRes;
 
 
-GameEngineSound* GameEngineSound::FindRes(const std::string& _Name) 
+GameEngineSound* GameEngineSound::FindRessource(const std::string& _Name)
 {
 	std::string UpperName = GameEngineString::ToUpperReturn(_Name);
 
@@ -124,12 +123,18 @@ GameEngineSound* GameEngineSound::FindRes(const std::string& _Name)
 
 	return FindIter->second;
 }
-GameEngineSound* GameEngineSound::LoadRes(const std::string& _Path)
+
+GameEngineSound* GameEngineSound::LoadRessource(const GameEngineFile& _Path)
+{
+	return LoadRessource(_Path.GetFullPath());
+}
+
+GameEngineSound* GameEngineSound::LoadRessource(const std::string& _Path)
 {
 	GameEnginePath NewPath = GameEnginePath(_Path);
-	return LoadRes(_Path, NewPath.GetFileName());	//경로와 파일이름(ex.idle.bmp)을 Map의 key,value로 넣기위해 각각 넘겨준다.
+	return LoadRessource(_Path, NewPath.GetFileName());	//경로와 파일이름(ex.idle.bmp)을 Map의 key,value로 넣기위해 각각 넘겨준다.
 }
-GameEngineSound* GameEngineSound::LoadRes(const std::string& _Path, const std::string& _Name)
+GameEngineSound* GameEngineSound::LoadRessource(const std::string& _Path, const std::string& _Name)
 {
 	std::string UpperName = GameEngineString::ToUpperReturn(_Name);
 
@@ -165,7 +170,7 @@ void GameEngineSound::AllResourcesDestroy()
 
 ////////////////////////////////////////////////////////// 사운드 플레이어
 
-void GameEngineSoundPlayer::Stop() 
+void GameEngineSoundPlayer::Stop()
 {
 	if (nullptr == ControlHandle_)
 	{
@@ -186,21 +191,21 @@ void GameEngineSoundPlayer::PlaySpeed(float _Speed)
 	ControlHandle_->setPitch(_Speed);
 }
 
-void GameEngineSoundPlayer::Volume(float _Value) 
+void GameEngineSoundPlayer::Volume(float _Value)
 {
 	ControlHandle_->setVolume(_Value);
 }
 
 
 
-GameEngineSoundPlayer::GameEngineSoundPlayer() 
+GameEngineSoundPlayer::GameEngineSoundPlayer()
 	: Sound_(nullptr)
 	, ControlHandle_(nullptr)
 {
 
 }
 
-GameEngineSoundPlayer::GameEngineSoundPlayer(const GameEngineSoundPlayer& _Other) 
+GameEngineSoundPlayer::GameEngineSoundPlayer(const GameEngineSoundPlayer& _Other)
 	: Sound_(_Other.Sound_)
 	, ControlHandle_(_Other.ControlHandle_)
 {
@@ -211,10 +216,10 @@ GameEngineSoundPlayer::GameEngineSoundPlayer(GameEngineSound* _Sound, FMOD::Chan
 	: Sound_(_Sound)
 	, ControlHandle_(_ControlHandle)
 {
-	
+
 }
 
-GameEngineSoundPlayer::~GameEngineSoundPlayer() 
+GameEngineSoundPlayer::~GameEngineSoundPlayer()
 {
 
 }

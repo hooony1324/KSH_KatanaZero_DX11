@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f095cac6-093b-448d-bb52-96642ef30aa6}</ProjectGuid>
-    <RootNamespace>GameEngineBase</RootNamespace>
+    <ProjectGuid>{0c116627-359c-47fd-8d38-f8a842e8800d}</ProjectGuid>
+    <RootNamespace>GameEngineCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -78,13 +78,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\$(PlatformTarget)\</OutDir>
-    <IntDir>$(SolutionDir)Bin\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\$(PlatformTarget)\</OutDir>
-    <IntDir>$(SolutionDir)Bin\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,7 +88,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,7 +102,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,54 +145,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameEngineDebug.cpp" />
-    <ClCompile Include="GameEngineDirectory.cpp" />
-    <ClCompile Include="GameEngineFile.cpp" />
-    <ClCompile Include="GameEngineInput.cpp" />
-    <ClCompile Include="GameEngineMath.cpp" />
-    <ClCompile Include="GameEngineNameObject.cpp" />
-    <ClCompile Include="GameEnginePath.cpp" />
-    <ClCompile Include="GameEngineRandom.cpp" />
-    <ClCompile Include="GameEngineReadFile.cpp" />
-    <ClCompile Include="GameEngineSound.cpp" />
-    <ClCompile Include="GameEngineString.cpp" />
-    <ClCompile Include="GameEngineTime.cpp" />
-    <ClCompile Include="GameEngineUpdateObject.cpp" />
-    <ClCompile Include="GameEngineWindow.cpp" />
-    <ClCompile Include="GameEngineWriteFile.cpp" />
+    <ClInclude Include="GameEngineActor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineCore.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineStateManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameEngineDebug.h" />
-    <ClInclude Include="GameEngineDirectory.h" />
-    <ClInclude Include="GameEngineFile.h" />
-    <ClInclude Include="GameEngineInput.h" />
-    <ClInclude Include="GameEngineMath.h" />
-    <ClInclude Include="GameEngineNameObject.h" />
-    <ClInclude Include="GameEnginePath.h" />
-    <ClInclude Include="GameEngineRandom.h" />
-    <ClInclude Include="GameEngineReadFile.h" />
-    <ClInclude Include="GameEngineSound.h" />
-    <ClInclude Include="GameEngineString.h" />
-    <ClInclude Include="GameEngineTime.h" />
-    <ClInclude Include="GameEngineUpdateObject.h" />
-    <ClInclude Include="GameEngineWindow.h" />
-    <ClInclude Include="GameEngineWriteFile.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="ThirdParty\bin\fmodL_vc.lib">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="ThirdParty\bin\fmod_vc.lib">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="ThirdParty\bin\fmod.dll">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="ThirdParty\bin\fmodL.dll">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
+    <ClCompile Include="GameEngineActor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineCore.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineStateManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
