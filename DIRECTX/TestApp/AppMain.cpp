@@ -1,12 +1,10 @@
 #include <Windows.h>
 
 #pragma comment(lib, "GameEngineBase.lib")
+#pragma comment(lib, "GameEngineCore.lib")
+#pragma comment(lib, "GameEngineContents.lib")
 
-#include <GameEngineBase/GameEngineDebug.h>
-#include <GameEngineBase/GameEngineDirectory.h>
-#include <GameEngineBase/GameEngineFile.h>
-#include <GameEngineBase/GameEngineSound.h>
-#include <GameEngineBase/GameEngineWindow.h>
+#include <GameEngineContents/TestContentsCore.h>
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -14,32 +12,37 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
-	GameEngineDirectory Dir;
+	//GameEngineDirectory Dir;
 
-	if (false == Dir.MoveParentToExitsChildDirectory("Resources"))
-	{
-		MsgBoxAssert("경로를 찾지 못했습니다.");
-		return 0;
-	}
+	//if (false == Dir.MoveParentToExitsChildDirectory("Resources"))
+	//{
+	//	MsgBoxAssert("경로를 찾지 못했습니다.");
+	//	return 0;
+	//}
 
-	Dir.Move("Resources");
-	Dir.Move("Sound");
+	//Dir.Move("Resources");
+	//Dir.Move("Sound");
 
-	std::vector<GameEngineFile> Files = Dir.GetAllFile();
+	//std::vector<GameEngineFile> Files = Dir.GetAllFile();
 
-	// Range for
-	// Files 특정한 오퍼레이터가 되어있으면 
-	for (GameEngineFile& File : Files)
-	{
-		GameEngineSound::LoadRessource(File);
-	}
+	//// Range for
+	//// Files 특정한 오퍼레이터가 되어있으면 
+	//for (GameEngineFile& File : Files)
+	//{
+	//	GameEngineSound::LoadRessource(File);
+	//}
 
-	GameEngineSound::SoundPlayOneShot("BGM.mp3");
+	//GameEngineSound::SoundPlayOneShot("BGM.mp3");
 
-	while (true)
-	{
-		GameEngineSound::Update();
-	}
+	//while (true)
+	//{
+	//	GameEngineSound::Update();
+	// 
+	//}
+
+
+	GameEngineCore::Start<TestContentsCore>();
+
 
 	return 0;
 }

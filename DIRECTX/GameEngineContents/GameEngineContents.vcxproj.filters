@@ -4,5 +4,18 @@
     <Filter Include="Contents">
       <UniqueIdentifier>{434ada6d-9237-4a74-bca2-8a4ba38998f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestContentsCore.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TestContentsCore.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
