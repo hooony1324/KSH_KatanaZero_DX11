@@ -2,6 +2,8 @@
 
 #pragma comment(lib, "GameEngineBase.lib")
 
+#include "GameEngineContents/TestLevel.h"
+
 TestContentsCore::TestContentsCore()
 	: GameEngineCore()
 {
@@ -11,9 +13,15 @@ TestContentsCore::~TestContentsCore()
 {
 }
 
-void TestContentsCore::UserGameStart()
+void TestContentsCore::UserStart()
 {
 	// 리소스를 로드하는데.
+
+	// RTTI 런 타임 타입 인포메이션
+	CreateLevel<TestLevel>("Test");
+
+	ChangeLevel("Test");
+
 
 	// 게임컨텐츠 정의
 	// 이 게임에는 타이틀화면
@@ -21,13 +29,11 @@ void TestContentsCore::UserGameStart()
 	//            스테이지2
 }
 
-void TestContentsCore::UserGameUpdate()
+void TestContentsCore::UserUpdate(float _DeltaTime)
 {
-	// 서버가 종료되었어.
-	// 무조건 경고 메세지창을 띄워줘야한다.
 }
 
-void TestContentsCore::UserGameEnd()
+void TestContentsCore::UserEnd()
 {
 	int a = 0;
 }

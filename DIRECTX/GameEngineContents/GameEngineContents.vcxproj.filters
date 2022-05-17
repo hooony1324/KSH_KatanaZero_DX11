@@ -12,10 +12,16 @@
     <ClInclude Include="TestContentsCore.h">
       <Filter>Contents</Filter>
     </ClInclude>
+    <ClInclude Include="TestLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestContentsCore.cpp">
       <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLevel.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
