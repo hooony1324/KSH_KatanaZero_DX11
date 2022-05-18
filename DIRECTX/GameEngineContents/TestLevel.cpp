@@ -8,14 +8,14 @@ TestLevel::~TestLevel()
 {
 }
 
-void TestLevel::UserStart()
+void TestLevel::Start()
 {
 }
 
-void TestLevel::UserUpdate(float _DeltaTime)
+void TestLevel::Update(float _DeltaTime)
 {
 }
 
-void TestLevel::UserEnd()
+void TestLevel::End()
 {
 }

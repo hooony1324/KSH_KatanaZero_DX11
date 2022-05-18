@@ -16,9 +16,9 @@ public:
 	TestLevel& operator=(TestLevel&& _Other) noexcept = delete;
 
 protected:
-	virtual void UserStart() override;
-	virtual void UserUpdate(float _DeltaTime) override;
-	virtual void UserEnd() override;
+	virtual void Start() override;
+	virtual void Update(float _DeltaTime) override;
+	virtual void End() override;
 
 private:
 

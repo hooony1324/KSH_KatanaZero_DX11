@@ -13,7 +13,7 @@ TestContentsCore::~TestContentsCore()
 {
 }
 
-void TestContentsCore::UserStart()
+void TestContentsCore::Start()
 {
 	// 리소스를 로드하는데.
 
@@ -29,11 +29,11 @@ void TestContentsCore::UserStart()
 	//            스테이지2
 }
 
-void TestContentsCore::UserUpdate(float _DeltaTime)
+void TestContentsCore::Update(float _DeltaTime)
 {
 }
 
-void TestContentsCore::UserEnd()
+void TestContentsCore::End()
 {
 	int a = 0;
 }

@@ -10,14 +10,17 @@
     <Filter Include="Object">
       <UniqueIdentifier>{e8f887f5-f424-4ad2-841a-f16e29a6d616}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Collision">
-      <UniqueIdentifier>{747d9495-9455-41d4-8186-cd610789ec6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Rendering">
-      <UniqueIdentifier>{d22526cb-e6e7-4155-9fb0-f85cfacdb7e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{4562ff68-b8ea-43b4-b2f6-35a87402128b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component">
+      <UniqueIdentifier>{443547a2-de4a-412b-93df-1a3b279f16fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Rendering">
+      <UniqueIdentifier>{d22526cb-e6e7-4155-9fb0-f85cfacdb7e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Collision">
+      <UniqueIdentifier>{747d9495-9455-41d4-8186-cd610789ec6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +36,13 @@
     <ClInclude Include="GameEngineLevel.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="GEngine.h" />
+    <ClInclude Include="GameEngineRenderer.h">
+      <Filter>Object\Component\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineComponent.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineStateManager.cpp">
@@ -46,6 +56,13 @@
     </ClCompile>
     <ClCompile Include="GameEngineLevel.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GEngine.cpp" />
+    <ClCompile Include="GameEngineRenderer.cpp">
+      <Filter>Object\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineComponent.cpp">
+      <Filter>Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

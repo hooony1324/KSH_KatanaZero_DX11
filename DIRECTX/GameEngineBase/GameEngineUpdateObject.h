@@ -97,13 +97,13 @@ protected:
 	virtual void OffEvent() {}
 
 	// 이 오브젝트가 만들어졌다.
-	virtual void UserStart() = 0;
+	virtual void Start() = 0;
 
 	// 이 오브젝트가 프레임구조안에서 돌고 있다.
-	virtual void UserUpdate(float _DeltaTime) = 0;
+	virtual void Update(float _DeltaTime) = 0;
 
 	// 이 오브젝트가 메모리가 삭제된다.
-	virtual void UserEnd() = 0;
+	virtual void End() = 0;
 
 private:
 	int Order_;
