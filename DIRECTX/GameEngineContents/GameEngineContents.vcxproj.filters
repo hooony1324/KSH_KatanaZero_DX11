@@ -7,6 +7,9 @@
     <Filter Include="Level">
       <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{841dd79c-eefd-4349-a9b3-5e026d472ccf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestContentsCore.h">
@@ -14,6 +17,9 @@
     </ClInclude>
     <ClInclude Include="TestLevel.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
