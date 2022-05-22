@@ -47,6 +47,9 @@ bool GameEngineCore::ChangeLevel(const std::string& _Name)
 
 void GameEngineCore::CoreStart(GameEngineCore* _UserCore)
 {
+	// 엔진 리소스는 완성되어야 합니다.
+	EngineResourcesInitialize();
+
 	// 엔진이 뭔가를 할겁니다.
 	// 준비를 먼저하고.
 	_UserCore->Start();
@@ -107,6 +110,8 @@ void GameEngineCore::CoreEnd(GameEngineCore* _UserCore)
 		delete Level.second;
 		Level.second = nullptr;
 	}
+
+	EngineResourcesDestroy();
 
 	GameEngineWindow::Destroy();
 	GameEngineInput::Destroy();
