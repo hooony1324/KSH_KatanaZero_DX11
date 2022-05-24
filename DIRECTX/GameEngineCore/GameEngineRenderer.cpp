@@ -21,10 +21,11 @@ void GameEngineRenderer::Start()
 	GetActor()->GetLevel()->PushRenderer(this);
 }
 
+float Degree = 0.0f;
 void GameEngineRenderer::Render(float _DeltaTime)
 {
-	GameEngineVertexBuffer* Vertex = GameEngineVertexBuffer::Find("Rect");
-	GameEngineIndexBuffer* Index = GameEngineIndexBuffer::Find("Rect");
+	GameEngineVertexBuffer* Vertex = GameEngineVertexBuffer::Find("Box");
+	GameEngineIndexBuffer* Index = GameEngineIndexBuffer::Find("Box");
 
 	std::vector<POINT> DrawVertex;
 	DrawVertex.resize(Index->Indexs.size());
@@ -32,7 +33,7 @@ void GameEngineRenderer::Render(float _DeltaTime)
 	std::vector<float4> CopyBuffer;
 	CopyBuffer.resize(Index->Indexs.size());
 
-
+	Degree += _DeltaTime * 90.0f;
 
 	for (size_t i = 0; i < Index->Indexs.size(); i++)
 	{
@@ -46,7 +47,9 @@ void GameEngineRenderer::Render(float _DeltaTime)
 		CopyBuffer[i] *= GetActor()->GetTransform().GetScale();
 
 		// 자전
-		// CopyBuffer[TriIndex] *= GetActor()->GetTransform().GetScale();
+		CopyBuffer[i] = float4::VectorRotationToDegreeXAxis(CopyBuffer[i], Degree);
+		CopyBuffer[i] = float4::VectorRotationToDegreeYAxis(CopyBuffer[i], Degree);
+		CopyBuffer[i] = float4::VectorRotationToDegreeZAxis(CopyBuffer[i], Degree);
 
 		// 이동
 		CopyBuffer[i] += GetActor()->GetTransform().GetPosition();
