@@ -21,9 +21,10 @@ void GameEngineRenderer::Start()
 	GetActor()->GetLevel()->PushRenderer(this);
 }
 
-float Degree = 0.0f;
+
 void GameEngineRenderer::Render(float _DeltaTime)
 {
+	// 랜더링
 	GameEngineVertexBuffer* Vertex = GameEngineVertexBuffer::Find("Box");
 	GameEngineIndexBuffer* Index = GameEngineIndexBuffer::Find("Box");
 
@@ -33,28 +34,26 @@ void GameEngineRenderer::Render(float _DeltaTime)
 	std::vector<float4> CopyBuffer;
 	CopyBuffer.resize(Index->Indexs.size());
 
-	Degree += _DeltaTime * 90.0f;
+	float4x4 Scale;
+	float4x4 Position;
+	float4x4 Rotate;
+	float4x4 World;
+
+	Scale.Scale(GetActor()->GetTransform().GetScale());
+	Position.Postion(GetActor()->GetTransform().GetPosition());
+	Rotate.RotationRadian(GetActor()->GetTransform().GetRotation());
+
+	World = Scale * Rotate * Position;
 
 	for (size_t i = 0; i < Index->Indexs.size(); i++)
 	{
 		int TriIndex = Index->Indexs[i];
 
 		// 0 번째 순서의 점이 됩니다.
+		// 최초에 원본 매쉬의 점을 복사합니다.
 		CopyBuffer[i] = Vertex->Vertexs[TriIndex];
 
-		// [0.5f] [0.5f] []                  [100] [100] [] 
-		// 크
-		CopyBuffer[i] *= GetActor()->GetTransform().GetScale();
-
-		// 자전
-		CopyBuffer[i] = float4::VectorRotationToDegreeXAxis(CopyBuffer[i], Degree);
-		CopyBuffer[i] = float4::VectorRotationToDegreeYAxis(CopyBuffer[i], Degree);
-		CopyBuffer[i] = float4::VectorRotationToDegreeZAxis(CopyBuffer[i], Degree);
-
-		// 이동
-		CopyBuffer[i] += GetActor()->GetTransform().GetPosition();
-
-
+		CopyBuffer[i] = CopyBuffer[i] * World;
 
 		DrawVertex[i] = CopyBuffer[i].GetConvertWindowPOINT();
 	}

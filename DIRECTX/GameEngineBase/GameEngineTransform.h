@@ -34,10 +34,47 @@ public:
 	{
 		Scale = _Value;
 	}
-	inline void SetRotation(const float4& _Value)
+
+	void SetRotationXDegree(const float _Value)
+	{
+		SetRotationXRadian(_Value * GameEngineMath::DegreeToRadian);
+	}
+
+	void SetRotationXRadian(const float _Value)
+	{
+		Rotation.x = _Value;
+	}
+
+	void SetRotationYDegree(const float _Value)
+	{
+		SetRotationYRadian(_Value * GameEngineMath::DegreeToRadian);
+	}
+
+	void SetRotationYRadian(const float _Value)
+	{
+		Rotation.y = _Value;
+	}
+
+	void SetRotationZDegree(const float _Value)
+	{
+		SetRotationZRadian(_Value * GameEngineMath::DegreeToRadian);
+	}
+
+	void SetRotationZRadian(const float _Value)
+	{
+		Rotation.z = _Value;
+	}
+
+	void SetRotationDegree(const float4& _Value)
+	{
+		SetRotationRadian(_Value * GameEngineMath::DegreeToRadian);
+	}
+
+	void SetRotationRadian(const float4& _Value)
 	{
 		Rotation = _Value;
 	}
+
 	inline void SetPosition(const float4& _Value)
 	{
 		Position = _Value;

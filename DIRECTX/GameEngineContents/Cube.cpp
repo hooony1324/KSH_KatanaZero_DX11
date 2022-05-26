@@ -17,8 +17,13 @@ void Cube::Start()
 	GetTransform().SetPosition(GameEngineWindow::GetScale().Half());
 }
 
+float TimeAngle = 0.0f;
+
 void Cube::Update(float _DeltaTime)
 {
+	TimeAngle += _DeltaTime * 20.0f;
+
+	GetTransform().SetRotationDegree({ TimeAngle, TimeAngle, TimeAngle });
 }
 
 void Cube::End()

@@ -1,13 +1,21 @@
 #pragma once
 #include <math.h>
 #include <Windows.h>
+#include <d3d11_4.h>
+#include <d3dcompiler.h>
+#include <DirectXPackedVector.h>
+
+#pragma comment(lib, "d3d11")
+#pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "dxguid")
+
 
 // 설명 :
 class GameEngineMath
 {
 public:
-	static const float PIE;
-	static const float PIE2;
+	static const float PI;
+	static const float PI2;
 	static const float DEG;
 	static const float DegreeToRadian;
 	static const float RadianToDegree;
@@ -60,7 +68,7 @@ public:
 
 		if (_Postion.y > _Target.y)
 		{
-			Angle = GameEngineMath::PIE2 - Angle;
+			Angle = GameEngineMath::PI2 - Angle;
 		}
 
 		return Angle;
@@ -74,13 +82,22 @@ public:
 
 	static float4 RadianToDirection2D(float _Radian)
 	{
-		return { cosf(_Radian) , sinf(_Radian)  };
+		return { cosf(_Radian) , sinf(_Radian) };
 	}
 
 	static float4 VectorRotationToDegreeZAxis(const float4& _Value, float _Degree)
 	{
 		return VectorRotationToRadianZAxis(_Value, _Degree * GameEngineMath::DegreeToRadian);
 	}
+
+	// 회전     크기       
+	// 
+	//[][][][] [][][][]   
+	//[][][][]*[][][][] * 
+	//[][][][] [][][][]   
+	//[][][][] [][][][]   
+
+	// x * cosf(_Radian) + y * 
 
 	static float4 VectorRotationToRadianZAxis(const float4& _Value, float _Radian)
 	{
@@ -111,6 +128,9 @@ public:
 		return VectorRotationToRadianXAxis(_Value, _Degree * GameEngineMath::DegreeToRadian);
 	}
 
+	// [][] * cosf   -sinf
+	// [][]   sinf   cosf
+
 	static float4 VectorRotationToRadianXAxis(const float4& _Value, float _Radian)
 	{
 		float4 Rot;
@@ -122,13 +142,13 @@ public:
 
 
 
-	static float4 Lerp(float4 p1, float4 p2, float Time)
+	static float4 Lerp(const float4& p1, const float4& p2, float Time)
 	{
 		return p1 * (1.0f - Time) + p2 * Time;
 	}
 
 	// 보통 누적된 시간을 Time
-	static float4 LerpLimit(float4 p1, float4 p2, float Time)
+	static float4 LerpLimit(const float4& p1, const float4& p2, float Time)
 	{
 		if (1.0f <= Time)
 		{
@@ -138,9 +158,17 @@ public:
 		return Lerp(p1, p2, Time);
 	}
 
+	//           []
+	//           []
+	//           []
+	// [][][][]  []
 
-	//X = P1X * cosf(40) - P1Y * sinf(40)
-	//Y = P1X * sinf(40) + P1Y * cosf(40)
+	static float DotProduct3D(const float4& _Left, const float4& _Right)
+	{
+		float fValue = _Left.x * _Right.x + _Left.y * _Right.y + _Left.z * _Right.z;
+		// DirectX::XMVector3Dot
+		return fValue;
+	}
 
 
 
@@ -152,13 +180,21 @@ public:
 	static const float4 ZERO;
 	static const float4 ONE;
 
-	
+
 
 public:
-	float x;
-	float y;
-	float z;
-	float w;
+	union
+	{
+		struct
+		{
+			float x;
+			float y;
+			float z;
+			float w;
+		};
+
+		float Arr1D[4];
+	};
 
 public:
 	bool IsZero2D() const
@@ -187,7 +223,7 @@ public:
 		return static_cast<int>(w);
 	}
 
-	POINT GetConvertWindowPOINT() 
+	POINT GetConvertWindowPOINT()
 	{
 		return POINT(ix(), iy());
 	}
@@ -249,7 +285,10 @@ public:
 	}
 
 
-
+	float& operator[](int _Index)
+	{
+		return Arr1D[_Index];
+	}
 
 
 	float4 operator-(const float4& _Other) const
@@ -448,9 +487,155 @@ public:
 
 class float4x4
 {
+public:
 	union
 	{
 		float Arr1D[16];
 		float Arr2D[4][4];
 	};
+
+public:
+	float4x4() {
+		Identity();
+	}
+
+public:
+	void Identity()
+	{
+		memset(Arr1D, 0, sizeof(float) * 16);
+		Arr2D[0][0] = 1.0f;
+		Arr2D[1][1] = 1.0f;
+		Arr2D[2][2] = 1.0f;
+		Arr2D[3][3] = 1.0f;
+	}
+
+	void Scale(const float4& _Value)
+	{
+		Identity();
+		Arr2D[0][0] = _Value.x;
+		Arr2D[1][1] = _Value.y;
+		Arr2D[2][2] = _Value.z;
+		Arr2D[3][3] = 1.0f;
+	}
+
+	void Postion(const float4& _Value)
+	{
+		Identity();
+		Arr2D[3][0] = _Value.x;
+		Arr2D[3][1] = _Value.y;
+		Arr2D[3][2] = _Value.z;
+		Arr2D[3][3] = 1.0f;
+	}
+
+	void RotationXDegree(const float _Value)
+	{
+		RotationXRadian(_Value);
+	}
+
+	void RotationXRadian(const float _Value)
+	{
+		Arr2D[1][1] = cosf(_Value);
+		Arr2D[1][2] = sinf(_Value);
+		Arr2D[2][1] = -sinf(_Value);
+		Arr2D[2][2] = cosf(_Value);
+	}
+
+	void RotYDegree(const float _Value)
+	{
+		RotationYRadian(_Value);
+	}
+
+	void RotationYRadian(const float _Value)
+	{
+		Arr2D[0][0] = cosf(_Value);
+		Arr2D[0][2] = -sinf(_Value);
+		Arr2D[2][0] = sinf(_Value);
+		Arr2D[2][2] = cosf(_Value);
+	}
+
+	void RotationZDegree(const float _Value)
+	{
+		RotationZRadian(_Value * GameEngineMath::DegreeToRadian);
+	}
+
+	void RotationZRadian(const float _Value)
+	{
+		Arr2D[0][0] = cosf(_Value);
+		Arr2D[0][1] = sinf(_Value);
+		Arr2D[1][0] = -sinf(_Value);
+		Arr2D[1][1] = cosf(_Value);
+	}
+
+
+	void RotationDegree(const float4& _Value)
+	{
+		RotationRadian(_Value * GameEngineMath::DegreeToRadian);
+	}
+
+	void RotationRadian(const float4& _Value)
+	{
+		float4x4 XRot;
+		float4x4 YRot;
+		float4x4 ZRot;
+		XRot.RotationXRadian(_Value.x);
+		YRot.RotationYRadian(_Value.y);
+		ZRot.RotationZRadian(_Value.z);
+
+		*this = XRot * YRot * ZRot;
+	}
+
+
+	//               바라보고 있는 위치
+	void View(const float4& _EyePostion, const float4& _Up)
+	{
+
+	}
+
+
+public: // 연산자
+	float4x4 operator*(const float4x4& _Value)
+	{
+		float4x4 Result;
+
+		float x = Arr2D[0][0];
+		float y = Arr2D[0][1];
+		float z = Arr2D[0][2];
+		float w = Arr2D[0][3];
+		// Perform the operation on the first row
+		Result.Arr2D[0][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
+		Result.Arr2D[0][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
+		Result.Arr2D[0][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
+		Result.Arr2D[0][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
+		// Repeat for all the other rows
+		x = Arr2D[1][0];
+		y = Arr2D[1][1];
+		z = Arr2D[1][2];
+		w = Arr2D[1][3];
+		Result.Arr2D[1][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
+		Result.Arr2D[1][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
+		Result.Arr2D[1][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
+		Result.Arr2D[1][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
+		x = Arr2D[2][0];
+		y = Arr2D[2][1];
+		z = Arr2D[2][2];
+		w = Arr2D[2][3];
+		Result.Arr2D[2][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
+		Result.Arr2D[2][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
+		Result.Arr2D[2][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
+		Result.Arr2D[2][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
+		x = Arr2D[3][0];
+		y = Arr2D[3][1];
+		z = Arr2D[3][2];
+		w = Arr2D[3][3];
+		Result.Arr2D[3][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
+		Result.Arr2D[3][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
+		Result.Arr2D[3][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
+		Result.Arr2D[3][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
+		return Result;
+
+	}
 };
+
+float4 operator*(const float4& _Vector, const float4x4& _Value);
+float4& operator*=(float4& _Vector, const float4x4& _Value);
+
