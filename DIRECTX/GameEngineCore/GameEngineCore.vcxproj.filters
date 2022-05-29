@@ -55,6 +55,12 @@
     <ClInclude Include="GameEngineRes.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineTransformComponent.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineCamera.h">
+      <Filter>Object\Component\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineStateManager.cpp">
@@ -90,6 +96,12 @@
     </ClCompile>
     <ClCompile Include="GameEngineCore_Resources.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineTransformComponent.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineCamera.cpp">
+      <Filter>Object\Component\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

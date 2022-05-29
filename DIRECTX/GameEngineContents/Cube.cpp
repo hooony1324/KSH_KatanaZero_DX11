@@ -12,9 +12,15 @@ Cube::~Cube()
 
 void Cube::Start()
 {
+	auto val = GetTransform().GetLocalScale();
+
+	GetTransform().SetLocalPosition(GameEngineWindow::GetScale().Half());
+
+
 	GameEngineRenderer* Renderer = CreateComponent<GameEngineRenderer>();
-	GetTransform().SetScale({ 100, 100, 100 });
-	GetTransform().SetPosition(GameEngineWindow::GetScale().Half());
+	Renderer->GetTransform().SetLocalPosition({ 100, 0, 0 });
+	Renderer->GetTransform().SetLocalScale({ 100, 100, 100 });
+	
 }
 
 float TimeAngle = 0.0f;
@@ -23,7 +29,7 @@ void Cube::Update(float _DeltaTime)
 {
 	TimeAngle += _DeltaTime * 20.0f;
 
-	GetTransform().SetRotationDegree({ TimeAngle, TimeAngle, TimeAngle });
+	GetTransform().SetLocalRotation({ TimeAngle, TimeAngle, TimeAngle });
 }
 
 void Cube::End()

@@ -34,16 +34,7 @@ void GameEngineRenderer::Render(float _DeltaTime)
 	std::vector<float4> CopyBuffer;
 	CopyBuffer.resize(Index->Indexs.size());
 
-	float4x4 Scale;
-	float4x4 Position;
-	float4x4 Rotate;
-	float4x4 World;
 
-	Scale.Scale(GetActor()->GetTransform().GetScale());
-	Position.Postion(GetActor()->GetTransform().GetPosition());
-	Rotate.RotationRadian(GetActor()->GetTransform().GetRotation());
-
-	World = Scale * Rotate * Position;
 
 	for (size_t i = 0; i < Index->Indexs.size(); i++)
 	{
@@ -53,7 +44,7 @@ void GameEngineRenderer::Render(float _DeltaTime)
 		// 최초에 원본 매쉬의 점을 복사합니다.
 		CopyBuffer[i] = Vertex->Vertexs[TriIndex];
 
-		CopyBuffer[i] = CopyBuffer[i] * World;
+		CopyBuffer[i] = CopyBuffer[i] * GetTransform().GetWorldWorld();
 
 		DrawVertex[i] = CopyBuffer[i].GetConvertWindowPOINT();
 	}
