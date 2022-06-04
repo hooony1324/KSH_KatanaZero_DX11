@@ -5,13 +5,19 @@
 #include <map>
 
 // 설명 : 화면(타이틀 화면, 플레이 화면, 인벤토리 화면)
+class GameEngineCore;
 class GameEngineActor;
+class GameEngineCamera;
+class GameEngineRenderer;
+class GameEngineTransform;
+class GameEngineCameraActor;
 class GameEngineLevel :
-	public GameEngineNameObject,
+	public GameEngineNameObject ,
 	public GameEngineUpdateObject
 {
-	friend class GameEngineRenderer;
-	friend class GameEngineCore;
+	friend GameEngineCore;
+	friend GameEngineCamera;
+	friend GameEngineRenderer;
 	// 레벨이 현재까지 얼마나 켜져있었는지 시간을 잴수 있게 한다.
 
 public:
@@ -25,6 +31,13 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
+	GameEngineCamera* GetMainCamera() 
+	{
+		return MainCamera;
+	}
+
+	GameEngineTransform& GetMainCameraActorTransform();
+
 protected:
 	//template<typename ReturnType, typename ActorType, typename GroupIndexType>
 	//ReturnType* CreateActor(GroupIndexType _ObjectGroupIndex)
@@ -33,13 +46,13 @@ protected:
 	//}
 
 	template<typename ActorType, typename GroupIndexType>
-	GameEngineActor* CreateActor(GroupIndexType _ObjectGroupIndex)
+	ActorType* CreateActor(GroupIndexType _ObjectGroupIndex)
 	{
 		return CreateActor<ActorType>(static_cast<int>(_ObjectGroupIndex));
 	}
 
 	template<typename ActorType>
-	GameEngineActor* CreateActor(int _ObjectGroupIndex = 0)
+	ActorType* CreateActor(int _ObjectGroupIndex = 0)
 	{
 		GameEngineActor* NewActor = new ActorType();
 		NewActor->ParentLevel = this;
@@ -53,7 +66,7 @@ protected:
 
 		Group.push_back(NewActor);
 
-		return NewActor;
+		return dynamic_cast<ActorType*>(NewActor);
 	}
 
 
@@ -72,7 +85,11 @@ private:
 	// 0번 백그라운드
 	// 1번 플레이어
 	// 2번 UI
-	std::map<int, std::list<class GameEngineRenderer*>> AllRenderer_;
+	GameEngineCamera* MainCamera;
+
+	GameEngineCamera* UIMainCamera;
+
+	void PushCamera(GameEngineCamera* _Camera);
 
 	void PushRenderer(GameEngineRenderer* _Renderer);
 

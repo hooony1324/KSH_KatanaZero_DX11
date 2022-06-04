@@ -159,6 +159,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="GameEngineCameraActor.h" />
     <ClInclude Include="GameEngineComponent.h">
       <SubType>
       </SubType>
@@ -213,6 +214,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="GameEngineCameraActor.cpp" />
     <ClCompile Include="GameEngineComponent.cpp">
       <SubType>
       </SubType>

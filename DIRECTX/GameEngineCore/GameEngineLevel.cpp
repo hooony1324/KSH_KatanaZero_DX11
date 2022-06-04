@@ -1,12 +1,15 @@
 #include "GameEngineLevel.h"
 #include "GameEngineActor.h"
 #include "GameEngineRenderer.h"
+#include "GameEngineCamera.h"
 
-GameEngineLevel::GameEngineLevel()
+GameEngineLevel::GameEngineLevel() 
+	: MainCamera(nullptr)
+	, UIMainCamera(nullptr)
 {
 }
 
-GameEngineLevel::~GameEngineLevel()
+GameEngineLevel::~GameEngineLevel() 
 {
 	for (const std::pair<int, std::list<GameEngineActor*>>& Group : AllActors)
 	{
@@ -50,19 +53,22 @@ void GameEngineLevel::ActorUpdate(float _DelataTime)
 
 void GameEngineLevel::PushRenderer(GameEngineRenderer* _Renderer)
 {
-	AllRenderer_[_Renderer->GetOrder()].push_back(_Renderer);
+	MainCamera->PushRenderer(_Renderer);
+}
+
+void GameEngineLevel::PushCamera(GameEngineCamera* _Camera)
+{
+	MainCamera = _Camera;
+}
+
+GameEngineTransform& GameEngineLevel::GetMainCameraActorTransform()
+{
+	return MainCamera->GetActor()->GetTransform();
 }
 
 void GameEngineLevel::Render(float _DelataTime)
 {
-	for (const std::pair<int, std::list<GameEngineRenderer*>>& Group : AllRenderer_)
-	{
-		float ScaleTime = GameEngineTime::GetInst()->GetDeltaTime(Group.first);
-		for (GameEngineRenderer* const Actor : Group.second)
-		{
-			Actor->Render(ScaleTime);
-		}
-	}
+	MainCamera->Render(_DelataTime);
 }
 
 void GameEngineLevel::LevelUpdate(float _DeltaTime)

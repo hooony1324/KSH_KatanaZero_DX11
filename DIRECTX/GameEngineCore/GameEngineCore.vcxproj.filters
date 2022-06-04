@@ -61,6 +61,9 @@
     <ClInclude Include="GameEngineCamera.h">
       <Filter>Object\Component\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineCameraActor.h">
+      <Filter>Object\Component\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineStateManager.cpp">
@@ -101,6 +104,9 @@
       <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCamera.cpp">
+      <Filter>Object\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineCameraActor.cpp">
       <Filter>Object\Component\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
