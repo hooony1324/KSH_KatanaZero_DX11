@@ -64,6 +64,7 @@
     <ClInclude Include="GameEngineCameraActor.h">
       <Filter>Object\Component\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="CoreMinimal.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineStateManager.cpp">

@@ -21,9 +21,18 @@ public:
 	inline void SetLocalScale(const float4& _Value)
 	{
 		LocalScale = _Value;
-		LocalScaleMat.Scale(LocalScale);
-	}
 
+		if (nullptr != Parent)
+		{
+			WorldScale = _Value * Parent->WorldWorldMat;
+		}
+		else
+		{
+			WorldScale = LocalScale;
+		}
+
+		CalculateWorld();
+	}
 
 	// 아무리 편의성 함수가 많아져도
 	void SetLocalRotation(const float4& _Value)
@@ -35,7 +44,7 @@ public:
 	inline void SetLocalPosition(const float4& _Value)
 	{
 		LocalPosition = _Value;
-		LocalPositionMat.Postion(LocalPosition);
+		LocalPositionMat.Position(LocalPosition);
 	}
 
 	inline void SetLocalMove(const float4& _Value)
@@ -120,6 +129,13 @@ private:
 	float4 LocalScale;
 	float4 LocalRotation;
 	float4 LocalPosition;
+
+	// WorldScale.w 0
+	float4 WorldScale;
+	// WorldScale.w 0
+	float4 WorldRotation;
+	// WorldPosition.w 1
+	float4 WorldPosition;
 
 	float4x4 LocalScaleMat;
 	float4x4 LocalPositionMat;

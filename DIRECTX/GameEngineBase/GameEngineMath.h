@@ -60,10 +60,10 @@ public:
 		// DirectX::XMVector3Cross()
 
 		float4 vResult = float4(
-		(_Left.Arr1D[1] * _Right.Arr1D[2]) - (_Left.Arr1D[2] * _Right.Arr1D[1]),
-		(_Left.Arr1D[2] * _Right.Arr1D[0]) - (_Left.Arr1D[0] * _Right.Arr1D[2]),
-		(_Left.Arr1D[0] * _Right.Arr1D[1]) - (_Left.Arr1D[1] * _Right.Arr1D[0]),
-		0.0f
+			(_Left.Arr1D[1] * _Right.Arr1D[2]) - (_Left.Arr1D[2] * _Right.Arr1D[1]),
+			(_Left.Arr1D[2] * _Right.Arr1D[0]) - (_Left.Arr1D[0] * _Right.Arr1D[2]),
+			(_Left.Arr1D[0] * _Right.Arr1D[1]) - (_Left.Arr1D[1] * _Right.Arr1D[0]),
+			0.0f
 		);
 		return vResult;
 	}
@@ -152,7 +152,7 @@ public:
 
 	static float4 RadianToDirection2D(float _Radian)
 	{
-		return { cosf(_Radian) , sinf(_Radian)  };
+		return { cosf(_Radian) , sinf(_Radian) };
 	}
 
 	static float4 VectorRotationToDegreeZAxis(const float4& _Value, float _Degree)
@@ -243,12 +243,10 @@ public:
 	static const float4 ZERO;
 	static const float4 ONE;
 
-	
-
 public:
-	union 
+	union
 	{
-		struct 
+		struct
 		{
 			float x;
 			float y;
@@ -259,6 +257,8 @@ public:
 		float Arr1D[4];
 
 		int Arr1DInt[4];
+
+		DirectX::XMVECTOR DirectVector;
 	};
 
 public:
@@ -288,7 +288,7 @@ public:
 		return static_cast<int>(w);
 	}
 
-	POINT GetConvertWindowPOINT() 
+	POINT GetConvertWindowPOINT()
 	{
 		return POINT(ix(), iy());
 	}
@@ -357,7 +357,7 @@ public:
 		return Arr1D[_Index];
 	}
 
-	
+
 	float4 operator-(const float4& _Other) const
 	{
 		return { x - _Other.x, y - _Other.y, z - _Other.z, 1.0f };
@@ -376,6 +376,11 @@ public:
 	float4 operator*(const float _Value) const
 	{
 		return { x * _Value, y * _Value, z * _Value, 1.0f };
+	}
+
+	float4 operator/(const float _Value) const
+	{
+		return { x / _Value, y / _Value, z / _Value, 1.0f };
 	}
 
 	float4& operator+=(const float4& _Other)
@@ -561,39 +566,64 @@ public:
 		float Arr1D[16];
 		float Arr2D[4][4];
 		float4 ArrV[4];
+		DirectX::XMMATRIX DirectMatrix;
 	};
 
 public:
-	float4x4() {
+	float4x4(const DirectX::XMMATRIX& _DirectMatrix)
+		: DirectMatrix(_DirectMatrix)
+	{
+	}
+
+	float4x4()
+	{
 		Identity();
 	}
 
 public:
+	void ZeroCheck()
+	{
+		for (size_t i = 0; i < 16; i++)
+		{
+			if (Arr1D[i] <= FLT_EPSILON)
+			{
+				Arr1D[i] = 0.0f;
+			}
+		}
+	}
+
 	void Identity()
 	{
-		memset(Arr1D, 0, sizeof(float) * 16);
-		Arr2D[0][0] = 1.0f;
-		Arr2D[1][1] = 1.0f;
-		Arr2D[2][2] = 1.0f;
-		Arr2D[3][3] = 1.0f;
+		DirectMatrix = DirectX::XMMatrixIdentity();
+
+		//memset(Arr1D, 0, sizeof(float) * 16);
+		//Arr2D[0][0] = 1.0f;
+		//Arr2D[1][1] = 1.0f;
+		//Arr2D[2][2] = 1.0f;
+		//Arr2D[3][3] = 1.0f;
 	}
 
 	void Scale(const float4& _Value)
 	{
-		Identity();
-		Arr2D[0][0] = _Value.x;
-		Arr2D[1][1] = _Value.y;
-		Arr2D[2][2] = _Value.z;
-		Arr2D[3][3] = 1.0f;
+		// Identity();
+
+		DirectMatrix = DirectX::XMMatrixScaling(_Value.x, _Value.y, _Value.z);
+
+		//Arr2D[0][0] = _Value.x;
+		//Arr2D[1][1] = _Value.y;
+		//Arr2D[2][2] = _Value.z;
+		//Arr2D[3][3] = 1.0f;
 	}
 
-	void Postion(const float4& _Value)
+	void Position(const float4& _Value)
 	{
-		Identity();
-		Arr2D[3][0] = _Value.x;
-		Arr2D[3][1] = _Value.y;
-		Arr2D[3][2] = _Value.z;
-		Arr2D[3][3] = 1.0f;
+		DirectMatrix = DirectX::XMMatrixTranslationFromVector(_Value.DirectVector);
+
+		// Identity();
+		//Arr2D[3][0] = _Value.x;
+		//Arr2D[3][1] = _Value.y;
+		//Arr2D[3][2] = _Value.z;
+		//Arr2D[3][3] = 1.0f;
 	}
 
 	void RotationXDegree(const float _Value)
@@ -642,29 +672,134 @@ public:
 
 	void RotationRadian(const float4& _Value)
 	{
-		float4x4 XRot;
-		float4x4 YRot;
-		float4x4 ZRot;
-		XRot.RotationXRadian(_Value.x);
-		YRot.RotationYRadian(_Value.y);
-		ZRot.RotationZRadian(_Value.z);
+		DirectMatrix = DirectX::XMMatrixRotationRollPitchYawFromVector(_Value.DirectVector);
 
-		*this = XRot * YRot * ZRot;
+		//float4x4 XRot;
+		//float4x4 YRot;
+		//float4x4 ZRot;
+		//XRot.RotationXRadian(_Value.x);
+		//YRot.RotationYRadian(_Value.y);
+		//ZRot.RotationZRadian(_Value.z);
+
+		//*this = XRot * YRot * ZRot;
+	}
+
+	void ViewPort(float _Width, float _Height, float _Left, float _Right, float _ZMin, float _ZMax)
+	{
+
+		Arr2D[0][0] = _Width / 2.0f;
+		Arr2D[0][1] = 0.0f;
+		Arr2D[0][2] = 0.0f;
+		Arr2D[0][3] = 0.0f;
+
+		Arr2D[1][0] = 0.0f;
+		Arr2D[1][1] = -_Height / 2.0f;
+		Arr2D[1][2] = 0.0f;
+		Arr2D[1][3] = 0.0f;
+
+		Arr2D[2][0] = 0.0f;
+		Arr2D[2][1] = 0.0f;
+		Arr2D[2][2] = 1.0f / 2.0f;
+		Arr2D[2][3] = 0.0f;
+
+		Arr2D[3][0] = _Width * 0.5f + _Left;
+		Arr2D[3][1] = _Height * 0.5f + _Right;
+		Arr2D[3][2] = 1.0f / 2.0f;
+		Arr2D[3][3] = 1.0f;
+	}
+
+	// Fov to Degree
+	void PerspectiveFovLH(float _FovDegree, float _Width, float _Height, float _Near, float _Far)
+	{
+
+		//assert(NearZ > 0.f && FarZ > 0.f);
+		//assert(!XMScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
+		//assert(!XMScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
+		//assert(!XMScalarNearEqual(FarZ, NearZ, 0.00001f));
+
+		//float    SinFov;
+		//float    CosFov;
+		// XMScalarSinCos(&SinFov, &CosFov, 0.5f * FovAngleY);
+
+		//               45                                 
+		float Tan = tanf(_FovDegree * GameEngineMath::DegreeToRadian * 0.5f);
+		float fRange = _Far / (_Far - _Near);
+
+		// z가 무슨 z죠?
+
+		Arr2D[0][0] = 1.0f / (Tan * (_Width / _Height)); // / z
+		Arr2D[0][1] = 0.0f;
+		Arr2D[0][2] = 0.0f;
+		Arr2D[0][3] = 0.0f;
+
+		Arr2D[1][0] = 0.0f;
+		Arr2D[1][1] = 1.0f / Tan;
+		Arr2D[1][2] = 0.0f;
+		Arr2D[1][3] = 0.0f;
+
+		Arr2D[2][0] = 0.0f;
+		Arr2D[2][1] = 0.0f;
+		Arr2D[2][2] = fRange;
+		Arr2D[2][3] = 1.0f;
+
+		//    150
+		//[x][y][150][1] * [1][0][0][0] = [][][][150]
+		//                 [0][1][0][0]
+		//                 [0][0][1][1]
+		//                 [0][0][0][0]
+
+		Arr2D[3][0] = 0.0f;
+		Arr2D[3][1] = 0.0f;
+		Arr2D[3][2] = -fRange * _Near;
+		Arr2D[3][3] = 0.0f;
+	}
+
+	void OrthographicLH(float _Width, float _Height, float _Near, float _Far)
+	{
+		// DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
+
+	   //assert(!XMScalarNearEqual(ViewWidth, 0.0f, 0.00001f));
+	   //assert(!XMScalarNearEqual(ViewHeight, 0.0f, 0.00001f));
+	   //assert(!XMScalarNearEqual(FarZ, NearZ, 0.00001f));
+
+		float fRange = 1.0f / (_Far - _Near);
+
+		Arr2D[0][0] = 2.0f / _Width;
+		Arr2D[0][1] = 0.0f;
+		Arr2D[0][2] = 0.0f;
+		Arr2D[0][3] = 0.0f;
+
+		Arr2D[1][0] = 0.0f;
+		Arr2D[1][1] = 2.0f / _Height;
+		Arr2D[1][2] = 0.0f;
+		Arr2D[1][3] = 0.0f;
+
+		Arr2D[2][0] = 0.0f;
+		Arr2D[2][1] = 0.0f;
+		Arr2D[2][2] = fRange;
+		Arr2D[2][3] = 0.0f;
+
+		Arr2D[3][0] = 0.0f;
+		Arr2D[3][1] = 0.0f;
+		Arr2D[3][2] = -fRange * _Near;
+		Arr2D[3][3] = 1.0f;
 	}
 
 	//               바라보고 있는 위치
-	void ViewPostion(const float4& _EyePostion, const float4& _EyeFocus, const float4& _Up)
+	void LookToLH(const float4& _EyePostion, const float4& _EyeFocus, const float4& _Up)
 	{
 		// DirectX::XMMatrixLookAtLH
 
 		// float4 EyeDir = (_EyeFocus - _EyePostion);
 		// EyeDir.Normalize();
 
-		View(_EyePostion, (_EyeFocus - _EyePostion), _Up);
+		LookAtLH(_EyePostion, (_EyeFocus - _EyePostion), _Up);
 	}
 
-	void View(const float4& _EyePostion, const float4& _EyeDir, const float4& _Up)
+	void LookAtLH(const float4& _EyePostion, const float4& _EyeDir, const float4& _Up)
 	{
+
+		// DirectX::XMMatrixLookAtLH
 		// View
 
 		//assert(!XMVector3Equal(EyeDirection, XMVectorZero()));
@@ -678,7 +813,7 @@ public:
 
 		//XMVECTOR R0 = XMVector3Cross(UpDirection, R2);
 		//R0 = XMVector3Normalize(R0);
-		
+
 		// 혹시나 넣어준 사람이 길이를 1로 만들지 않고 넣어줬을수 있으니까.
 		// 길이 1짜리 벡터로 만들고
 		float4 R0 = float4::Cross(_Up, R2);
@@ -716,7 +851,7 @@ public:
 
 		// 90 => ~90도 하려면 회전행렬을 전치하면 된다.
 
-		float4 Control = {0xff, 0xff , 0xff , 0};
+		float4 Control = { 0xff, 0xff , 0xff , 0 };
 		float4x4 Mat;
 		Mat.ArrV[0] = float4::Select(D0, R0, Control);
 		Mat.ArrV[1] = float4::Select(D1, R1, Control);
@@ -741,6 +876,17 @@ public:
 		// DirectX::XMMatrixLookAtLH()
 	}
 
+	void Inverse()
+	{
+		DirectMatrix = DirectX::XMMatrixInverse(nullptr, DirectMatrix);
+	}
+
+	float4x4 InverseReturn()
+	{
+		DirectX::XMMATRIX Result = DirectX::XMMatrixInverse(nullptr, DirectMatrix);
+		return Result;
+	}
+
 	void Transpose()
 	{
 		float4x4 This = *this;
@@ -755,49 +901,14 @@ public:
 		}
 	}
 
-	
+
 public: // 연산자
-	float4x4 operator*(const float4x4& _Value) 
+	float4x4 operator*(const float4x4& _Value)
 	{
-		float4x4 Result;
+		DirectMatrix = DirectX::XMMatrixMultiply(DirectMatrix, _Value.DirectMatrix);
 
-		float x = Arr2D[0][0];
-		float y = Arr2D[0][1];
-		float z = Arr2D[0][2];
-		float w = Arr2D[0][3];
-		// Perform the operation on the first row
-		Result.Arr2D[0][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
-		Result.Arr2D[0][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
-		Result.Arr2D[0][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
-		Result.Arr2D[0][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
-		// Repeat for all the other rows
-		x = Arr2D[1][0];
-		y = Arr2D[1][1];
-		z = Arr2D[1][2];
-		w = Arr2D[1][3];
-		Result.Arr2D[1][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
-		Result.Arr2D[1][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
-		Result.Arr2D[1][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
-		Result.Arr2D[1][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
-		x = Arr2D[2][0];
-		y = Arr2D[2][1];
-		z = Arr2D[2][2];
-		w = Arr2D[2][3];
-		Result.Arr2D[2][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
-		Result.Arr2D[2][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
-		Result.Arr2D[2][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
-		Result.Arr2D[2][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
-		x = Arr2D[3][0];
-		y = Arr2D[3][1];
-		z = Arr2D[3][2];
-		w = Arr2D[3][3];
-		Result.Arr2D[3][0] = (_Value.Arr2D[0][0] * x) + (_Value.Arr2D[1][0] * y) + (_Value.Arr2D[2][0] * z) + (_Value.Arr2D[3][0] * w);
-		Result.Arr2D[3][1] = (_Value.Arr2D[0][1] * x) + (_Value.Arr2D[1][1] * y) + (_Value.Arr2D[2][1] * z) + (_Value.Arr2D[3][1] * w);
-		Result.Arr2D[3][2] = (_Value.Arr2D[0][2] * x) + (_Value.Arr2D[1][2] * y) + (_Value.Arr2D[2][2] * z) + (_Value.Arr2D[3][2] * w);
-		Result.Arr2D[3][3] = (_Value.Arr2D[0][3] * x) + (_Value.Arr2D[1][3] * y) + (_Value.Arr2D[2][3] * z) + (_Value.Arr2D[3][3] * w);
-
-		return Result;
-
+		// ZeroCheck();
+		return DirectMatrix;
 	}
 };
 

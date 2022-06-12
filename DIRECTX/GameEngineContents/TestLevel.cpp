@@ -30,10 +30,13 @@ void TestLevel::Start()
 
 	{
 		GameEngineCameraActor* actor = CreateActor<GameEngineCameraActor>();
-		actor->GetTransform().SetLocalPosition({ 1280.0f * -0.5F, 720.0f * 0.5f, -100.0f });
+		actor->GetTransform().SetLocalPosition({ 0, 0, -300.0f });
 	}
 	
-	CreateActor<Cube>(0);
+	{
+		GameEngineActor* actor = CreateActor<Cube>();
+		actor->GetTransform().SetLocalPosition({ 0, 0, 0 });
+	}
 }
 
 void TestLevel::Update(float _DeltaTime)
