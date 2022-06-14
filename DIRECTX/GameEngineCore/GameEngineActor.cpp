@@ -35,7 +35,7 @@ void GameEngineActor::ComponentUpdate(float _ScaleDeltaTime, float _DeltaTime)
 
 void GameEngineActor::SettingTransformComponent(GameEngineTransformComponent* TransCom)
 {
-	GetTransform().PushChild(&TransCom->GetTransform());
+	TransCom->GetTransform().SetParent(GetTransform());
 }
 
 void GameEngineActor::ComponentCalculateTransform()

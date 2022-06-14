@@ -161,6 +161,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="GameEngineCameraActor.h" />
+    <ClInclude Include="GameEngineCollision.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameEngineComponent.h">
       <SubType>
       </SubType>
@@ -216,6 +220,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="GameEngineCameraActor.cpp" />
+    <ClCompile Include="GameEngineCollision.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameEngineComponent.cpp">
       <SubType>
       </SubType>

@@ -1,8 +1,9 @@
 #include "Cube.h"
-#include <GameEngineBase/GameEngineWindow.h>
-#include <GameEngineCore/GameEngineRenderer.h>
+#include <GameEngineCore/CoreMinimal.h>
+#include <GameEngineBase/GameEngineInput.h>
 
-Cube::Cube() 
+Cube::Cube()
+	: Speed(80.0f)
 {
 }
 
@@ -10,19 +11,75 @@ Cube::~Cube()
 {
 }
 
+GameEngineRenderer* CurRenderer;
+GameEngineRenderer* ChildRenderer;
+
 void Cube::Start()
 {
+	if (false == GameEngineInput::GetInst()->IsKey("PlayerLeft"))
+	{
+		GameEngineInput::GetInst()->CreateKey("PlayerLeft", VK_NUMPAD4);
+		GameEngineInput::GetInst()->CreateKey("PlayerRight", VK_NUMPAD6);
+		GameEngineInput::GetInst()->CreateKey("PlayerUp", VK_NUMPAD9);
+		GameEngineInput::GetInst()->CreateKey("PlayerDown", VK_NUMPAD7);
+		GameEngineInput::GetInst()->CreateKey("PlayerForward", VK_NUMPAD8);
+		GameEngineInput::GetInst()->CreateKey("PlayerBack", VK_NUMPAD5);
+		GameEngineInput::GetInst()->CreateKey("Rot+", VK_NUMPAD1);
+		GameEngineInput::GetInst()->CreateKey("Rot-", VK_NUMPAD2);
+	}
 
-	GameEngineRenderer* Renderer = CreateComponent<GameEngineRenderer>();
-	Renderer->GetTransform().SetLocalScale({ 100, 100, 100 });
-	
+	GetTransform().SetLocalScale({ 1, 1, 1 });
+
+	{
+		CurRenderer = CreateComponent<GameEngineRenderer>();
+		CurRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
+	}
+
+	{
+		ChildRenderer = CreateComponent<GameEngineRenderer>();
+		ChildRenderer->GetTransform().SetParent(CurRenderer->GetTransform());
+
+		ChildRenderer->GetTransform().SetWorldPosition({ 150.0f, 100.0f, 30.0f });
+	}
 }
 
 void Cube::Update(float _DeltaTime)
 {
-	//TimeAngle += _DeltaTime * 20.0f;
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerLeft"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetLeftVector() * Speed * _DeltaTime);
+	}
 
-	//GetTransform().SetLocalRotation({ TimeAngle, TimeAngle, TimeAngle });
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerRight"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetRightVector() * Speed * _DeltaTime);
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerUp"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetUpVector() * Speed * _DeltaTime);
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerDown"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetDownVector() * Speed * _DeltaTime);
+	}
+
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerForward"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetForwardVector() * Speed * _DeltaTime);
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerBack"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetBackVector() * Speed * _DeltaTime);
+	}
+
+	if (true == GameEngineInput::GetInst()->IsPress("Rot+"))
+	{
+		CurRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("Rot-"))
+	{
+		CurRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
+	}
 }
 
 void Cube::End()

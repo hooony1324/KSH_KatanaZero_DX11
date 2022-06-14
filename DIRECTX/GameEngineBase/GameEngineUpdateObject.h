@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include "GameEngineTime.h"
+#include "GameEngineDebugObject.h"
 
 
-class GameEngineUpdateObject
+class GameEngineUpdateObject : public GameEngineDebugObject
 {
 public:
 	// constrcuter destructer

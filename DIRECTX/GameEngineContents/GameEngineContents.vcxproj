@@ -151,6 +151,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChildCube.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Cube.h">
       <SubType>
       </SubType>
@@ -166,6 +170,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChildCube.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Cube.cpp">
       <SubType>
       </SubType>

@@ -154,6 +154,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineDebug.cpp" />
+    <ClCompile Include="GameEngineDebugObject.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameEngineDirectory.cpp" />
     <ClCompile Include="GameEngineFile.cpp" />
     <ClCompile Include="GameEngineInput.cpp" />
@@ -169,12 +173,17 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="GameEngineTransform_Collision.cpp" />
     <ClCompile Include="GameEngineUpdateObject.cpp" />
     <ClCompile Include="GameEngineWindow.cpp" />
     <ClCompile Include="GameEngineWriteFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineDebug.h" />
+    <ClInclude Include="GameEngineDebugObject.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameEngineDirectory.h" />
     <ClInclude Include="GameEngineFile.h" />
     <ClInclude Include="GameEngineInput.h" />

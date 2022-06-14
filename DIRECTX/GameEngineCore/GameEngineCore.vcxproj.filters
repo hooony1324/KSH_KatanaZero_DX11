@@ -65,6 +65,9 @@
       <Filter>Object\Component\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="CoreMinimal.h" />
+    <ClInclude Include="GameEngineCollision.h">
+      <Filter>Object\Component\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineStateManager.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="GameEngineCameraActor.cpp">
       <Filter>Object\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineCollision.cpp">
+      <Filter>Object\Component\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

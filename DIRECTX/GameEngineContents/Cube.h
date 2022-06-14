@@ -21,6 +21,6 @@ protected:
 	void End() override;
 
 private:
-
+	float Speed;
 };
 

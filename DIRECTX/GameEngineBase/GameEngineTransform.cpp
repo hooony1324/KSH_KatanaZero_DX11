@@ -4,6 +4,9 @@ GameEngineTransform::GameEngineTransform()
 	: LocalScale(float4::ONE)
 	, LocalPosition(float4::ZERO)
 	, LocalRotation(float4::ZERO)
+	, WorldScale(float4::ONE)
+	, WorldPosition(float4::ZERO)
+	, WorldRotation(float4::ZERO)
 	, Parent(nullptr)
 {
 }
@@ -15,6 +18,11 @@ GameEngineTransform::~GameEngineTransform()
 
 void GameEngineTransform::CalculateWorld()
 {
+	if (IsDebug())
+	{
+		int a = 0;
+	}
+
 	LocalWorldMat = LocalScaleMat * LocalRotateMat * LocalPositionMat;
 
 	if (nullptr != Parent)
@@ -39,8 +47,17 @@ void GameEngineTransform::CalculateWorldViewProjection()
 	WorldViewProjectMat = WorldViewMat * Projection;
 }
 
-void GameEngineTransform::PushChild(GameEngineTransform* _Child)
+void GameEngineTransform::SetParent(GameEngineTransform& _Parent)
 {
-	_Child->Parent = this;
-	Childs.push_back(_Child);
+	if (nullptr != Parent)
+	{
+		// 나는 삭제되고
+		Parent->Childs.remove(this);
+		Parent = nullptr;
+	}
+
+	Parent = &_Parent;
+	_Parent.Childs.push_back(this);
 }
+
+

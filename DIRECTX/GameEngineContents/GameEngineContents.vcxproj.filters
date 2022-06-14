@@ -27,6 +27,9 @@
     <ClInclude Include="Cube.h">
       <Filter>TestLevel\TestLevelActor</Filter>
     </ClInclude>
+    <ClInclude Include="ChildCube.h">
+      <Filter>TestLevel\TestLevelActor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestContentsCore.cpp">
@@ -36,6 +39,9 @@
       <Filter>TestLevel</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
+      <Filter>TestLevel\TestLevelActor</Filter>
+    </ClCompile>
+    <ClCompile Include="ChildCube.cpp">
       <Filter>TestLevel\TestLevelActor</Filter>
     </ClCompile>
   </ItemGroup>
