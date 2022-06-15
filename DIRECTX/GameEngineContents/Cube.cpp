@@ -32,14 +32,14 @@ void Cube::Start()
 
 	{
 		CurRenderer = CreateComponent<GameEngineRenderer>();
-		CurRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
+		CurRenderer->GetTransform().SetLocalScale({ 100, 100, 0 });
 	}
 
 	{
 		ChildRenderer = CreateComponent<GameEngineRenderer>();
 		ChildRenderer->GetTransform().SetParent(CurRenderer->GetTransform());
 
-		ChildRenderer->GetTransform().SetWorldPosition({ 150.0f, 100.0f, 30.0f });
+		ChildRenderer->GetTransform().SetLocalPosition({ 2, 0, 0 });
 	}
 }
 

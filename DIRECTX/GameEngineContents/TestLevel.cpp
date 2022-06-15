@@ -2,6 +2,8 @@
 #include <GameEngineCore/GameEngineCameraActor.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include "Cube.h"
+#include "Obstacle.h"
+#include "GlobalValueManager.h"
 
 TestLevel::TestLevel() 
 {
@@ -10,6 +12,8 @@ TestLevel::TestLevel()
 TestLevel::~TestLevel() 
 {
 }
+
+GameEngineActor* player;
 
 void TestLevel::Start()
 {
@@ -31,12 +35,15 @@ void TestLevel::Start()
 	{
 		GameEngineCameraActor* actor = CreateActor<GameEngineCameraActor>();
 		actor->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::PersPective);
-		actor->GetTransform().SetLocalPosition({ 0.0f, 0.0f, -500.0f });
+		actor->GetTransform().SetLocalPosition({ 0.0f, 0.0f, -1000.0f });
 
 	}
 	
 	{
-		GameEngineActor* actor = CreateActor<Cube>();
+		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
+		GameEngineActor* obstcle = CreateActor<Obstacle>(ACTORGROUP::MONSTER);
+		obstcle->GetTransform().SetWorldScale({ 20, 20, 0 });
+		obstcle->GetTransform().SetWorldPosition({ 0, 200, 0, });
 	}
 }
 
@@ -78,6 +85,8 @@ void TestLevel::Update(float _DeltaTime)
 	{
 		Rot.y -= 360.0f * _DeltaTime;
 	}
+
+
 }
 
 void TestLevel::End()

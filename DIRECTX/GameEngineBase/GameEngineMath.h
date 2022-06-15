@@ -111,9 +111,6 @@ public:
 		//Return.Arr1DInt[2] = (_Left.Arr1DInt[2] & ~_Control.Arr1DInt[2]) | (_Right.Arr1DInt[2] & _Control.Arr1DInt[2]);
 		//Return.Arr1DInt[3] = (_Left.Arr1DInt[3] & ~_Control.Arr1DInt[3]) | (_Right.Arr1DInt[3] & _Control.Arr1DInt[3]);
 		return Return;
-
-
-		// DirectX::XMVectorSelect
 	}
 
 

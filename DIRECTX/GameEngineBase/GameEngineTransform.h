@@ -12,6 +12,24 @@ enum CollisionType
 	CT_OBB, // 회전한 박스
 };
 
+class CollisionData
+{
+	friend class GameEngineTransform;
+
+	union
+	{
+		DirectX::BoundingSphere SPHERE;
+		DirectX::BoundingBox AABB;
+		DirectX::BoundingOrientedBox OBB;
+	};
+
+	CollisionData()
+		: OBB()
+	{
+
+	}
+};
+
 // 설명 :
 class GameEngineTransform : public GameEngineDebugObject
 {
@@ -31,6 +49,7 @@ public:
 	inline void SetLocalScale(const float4& _Value)
 	{
 		CalculateWorldScale(_Value);
+		CalculateWorld();
 
 		for (GameEngineTransform* Child : Childs)
 		{
@@ -38,30 +57,18 @@ public:
 			Child->CalculateWorldPosition(Child->LocalPosition);
 		}
 
-		CalculateWorld();
 	}
 
 	inline void SetLocalRotation(const float4& _Value)
 	{
 		CalculateWorldRotation(_Value);
-
-		for (GameEngineTransform* Child : Childs)
-		{
-			Child->CalculateWorldRotation(Child->LocalRotation);
-			Child->CalculateWorldPosition(Child->LocalPosition);
-		}
 		CalculateWorld();
+
 	}
 
 	inline void SetLocalPosition(const float4& _Value)
 	{
 		CalculateWorldPosition(_Value);
-
-		for (GameEngineTransform* Child : Childs)
-		{
-			Child->CalculateWorldPosition(Child->LocalPosition);
-		}
-
 		CalculateWorld();
 	}
 
@@ -74,13 +81,6 @@ public:
 		}
 
 		CalculateWorldScale(Local);
-
-		for (GameEngineTransform* Child : Childs)
-		{
-			Child->CalculateWorldScale(Child->LocalScale);
-			Child->CalculateWorldPosition(Child->LocalPosition);
-		}
-
 		CalculateWorld();
 	}
 
@@ -93,12 +93,6 @@ public:
 		}
 
 		CalculateWorldRotation(Local);
-
-		for (GameEngineTransform* Child : Childs)
-		{
-			Child->CalculateWorldRotation(Child->LocalRotation);
-			Child->CalculateWorldPosition(Child->LocalPosition);
-		}
 		CalculateWorld();
 	}
 
@@ -113,12 +107,6 @@ public:
 
 
 		CalculateWorldPosition(Local);
-
-		for (GameEngineTransform* Child : Childs)
-		{
-			Child->CalculateWorldPosition(Child->LocalPosition);
-		}
-
 		CalculateWorld();
 	}
 
@@ -247,6 +235,9 @@ private:
 	void CalculateWorldScale(const float4& _Local)
 	{
 		LocalScale = _Local;
+		LocalScale.w = 0.0f; // 이동을 적용받지 않기.
+		// DirectX::XMVector3TransformCoord // 1로 곱하기
+		// DirectX::XMVector3TransformNormal // 0넣고 곱하기
 
 		if (nullptr != Parent)
 		{
@@ -257,11 +248,21 @@ private:
 			WorldScale = LocalScale;
 		}
 
+		CollisionScaleSetting();
+
 		LocalScaleMat.Scale(LocalScale);
+
+		for (GameEngineTransform* Child : Childs)
+		{
+			Child->CalculateWorldScale(Child->LocalScale);
+			Child->CalculateWorldPosition(Child->LocalPosition);
+		}
+
 	}
 	void CalculateWorldRotation(const float4& _Local)
 	{
 		LocalRotation = _Local;
+		LocalRotation.w = 0.0f; // 이동을 적용받지 않기.
 
 		if (nullptr != Parent)
 		{
@@ -272,13 +273,21 @@ private:
 			WorldRotation = LocalRotation;
 		}
 
+		CollisionRotationSetting();
+
 		LocalRotateMat.RotationDegree(LocalRotation);
 
+		for (GameEngineTransform* Child : Childs)
+		{
+			Child->CalculateWorldRotation(Child->LocalRotation);
+			Child->CalculateWorldPosition(Child->LocalPosition);
+		}
 	}
 
 	void CalculateWorldPosition(const float4& _Local)
 	{
 		LocalPosition = _Local;
+		LocalPosition.w = 1.0f; // 이동을 적용받기 위해서.
 
 		if (nullptr != Parent)
 		{
@@ -289,10 +298,22 @@ private:
 			WorldPosition = LocalPosition;
 		}
 
+		CollisionPositionSetting();
+
 		LocalPositionMat.Position(LocalPosition);
+
+		for (GameEngineTransform* Child : Childs)
+		{
+			Child->CalculateWorldPosition(Child->LocalPosition);
+		}
 	}
 
+	CollisionData CollisionDataObject;
 
+	void CollisionScaleSetting();
+	void CollisionRotationSetting();
+	void CollisionPositionSetting();
+	void CollisionDataSetting();
 
 	/////////////////////////// 충돌관련
 public:

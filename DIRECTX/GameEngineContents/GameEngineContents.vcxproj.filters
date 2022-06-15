@@ -27,8 +27,11 @@
     <ClInclude Include="Cube.h">
       <Filter>TestLevel\TestLevelActor</Filter>
     </ClInclude>
-    <ClInclude Include="ChildCube.h">
+    <ClInclude Include="Obstacle.h">
       <Filter>TestLevel\TestLevelActor</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalValueManager.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +44,11 @@
     <ClCompile Include="Cube.cpp">
       <Filter>TestLevel\TestLevelActor</Filter>
     </ClCompile>
-    <ClCompile Include="ChildCube.cpp">
+    <ClCompile Include="Obstacle.cpp">
       <Filter>TestLevel\TestLevelActor</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalValueManager.cpp">
+      <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -151,15 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ChildCube.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Cube.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Enums.h" />
+    <ClInclude Include="GlobalValueManager.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TestContentsCore.h">
       <SubType>
       </SubType>
@@ -170,11 +174,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChildCube.cpp">
+    <ClCompile Include="Cube.cpp">
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
+    <ClCompile Include="GlobalValueManager.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
       <SubType>
       </SubType>
     </ClCompile>

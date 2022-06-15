@@ -6,11 +6,11 @@
 class GameEngineString
 {
 public:
-	static void ToUpper(std::string& _Text) 
+	static void ToUpper(std::string& _Text)
 	{
 		for (size_t i = 0; i < _Text.size(); i++)
 		{
-			_Text[i] = std::toupper(_Text[i]);
+			_Text[i] = static_cast<char>(std::toupper(_Text[i]));
 		}
 
 		// std::transform(_Text.begin(), _Text.end(), _Text.begin(), std::toupper);
@@ -21,7 +21,7 @@ public:
 		std::string NewText = _Text;
 		for (size_t i = 0; i < _Text.size(); i++)
 		{
-			NewText[i] = std::toupper(NewText[i]);
+			NewText[i] = static_cast<char>(std::toupper(NewText[i]));
 		}
 		return NewText;
 	}

@@ -12,7 +12,7 @@ class GameEngineRenderer;
 class GameEngineTransform;
 class GameEngineCameraActor;
 class GameEngineLevel :
-	public GameEngineNameObject ,
+	public GameEngineNameObject,
 	public GameEngineUpdateObject
 {
 	friend GameEngineCore;
@@ -31,14 +31,13 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
-	GameEngineCamera* GetMainCamera() 
+	GameEngineCamera* GetMainCamera()
 	{
 		return MainCamera;
 	}
 
 	GameEngineTransform& GetMainCameraActorTransform();
 
-protected:
 	//template<typename ReturnType, typename ActorType, typename GroupIndexType>
 	//ReturnType* CreateActor(GroupIndexType _ObjectGroupIndex)
 	//{
@@ -49,6 +48,12 @@ protected:
 	ActorType* CreateActor(GroupIndexType _ObjectGroupIndex)
 	{
 		return CreateActor<ActorType>(static_cast<int>(_ObjectGroupIndex));
+	}
+
+	template<typename ActorType>
+	ActorType* CreateActor(const std::string _Name, int _ObjectGroupIndex = 0)
+	{
+		CreateActor(_ObjectGroupIndex);
 	}
 
 	template<typename ActorType>
@@ -70,6 +75,40 @@ protected:
 	}
 
 
+	template<typename GroupIndexType>
+	std::list<GameEngineActor*> GetGroup(GroupIndexType _ObjectGroupIndex)
+	{
+		return AllActors[static_cast<int>(_ObjectGroupIndex)];
+	}
+
+	std::list<GameEngineActor*> GetGroup(int _ObjectGroupIndex)
+	{
+		return AllActors[_ObjectGroupIndex];
+	}
+
+	template<typename ObjectType, typename GroupIndexType>
+	std::list<ObjectType*> GetConvertToGroup(GroupIndexType _ObjectGroupIndex)
+	{
+		return GetConvertToGroup<ObjectType>(static_cast<int>(_ObjectGroupIndex));
+	}
+
+
+	template<typename ObjectType>
+	std::list<ObjectType*> GetConvertToGroup(int _ObjectGroupIndex)
+	{
+		std::list<ObjectType*> Result;
+		for (GameEngineActor* Object : AllActors[_ObjectGroupIndex])
+		{
+			Result.push_back(dynamic_cast<ObjectType*>(Object));
+		}
+
+		return Result;
+	}
+
+protected:
+
+
+
 
 private:
 	// 0번 그룹 플레이어
@@ -80,6 +119,8 @@ private:
 	void ActorUpdate(float _DelataTime);
 
 	void LevelUpdate(float DeltaTime);
+
+
 
 private:
 	// 0번 백그라운드

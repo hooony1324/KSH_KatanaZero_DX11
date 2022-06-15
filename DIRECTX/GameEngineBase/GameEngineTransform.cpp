@@ -8,7 +8,9 @@ GameEngineTransform::GameEngineTransform()
 	, WorldPosition(float4::ZERO)
 	, WorldRotation(float4::ZERO)
 	, Parent(nullptr)
+	, CollisionDataObject()
 {
+	CollisionDataSetting();
 }
 
 GameEngineTransform::~GameEngineTransform()
@@ -18,10 +20,10 @@ GameEngineTransform::~GameEngineTransform()
 
 void GameEngineTransform::CalculateWorld()
 {
-	if (IsDebug())
-	{
-		int a = 0;
-	}
+	//if (IsDebug())
+	//{
+	//	int a = 0;
+	//}
 
 	LocalWorldMat = LocalScaleMat * LocalRotateMat * LocalPositionMat;
 
@@ -58,6 +60,8 @@ void GameEngineTransform::SetParent(GameEngineTransform& _Parent)
 
 	Parent = &_Parent;
 	_Parent.Childs.push_back(this);
+
+	SetLocalScale(LocalScale);
+	SetLocalRotation(LocalRotation);
+	SetLocalPosition(LocalPosition);
 }
-
-
