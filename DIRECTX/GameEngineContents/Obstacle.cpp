@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "Obstacle.h"
 #include <GameEngineCore/CoreMinimal.h>
 

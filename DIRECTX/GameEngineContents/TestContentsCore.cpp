@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "TestContentsCore.h"
 
 #pragma comment(lib, "GameEngineBase.lib")

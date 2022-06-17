@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "Cube.h"
 #include <GameEngineCore/CoreMinimal.h>
 #include <GameEngineBase/GameEngineInput.h>
@@ -38,8 +39,6 @@ void Cube::Start()
 	{
 		ChildRenderer = CreateComponent<GameEngineRenderer>();
 		ChildRenderer->GetTransform().SetParent(CurRenderer->GetTransform());
-
-		ChildRenderer->GetTransform().SetLocalPosition({ 2, 0, 0 });
 	}
 }
 

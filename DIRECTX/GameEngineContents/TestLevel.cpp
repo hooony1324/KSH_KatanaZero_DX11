@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "TestLevel.h"
 #include <GameEngineCore/GameEngineCameraActor.h>
 #include <GameEngineBase/GameEngineInput.h>
@@ -12,8 +13,6 @@ TestLevel::TestLevel()
 TestLevel::~TestLevel() 
 {
 }
-
-GameEngineActor* player;
 
 void TestLevel::Start()
 {
@@ -41,9 +40,11 @@ void TestLevel::Start()
 	
 	{
 		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
-		GameEngineActor* obstcle = CreateActor<Obstacle>(ACTORGROUP::MONSTER);
-		obstcle->GetTransform().SetWorldScale({ 20, 20, 0 });
-		obstcle->GetTransform().SetWorldPosition({ 0, 200, 0, });
+
+		monster = CreateActor<Obstacle>(ACTORGROUP::MONSTER);
+		monster->GetTransform().SetLocalScale({ 5, 5, 0 });
+		monster->GetTransform().SetWorldScale({ 20, 20, 0 });
+		monster->GetTransform().SetWorldPosition({ 0, 200, 0 });
 	}
 }
 
@@ -86,6 +87,12 @@ void TestLevel::Update(float _DeltaTime)
 		Rot.y -= 360.0f * _DeltaTime;
 	}
 
+
+	// 충돌체크
+	if (GameEngineTransform::OBBToOBB(player->GetTransform(), monster->GetTransform()))
+	{
+		int a = 0;
+	}
 
 }
 

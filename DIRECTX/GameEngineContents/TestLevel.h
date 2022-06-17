@@ -21,6 +21,7 @@ protected:
 	virtual void End() override;
 
 private:
-
+	GameEngineActor* player;
+	GameEngineActor* monster;
 };
 

@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "GameEngineCamera.h"
 #include "GameEngineRenderer.h"
 #include "GameEngineActor.h"

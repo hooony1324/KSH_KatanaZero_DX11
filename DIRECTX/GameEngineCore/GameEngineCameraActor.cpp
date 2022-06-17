@@ -1,3 +1,4 @@
+#include "PreCompile.h"
 #include "GameEngineCameraActor.h"
 
 GameEngineCameraActor::GameEngineCameraActor() 

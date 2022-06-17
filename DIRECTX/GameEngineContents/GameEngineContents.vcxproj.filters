@@ -13,6 +13,9 @@
     <Filter Include="TestLevel\TestLevelActor">
       <UniqueIdentifier>{dd1ad5fb-a1eb-4e74-880b-223da2dd6448}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{094c440d-86fd-472b-99e8-3c4f72a18344}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestContentsCore.h">
@@ -33,6 +36,9 @@
     <ClInclude Include="GlobalValueManager.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="PreCompile.h">
+      <Filter>PreCompile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestContentsCore.cpp">
@@ -49,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="GlobalValueManager.cpp">
       <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>PreCompile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

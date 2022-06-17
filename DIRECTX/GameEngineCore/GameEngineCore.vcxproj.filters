@@ -22,6 +22,9 @@
     <Filter Include="Object\Component\Collision">
       <UniqueIdentifier>{747d9495-9455-41d4-8186-cd610789ec6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{b8aebae3-e2dd-4c7d-a3dd-f32669c14a3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineStateManager.h">
@@ -67,6 +70,9 @@
     <ClInclude Include="CoreMinimal.h" />
     <ClInclude Include="GameEngineCollision.h">
       <Filter>Object\Component\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="PreCompile.h">
+      <Filter>PreCompile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="GameEngineCollision.cpp">
       <Filter>Object\Component\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>PreCompile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
