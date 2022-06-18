@@ -5,6 +5,7 @@ enum class ACTORGROUP
 {
 	PLAYER,
 	MONSTER,
+	OBSTACLE,
 };
 
 // Ό³Έν :
@@ -16,19 +17,20 @@ public:
 	{
 	public:
 		static Obstacle* testObstacle;
+
+	private:
+
+		Actors() {}
+		~Actors() {}
 	};
 
 protected:
 
+
+
 private:
 	// constrcuter destructer
-	GlobalValueManager();
-	~GlobalValueManager();
-
-	// delete Function
-	GlobalValueManager(const GlobalValueManager& _Other) = delete;
-	GlobalValueManager(GlobalValueManager&& _Other) noexcept = delete;
-	GlobalValueManager& operator=(const GlobalValueManager& _Other) = delete;
-	GlobalValueManager& operator=(GlobalValueManager&& _Other) noexcept = delete;
+	GlobalValueManager() {}
+	~GlobalValueManager() {}
 };
 

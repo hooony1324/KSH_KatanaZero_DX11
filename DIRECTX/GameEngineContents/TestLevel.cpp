@@ -19,15 +19,15 @@ void TestLevel::Start()
 
 	if (false == GameEngineInput::GetInst()->IsKey("CamLeft"))
 	{
-		GameEngineInput::GetInst()->CreateKey("CamLeft", 'A');
-		GameEngineInput::GetInst()->CreateKey("CamRight", 'D');
-		GameEngineInput::GetInst()->CreateKey("CamUp", 'Q');
-		GameEngineInput::GetInst()->CreateKey("CamDown", 'E');
-		GameEngineInput::GetInst()->CreateKey("CamForward", 'W');
-		GameEngineInput::GetInst()->CreateKey("CamBack", 'S');
+		GameEngineInput::GetInst()->CreateKey("CamLeft", VK_NUMPAD4);
+		GameEngineInput::GetInst()->CreateKey("CamRight", VK_NUMPAD6);
+		GameEngineInput::GetInst()->CreateKey("CamUp", VK_NUMPAD8);
+		GameEngineInput::GetInst()->CreateKey("CamDown", VK_NUMPAD2);
+		GameEngineInput::GetInst()->CreateKey("CamForward", VK_ADD);
+		GameEngineInput::GetInst()->CreateKey("CamBack", VK_SUBTRACT);
 
-		GameEngineInput::GetInst()->CreateKey("CamRotY+", 'R');
-		GameEngineInput::GetInst()->CreateKey("CamRotY-", 'T');
+		GameEngineInput::GetInst()->CreateKey("CamRotY+", VK_NUMPAD9);
+		GameEngineInput::GetInst()->CreateKey("CamRotY-", VK_NUMPAD7);
 
 	}
 
@@ -41,10 +41,10 @@ void TestLevel::Start()
 	{
 		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
 
-		monster = CreateActor<Obstacle>(ACTORGROUP::MONSTER);
-		monster->GetTransform().SetLocalScale({ 5, 5, 0 });
-		monster->GetTransform().SetWorldScale({ 20, 20, 0 });
-		monster->GetTransform().SetWorldPosition({ 0, 200, 0 });
+		obstacle = CreateActor<Obstacle>(ACTORGROUP::OBSTACLE);
+		obstacle->GetTransform().SetLocalScale({ 5, 5, 0 });
+		obstacle->GetTransform().SetWorldScale({ 20, 20, 0 });
+		obstacle->GetTransform().SetWorldPosition({ 0, 200, 0 });
 	}
 }
 
@@ -85,13 +85,6 @@ void TestLevel::Update(float _DeltaTime)
 	if (true == GameEngineInput::GetInst()->IsPress("CamRotY-"))
 	{
 		Rot.y -= 360.0f * _DeltaTime;
-	}
-
-
-	// 충돌체크
-	if (GameEngineTransform::OBBToOBB(player->GetTransform(), monster->GetTransform()))
-	{
-		int a = 0;
 	}
 
 }

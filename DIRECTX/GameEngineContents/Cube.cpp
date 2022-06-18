@@ -2,6 +2,7 @@
 #include "Cube.h"
 #include <GameEngineCore/CoreMinimal.h>
 #include <GameEngineBase/GameEngineInput.h>
+#include "GlobalValueManager.h"
 
 Cube::Cube()
 	: Speed(80.0f)
@@ -12,34 +13,34 @@ Cube::~Cube()
 {
 }
 
-GameEngineRenderer* CurRenderer;
-GameEngineRenderer* ChildRenderer;
+
 
 void Cube::Start()
 {
 	if (false == GameEngineInput::GetInst()->IsKey("PlayerLeft"))
 	{
-		GameEngineInput::GetInst()->CreateKey("PlayerLeft", VK_NUMPAD4);
-		GameEngineInput::GetInst()->CreateKey("PlayerRight", VK_NUMPAD6);
-		GameEngineInput::GetInst()->CreateKey("PlayerUp", VK_NUMPAD9);
-		GameEngineInput::GetInst()->CreateKey("PlayerDown", VK_NUMPAD7);
-		GameEngineInput::GetInst()->CreateKey("PlayerForward", VK_NUMPAD8);
-		GameEngineInput::GetInst()->CreateKey("PlayerBack", VK_NUMPAD5);
-		GameEngineInput::GetInst()->CreateKey("Rot+", VK_NUMPAD1);
-		GameEngineInput::GetInst()->CreateKey("Rot-", VK_NUMPAD2);
-	}
-
-	GetTransform().SetLocalScale({ 1, 1, 1 });
-
-	{
-		CurRenderer = CreateComponent<GameEngineRenderer>();
-		CurRenderer->GetTransform().SetLocalScale({ 100, 100, 0 });
+		GameEngineInput::GetInst()->CreateKey("PlayerLeft", 'A');
+		GameEngineInput::GetInst()->CreateKey("PlayerRight", 'D');
+		GameEngineInput::GetInst()->CreateKey("PlayerUp", 'W');
+		GameEngineInput::GetInst()->CreateKey("PlayerDown", 'S');
+		GameEngineInput::GetInst()->CreateKey("PlayerForward", VK_UP);
+		GameEngineInput::GetInst()->CreateKey("PlayerBack", VK_DOWN);
+		GameEngineInput::GetInst()->CreateKey("Rot+", 'Q');
+		GameEngineInput::GetInst()->CreateKey("Rot-", 'E');
 	}
 
 	{
-		ChildRenderer = CreateComponent<GameEngineRenderer>();
-		ChildRenderer->GetTransform().SetParent(CurRenderer->GetTransform());
+		bodyRenderer = CreateComponent<GameEngineRenderer>();
+		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 0 });
 	}
+
+	{
+		childRenderer = CreateComponent<GameEngineRenderer>();
+		childRenderer->GetTransform().SetParent(bodyRenderer->GetTransform());
+		childRenderer->GetTransform().SetLocalScale({1, 1, 0});
+		childRenderer->GetTransform().SetLocalPosition({ 1,0,0 });
+	}
+
 }
 
 void Cube::Update(float _DeltaTime)
@@ -73,11 +74,23 @@ void Cube::Update(float _DeltaTime)
 
 	if (true == GameEngineInput::GetInst()->IsPress("Rot+"))
 	{
-		CurRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
+		GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Rot-"))
 	{
-		CurRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
+		GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
+	}
+
+	// 충돌체크
+	list_Obstacle = GetLevel()->GetConvertToGroup<Obstacle>(ACTORGROUP::OBSTACLE);
+
+	for (auto& Obs : list_Obstacle)
+	{
+		if (GameEngineTransform::OBBToOBB(childRenderer->GetTransform(), Obs->GetTransform()) )
+		{
+			int a = 0;
+			GameEngineDebug::OutPutString("부딪");
+		}
 	}
 }
 

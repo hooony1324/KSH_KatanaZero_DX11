@@ -161,6 +161,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ContentsCore.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Cube.h">
       <SubType>
       </SubType>
@@ -178,16 +182,16 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="TestContentsCore.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="TestLevel.h">
       <SubType>
       </SubType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ContentsCore.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Cube.cpp">
       <SubType>
       </SubType>
@@ -207,10 +211,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="TestContentsCore.cpp">
-      <SubType>
-      </SubType>
     </ClCompile>
     <ClCompile Include="TestLevel.cpp">
       <SubType>

@@ -1,28 +1,26 @@
 #include "PreCompile.h"
-#include "TestContentsCore.h"
+#include "ContentsCore.h"
 
 #pragma comment(lib, "GameEngineBase.lib")
+#include "TestLevel.h"
 
-#include "GameEngineContents/TestLevel.h"
-
-TestContentsCore::TestContentsCore()
-	: GameEngineCore()
+ContentsCore::ContentsCore() 
 {
 }
 
-TestContentsCore::~TestContentsCore()
+ContentsCore::~ContentsCore() 
 {
 }
 
-void TestContentsCore::Start()
+void ContentsCore::Start()
 {
+	// GameEngineDebug::ConsoleOpen();
+
 	// 리소스를 로드하는데.
 
 	// RTTI 런 타임 타입 인포메이션
 	CreateLevel<TestLevel>("Test");
-
 	ChangeLevel("Test");
-
 
 	// 게임컨텐츠 정의
 	// 이 게임에는 타이틀화면
@@ -30,11 +28,10 @@ void TestContentsCore::Start()
 	//            스테이지2
 }
 
-void TestContentsCore::Update(float _DeltaTime)
+void ContentsCore::Update(float _DeltaTime)
 {
 }
 
-void TestContentsCore::End()
+void ContentsCore::End()
 {
-	int a = 0;
 }

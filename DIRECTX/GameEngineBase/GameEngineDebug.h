@@ -4,18 +4,22 @@
 #include <assert.h>
 #include <Windows.h>
 
+
 // 설명 :
 class GameEngineDebug
 {
 public:
 	static void LeakCheckOn();
+	static void ConsoleOpen();
 
-	// 보기 좋은 안전한 함수.
-	// static void MsgBoxAssert(const std::string& _Text);
+	static void OutPutString(const std::string& _Text);
+
+	static void Destroy();
 
 protected:
 
 private:
+	static HANDLE hConsole;
 	// constrcuter destructer
 	GameEngineDebug();
 	~GameEngineDebug();

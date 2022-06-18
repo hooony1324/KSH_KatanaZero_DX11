@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestContentsCore.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
     <ClInclude Include="TestLevel.h">
       <Filter>TestLevel</Filter>
     </ClInclude>
@@ -39,11 +36,11 @@
     <ClInclude Include="PreCompile.h">
       <Filter>PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsCore.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestContentsCore.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
     <ClCompile Include="TestLevel.cpp">
       <Filter>TestLevel</Filter>
     </ClCompile>
@@ -58,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCore.cpp">
+      <Filter>Contents</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

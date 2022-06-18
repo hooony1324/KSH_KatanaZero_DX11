@@ -22,6 +22,6 @@ protected:
 
 private:
 	GameEngineActor* player;
-	GameEngineActor* monster;
+	GameEngineActor* obstacle;
 };
 

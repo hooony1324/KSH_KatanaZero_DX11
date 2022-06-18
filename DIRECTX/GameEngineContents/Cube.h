@@ -2,6 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
+class GameEngineRenderer;
 class Cube : public GameEngineActor
 {
 public:
@@ -22,5 +23,10 @@ protected:
 
 private:
 	float Speed;
+	GameEngineRenderer* bodyRenderer;
+	GameEngineRenderer* childRenderer;
+
+	std::list<class Obstacle*> list_Obstacle;
+
 };
 
