@@ -16,6 +16,12 @@
     <Filter Include="PreCompile">
       <UniqueIdentifier>{094c440d-86fd-472b-99e8-3c4f72a18344}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayLevel">
+      <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TitleLevel">
+      <UniqueIdentifier>{1be4c993-8195-40d8-9539-d3a2f050b3d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestLevel.h">

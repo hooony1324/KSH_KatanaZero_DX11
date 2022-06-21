@@ -11,7 +11,7 @@ class GameEngineVertexBuffer : public GameEngineRes<GameEngineVertexBuffer>
 {
 public:
 	friend GameEngineRes<GameEngineVertexBuffer>;
-
+	
 private:
 	static GameEngineVertexBuffer* CreateRes(const std::vector<float4>& _Vertex, const std::string& _Name = "");
 

@@ -1,68 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Contents">
-      <UniqueIdentifier>{091cbac7-3415-4460-91d6-a029ad26b572}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{b1d22e24-1c89-4117-96a1-b21e01ca1b24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{e8f887f5-f424-4ad2-841a-f16e29a6d616}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{4562ff68-b8ea-43b4-b2f6-35a87402128b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Component">
-      <UniqueIdentifier>{443547a2-de4a-412b-93df-1a3b279f16fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Component\Rendering">
-      <UniqueIdentifier>{d22526cb-e6e7-4155-9fb0-f85cfacdb7e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\Component\Collision">
-      <UniqueIdentifier>{747d9495-9455-41d4-8186-cd610789ec6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PreCompile">
-      <UniqueIdentifier>{b8aebae3-e2dd-4c7d-a3dd-f32669c14a3e}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GameEngineStateManager.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngineCore.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngineActor.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineLevel.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="GEngine.h" />
-    <ClInclude Include="GameEngineRenderer.h">
-      <Filter>Object\Component\Rendering</Filter>
+    <ClInclude Include="GameEngineCore.h">
+      <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineStateManager.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="GEngine.h" />
     <ClInclude Include="GameEngineComponent.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineMesh.h">
-      <Filter>Resources</Filter>
+    <ClInclude Include="GameEngineRenderer.h">
+      <Filter>Object\Component\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineIndexBuffer.h">
+    <ClInclude Include="GameEngineMesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineVertexBuffer.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineIndexBuffer.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
     <ClInclude Include="GameEngineRes.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineTransformComponent.h">
-      <Filter>Object\Component</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngineCamera.h">
       <Filter>Object\Component\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineTransformComponent.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineCameraActor.h">
       <Filter>Object\Component\Rendering</Filter>
@@ -74,47 +48,53 @@
     <ClInclude Include="PreCompile.h">
       <Filter>PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineDevice.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineTransformBase.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameEngineStateManager.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngineCore.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngineActor.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineLevel.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="GEngine.cpp" />
-    <ClCompile Include="GameEngineRenderer.cpp">
-      <Filter>Object\Component\Rendering</Filter>
+    <ClCompile Include="GameEngineCore.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngineStateManager.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="GEngine.cpp" />
     <ClCompile Include="GameEngineComponent.cpp">
       <Filter>Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngineRenderer.cpp">
+      <Filter>Object\Component\Rendering</Filter>
+    </ClCompile>
     <ClCompile Include="GameEngineMesh.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngineIndexBuffer.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngineVertexBuffer.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngineRes.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCore_Resources.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngineTransformComponent.cpp">
-      <Filter>Object\Component</Filter>
+    <ClCompile Include="GameEngineVertexBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineIndexBuffer.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineRes.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCamera.cpp">
       <Filter>Object\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineTransformComponent.cpp">
+      <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="GameEngineCameraActor.cpp">
       <Filter>Object\Component\Rendering</Filter>
@@ -125,5 +105,40 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>PreCompile</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngineDevice.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineTransformBase.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Object">
+      <UniqueIdentifier>{9ad0e594-e458-4444-afe7-c98ac47786a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{bdafba04-6358-4c0c-b061-b6e84276d91f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{26808072-562e-43d7-a7f8-527f4cf62091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents">
+      <UniqueIdentifier>{0f1a8369-7658-4e5c-9bfe-7868e9ffee8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component">
+      <UniqueIdentifier>{e7912e52-0386-45b4-bf50-049ebcedb9a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Rendering">
+      <UniqueIdentifier>{159c3bb7-6922-43be-8efe-4497bb9d7c47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Collision">
+      <UniqueIdentifier>{419faf34-473f-447d-a811-d5ec4dcb7149}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{d46787de-918a-4696-9fbe-d892a479d89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{ac8a4ff0-3f71-4a8a-b75f-ae035701be9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

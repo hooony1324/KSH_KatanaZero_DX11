@@ -2,7 +2,7 @@
 #include "GameEngineFile.h"
 #include "GameEngineDebug.h"
 
-GameEngineFile::GameEngineFile()
+GameEngineFile::GameEngineFile() 
 	: FilePtr(nullptr)
 {
 
@@ -20,13 +20,13 @@ GameEngineFile::GameEngineFile(std::filesystem::path _Path)
 	Path_ = _Path;
 }
 
-GameEngineFile::GameEngineFile(const GameEngineFile& _Other)
+GameEngineFile::GameEngineFile(const GameEngineFile& _Other) 
 	: FilePtr(nullptr)
 {
 	Path_ = _Other.Path_;
 }
 
-GameEngineFile::~GameEngineFile()
+GameEngineFile::~GameEngineFile() 
 {
 	GameEngineFile::Close();
 }

@@ -25,17 +25,17 @@ public:
 	{
 		std::string UpperName = GameEngineString::ToUpperReturn(_Name);
 
-		typename std::map<std::string, ResType*>::iterator Iter = NamedRes.find(UpperName);
+		typename std::map<std::string, ResType*>::iterator Iter =  NamedRes.find(UpperName);
 
 		if (NamedRes.end() == Iter)
 		{
 			return nullptr;
 		}
-
+		
 		return Iter->second;
 	}
 
-	static void ResourcesDestroy()
+	static void ResourcesDestroy() 
 	{
 		for (auto& Res : UnNamedRes)
 		{

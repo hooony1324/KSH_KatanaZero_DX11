@@ -12,7 +12,7 @@ private:
 	static GameEngineWindow* Inst_;
 
 public:
-	inline static GameEngineWindow* GetInst()
+	inline static GameEngineWindow* GetInst() 
 	{
 		return Inst_;
 	}
@@ -39,6 +39,11 @@ public:
 	static inline HDC GetHDC()
 	{
 		return Inst_->HDC_;
+	}
+
+	static inline HWND GetHWND()
+	{
+		return Inst_->hWnd_;
 	}
 
 	static inline float4 GetScale()

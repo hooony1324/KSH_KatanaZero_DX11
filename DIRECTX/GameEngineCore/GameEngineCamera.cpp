@@ -5,7 +5,7 @@
 #include "GameEngineLevel.h"
 #include <GameEngineBase/GameEngineWindow.h>
 
-GameEngineCamera::GameEngineCamera()
+GameEngineCamera::GameEngineCamera() 
 {
 	// 윈도우가 여러분들 생각하기 가장 쉬운 비율이라서 여기서 하는거고.
 	Size = GameEngineWindow::GetInst()->GetScale();
@@ -15,7 +15,7 @@ GameEngineCamera::GameEngineCamera()
 	Fov = 60.0f;
 }
 
-GameEngineCamera::~GameEngineCamera()
+GameEngineCamera::~GameEngineCamera() 
 {
 }
 
@@ -23,8 +23,8 @@ void GameEngineCamera::Render(float _DeltaTime)
 {
 	// 랜더하기 전에 
 	View.LookAtLH(
-		GetActor()->GetTransform().GetLocalPosition(),
-		GetActor()->GetTransform().GetForwardVector(),
+		GetActor()->GetTransform().GetLocalPosition(), 
+		GetActor()->GetTransform().GetForwardVector(), 
 		GetActor()->GetTransform().GetUpVector());
 
 	switch (Mode)
@@ -66,4 +66,31 @@ void GameEngineCamera::Start()
 void GameEngineCamera::PushRenderer(GameEngineRenderer* _Renderer)
 {
 	AllRenderer_[_Renderer->GetOrder()].push_back(_Renderer);
+}
+
+void GameEngineCamera::Release(float _DelataTime)
+{
+	std::map<int, std::list<GameEngineRenderer*>>::iterator StartGroupIter = AllRenderer_.begin();
+	std::map<int, std::list<GameEngineRenderer*>>::iterator EndGroupIter = AllRenderer_.end();
+
+	for (; StartGroupIter != EndGroupIter; ++StartGroupIter)
+	{
+		std::list<GameEngineRenderer*>& Group = StartGroupIter->second;
+		std::list<GameEngineRenderer*>::iterator GroupStart = Group.begin();
+		std::list<GameEngineRenderer*>::iterator GroupEnd = Group.end();
+
+		for (; GroupStart != GroupEnd; )
+		{
+			(*GroupStart)->ReleaseUpdate(_DelataTime);
+			if (true == (*GroupStart)->IsDeath())
+			{
+				GroupStart = Group.erase(GroupStart);
+			}
+			else
+			{
+				++GroupStart;
+			}
+
+		}
+	}
 }

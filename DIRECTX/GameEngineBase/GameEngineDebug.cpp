@@ -4,11 +4,11 @@
 
 HANDLE GameEngineDebug::hConsole = nullptr;
 
-GameEngineDebug::GameEngineDebug()
+GameEngineDebug::GameEngineDebug() 
 {
 }
 
-GameEngineDebug::~GameEngineDebug()
+GameEngineDebug::~GameEngineDebug() 
 {
 }
 
@@ -47,9 +47,9 @@ void GameEngineDebug::ConsoleOpen()
 
 void GameEngineDebug::OutPutString(const std::string& _Text)
 {
-	// #ifdef _DEBUG
+// #ifdef _DEBUG
 	OutputDebugStringA((_Text + "\n").c_str());
-	// #endif
+// #endif
 }
 
 void GameEngineDebug::Destroy()

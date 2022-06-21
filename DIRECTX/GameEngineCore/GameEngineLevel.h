@@ -12,7 +12,7 @@ class GameEngineRenderer;
 class GameEngineTransform;
 class GameEngineCameraActor;
 class GameEngineLevel :
-	public GameEngineNameObject,
+	public GameEngineNameObject ,
 	public GameEngineUpdateObject
 {
 	friend GameEngineCore;
@@ -31,7 +31,7 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
-	GameEngineCamera* GetMainCamera()
+	GameEngineCamera* GetMainCamera() 
 	{
 		return MainCamera;
 	}
@@ -106,7 +106,7 @@ public:
 	}
 
 protected:
-
+	
 
 
 
@@ -115,6 +115,7 @@ private:
 	// 1번 그룹 몬스터
 	// 2번 그룹
 	std::map<int, std::list<GameEngineActor*>> AllActors;
+	std::list<GameEngineUpdateObject*> DeleteObject;
 
 	void ActorUpdate(float _DelataTime);
 
@@ -135,5 +136,7 @@ private:
 	void PushRenderer(GameEngineRenderer* _Renderer);
 
 	void Render(float _DelataTime);
+
+	void Release(float _DelataTime);
 };
 

@@ -2,11 +2,14 @@
 #include "GameEngineMesh.h"
 #include "GameEngineBase/GameEngineString.h"
 
-GameEngineMesh::GameEngineMesh()
+std::map<std::string, GameEngineMesh*> GameEngineMesh::NamedRes;
+std::list<GameEngineMesh*> GameEngineMesh::UnNamedRes;
+
+GameEngineMesh::GameEngineMesh() 
 {
 }
 
-GameEngineMesh::~GameEngineMesh()
+GameEngineMesh::~GameEngineMesh() 
 {
 }
 

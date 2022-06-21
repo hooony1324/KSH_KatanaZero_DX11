@@ -20,18 +20,11 @@ public:
 	GameEngineComponent& operator=(const GameEngineComponent& _Other) = delete;
 	GameEngineComponent& operator=(GameEngineComponent&& _Other) noexcept = delete;
 
-	inline GameEngineActor* GetActor()
-	{
-		return ParentActor;
-	}
+	void SetParent(GameEngineUpdateObject*) override;
 
 protected:
 	virtual void Start() {}
 	virtual void Update(float _DeltaTime) {}
 	virtual void End() {}
-
-private:
-	class GameEngineActor* ParentActor;
-
 };
 

@@ -3,7 +3,9 @@
 #include <GameEngineBase/GameEngineWindow.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineTime.h>
+#include <GameEngineCore/GameEngineDevice.h>
 #include "GameEngineLevel.h"
+#include "GameEngineDevice.h"
 
 #pragma comment(lib, "GameEngineBase.lib")
 
@@ -119,8 +121,8 @@ void GameEngineCore::CoreEnd(GameEngineCore* _UserCore)
 
 	GameEngineWindow::Destroy();
 	GameEngineInput::Destroy();
+	GameEngineDebug::Destroy();
 	GameEngineTime::Destroy();
-	
 }
 
 
@@ -129,11 +131,18 @@ void GameEngineCore::WindowCreate(const std::string& _Name, GameEngineCore* _Use
 	GameEngineWindow::GetInst()->CreateGameWindow(nullptr, _Name.c_str());
 	GameEngineWindow::GetInst()->SetWindowScaleAndPosition({ 0,0 }, {1280, 720});
 	GameEngineWindow::GetInst()->ShowGameWindow();
+	GameEngineDevice::Initialize();
+
+
+
+
+	// 엔진의 실행인데.
 	GameEngineWindow::GetInst()->MessageLoop(
 		std::bind(&GameEngineCore::CoreStart, _UserCore),
 		std::bind(&GameEngineCore::CoreUpdate, _UserCore),
 		std::bind(&GameEngineCore::CoreEnd, _UserCore)
 	);
+
 }
 
 void GameEngineCore::InitializeLevel(GameEngineLevel* _Level, const std::string _Name)

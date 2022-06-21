@@ -2,6 +2,7 @@
 #include "GameEngineMath.h"
 #include <DirectXCollision.h>
 #include <GameEngineBase/GameEngineDebugObject.h>
+#include <GameEngineBase/GameEngineUpdateObject.h>
 #include <list>
 
 enum CollisionType
@@ -16,14 +17,14 @@ class CollisionData
 {
 	friend class GameEngineTransform;
 
-	union
+	union 
 	{
 		DirectX::BoundingSphere SPHERE;
 		DirectX::BoundingBox AABB;
 		DirectX::BoundingOrientedBox OBB;
 	};
 
-	CollisionData()
+	CollisionData() 
 		: OBB()
 	{
 
@@ -187,7 +188,9 @@ public:
 
 	void CalculateWorldViewProjection();
 
-	void SetParent(GameEngineTransform& _Child);
+	void DetachTransform();
+
+	void SetParentTransform(GameEngineTransform& _Child);
 
 	// void PushChild(GameEngineTransform* _Child);
 
@@ -315,7 +318,12 @@ private:
 	void CollisionPositionSetting();
 	void CollisionDataSetting();
 
-	/////////////////////////// 面倒包访
+	virtual void Start() {}
+	virtual void Update(float _DeltaTime) {}
+	virtual void End() {}
+
+
+/////////////////////////// 面倒包访
 public:
 	static bool SphereToSphere(const GameEngineTransform& _Left, const GameEngineTransform& _Right);
 

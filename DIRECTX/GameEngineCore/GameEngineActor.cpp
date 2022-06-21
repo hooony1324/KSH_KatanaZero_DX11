@@ -3,22 +3,14 @@
 #include "GameEngineComponent.h"
 #include "GameEngineTransformComponent.h"
 
-GameEngineActor::GameEngineActor()
+GameEngineActor::GameEngineActor() 
 	:ParentLevel(nullptr)
 {
+
 }
 
-GameEngineActor::~GameEngineActor()
+GameEngineActor::~GameEngineActor() 
 {
-	for (GameEngineComponent* Com : AllComList)
-	{
-		delete Com;
-	}
-
-	for (GameEngineTransformComponent* Com : AllTransComList)
-	{
-		delete Com;
-	}
 }
 
 void GameEngineActor::Start() {}
@@ -27,22 +19,46 @@ void GameEngineActor::End() {}
 
 void GameEngineActor::ComponentUpdate(float _ScaleDeltaTime, float _DeltaTime)
 {
-	for (GameEngineComponent* Com : AllComList)
+	for (GameEngineUpdateObject* Com : Childs)
 	{
 		Com->AddAccTime(_DeltaTime);
 		Com->Update(_ScaleDeltaTime);
 	}
 }
-
-void GameEngineActor::SettingTransformComponent(GameEngineTransformComponent* TransCom)
+void GameEngineActor::DetachObject() 
 {
-	TransCom->GetTransform().SetParent(GetTransform());
+	GameEngineUpdateObject::DetachObject();
+
+	GetTransform().DetachTransform();
 }
 
-void GameEngineActor::ComponentCalculateTransform()
+void GameEngineActor::SetParent(GameEngineUpdateObject* _Object) 
 {
-	for (GameEngineTransformComponent* Com : AllTransComList)
+	GameEngineUpdateObject::SetParent(_Object);
+
 	{
-		Com->GetTransform().CalculateWorld();
+		GameEngineTransformBase* Actor = nullptr;
+		if (Actor = dynamic_cast<GameEngineTransformBase*>(_Object))
+		{
+			GetTransform().SetParentTransform(Actor->GetTransform());
+			return;
+		}
+	}
+
+	MsgBoxAssert("트랜스폼이 없는 컴포넌트에 트랜스폼이 있는 부모를 붙이려고 했습니다.");
+}
+
+void GameEngineActor::ReleaseObject(std::list<GameEngineUpdateObject*>& _RelaseList) 
+{
+	GameEngineUpdateObject::ReleaseObject(_RelaseList);
+
+	for (GameEngineUpdateObject* Component : _RelaseList)
+	{
+		GameEngineComponent* ConvertPtr = dynamic_cast<GameEngineComponent*>(Component);
+
+		if (nullptr == ConvertPtr)
+		{
+			continue;
+		}
 	}
 }

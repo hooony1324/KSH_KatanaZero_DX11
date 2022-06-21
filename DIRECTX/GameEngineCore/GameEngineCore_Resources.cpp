@@ -4,10 +4,12 @@
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineTime.h>
 #include "GameEngineLevel.h"
+#include <math.h>
 
 // Resources Header
 #include "GameEngineVertexBuffer.h"
 #include "GameEngineIndexBuffer.h"
+
 
 void GameEngineCore::EngineResourcesInitialize()
 {
@@ -15,17 +17,14 @@ void GameEngineCore::EngineResourcesInitialize()
 	// 엔진수준에서 기본적으로 지원줘야 한다고 생각하는
 	// 리소스들을 이니셜라이즈하는 단계
 
-
 	{
 		// 0       1
 
 		//    원점
-
+		
 		// 3       2
 
 		std::vector<float4> Vertex;
-
-		// 앞면
 		Vertex.push_back(float4(-0.5f, 0.5f));
 		Vertex.push_back(float4(0.5f, 0.5f));
 		Vertex.push_back(float4(0.5f, -0.5f));
@@ -59,6 +58,7 @@ void GameEngineCore::EngineResourcesInitialize()
 
 		GameEngineIndexBuffer::Create("Rect", Index);
 	}
+
 	{
 		// 0       1
 
@@ -131,4 +131,6 @@ void GameEngineCore::EngineResourcesDestroy()
 {
 	GameEngineVertexBuffer::ResourcesDestroy();
 	GameEngineIndexBuffer::ResourcesDestroy();
+
+	GameEngineDevice::Destroy();
 }

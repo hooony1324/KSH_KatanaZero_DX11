@@ -53,5 +53,7 @@ private:
 	void Render(float _DeltaTime);
 
 	void PushRenderer(GameEngineRenderer* _Renderer);
+
+	void Release(float _DelataTime);
 };
 

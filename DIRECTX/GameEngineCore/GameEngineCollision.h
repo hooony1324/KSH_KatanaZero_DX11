@@ -1,8 +1,14 @@
 #pragma once
+#include <GameEngineBase/GameEngineTransform.h>
+
+
 
 // Ό³Έν :
 class GameEngineCollision
 {
+public:
+	// static bool SphereToSphere(const GameEngineTransform&);
+
 public:
 	// constrcuter destructer
 	GameEngineCollision();
