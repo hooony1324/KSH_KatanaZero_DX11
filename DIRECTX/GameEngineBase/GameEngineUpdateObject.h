@@ -35,7 +35,7 @@ public:
 		{
 			return IsUpdate_ && false == IsDeath_ && true == Parent->IsUpdate();
 		}
-		else 
+		else
 		{
 			return IsUpdate_ && false == IsDeath_;
 		}
@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	void AddAccTime(float _DeltaTime) 
+	void AddAccTime(float _DeltaTime)
 	{
 		AccTime_ += _DeltaTime;
 	}
@@ -80,7 +80,7 @@ public:
 			return;
 		}
 
-		DeathTime_ -= GameEngineTime::GetDeltaTime();
+		DeathTime_ -= _DeltaTime;
 
 		if (0.0f >= DeathTime_)
 		{
@@ -110,10 +110,16 @@ public:
 		return dynamic_cast<ParentType*>(Parent);
 	}
 
+	GameEngineUpdateObject* GetParent()
+	{
+		return Parent;
+	}
+
+
 	virtual void SetParent(GameEngineUpdateObject* _Parent);
 	virtual void DetachObject();
 
-	virtual void DeleteChild();
+	virtual void ReleaseHierarchy();
 
 	// 이 오브젝트가 프레임구조안에서 돌고 있다.
 	virtual void Update(float _DeltaTime) = 0;

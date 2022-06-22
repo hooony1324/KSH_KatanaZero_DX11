@@ -17,14 +17,14 @@ class CollisionData
 {
 	friend class GameEngineTransform;
 
-	union 
+	union
 	{
 		DirectX::BoundingSphere SPHERE;
 		DirectX::BoundingBox AABB;
 		DirectX::BoundingOrientedBox OBB;
 	};
 
-	CollisionData() 
+	CollisionData()
 		: OBB()
 	{
 
@@ -51,20 +51,12 @@ public:
 	{
 		CalculateWorldScale(_Value);
 		CalculateWorld();
-
-		for (GameEngineTransform* Child : Childs)
-		{
-			Child->CalculateWorldScale(Child->LocalScale);
-			Child->CalculateWorldPosition(Child->LocalPosition);
-		}
-
 	}
 
 	inline void SetLocalRotation(const float4& _Value)
 	{
 		CalculateWorldRotation(_Value);
 		CalculateWorld();
-
 	}
 
 	inline void SetLocalPosition(const float4& _Value)
@@ -323,7 +315,7 @@ private:
 	virtual void End() {}
 
 
-/////////////////////////// 面倒包访
+	/////////////////////////// 面倒包访
 public:
 	static bool SphereToSphere(const GameEngineTransform& _Left, const GameEngineTransform& _Right);
 

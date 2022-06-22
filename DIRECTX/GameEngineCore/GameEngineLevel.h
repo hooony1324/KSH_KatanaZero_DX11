@@ -12,10 +12,11 @@ class GameEngineRenderer;
 class GameEngineTransform;
 class GameEngineCameraActor;
 class GameEngineLevel :
-	public GameEngineNameObject ,
+	public GameEngineNameObject,
 	public GameEngineUpdateObject
 {
 	friend GameEngineCore;
+	friend GameEngineActor;
 	friend GameEngineCamera;
 	friend GameEngineRenderer;
 	// 레벨이 현재까지 얼마나 켜져있었는지 시간을 잴수 있게 한다.
@@ -31,7 +32,7 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
-	GameEngineCamera* GetMainCamera() 
+	GameEngineCamera* GetMainCamera()
 	{
 		return MainCamera;
 	}
@@ -60,9 +61,9 @@ public:
 	ActorType* CreateActor(int _ObjectGroupIndex = 0)
 	{
 		GameEngineActor* NewActor = new ActorType();
-		NewActor->ParentLevel = this;
-		NewActor->Start();
 		NewActor->SetLevel(this);
+		NewActor->SetOrder(_ObjectGroupIndex);
+		NewActor->Start();
 
 		// AllActors[_ObjectGroupIndex]게 사용하면
 		// 없으면 만들어버리고 있으면
@@ -106,7 +107,7 @@ public:
 	}
 
 protected:
-	
+
 
 
 
@@ -121,7 +122,7 @@ private:
 
 	void LevelUpdate(float DeltaTime);
 
-
+	void RemoveActor(GameEngineActor* _Actor);
 
 private:
 	// 0번 백그라운드

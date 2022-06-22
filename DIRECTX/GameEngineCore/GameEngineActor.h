@@ -26,9 +26,9 @@ public:
 	GameEngineActor& operator=(const GameEngineActor& _Other) = delete;
 	GameEngineActor& operator=(GameEngineActor&& _Other) noexcept = delete;
 
-	inline GameEngineLevel* GetLevel() 	
-	{		
-		return ParentLevel;	
+	inline GameEngineLevel* GetLevel()
+	{
+		return ParentLevel;
 	}
 
 	template<typename ComponentType>
@@ -51,16 +51,13 @@ protected:
 	virtual void End() override;
 
 private:
-	void ComponentUpdate(float _ScaleDeltaTime, float _DeltaTime);
+	void AllUpdate(float _ScaleDeltaTime, float _DeltaTime);
 
 	class GameEngineLevel* ParentLevel;
 
-	void SetLevel(GameEngineLevel* _ParentLevel) 
+	void SetLevel(GameEngineLevel* _ParentLevel)
 	{
 		ParentLevel = _ParentLevel;
 	}
-
-	void ReleaseObject(std::list<GameEngineUpdateObject*>& _RelaseList) override;
-	
 };
 

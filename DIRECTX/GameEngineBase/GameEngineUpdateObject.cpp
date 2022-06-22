@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "GameEngineUpdateObject.h"
 
-GameEngineUpdateObject::GameEngineUpdateObject() 
+GameEngineUpdateObject::GameEngineUpdateObject()
 	: IsUpdate_(true)
 	, IsDeath_(false)
 	, IsReleaseUpdate_(false)
@@ -12,24 +12,24 @@ GameEngineUpdateObject::GameEngineUpdateObject()
 {
 }
 
-GameEngineUpdateObject::~GameEngineUpdateObject() 
+GameEngineUpdateObject::~GameEngineUpdateObject()
 {
 }
 
-void GameEngineUpdateObject::DeleteChild() 
+void GameEngineUpdateObject::ReleaseHierarchy()
 {
 	std::list<GameEngineUpdateObject*>::iterator StartIter = Childs.begin();
 	std::list<GameEngineUpdateObject*>::iterator EndIter = Childs.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
-		(*StartIter)->DeleteChild();
+		(*StartIter)->ReleaseHierarchy();
 	}
 
 	delete this;
 }
 
-void GameEngineUpdateObject::SetParent(GameEngineUpdateObject* _Parent) 
+void GameEngineUpdateObject::SetParent(GameEngineUpdateObject* _Parent)
 {
 	DetachObject();
 
@@ -57,7 +57,7 @@ void GameEngineUpdateObject::ReleaseObject(std::list<GameEngineUpdateObject*>& _
 	std::list<GameEngineUpdateObject*>::iterator StartIter = Childs.begin();
 	std::list<GameEngineUpdateObject*>::iterator EndIter = Childs.end();
 
-	for ( ; StartIter != EndIter;)
+	for (; StartIter != EndIter;)
 	{
 		if (true == (*StartIter)->IsDeath())
 		{

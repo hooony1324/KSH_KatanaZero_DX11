@@ -1,15 +1,16 @@
 #include "PreCompile.h"
 #include "GameEngineActor.h"
+#include "GameEngineLevel.h"
 #include "GameEngineComponent.h"
 #include "GameEngineTransformComponent.h"
 
-GameEngineActor::GameEngineActor() 
+GameEngineActor::GameEngineActor()
 	:ParentLevel(nullptr)
 {
 
 }
 
-GameEngineActor::~GameEngineActor() 
+GameEngineActor::~GameEngineActor()
 {
 }
 
@@ -17,23 +18,38 @@ void GameEngineActor::Start() {}
 void GameEngineActor::Update(float _DeltaTime) {}
 void GameEngineActor::End() {}
 
-void GameEngineActor::ComponentUpdate(float _ScaleDeltaTime, float _DeltaTime)
+void GameEngineActor::AllUpdate(float _ScaleDeltaTime, float _DeltaTime)
 {
+	AddAccTime(_DeltaTime);
+	ReleaseUpdate(_DeltaTime);
+	Update(_ScaleDeltaTime);
+
 	for (GameEngineUpdateObject* Com : Childs)
 	{
 		Com->AddAccTime(_DeltaTime);
+		Com->ReleaseUpdate(_DeltaTime);
+		if (false == Com->IsUpdate())
+		{
+			continue;
+		}
+
 		Com->Update(_ScaleDeltaTime);
 	}
 }
-void GameEngineActor::DetachObject() 
+void GameEngineActor::DetachObject()
 {
 	GameEngineUpdateObject::DetachObject();
 
 	GetTransform().DetachTransform();
 }
 
-void GameEngineActor::SetParent(GameEngineUpdateObject* _Object) 
+void GameEngineActor::SetParent(GameEngineUpdateObject* _Object)
 {
+	if (nullptr == GetParent())
+	{
+		GetLevel()->RemoveActor(this);
+	}
+
 	GameEngineUpdateObject::SetParent(_Object);
 
 	{
@@ -48,17 +64,3 @@ void GameEngineActor::SetParent(GameEngineUpdateObject* _Object)
 	MsgBoxAssert("트랜스폼이 없는 컴포넌트에 트랜스폼이 있는 부모를 붙이려고 했습니다.");
 }
 
-void GameEngineActor::ReleaseObject(std::list<GameEngineUpdateObject*>& _RelaseList) 
-{
-	GameEngineUpdateObject::ReleaseObject(_RelaseList);
-
-	for (GameEngineUpdateObject* Component : _RelaseList)
-	{
-		GameEngineComponent* ConvertPtr = dynamic_cast<GameEngineComponent*>(Component);
-
-		if (nullptr == ConvertPtr)
-		{
-			continue;
-		}
-	}
-}

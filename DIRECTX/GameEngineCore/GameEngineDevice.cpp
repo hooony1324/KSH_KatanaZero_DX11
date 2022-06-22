@@ -1,16 +1,17 @@
 #include "PreCompile.h"
 #include "GameEngineDevice.h"
+#include <GameEngineBase/GameEngineWindow.h>
 
 GameEngineDevice* GameEngineDevice::Inst = new GameEngineDevice();
 ID3D11Device* GameEngineDevice::Device_ = nullptr;
 ID3D11DeviceContext* GameEngineDevice::Context_ = nullptr;
 IDXGISwapChain* GameEngineDevice::SwapChain_ = nullptr;
 
-GameEngineDevice::GameEngineDevice() 
+GameEngineDevice::GameEngineDevice()
 {
 }
 
-GameEngineDevice::~GameEngineDevice() 
+GameEngineDevice::~GameEngineDevice()
 {
 	if (nullptr != SwapChain_)
 	{
@@ -31,7 +32,7 @@ GameEngineDevice::~GameEngineDevice()
 	}
 }
 
-void GameEngineDevice::Initialize() 
+void GameEngineDevice::DeviceCreate()
 {
 	if (nullptr == GameEngineWindow::GetHWND())
 	{
@@ -49,23 +50,88 @@ void GameEngineDevice::Initialize()
 	D3D_FEATURE_LEVEL Level = D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_0;
 
 	// soft
+	if (
+		S_OK != D3D11CreateDevice(
+			// 내가 코딩한 그래픽카드 드라이버 방법이 있나요?
+			nullptr,
+			// 일반적인 표준하에서 만들어지는 그래픽카드를 사용할겁니다.
+			D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE,
+			nullptr,
+			iFlag,
+			nullptr,
+			0,
+			D3D11_SDK_VERSION,
+			&Device_,
+			&Level,
+			&Context_
+		)
+		)
+	{
+		MsgBoxAssert("디바이스 생성이 실패했습니다.");
+	}
 
-	//if (
-	//	S_OK != D3D11CreateDevice(
-	//		// 내가 코딩한 그래픽카드 드라이버 방법이 있나요?
-	//		nullptr,
-	//		// 일반적인 표준하에서 만들어지는 그래픽카드를 사용할겁니다.
-	//		D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE,
-	//		nullptr,
-	//		iFlag,
-	//		nullptr, 
-	//		0, 
-	//		D3D11_SDK_VERSION,
+	if (Level != D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_0)
+	{
+		MsgBoxAssert("11을 지원하지 않는 디바이스 입니다.");
+	}
 
-	//	)
-	//	)
-	//{
+	// 멀티쓰레드 로딩용 옵션.
+	HRESULT Hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+}
 
-	//}
+void GameEngineDevice::CreateSwapChain()
+{
+	float4 ScreenSize = GameEngineWindow::GetScale();
+
+	// 다이렉트의 그래픽카드에 생성 방식은 보통 생성하기 위한 정보를 넘기는것
+	// 이게 그래픽카드에 이 메모리를 만들거냐
+	// 램에 만들면 느려.
+	DXGI_SWAP_CHAIN_DESC ScInfo = { 0, };
+
+	ScInfo.BufferCount = 2;
+	ScInfo.BufferDesc.Width = ScreenSize.uix();
+	ScInfo.BufferDesc.Height = ScreenSize.uix();
+
+	ScInfo.BufferDesc.RefreshRate.Denominator = 1;
+	ScInfo.BufferDesc.RefreshRate.Numerator = 60;
+
+	ScInfo.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	ScInfo.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	ScInfo.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+	ScInfo.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+
+	ScInfo.SampleDesc.Quality = 0;
+	ScInfo.SampleDesc.Count = 1;
+
+	ScInfo.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD;
+
+	ScInfo.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+	ScInfo.Windowed = true;
+
+	// 스왑체인을 만들려면
+	// 기본적으로 팩토리라는걸 만들거나 얻어와야 하는데.
+	// 만드는 방식이 아니고. 
+
+	IDXGIDevice* pD = nullptr;
+	IDXGIAdapter* pA = nullptr;
+	IDXGIFactory* pF = nullptr;
+
+	// 이 프로그램 내에서 절대로 겹치지 않을 하나의 값을 만들어내는 겁니다.
+	// "54ec77fa-1377-44e6-8c32-88fd5f44c84c"
+	// 절대로 겹치지
+	Device_->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&pD));
+	if (nullptr == pD)
+	{
+		MsgBoxAssert("디바이스 추출에 실패했습니다.");
+	}
+
+}
+
+void GameEngineDevice::Initialize()
+{
+	DeviceCreate();
+	CreateSwapChain();
 }
 
