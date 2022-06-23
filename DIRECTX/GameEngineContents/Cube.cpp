@@ -45,10 +45,19 @@ void Cube::Start()
 
 	{
 		childRenderer2 = CreateComponent<GameEngineRenderer>();
-		childRenderer2->SetParent(childRenderer);
+		childRenderer2->SetParent(this);
 		childRenderer2->GetTransform().SetLocalScale({ 1, 1, 0 });
 		childRenderer2->GetTransform().SetLocalPosition({ 1,0,0 });
 	}
+
+	auto obs = GetLevel()->CreateActor<Obstacle>(ACTORGROUP::OBSTACLE);
+	obs->SetParent(this);
+	obs->GetTransform().SetLocalScale({ 10, 10, 10 });
+	GetTransform().SetWorldScale({ 2, 2, 2 });
+	this;
+
+	obs->GetTransform().SetWorldPosition({ 10, 10, 0 });
+
 
 }
 

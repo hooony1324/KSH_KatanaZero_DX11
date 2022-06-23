@@ -16,11 +16,20 @@
     <Filter Include="PreCompile">
       <UniqueIdentifier>{094c440d-86fd-472b-99e8-3c4f72a18344}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayLevel">
+    <Filter Include="00TitleLevel">
+      <UniqueIdentifier>{1be4c993-8195-40d8-9539-d3a2f050b3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01PlayLevel">
       <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TitleLevel">
-      <UniqueIdentifier>{1be4c993-8195-40d8-9539-d3a2f050b3d1}</UniqueIdentifier>
+    <Filter Include="01PlayLevel\Rooms">
+      <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01PlayLevel\Player">
+      <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01PlayLevel\Enemy">
+      <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

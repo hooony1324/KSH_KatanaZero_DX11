@@ -3,6 +3,7 @@
 
 enum class ACTORGROUP
 {
+	CAMERA,
 	PLAYER,
 	MONSTER,
 	OBSTACLE,

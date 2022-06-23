@@ -35,16 +35,10 @@ void TestLevel::Start()
 		GameEngineCameraActor* actor = CreateActor<GameEngineCameraActor>();
 		actor->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::PersPective);
 		actor->GetTransform().SetLocalPosition({ 0.0f, 0.0f, -1000.0f });
-
 	}
 	
 	{
 		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
-
-		obstacle = CreateActor<Obstacle>(ACTORGROUP::OBSTACLE);
-		obstacle->GetTransform().SetLocalScale({ 5, 5, 0 });
-		obstacle->GetTransform().SetWorldScale({ 20, 20, 0 });
-		obstacle->GetTransform().SetWorldPosition({ 0, 200, 0 });
 	}
 }
 
