@@ -25,17 +25,17 @@ public:
 	{
 		std::string UpperName = GameEngineString::ToUpperReturn(_Name);
 
-		typename std::map<std::string, ResType*>::iterator Iter =  NamedRes.find(UpperName);
+		typename std::map<std::string, ResType*>::iterator Iter = NamedRes.find(UpperName);
 
 		if (NamedRes.end() == Iter)
 		{
 			return nullptr;
 		}
-		
+
 		return Iter->second;
 	}
 
-	static void ResourcesDestroy() 
+	static void ResourcesDestroy()
 	{
 		for (auto& Res : UnNamedRes)
 		{
@@ -52,8 +52,32 @@ protected:
 	static std::map<std::string, ResType*> NamedRes;
 	static std::list<ResType*> UnNamedRes;
 
-private:
+	static ResType* CreateResName(const std::string& _Name = "")
+	{
+		ResType* Res = CreateRes(_Name);
+		NamedRes.insert(std::make_pair(Res->GetNameCopy(), Res));
+		return Res;
+	}
 
+	static ResType* CreateResUnName()
+	{
+		ResType* Res = CreateRes();
+		UnNamedRes.push_back(Res);
+		return Res;
+	}
+
+	static ResType* CreateRes(const std::string& _Name = "")
+	{
+		std::string Name = GameEngineString::ToUpperReturn(_Name);
+
+		ResType* NewRes = new ResType();
+		NewRes->SetName(Name);
+
+		return NewRes;
+	}
+
+
+private:
 };
 
 template<typename ResType>

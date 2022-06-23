@@ -11,13 +11,10 @@ class GameEngineVertexBuffer : public GameEngineRes<GameEngineVertexBuffer>
 {
 public:
 	friend GameEngineRes<GameEngineVertexBuffer>;
-	
-private:
-	static GameEngineVertexBuffer* CreateRes(const std::vector<float4>& _Vertex, const std::string& _Name = "");
 
 public:
-	static void Create(const std::string& _Name, const std::vector<float4>& _Vertex);
-	static void Create(const std::vector<float4>& _Vertex);
+	static GameEngineVertexBuffer* Create(const std::string& _Name, const std::vector<float4>& _Vertex);
+	static GameEngineVertexBuffer* Create(const std::vector<float4>& _Vertex);
 
 private:
 	// constrcuter destructer

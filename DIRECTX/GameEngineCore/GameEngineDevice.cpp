@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "GameEngineDevice.h"
 #include <GameEngineBase/GameEngineWindow.h>
+#include "GameEngineTexture.h"
 
 GameEngineDevice* GameEngineDevice::Inst = new GameEngineDevice();
 ID3D11Device* GameEngineDevice::Device_ = nullptr;
@@ -91,6 +92,7 @@ void GameEngineDevice::CreateSwapChain()
 	ScInfo.BufferCount = 2;
 	ScInfo.BufferDesc.Width = ScreenSize.uix();
 	ScInfo.BufferDesc.Height = ScreenSize.uix();
+	ScInfo.OutputWindow = GameEngineWindow::GetHWND();
 
 	ScInfo.BufferDesc.RefreshRate.Denominator = 1;
 	ScInfo.BufferDesc.RefreshRate.Numerator = 60;
@@ -121,12 +123,48 @@ void GameEngineDevice::CreateSwapChain()
 	// 이 프로그램 내에서 절대로 겹치지 않을 하나의 값을 만들어내는 겁니다.
 	// "54ec77fa-1377-44e6-8c32-88fd5f44c84c"
 	// 절대로 겹치지
+	// 다이렉트가 제공하는 인터페이스가 포인터들은 레퍼런스 카운트 방식을 사용하는데.
+	// Comptr이나 이런 보조클래스가 없으면 내가 직접 Release를 호출해줘야 한다.
 	Device_->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&pD));
 	if (nullptr == pD)
 	{
 		MsgBoxAssert("디바이스 추출에 실패했습니다.");
 	}
 
+	pD->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&pA));
+	if (nullptr == pA)
+	{
+		MsgBoxAssert("어뎁터 추출에 실패했습니다.");
+	}
+
+	pA->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&pF));
+	if (nullptr == pF)
+	{
+		MsgBoxAssert("팩토리 추출에 실패했습니다.");
+	}
+
+	if (S_OK != pF->CreateSwapChain(Device_, &ScInfo, &SwapChain_))
+	{
+		MsgBoxAssert("스왑체인 생성에 실패했습니다.");
+	}
+
+
+	pF->Release();
+	pA->Release();
+	pD->Release();
+
+	ID3D11Texture2D* BackBufferTexture = nullptr;
+	if (S_OK != SwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&BackBufferTexture)))
+	{
+		MsgBoxAssert("백버퍼 텍스처를 얻어오지 못했습니다.");
+	}
+
+	GameEngineTexture::Create("BackBuffer", BackBufferTexture);
+
+
+	//Context_->OMSetRenderTargets();
+
+	// ID3D11Texture2D*
 }
 
 void GameEngineDevice::Initialize()

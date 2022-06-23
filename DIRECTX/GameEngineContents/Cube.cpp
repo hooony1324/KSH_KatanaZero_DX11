@@ -4,6 +4,8 @@
 #include <GameEngineBase/GameEngineInput.h>
 #include "GlobalValueManager.h"
 
+#include "Obstacle.h"
+
 Cube::Cube()
 	: Speed(80.0f)
 {
@@ -41,6 +43,13 @@ void Cube::Start()
 		childRenderer->GetTransform().SetLocalPosition({ 1,0,0 });
 	}
 
+	{
+		childRenderer2 = CreateComponent<GameEngineRenderer>();
+		childRenderer2->SetParent(childRenderer);
+		childRenderer2->GetTransform().SetLocalScale({ 1, 1, 0 });
+		childRenderer2->GetTransform().SetLocalPosition({ 1,0,0 });
+	}
+
 }
 
 void Cube::Update(float _DeltaTime)
@@ -74,11 +83,11 @@ void Cube::Update(float _DeltaTime)
 
 	if (true == GameEngineInput::GetInst()->IsPress("Rot+"))
 	{
-		GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
+		bodyRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Rot-"))
 	{
-		GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
+		bodyRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
 	}
 
 	// 충돌체크

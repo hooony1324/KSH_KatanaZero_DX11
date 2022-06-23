@@ -32,9 +32,10 @@ public:
 	}
 
 	template<typename ComponentType>
-	ComponentType* CreateComponent()
+	ComponentType* CreateComponent(const std::string& _Name = "")
 	{
 		GameEngineComponent* NewComponent = new ComponentType();
+		NewComponent->SetName(_Name);
 		NewComponent->SetParent(this);
 		NewComponent->Start();
 

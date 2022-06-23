@@ -11,12 +11,9 @@ class GameEngineIndexBuffer : public GameEngineRes<GameEngineIndexBuffer>
 {
 	friend GameEngineRes<GameEngineIndexBuffer>;
 
-private:
-	static GameEngineIndexBuffer* CreateRes(const std::vector<int>& _Indexs, const std::string& _Name = "");
-
 public:
-	static void Create(const std::string& _Name, const std::vector<int>& _Indexs);
-	static void Create(const std::vector<int>& _Indexs);
+	static GameEngineIndexBuffer* Create(const std::string& _Name, const std::vector<int>& _Indexs);
+	static GameEngineIndexBuffer* Create(const std::vector<int>& _Indexs);
 
 private:
 	// constrcuter destructer
