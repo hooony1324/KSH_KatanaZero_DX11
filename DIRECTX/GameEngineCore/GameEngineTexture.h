@@ -18,12 +18,19 @@ public:
 	GameEngineTexture& operator=(const GameEngineTexture& _Other) = delete;
 	GameEngineTexture& operator=(GameEngineTexture&& _Other) noexcept = delete;
 
+	// static
 	static GameEngineTexture* Create(const std::string& _Name, ID3D11Texture2D* _Texture);
+	static GameEngineTexture* Create(ID3D11Texture2D* _Texture);
+
+	// Member
+	ID3D11RenderTargetView* CreateRenderTargetView();
+
 
 protected:
 
 private:
-	ID3D11Texture2D* Texture;
+	ID3D11Texture2D* Texture2D;
+	ID3D11RenderTargetView* RenderTargetView;
 
 	// 이녀석은 텍스처를 통해서 
 	// ID3D11RenderTargetView* Render;

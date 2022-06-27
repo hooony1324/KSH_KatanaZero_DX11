@@ -7,24 +7,6 @@
 // 설명 :
 class GameEngineDevice
 {
-private:
-	static GameEngineDevice* Inst;
-
-public:
-	static GameEngineDevice& GetInst()
-	{
-		return *Inst;
-	}
-
-	static void Destroy()
-	{
-		if (nullptr != Inst)
-		{
-			delete Inst;
-			Inst = nullptr;
-		}
-	}
-
 public:
 	~GameEngineDevice();
 
@@ -37,6 +19,20 @@ public:
 	static void Initialize();
 	static void DeviceCreate();
 	static void CreateSwapChain();
+
+	static void RenderStart();
+	static void RenderEnd();
+
+	static ID3D11Device* GetDevice()
+	{
+		return Device_;
+	}
+	static ID3D11DeviceContext* GetContext()
+	{
+		return Context_;
+	}
+
+	static void Destroy();
 
 protected:
 
@@ -54,6 +50,8 @@ private:
 
 	// api의 백버퍼
 	static IDXGISwapChain* SwapChain_;
+
+	static class GameEngineRenderTarget* BackBufferTarget;
 
 	GameEngineDevice();
 };

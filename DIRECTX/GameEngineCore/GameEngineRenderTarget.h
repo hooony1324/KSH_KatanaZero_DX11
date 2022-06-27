@@ -3,7 +3,7 @@
 #include <vector>
 
 // Ό³Έν :
-class GameEngineRenderTarget
+class GameEngineRenderTarget : public GameEngineRes <GameEngineRenderTarget>
 {
 public:
 	// constrcuter destructer
@@ -16,10 +16,22 @@ public:
 	GameEngineRenderTarget& operator=(const GameEngineRenderTarget& _Other) = delete;
 	GameEngineRenderTarget& operator=(GameEngineRenderTarget&& _Other) noexcept = delete;
 
+	static GameEngineRenderTarget* Create(const std::string& _Name);
+
+	void CreateRenderTargetTexture(ID3D11Texture2D* _Texture, float4 _Color);
+
+	void Clear();
+
+	void Setting();
+
 protected:
-	std::vector<GameEngineTexture*> RenderTarget;
+	std::vector<GameEngineTexture*> RenderTargets;
+	std::vector<ID3D11RenderTargetView*> RenderTargetViews;
+	std::vector<float4> ClearColors;
+
+
+	ID3D11DepthStencilView* DepthStencilView;
 
 private:
-
 };
 

@@ -1,18 +1,14 @@
 #include "PreCompile.h"
 #include "GameEngineDevice.h"
 #include <GameEngineBase/GameEngineWindow.h>
-#include "GameEngineTexture.h"
+#include "GameEngineRenderTarget.h"
 
-GameEngineDevice* GameEngineDevice::Inst = new GameEngineDevice();
 ID3D11Device* GameEngineDevice::Device_ = nullptr;
 ID3D11DeviceContext* GameEngineDevice::Context_ = nullptr;
 IDXGISwapChain* GameEngineDevice::SwapChain_ = nullptr;
+GameEngineRenderTarget* GameEngineDevice::BackBufferTarget = nullptr;
 
-GameEngineDevice::GameEngineDevice()
-{
-}
-
-GameEngineDevice::~GameEngineDevice()
+void GameEngineDevice::Destroy()
 {
 	if (nullptr != SwapChain_)
 	{
@@ -148,7 +144,6 @@ void GameEngineDevice::CreateSwapChain()
 		MsgBoxAssert("스왑체인 생성에 실패했습니다.");
 	}
 
-
 	pF->Release();
 	pA->Release();
 	pD->Release();
@@ -159,12 +154,8 @@ void GameEngineDevice::CreateSwapChain()
 		MsgBoxAssert("백버퍼 텍스처를 얻어오지 못했습니다.");
 	}
 
-	GameEngineTexture::Create("BackBuffer", BackBufferTexture);
-
-
-	//Context_->OMSetRenderTargets();
-
-	// ID3D11Texture2D*
+	BackBufferTarget = GameEngineRenderTarget::Create("BackBuffer");
+	BackBufferTarget->CreateRenderTargetTexture(BackBufferTexture, float4::BLUE);
 }
 
 void GameEngineDevice::Initialize()
@@ -173,3 +164,21 @@ void GameEngineDevice::Initialize()
 	CreateSwapChain();
 }
 
+void GameEngineDevice::RenderStart()
+{
+	// 지우고
+	BackBufferTarget->Clear();
+
+	// 세팅하고
+	BackBufferTarget->Setting();
+}
+
+void GameEngineDevice::RenderEnd()
+{
+	// 모니터에 나오게 해라.
+	HRESULT Result = SwapChain_->Present(0, 0);
+	if (Result == DXGI_ERROR_DEVICE_REMOVED || Result == DXGI_ERROR_DEVICE_RESET)
+	{
+		MsgBoxAssert("디바이스 프레젠트에 이상이 생겼습니다.");
+	}
+}

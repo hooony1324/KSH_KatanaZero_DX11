@@ -55,6 +55,21 @@ private:
 class float4
 {
 public:
+	// Dir
+	static const float4 LEFT;
+	static const float4 RIGHT;
+	static const float4 UP;
+	static const float4 DOWN;
+	static const float4 FORWARD;
+	static const float4 BACK;
+	static const float4 ZERO;
+	static const float4 ONE;
+
+	// Color
+	static const float4 BLUE;
+	static const float4 RED;
+
+public:
 	// 외적을 쓸수 있는곳
 	// 마우스 클릭시 회전방향 알아낼때.
 	static float4 Cross(const float4& _Left, const float4& _Right)
@@ -229,17 +244,6 @@ public:
 		return fValue;
 	}
 
-
-
-public:
-	static const float4 LEFT;
-	static const float4 RIGHT;
-	static const float4 UP;
-	static const float4 DOWN;
-	static const float4 FORWARD;
-	static const float4 BACK;
-	static const float4 ZERO;
-	static const float4 ONE;
 
 public:
 	union
