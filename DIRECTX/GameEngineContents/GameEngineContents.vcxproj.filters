@@ -1,49 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Contents">
-      <UniqueIdentifier>{434ada6d-9237-4a74-bca2-8a4ba38998f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Global">
       <UniqueIdentifier>{841dd79c-eefd-4349-a9b3-5e026d472ccf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TestLevel">
-      <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TestLevel\TestLevelActor">
-      <UniqueIdentifier>{dd1ad5fb-a1eb-4e74-880b-223da2dd6448}</UniqueIdentifier>
     </Filter>
     <Filter Include="PreCompile">
       <UniqueIdentifier>{094c440d-86fd-472b-99e8-3c4f72a18344}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00TitleLevel">
+    <Filter Include="Levels">
+      <UniqueIdentifier>{16df310c-9485-40a0-b980-2a3ccffc4534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\00TitleLevel">
       <UniqueIdentifier>{1be4c993-8195-40d8-9539-d3a2f050b3d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01PlayLevel">
+    <Filter Include="Levels\01PlayLevel">
       <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01PlayLevel\Rooms">
+    <Filter Include="Levels\01PlayLevel\Rooms">
       <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01PlayLevel\Player">
+    <Filter Include="Levels\01PlayLevel\Player">
       <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01PlayLevel\Enemy">
+    <Filter Include="Levels\01PlayLevel\Enemy">
       <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\000TestLevel">
+      <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\000TestLevel\TestLevelActor">
+      <UniqueIdentifier>{dd1ad5fb-a1eb-4e74-880b-223da2dd6448}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestLevel.h">
-      <Filter>TestLevel</Filter>
+      <Filter>Levels\000TestLevel</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
     </ClInclude>
     <ClInclude Include="Obstacle.h">
-      <Filter>TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
     </ClInclude>
     <ClInclude Include="GlobalValueManager.h">
       <Filter>Global</Filter>
@@ -51,22 +51,20 @@
     <ClInclude Include="PreCompile.h">
       <Filter>PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="ContentsCore.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
     <ClInclude Include="PlayLevel.h">
-      <Filter>01PlayLevel</Filter>
+      <Filter>Levels\01PlayLevel</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestLevel.cpp">
-      <Filter>TestLevel</Filter>
+      <Filter>Levels\000TestLevel</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
-      <Filter>TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
     </ClCompile>
     <ClCompile Include="Obstacle.cpp">
-      <Filter>TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
     </ClCompile>
     <ClCompile Include="GlobalValueManager.cpp">
       <Filter>Global</Filter>
@@ -74,11 +72,9 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>PreCompile</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsCore.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
     <ClCompile Include="PlayLevel.cpp">
-      <Filter>01PlayLevel</Filter>
+      <Filter>Levels\01PlayLevel</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsCore.cpp" />
   </ItemGroup>
 </Project>

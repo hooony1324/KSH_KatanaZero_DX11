@@ -2,7 +2,7 @@
 #include "ContentsCore.h"
 
 #pragma comment(lib, "GameEngineBase.lib")
-#include "TestLevel.h"
+#include "PlayLevel.h"
 
 ContentsCore::ContentsCore() 
 {
@@ -19,8 +19,8 @@ void ContentsCore::Start()
 	// 리소스를 로드하는데.
 
 	// RTTI 런 타임 타입 인포메이션
-	CreateLevel<TestLevel>("Test");
-	ChangeLevel("Test");
+	CreateLevel<PlayLevel>("PlayLevel");
+	ChangeLevel("PlayLevel");
 
 	// 게임컨텐츠 정의
 	// 이 게임에는 타이틀화면
