@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/DIRECTX/Resources/Image/Player/spr_answer_phone_0.png
+/Unused
