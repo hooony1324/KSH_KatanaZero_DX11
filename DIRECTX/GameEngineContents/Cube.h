@@ -2,7 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
-class GameEngineRenderer;
+class GameEngineDefaultRenderer;
 class Cube : public GameEngineActor
 {
 public:

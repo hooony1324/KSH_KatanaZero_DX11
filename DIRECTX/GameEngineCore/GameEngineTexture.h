@@ -2,11 +2,9 @@
 #include <GameEngineBase/GameEngineMath.h>
 #include "GameEngineRes.h"
 
-// 설명 :
+// 설명 : 
 class GameEngineTexture : public GameEngineRes<GameEngineTexture>
 {
-
-
 public:
 	// constrcuter destructer
 	GameEngineTexture();

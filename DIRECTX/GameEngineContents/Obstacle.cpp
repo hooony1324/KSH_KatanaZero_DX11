@@ -12,7 +12,7 @@ Obstacle::~Obstacle()
 
 void Obstacle::Start()
 {
-	GameEngineRenderer* renderer = CreateComponent<GameEngineRenderer>();
+	GameEngineRenderer* renderer = CreateComponent<GameEngineDefaultRenderer>();
 }
 
 void Obstacle::Update(float _DeltaTime)

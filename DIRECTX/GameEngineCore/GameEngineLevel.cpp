@@ -4,13 +4,13 @@
 #include "GameEngineRenderer.h"
 #include "GameEngineCamera.h"
 
-GameEngineLevel::GameEngineLevel()
+GameEngineLevel::GameEngineLevel() 
 	: MainCamera(nullptr)
 	, UIMainCamera(nullptr)
 {
 }
 
-GameEngineLevel::~GameEngineLevel()
+GameEngineLevel::~GameEngineLevel() 
 {
 	for (const std::pair<int, std::list<GameEngineActor*>>& Group : AllActors)
 	{
@@ -108,11 +108,11 @@ void GameEngineLevel::Release(float _DelataTime)
 				// DeleteObject.push_back((*GroupStart));
 				GroupStart = Group.erase(GroupStart);
 			}
-			else
+			else 
 			{
 				++GroupStart;
 			}
-
+			
 		}
 	}
 

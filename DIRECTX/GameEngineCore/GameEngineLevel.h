@@ -12,7 +12,7 @@ class GameEngineRenderer;
 class GameEngineTransform;
 class GameEngineCameraActor;
 class GameEngineLevel :
-	public GameEngineNameObject,
+	public GameEngineNameObject ,
 	public GameEngineUpdateObject
 {
 	friend GameEngineCore;
@@ -32,7 +32,7 @@ public:
 	GameEngineLevel& operator=(const GameEngineLevel& _Other) = delete;
 	GameEngineLevel& operator=(GameEngineLevel&& _Other) noexcept = delete;
 
-	GameEngineCamera* GetMainCamera()
+	GameEngineCamera* GetMainCamera() 
 	{
 		return MainCamera;
 	}
@@ -107,7 +107,7 @@ public:
 	}
 
 protected:
-
+	
 
 
 

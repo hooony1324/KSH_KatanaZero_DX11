@@ -1,13 +1,13 @@
 #include "PreCompile.h"
 #include "GameEngineTexture.h"
 
-GameEngineTexture::GameEngineTexture()
+GameEngineTexture::GameEngineTexture() 
 	: Texture2D(nullptr)
 	, RenderTargetView(nullptr)
 {
 }
 
-GameEngineTexture::~GameEngineTexture()
+GameEngineTexture::~GameEngineTexture() 
 {
 	if (nullptr != RenderTargetView)
 	{
