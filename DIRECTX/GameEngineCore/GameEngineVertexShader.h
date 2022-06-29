@@ -18,6 +18,8 @@ public:
 	GameEngineVertexShader& operator=(const GameEngineVertexShader& _Other) = delete;
 	GameEngineVertexShader& operator=(GameEngineVertexShader&& _Other) noexcept = delete;
 
+	static GameEngineVertexShader* Load(std::string _Path);
+
 protected:
 
 private:
