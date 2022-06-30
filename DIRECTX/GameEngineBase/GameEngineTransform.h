@@ -17,14 +17,14 @@ class CollisionData
 {
 	friend class GameEngineTransform;
 
-	union
+	union 
 	{
 		DirectX::BoundingSphere SPHERE;
 		DirectX::BoundingBox AABB;
 		DirectX::BoundingOrientedBox OBB;
 	};
 
-	CollisionData()
+	CollisionData() 
 		: OBB()
 	{
 
@@ -115,7 +115,7 @@ public:
 
 	inline void SetWorldMove(const float4& _Value)
 	{
-		SetLocalPosition(WorldPosition + _Value);
+		SetWorldPosition(WorldPosition + _Value);
 	}
 
 	inline float4 GetLocalScale() const
@@ -315,7 +315,7 @@ private:
 	virtual void End() {}
 
 
-	/////////////////////////// 面倒包访
+/////////////////////////// 面倒包访
 public:
 	static bool SphereToSphere(const GameEngineTransform& _Left, const GameEngineTransform& _Right);
 

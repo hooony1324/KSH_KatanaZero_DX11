@@ -35,7 +35,7 @@ public:
 		{
 			return IsUpdate_ && false == IsDeath_ && true == Parent->IsUpdate();
 		}
-		else
+		else 
 		{
 			return IsUpdate_ && false == IsDeath_;
 		}
@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	void AddAccTime(float _DeltaTime)
+	void AddAccTime(float _DeltaTime) 
 	{
 		AccTime_ += _DeltaTime;
 	}
