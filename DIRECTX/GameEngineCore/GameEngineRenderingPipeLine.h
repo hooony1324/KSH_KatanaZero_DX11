@@ -14,6 +14,9 @@ class GameEngineBlend;
 class GameEngineRenderingPipeLine : public GameEngineRes<GameEngineRenderingPipeLine>
 {
 public:
+	static GameEngineRenderingPipeLine* Create(const std::string& _Name);
+
+public:
 	// constrcuter destructer
 	GameEngineRenderingPipeLine();
 	~GameEngineRenderingPipeLine();
@@ -26,14 +29,35 @@ public:
 
 	void Draw();
 
+	// void SetInputAssembler1InputLayOutSetting(const std::string& _Name);
+
+	void SetInputAssembler1VertexBufferSetting(const std::string& _Name);
+
+	void SetVertexShaderSetting(const std::string& _Name);
+
+	void SetInputAssembler2IndexBufferSetting(const std::string& _Name);
+
+	void SetRasterizerSetting(const std::string& _Name);
+
+	void SetPixelShaderSetting(const std::string& _Name);
+
+	void SetOutputMergerBlendSetting(const std::string& _Name);
+
+	void SetOutputMergerDepthStencilSetting(const std::string& _Name);
+
+
+
 protected:
+
+	
+private:
 	GameEngineInputLayOut* InputLayOut; // 인풋어셈블러1 세팅
 	GameEngineVertexBuffer* VertexBuffer; // 인풋어셈블러1 세팅
 
 	// HLSL이라는 다른 언어를 사용하는 단계에요.
 	// HLSL은 그래픽카드에 특정 데이터에 대한 처리 단계를 우리가 직접 작성해서
 	// 그래픽카드에 올려줄수 있는 겁니다.
-	
+
 	// 정점을 이렇게 처리해.
 	GameEngineVertexShader* VertexShader; // 버텍스쉐이더 세팅
 
@@ -49,31 +73,11 @@ protected:
 	GameEngineBlend* Blend; // 아웃풋머저 색상통합 세팅 
 
 
-	
+
 
 	// 아웃풋 머저중 랜더타겟세팅은 이미 해놨다.
 	// 디바이스의 백버퍼를 사용해서 만든 랜터타겟이 매번 세팅되고 있다.
 	// 거기에 그려라.
-	
-private:
-	void SetInputAssembler1InputLayOutSetting(const std::string& _Name);
-
-	void SetInputAssembler1VertexBufferSetting(const std::string& _Name);
-
-	void SetVertexShader(const std::string& _Name);
-
-	void SetInputAssembler2IndexBufferSetting(const std::string& _Name);
-
-	void SetRasterizer(const std::string& _Name);
-
-	void SetPixelShader(const std::string& _Name);
-
-	void SetOutputMergerBlend(const std::string& _Name);
-
-	void SetOutputMergerDepthStencilSetting(const std::string& _Name);
-
-	
-
 };
 
 

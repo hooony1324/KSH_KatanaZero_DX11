@@ -1,9 +1,14 @@
 #pragma once
+#include "GameEngineDevice.h"
 #include "GameEngineRes.h"
 
 // Ό³Έν :
+class GameEngineLayOutDesc;
+class GameEngineVertexShader;
 class GameEngineInputLayOut : public GameEngineRes<GameEngineInputLayOut>
 {
+	
+
 public:
 	// constrcuter destructer
 	GameEngineInputLayOut();
@@ -15,9 +20,12 @@ public:
 	GameEngineInputLayOut& operator=(const GameEngineInputLayOut& _Other) = delete;
 	GameEngineInputLayOut& operator=(GameEngineInputLayOut&& _Other) noexcept = delete;
 
+	void Create(const GameEngineLayOutDesc& _Desc, GameEngineVertexShader* _Shader);
+
 protected:
 
 private:
+	ID3D11InputLayout* InputLayOut;
 
 };
 
