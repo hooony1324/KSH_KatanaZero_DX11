@@ -22,10 +22,13 @@ public:
 
 	void Create(const GameEngineLayOutDesc& _Desc, GameEngineVertexShader* _Shader);
 
+	void Setting();
+
 protected:
 
 private:
 	ID3D11InputLayout* InputLayOut;
 
+	
 };
 

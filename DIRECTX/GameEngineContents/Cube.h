@@ -23,9 +23,9 @@ protected:
 
 private:
 	float Speed;
-	GameEngineRenderer* bodyRenderer;
-	GameEngineRenderer* childRenderer;
-	GameEngineRenderer* childRenderer2;
+	GameEngineDefaultRenderer* bodyRenderer;
+	GameEngineDefaultRenderer* childRenderer;
+	GameEngineDefaultRenderer* childRenderer2;
 
 	std::list<class Obstacle*> list_Obstacle;
 

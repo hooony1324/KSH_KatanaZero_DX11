@@ -31,6 +31,7 @@ public:
 
 struct GameEngineVertex 
 {
+public:
 	static GameEngineLayOutDesc LayOut;
 
 public:
