@@ -16,8 +16,8 @@ GameEngineCamera::GameEngineCamera()
 
 	ViewPortDesc.TopLeftX = 0;
 	ViewPortDesc.TopLeftY = 0;
-	ViewPortDesc.Width = Size.uix();
-	ViewPortDesc.Height = Size.uiy();
+	ViewPortDesc.Width = Size.x;
+	ViewPortDesc.Height = Size.y;
 	ViewPortDesc.MinDepth = 0.0f;
 	ViewPortDesc.MaxDepth = 0.0f;
 
@@ -31,7 +31,7 @@ GameEngineCamera::~GameEngineCamera()
 void GameEngineCamera::Render(float _DeltaTime)
 {
 	// 순서적으로보면 레스터라이저 단계이지만 변경이 거의 없을거기 때문에.
-	GameEngineDevice::GetContext()->RSSetViewports(0, &ViewPortDesc);
+	GameEngineDevice::GetContext()->RSSetViewports(1, &ViewPortDesc);
 
 	// 랜더하기 전에 
 	View.LookAtLH(

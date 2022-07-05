@@ -7,4 +7,5 @@
 
 #include <GameEngineCore/GameEngineLevel.h>
 #include <GameEngineCore/GameEngineActor.h>
+#include <GameEngineCore/GameEngineCameraActor.h>
 #include <GameEngineCore/GameEngineRenderer.h>

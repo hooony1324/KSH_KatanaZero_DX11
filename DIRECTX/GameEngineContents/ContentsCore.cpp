@@ -3,6 +3,7 @@
 
 #pragma comment(lib, "GameEngineBase.lib")
 #include "PlayLevel.h"
+#include "TestLevel.h"
 
 ContentsCore::ContentsCore() 
 {
@@ -20,7 +21,8 @@ void ContentsCore::Start()
 
 	// RTTI 런 타임 타입 인포메이션
 	CreateLevel<PlayLevel>("PlayLevel");
-	ChangeLevel("PlayLevel");
+	CreateLevel<TestLevel>("TestLevel");
+	ChangeLevel("TestLevel");
 
 	// 게임컨텐츠 정의
 	// 이 게임에는 타이틀화면

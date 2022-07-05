@@ -70,3 +70,29 @@ void GameEngineShader::CreateVersion(const std::string& _ShaderType, UINT _Versi
 	Version += "_"; // vs_5_
 	Version += std::to_string(_VersionLow); // vs_5_0
 }
+
+// 쉐이더에서 상수버퍼를 사용했는지 텍스처를 썼는지
+void GameEngineShader::ShaderResCheck()
+{
+	// BinaryPtr 완전히 빌드된 쉐이더 파일의 2진 메모리
+	if (nullptr == BinaryPtr)
+	{
+		MsgBoxAssert("쉐이더 리소스가 만들어지지 않았는데 리소스(상수버퍼 and 텍스처) 체크를 하려고 했습니다.");
+		return;
+	}
+
+	// Reflection 
+	// 클래스의 세부 정보를 언어차원에서 우리에게 제공해줄때 그 클래스나 함수들이 이런 이름을 가지고 있다.
+	// 이런 이름의 인터페이스 
+	ID3D11ShaderReflection* CompileInfo = nullptr;
+
+	if (S_OK != D3DReflect(
+		BinaryPtr->GetBufferPointer(), 
+		BinaryPtr->GetBufferSize(),
+		IID_ID3D11ShaderReflection,
+		reinterpret_cast<void**>( & CompileInfo)
+	))
+	{
+	}
+	// BinaryPtr
+}

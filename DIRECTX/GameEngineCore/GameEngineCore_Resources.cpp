@@ -47,9 +47,7 @@ void EngineRenderingPipeLine()
 		NewPipe->SetVertexShader("Color.hlsl");
 		NewPipe->SetPixelShader("Color.hlsl");
 		NewPipe->SetRasterizer("EngineRasterizer");
-
 	}
-
 }
 
 void EngineMesh() 
@@ -58,11 +56,20 @@ void EngineMesh()
 	{
 		std::vector<GameEngineVertex> Vertex;
 		Vertex.push_back({ float4(-0.5f, 0.5f), float4()});
-		Vertex.push_back({ float4(0.5f, 0.5f), float4() });
+		Vertex.push_back({ float4(0.5f, 0.5f), float4(1.0f, 0.0f, 0.0f, 1.0f) });
 		Vertex.push_back({ float4(0.5f, -0.5f), float4() });
 		Vertex.push_back({ float4(-0.5f, -0.5f), float4() });
 		GameEngineVertexBuffer::Create("Rect", Vertex);
 	}
+
+	//{
+	//	std::vector<GameEngineVertex> Vertex;
+	//	Vertex.push_back({ float4(-1.0f, 1.0f), float4() });
+	//	Vertex.push_back({ float4(1.0f, 1.0f), float4() });
+	//	Vertex.push_back({ float4(1.0f, -1.0f), float4() });
+	//	Vertex.push_back({ float4(-1.0f, -1.0f), float4() });
+	//	GameEngineVertexBuffer::Create("FullRect", Vertex);
+	//}
 
 	{
 		std::vector<int> Index;
@@ -210,6 +217,7 @@ void GameEngineCore::EngineResourcesDestroy()
 	GameEngineIndexBuffer::ResourcesDestroy();
 	GameEngineRenderTarget::ResourcesDestroy();
 	GameEngineTexture::ResourcesDestroy();
+	GameEngineRasterizer::ResourcesDestroy();
 
 	GameEngineDevice::Destroy();
 }

@@ -5,6 +5,7 @@
 #include "Cube.h"
 #include "Obstacle.h"
 #include "GlobalValueManager.h"
+#include <GameEngineCore/GameEngineDefaultRenderer.h>
 
 TestLevel::TestLevel() 
 {
@@ -39,6 +40,10 @@ void TestLevel::Start()
 	
 	{
 		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
+		GameEngineDefaultRenderer* Renderer;
+		Renderer = player->CreateComponent<GameEngineDefaultRenderer>();
+		Renderer->GetTransform().SetLocalScale({ 100, 100, 100 });
+		Renderer->SetPipeLine("Color");
 	}
 }
 
