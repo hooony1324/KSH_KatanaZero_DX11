@@ -16,6 +16,7 @@ public:
 		// std::transform(_Text.begin(), _Text.end(), _Text.begin(), std::toupper);
 	}
 
+
 	static std::string ToUpperReturn(const std::string& _Text)
 	{
 		std::string NewText = _Text;

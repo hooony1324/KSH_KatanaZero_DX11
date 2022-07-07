@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "PlayLevel.h"
 #include <GameEngineCore/CoreMinimal.h>
+#include <GameEngineCore/GameEngineCameraActor.h>
 
 PlayLevel::PlayLevel() 
 {
