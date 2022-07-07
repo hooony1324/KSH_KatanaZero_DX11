@@ -104,6 +104,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="GameEngineShaderResourcesHelper.h" />
     <ClInclude Include="GameEngineStateManager.h">
       <SubType>
       </SubType>
@@ -224,6 +225,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="GameEngineShaderResourcesHelper.cpp" />
     <ClCompile Include="GameEngineStateManager.cpp">
       <SubType>
       </SubType>

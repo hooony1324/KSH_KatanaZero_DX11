@@ -40,10 +40,6 @@ void TestLevel::Start()
 	
 	{
 		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
-		GameEngineDefaultRenderer* Renderer;
-		Renderer = player->CreateComponent<GameEngineDefaultRenderer>();
-		Renderer->GetTransform().SetLocalScale({ 100, 100, 100 });
-		Renderer->SetPipeLine("Color");
 	}
 }
 

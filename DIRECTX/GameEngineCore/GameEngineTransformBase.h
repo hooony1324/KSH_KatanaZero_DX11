@@ -24,5 +24,10 @@ public:
 	{
 		return Transform;
 	}
+
+	const TransformData& GetTransformData()
+	{
+		return Transform.GetTransformData();
+	}
 };
 

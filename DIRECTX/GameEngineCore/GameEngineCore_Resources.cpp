@@ -5,6 +5,7 @@
 #include <GameEngineBase/GameEngineTime.h>
 #include "GameEngineLevel.h"
 #include "GameEngineVertexs.h"
+#include "GameEngineConstantBuffer.h"
 #include <math.h>
 
 
@@ -218,6 +219,7 @@ void GameEngineCore::EngineResourcesDestroy()
 	GameEngineRenderTarget::ResourcesDestroy();
 	GameEngineTexture::ResourcesDestroy();
 	GameEngineRasterizer::ResourcesDestroy();
+	GameEngineConstantBuffer::ResourcesDestroy();
 
 	GameEngineDevice::Destroy();
 }

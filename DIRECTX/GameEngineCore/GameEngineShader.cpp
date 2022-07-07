@@ -98,6 +98,8 @@ void GameEngineShader::ShaderResCheck()
 		return;
 	}
 
+	
+
 	D3D11_SHADER_DESC Info;
 	CompileInfo->GetDesc(&Info);
 
@@ -127,15 +129,14 @@ void GameEngineShader::ShaderResCheck()
 			// 5번에 세팅되는 
 			// ResInfo.BindPoint;
 
-			GameEngineConstantShaderResSetter NewSetter;
+			GameEngineConstantBufferSetter NewSetter;
 
 			// 중복으로 만드는일이 생기면 안되니까.
 			// 만든걸 또 만들라고 하는게 
 			NewSetter.Buffer = GameEngineConstantBuffer::Create(Name, BufferDesc, CBufferPtr);
 			NewSetter.BindPoint = ResInfo.BindPoint;
 
-
-			ResSetterMap.insert(std::make_pair(Name, NewSetter));
+			ConstantBufferMap.insert(std::make_pair(Name, NewSetter));
 
 			break;
 		}
@@ -151,8 +152,23 @@ void GameEngineShader::ShaderResCheck()
 
 	}
 
+	ConstantBufferMap;
+	TextureSetterMap;
+
 	// 상수버는 몇개 쓰는지 크기는 얼마인지 이런것들을 알아내줍니다.
 	// CompileInfo
 
-	// BinaryPtr
+	// CompileInfo->Release();
+}
+
+GameEngineConstantBufferSetter& GameEngineShader::GetConstantBufferSetter(std::string _Name)
+{
+	std::string Name = GameEngineString::ToUpperReturn(_Name);
+
+	if (ConstantBufferMap.end() == ConstantBufferMap.find(Name))
+	{
+		MsgBoxAssert("존재하지 않는 상수버퍼를 찾으려고 했습니다.");
+	}
+
+	return ConstantBufferMap[Name];
 }

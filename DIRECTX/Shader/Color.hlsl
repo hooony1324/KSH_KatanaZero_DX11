@@ -6,29 +6,7 @@
 // t1
 
 // Create("TransformData");
-
-cbuffer TransformData : register(b0)
-{
-    float4 LocalPosition;
-    float4 LocalRotation;
-    float4 LocalScaling;
-
-    float4 WorldPosition;
-    float4 WorldRotation;
-    float4 WorldScaling;
-
-    float4x4 LocalPositionMatrix;
-    float4x4 LocalRotationMatrix;
-    float4x4 LocalScalingMatrix;
-
-    float4x4 LocalWorldMatrix;
-    float4x4 WorldWorldMatrix;
-    float4x4 View;
-    float4x4 Projection;
-
-    float4x4 WorldView;
-    float4x4 WorldViewProjection;
-};
+#include "TransformHeader.hlsli"
 
 struct Input
 {
@@ -57,16 +35,15 @@ Output Color_VS(Input _Input)
 {
     // 쉐이더의 경우에는 대부분의 상황에서 형변환이 가능하다.
     // 0
-    Output NewOutPut = (Output)0;
+    Output NewOutPut = (Output) 0;
     NewOutPut.Pos = _Input.Pos;
-    //NewOutPut.Pos.w = 1.0f;
-    //NewOutPut.Pos = mul(NewOutPut.Pos, WorldViewProjection);
-    // NewOutPut.Pos.w = 1.0f;
+    NewOutPut.Pos.w = 1.0f;
+    NewOutPut.Pos = mul(NewOutPut.Pos, WorldViewProjection);
     
     NewOutPut.Pos2 = _Input.Pos;
-    
+    // NewOutPut.Pos.w = 1.0f;
     NewOutPut.Color = _Input.Color;
-
+    
     return NewOutPut;
 }
 

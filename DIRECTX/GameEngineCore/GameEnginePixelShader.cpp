@@ -70,7 +70,7 @@ void GameEnginePixelShader::ShaderCompile(std::string _Path, std::string _EntryP
 	if (D3DCompileFromFile(
 		UnicodePath.c_str(), // 파일 경로
 		nullptr,  // 매크로 ()
-		nullptr,  // 헤더 ()
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,  // 헤더 ()
 		_EntryPoint.c_str(), // 진입점 COLOR_VS(
 		Version.c_str(),  // vs_5_0
 		Flag,

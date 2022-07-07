@@ -6,6 +6,13 @@
 
 #include "Obstacle.h"
 
+#include <GameEngineCore/GameEngineDefaultRenderer.h>
+#include <GameEngineCore/GameEngineRenderingPipeLine.h>
+#include <GameEngineCore/GameEngineVertexShader.h>
+#include <GameEngineCore/GameEngineConstantBuffer.h>
+#include <GameEngineCore/GameEngineDevice.h>
+
+
 Cube::Cube()
 	: Speed(80.0f)
 {
@@ -31,10 +38,11 @@ void Cube::Start()
 		GameEngineInput::GetInst()->CreateKey("Rot-", 'E');
 	}
 
-	//{
-	//	bodyRenderer = CreateComponent<GameEngineDefaultRenderer>();
-	//	bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 0 });
-	//}
+	{
+		bodyRenderer = CreateComponent<GameEngineDefaultRenderer>();
+		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 0 });
+		bodyRenderer->SetPipeLine("Color");
+	}
 
 	//{
 	//	childRenderer = CreateComponent<GameEngineDefaultRenderer>();
@@ -63,41 +71,41 @@ void Cube::Start()
 
 void Cube::Update(float _DeltaTime)
 {
-	//if (true == GameEngineInput::GetInst()->IsPress("PlayerLeft"))
-	//{
-	//	GetTransform().SetWorldMove(GetTransform().GetLeftVector() * Speed * _DeltaTime);
-	//}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerLeft"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetLeftVector() * Speed * _DeltaTime);
+	}
 
-	//if (true == GameEngineInput::GetInst()->IsPress("PlayerRight"))
-	//{
-	//	GetTransform().SetWorldMove(GetTransform().GetRightVector() * Speed * _DeltaTime);
-	//}
-	//if (true == GameEngineInput::GetInst()->IsPress("PlayerUp"))
-	//{
-	//	GetTransform().SetWorldMove(GetTransform().GetUpVector() * Speed * _DeltaTime);
-	//}
-	//if (true == GameEngineInput::GetInst()->IsPress("PlayerDown"))
-	//{
-	//	GetTransform().SetWorldMove(GetTransform().GetDownVector() * Speed * _DeltaTime);
-	//}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerRight"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetRightVector() * Speed * _DeltaTime);
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerUp"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetUpVector() * Speed * _DeltaTime);
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerDown"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetDownVector() * Speed * _DeltaTime);
+	}
 
-	//if (true == GameEngineInput::GetInst()->IsPress("PlayerForward"))
-	//{
-	//	GetTransform().SetWorldMove(GetTransform().GetForwardVector() * Speed * _DeltaTime);
-	//}
-	//if (true == GameEngineInput::GetInst()->IsPress("PlayerBack"))
-	//{
-	//	GetTransform().SetWorldMove(GetTransform().GetBackVector() * Speed * _DeltaTime);
-	//}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerForward"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetForwardVector() * Speed * _DeltaTime);
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerBack"))
+	{
+		GetTransform().SetWorldMove(GetTransform().GetBackVector() * Speed * _DeltaTime);
+	}
 
-	//if (true == GameEngineInput::GetInst()->IsPress("Rot+"))
-	//{
-	//	bodyRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
-	//}
-	//if (true == GameEngineInput::GetInst()->IsPress("Rot-"))
-	//{
-	//	bodyRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
-	//}
+	if (true == GameEngineInput::GetInst()->IsPress("Rot+"))
+	{
+		bodyRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, 360.0f * _DeltaTime });
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("Rot-"))
+	{
+		bodyRenderer->GetTransform().SetLocalRotate({ 0.0f, 0.0f, -360.0f * _DeltaTime });
+	}
 
 	//// 충돌체크
 	//list_Obstacle = GetLevel()->GetConvertToGroup<Obstacle>(ACTORGROUP::OBSTACLE);
@@ -110,6 +118,14 @@ void Cube::Update(float _DeltaTime)
 	//		GameEngineDebug::OutPutString("부딪");
 	//	}
 	//}
+
+	GameEngineConstantBufferSetter& Data = bodyRenderer->GetPipeLine()->GetVertexShader()->GetConstantBufferSetter("TransformData");
+
+	const TransformData& DataRef = bodyRenderer->GetTransformData();
+
+	Data.Buffer->ChangeData(&DataRef, sizeof(TransformData));
+
+	GameEngineDevice::GetContext()->VSSetConstantBuffers(Data.BindPoint, 1, &Data.Buffer->Buffer);
 }
 
 void Cube::End()
