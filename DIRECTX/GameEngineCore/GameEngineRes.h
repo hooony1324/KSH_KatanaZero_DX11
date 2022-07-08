@@ -13,7 +13,7 @@ class GameEngineRes : public GameEngineNameObject
 public:
 	// constrcuter destructer
 	GameEngineRes() {}
-	~GameEngineRes() {}
+	virtual ~GameEngineRes() {}
 
 	// delete Function
 	GameEngineRes(const GameEngineRes& _Other) = delete;

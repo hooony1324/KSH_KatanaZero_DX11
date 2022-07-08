@@ -93,6 +93,9 @@
     <ClInclude Include="GameEngineShaderResourcesHelper.h">
       <Filter>Object\Component\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\inc\DirectXTex.h">
+      <Filter>ThirdParty\Inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineActor.cpp">
@@ -236,5 +239,28 @@
     <Filter Include="Resources\ShaderResources">
       <UniqueIdentifier>{f899ac69-4ac6-4282-98ea-1d17623e8b55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{ad6a5a9e-09e4-48a7-a2d7-042aaaa592ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Inc">
+      <UniqueIdentifier>{e2f3cfc4-d23a-4794-9787-e8a7f3c9b1d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Lib">
+      <UniqueIdentifier>{956f0b7b-33ff-45e0-ab0e-6639b123c382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Lib\Debug">
+      <UniqueIdentifier>{a43a8931-f835-456b-a4b3-886903c61727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Lib\Release">
+      <UniqueIdentifier>{56d71c1c-436d-4163-9012-2ec0a5301f4d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="ThirdParty\bin\Release\DirectXTex.lib">
+      <Filter>ThirdParty\Lib\Release</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ThirdParty\bin\Debug\DirectXTex.lib">
+      <Filter>ThirdParty\Lib\Debug</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

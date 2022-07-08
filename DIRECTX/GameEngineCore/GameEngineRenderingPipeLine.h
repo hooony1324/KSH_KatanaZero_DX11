@@ -50,6 +50,11 @@ public:
 		return VertexShader;
 	}
 
+	inline GameEnginePixelShader* GetPixelShader()
+	{
+		return PixelShader;
+	}
+
 protected:
 
 	

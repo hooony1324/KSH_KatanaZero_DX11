@@ -5,8 +5,8 @@
 // Ό³Έν :
 class GameEngineInputLayOut;
 class GameEngineVertexShader 
-	: public GameEngineRes<GameEngineVertexShader>
-	, public GameEngineShader
+	: public GameEngineShader
+	, public GameEngineRes<GameEngineVertexShader>
 
 {
 	friend GameEngineInputLayOut;

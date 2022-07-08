@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <FxCompile Include="Color.hlsl" />
-    <FxCompile Include="TransformHeader.hlsli" />
+    <FxCompile Include="TransformHeader.fx" />
+    <FxCompile Include="Color2.hlsl" />
   </ItemGroup>
 </Project>
