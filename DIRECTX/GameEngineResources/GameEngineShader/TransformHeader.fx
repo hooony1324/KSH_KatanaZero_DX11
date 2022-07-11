@@ -20,3 +20,9 @@ cbuffer TransformData : register(b0)
     float4x4 WorldView;
     float4x4 WorldViewProjection;
 };
+
+cbuffer TransformData : register(b1)
+{
+    float4 LocalPos;
+    float4 LocalRot;
+}

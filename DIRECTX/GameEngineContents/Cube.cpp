@@ -76,19 +76,24 @@ void Cube::Update(float _DeltaTime)
 	if (true == GameEngineInput::GetInst()->IsPress("PlayerLeft"))
 	{
 		Color.r += 1.0f * _DeltaTime;
+		Color.b += 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetLeftVector() * Speed * _DeltaTime);
 	}
 
 	if (true == GameEngineInput::GetInst()->IsPress("PlayerRight"))
 	{
+		Color.r -= 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetRightVector() * Speed * _DeltaTime);
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("PlayerUp"))
 	{
+		Color.g += 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetUpVector() * Speed * _DeltaTime);
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("PlayerDown"))
 	{
+		Color.b -= 1.0f * _DeltaTime;
+		Color.g -= 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetDownVector() * Speed * _DeltaTime);
 	}
 

@@ -55,6 +55,9 @@
       <Filter>Levels\01PlayLevel</Filter>
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="PlayerZero.h">
+      <Filter>Levels\01PlayLevel\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestLevel.cpp">
@@ -76,5 +79,8 @@
       <Filter>Levels\01PlayLevel</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="PlayerZero.cpp">
+      <Filter>Levels\01PlayLevel\Player</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
