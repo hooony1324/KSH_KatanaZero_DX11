@@ -17,14 +17,14 @@ class CollisionData
 {
 	friend class GameEngineTransform;
 
-	union
+	union 
 	{
 		DirectX::BoundingSphere SPHERE;
 		DirectX::BoundingBox AABB;
 		DirectX::BoundingOrientedBox OBB;
 	};
 
-	CollisionData()
+	CollisionData() 
 		: OBB()
 	{
 
@@ -230,7 +230,7 @@ public:
 		Data.ProjectionMatrix = _Mat;
 	}
 
-	const TransformData& GetTransformData()
+	const TransformData& GetTransformData() 
 	{
 		return Data;
 	}
@@ -331,7 +331,7 @@ private:
 	virtual void End() {}
 
 
-	/////////////////////////// 面倒包访
+/////////////////////////// 面倒包访
 public:
 	static bool SphereToSphere(const GameEngineTransform& _Left, const GameEngineTransform& _Right);
 

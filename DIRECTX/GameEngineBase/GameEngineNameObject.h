@@ -23,7 +23,7 @@ public:
 
 	// 어마어마 싫어하는 사람들이 이습니다.
 	// 필요할때 써야겠죠.
-	std::string GetNameCopy()
+	std::string GetNameCopy() const
 	{
 		return ObjectName_;
 	}

@@ -127,11 +127,6 @@ private:
 
 
 public:
-	ID3D11Buffer* Buffer;
-	D3D11_BUFFER_DESC BufferDesc;
-	D3D11_SHADER_BUFFER_DESC ShaderDesc;
-	D3D11_MAPPED_SUBRESOURCE SettingResources;
-
 	// constrcuter destructer
 	GameEngineConstantBuffer();
 	~GameEngineConstantBuffer();
@@ -142,11 +137,20 @@ public:
 	GameEngineConstantBuffer& operator=(const GameEngineConstantBuffer& _Other) = delete;
 	GameEngineConstantBuffer& operator=(GameEngineConstantBuffer&& _Other) noexcept = delete;
 
-	void ChangeData(const void* _Data, size_t _Size);
+	void ChangeData(const void* _Data, size_t _Size) const;
+
+	void VSSetting();
+
+	void PSSetting();
 
 protected:
 
 private:
+	ID3D11Buffer* Buffer;
+	D3D11_BUFFER_DESC BufferDesc;
+	D3D11_SHADER_BUFFER_DESC ShaderDesc;
+	// D3D11_MAPPED_SUBRESOURCE SettingResources;
+
 	void Create(const D3D11_SHADER_BUFFER_DESC& _Desc, ID3D11ShaderReflectionConstantBuffer* _CBufferPtr);
 };
 

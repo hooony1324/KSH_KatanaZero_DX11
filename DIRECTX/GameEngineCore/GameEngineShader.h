@@ -9,11 +9,6 @@ enum class ShaderType
 	Pixel,
 };
 
-class ConstantBuffer
-{
-
-};
-
 class ShaderResSetter 
 {
 public:
@@ -26,7 +21,24 @@ class GameEngineConstantBuffer;
 class GameEngineConstantBufferSetter : public ShaderResSetter
 {
 public:
-	GameEngineConstantBuffer* Buffer;
+	GameEngineConstantBuffer* Res;
+	// 각자가 가진 정보에 대한 주소
+	const void* SetData;
+	UINT Size;
+
+	// 자기메모리로 할당할 것이다.
+	std::vector<char> OriginalData;
+
+	void Setting() const;
+
+public:
+	GameEngineConstantBufferSetter() 
+		: Res(nullptr)
+		, SetData(nullptr)
+		, Size(-1)
+	{
+
+	}
 };
 
 class GameEngineConstantBuffer;
@@ -80,7 +92,7 @@ private:
 
 	// std::map<unsigned int, ConstantBuffer> 
 
-	
+	// void SetConstantBuffer() override;
 
 };
 

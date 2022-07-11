@@ -14,6 +14,8 @@ class GameEngineDefaultRenderer : public GameEngineRenderer
 
 
 public:
+	GameEngineShaderResourcesHelper PipeLineHelper;
+
 	// constrcuter destructer
 	GameEngineRenderingPipeLine* GetPipeLine()
 	{
@@ -43,7 +45,5 @@ private:
 	// 공통적인 메모리 공유하는 메로리들을 들고 있고
 	GameEngineRenderingPipeLine* PipeLine;
 
-	// 그중에서 어떤애를 바꾸고 싶은데?
-	GameEngineShaderResourcesHelper PipeLineHelper;
 };
 

@@ -29,5 +29,7 @@ private:
 
 	std::list<class Obstacle*> list_Obstacle;
 
+	float4 Color;
+
 };
 

@@ -257,6 +257,23 @@ public:
 			float w;
 		};
 
+		struct
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		};
+
+		struct
+		{
+			int IntValueX;
+			int IntValueY;
+			int IntValueZ;
+			int IntValueW;
+		};
+
+
 		float Arr1D[4];
 
 		int Arr1DInt[4];

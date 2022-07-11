@@ -32,6 +32,9 @@ private:
 
 };
 
+#define MsgBox(Text) 	MessageBeep(0); \
+MessageBoxA(nullptr, Text, "Error", MB_OK);  
+
 #define MsgBoxAssert(Text) 	MessageBeep(0); \
 MessageBoxA(nullptr, Text, "Error", MB_OK); \
 assert(false); 

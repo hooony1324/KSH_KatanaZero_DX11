@@ -38,10 +38,12 @@ void Cube::Start()
 		GameEngineInput::GetInst()->CreateKey("Rot-", 'E');
 	}
 
+
 	{
 		bodyRenderer = CreateComponent<GameEngineDefaultRenderer>();
-		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 0 });
+		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
 		bodyRenderer->SetPipeLine("Color");
+		bodyRenderer->PipeLineHelper.SetConstantBufferLink("ResultColor", Color);
 	}
 
 	//{
@@ -73,6 +75,7 @@ void Cube::Update(float _DeltaTime)
 {
 	if (true == GameEngineInput::GetInst()->IsPress("PlayerLeft"))
 	{
+		Color.r += 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetLeftVector() * Speed * _DeltaTime);
 	}
 
@@ -119,13 +122,13 @@ void Cube::Update(float _DeltaTime)
 	//	}
 	//}
 
-	GameEngineConstantBufferSetter& Data = bodyRenderer->GetPipeLine()->GetVertexShader()->GetConstantBufferSetter("TransformData");
+	//GameEngineConstantBufferSetter& Data = bodyRenderer->GetPipeLine()->GetVertexShader()->GetConstantBufferSetter("TransformData");
 
-	const TransformData& DataRef = bodyRenderer->GetTransformData();
+	//const TransformData& DataRef = bodyRenderer->GetTransformData();
 
-	Data.Buffer->ChangeData(&DataRef, sizeof(TransformData));
+	//Data.Buffer->ChangeData(&DataRef, sizeof(TransformData));
 
-	GameEngineDevice::GetContext()->VSSetConstantBuffers(Data.BindPoint, 1, &Data.Buffer->Buffer);
+	//GameEngineDevice::GetContext()->VSSetConstantBuffers(Data.BindPoint, 1, &Data.Buffer->Buffer);
 }
 
 void Cube::End()
