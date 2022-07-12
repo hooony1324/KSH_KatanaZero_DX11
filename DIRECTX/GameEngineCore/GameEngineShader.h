@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <map>
+#include <GameEngineBase/GameEngineNameObject.h>
+#include <functional>
 
 
 enum class ShaderType
@@ -9,12 +11,12 @@ enum class ShaderType
 	Pixel,
 };
 
-class ShaderResSetter 
+class ShaderResSetter : public GameEngineNameObject
 {
 public:
 	ShaderType ShaderType;
 	int BindPoint;
-	std::string* Name;
+	std::function<void()> SettingFunction;
 };
 
 class GameEngineConstantBuffer;
@@ -25,6 +27,7 @@ public:
 	// 각자가 가진 정보에 대한 주소
 	const void* SetData;
 	UINT Size;
+
 
 	// 자기메모리로 할당할 것이다.
 	std::vector<char> OriginalData;

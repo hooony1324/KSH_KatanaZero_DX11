@@ -69,12 +69,12 @@ void GameEngineConstantBuffer::ChangeData(const void* _Data, size_t _Size) const
 	GameEngineDevice::GetContext()->Unmap(Buffer, 0);
 }
 
-void GameEngineConstantBuffer::VSSetting()
+void GameEngineConstantBuffer::VSSetting(int _BindPoint)
 {
-	GameEngineDevice::GetContext()->VSSetConstantBuffers(0, 1, &Buffer);
+	GameEngineDevice::GetContext()->VSSetConstantBuffers(_BindPoint, 1, &Buffer);
 }
 
-void GameEngineConstantBuffer::PSSetting()
+void GameEngineConstantBuffer::PSSetting(int _BindPoint)
 {
-	GameEngineDevice::GetContext()->PSSetConstantBuffers(0, 1, &Buffer);
+	GameEngineDevice::GetContext()->PSSetConstantBuffers(_BindPoint, 1, &Buffer);
 }

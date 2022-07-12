@@ -38,6 +38,14 @@ public:
 
 	void SetConstantBufferLink(const std::string& _Name, const void* Data, UINT _Size);
 
+	template<typename Res>
+	void SetConstantBufferNew(const std::string& _Name, const Res& Data)
+	{
+		SetConstantBufferNew(_Name, &Data, sizeof(Res));
+	}
+
+	void SetConstantBufferNew(const std::string& _Name, const void* Data, UINT _Size);
+
 protected:
 	void ShaderCheck(GameEngineShader* _Shader);
 
