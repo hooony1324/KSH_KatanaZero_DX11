@@ -41,6 +41,8 @@ void TestLevel::Start()
 	{
 		player = CreateActor<Cube>(ACTORGROUP::PLAYER);
 	}
+
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_slash_bullet.wav", 0);
 }
 
 void TestLevel::Update(float _DeltaTime)

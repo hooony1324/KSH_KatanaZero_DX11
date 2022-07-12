@@ -25,10 +25,6 @@ public:
 		~Actors() {}
 	};
 
-protected:
-
-
-
 private:
 	// constrcuter destructer
 	GlobalValueManager() {}

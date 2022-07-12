@@ -25,25 +25,25 @@
     <Filter Include="Levels\01PlayLevel\Enemy">
       <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\000TestLevel">
+    <Filter Include="Levels\%40%40%40TestLevel%40%40%40">
       <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\000TestLevel\TestLevelActor">
+    <Filter Include="Levels\%40%40%40TestLevel%40%40%40\TestLevelActor">
       <UniqueIdentifier>{dd1ad5fb-a1eb-4e74-880b-223da2dd6448}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestLevel.h">
-      <Filter>Levels\000TestLevel</Filter>
+      <Filter>Levels\%40%40%40TestLevel%40%40%40</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
     </ClInclude>
     <ClInclude Include="Obstacle.h">
-      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
     </ClInclude>
     <ClInclude Include="GlobalValueManager.h">
       <Filter>Global</Filter>
@@ -51,23 +51,26 @@
     <ClInclude Include="PreCompile.h">
       <Filter>PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="PlayLevel.h">
-      <Filter>Levels\01PlayLevel</Filter>
-    </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="PlayerZero.h">
       <Filter>Levels\01PlayLevel\Player</Filter>
     </ClInclude>
+    <ClInclude Include="PlayLevel.h">
+      <Filter>Levels\01PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleLevel.h">
+      <Filter>Levels\00TitleLevel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestLevel.cpp">
-      <Filter>Levels\000TestLevel</Filter>
+      <Filter>Levels\%40%40%40TestLevel%40%40%40</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
-      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
     </ClCompile>
     <ClCompile Include="Obstacle.cpp">
-      <Filter>Levels\000TestLevel\TestLevelActor</Filter>
+      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
     </ClCompile>
     <ClCompile Include="GlobalValueManager.cpp">
       <Filter>Global</Filter>
@@ -75,12 +78,15 @@
     <ClCompile Include="PreCompile.cpp">
       <Filter>PreCompile</Filter>
     </ClCompile>
-    <ClCompile Include="PlayLevel.cpp">
-      <Filter>Levels\01PlayLevel</Filter>
-    </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="PlayerZero.cpp">
       <Filter>Levels\01PlayLevel\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayLevel.cpp">
+      <Filter>Levels\01PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleLevel.cpp">
+      <Filter>Levels\00TitleLevel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

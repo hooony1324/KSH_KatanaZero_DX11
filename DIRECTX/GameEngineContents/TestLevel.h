@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngineCore/GameEngineLevel.h>
+#include <GameEngineBase/GameEngineSound.h>
 
 // Ό³Έν :
 class TestLevel : public GameEngineLevel
@@ -23,5 +24,7 @@ protected:
 private:
 	GameEngineActor* player;
 	GameEngineActor* obstacle;
+
+	GameEngineSoundPlayer SoundPlayer;
 };
 
