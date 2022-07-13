@@ -44,6 +44,7 @@ void Cube::Start()
 		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
 		bodyRenderer->SetPipeLine("Color");
 		bodyRenderer->PipeLineHelper.SetConstantBufferLink("ResultColor", Color);
+
 	}
 
 	//{
@@ -85,7 +86,7 @@ void Cube::Update(float _DeltaTime)
 		Color.r -= 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetRightVector() * Speed * _DeltaTime);
 	}
-	if (true == GameEngineInput::GetInst()->IsPress("PlayerUp"))
+	if (STATE_PLAYER::JUMP == Input.HandleInput())
 	{
 		Color.g += 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetUpVector() * Speed * _DeltaTime);

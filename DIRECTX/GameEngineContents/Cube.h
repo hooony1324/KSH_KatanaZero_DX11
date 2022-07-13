@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
 
+#include "InputHandler.h"
 // Ό³Έν :
 class GameEngineDefaultRenderer;
 class Cube : public GameEngineActor
@@ -31,5 +32,6 @@ private:
 
 	float4 Color;
 
+	InputHandler Input;
 };
 

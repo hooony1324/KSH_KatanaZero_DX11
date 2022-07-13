@@ -31,3 +31,13 @@ private:
 	~GlobalValueManager() {}
 };
 
+enum class STATE_PLAYER
+{
+	IDLE,
+	JUMP,
+	WALK_RIGHT,
+	WALK_LEFT,
+	RUN_RIGHT,
+	RUN_LEFT,
+	DOWN,
+};
