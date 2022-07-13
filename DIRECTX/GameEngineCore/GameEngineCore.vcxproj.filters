@@ -96,6 +96,9 @@
     <ClInclude Include="ThirdParty\inc\DirectXTex.h">
       <Filter>ThirdParty\Inc</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngineSampler.h">
+      <Filter>Resources\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineActor.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="GameEngineShaderResourcesHelper.cpp">
       <Filter>Object\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineSampler.cpp">
+      <Filter>Resources\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

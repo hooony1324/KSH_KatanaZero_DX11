@@ -42,9 +42,7 @@ void Cube::Start()
 	{
 		bodyRenderer = CreateComponent<GameEngineDefaultRenderer>();
 		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
-		bodyRenderer->SetPipeLine("Color");
-		bodyRenderer->PipeLineHelper.SetConstantBufferLink("ResultColor", Color);
-
+		bodyRenderer->SetPipeLine("Texture");
 	}
 
 	//{

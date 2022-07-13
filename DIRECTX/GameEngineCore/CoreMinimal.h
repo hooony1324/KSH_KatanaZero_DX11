@@ -9,4 +9,4 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 
-#include <GameEngineContents/GlobalValueManager.h>
+#include <GameEngineCore/GameEngineDefaultRenderer.h>
