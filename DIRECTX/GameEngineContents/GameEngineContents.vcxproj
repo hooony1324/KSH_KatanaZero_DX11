@@ -198,7 +198,27 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TitleFence.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TitleGraphic.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TitleGrass.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TitleLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TitlePlants.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TitlePlate.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -244,7 +264,27 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TitleFence.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TitleGraphic.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TitleGrass.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TitleLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TitlePlants.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TitlePlate.cpp">
       <SubType>
       </SubType>
     </ClCompile>

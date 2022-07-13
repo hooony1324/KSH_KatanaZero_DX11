@@ -16,20 +16,26 @@
     <Filter Include="Levels\01PlayLevel">
       <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Rooms">
-      <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01PlayLevel\Player">
-      <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01PlayLevel\Enemy">
-      <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\%40%40%40TestLevel%40%40%40">
       <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Levels\%40%40%40TestLevel%40%40%40\TestLevelActor">
       <UniqueIdentifier>{dd1ad5fb-a1eb-4e74-880b-223da2dd6448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\00TitleLevel\Actor">
+      <UniqueIdentifier>{cd620d5a-4fd5-426f-b37a-f7e28a3ffc84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor">
+      <UniqueIdentifier>{39ba30d1-0ded-465c-91d7-fd13a2421a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor\Enemy">
+      <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor\Player">
+      <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor\Rooms">
+      <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +59,7 @@
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="PlayerZero.h">
-      <Filter>Levels\01PlayLevel\Player</Filter>
+      <Filter>Levels\01PlayLevel\Actor\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayLevel.h">
       <Filter>Levels\01PlayLevel</Filter>
@@ -63,6 +69,21 @@
     </ClInclude>
     <ClInclude Include="InputHandler.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="TitlePlate.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleFence.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleGrass.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TitlePlants.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleGraphic.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +104,7 @@
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="PlayerZero.cpp">
-      <Filter>Levels\01PlayLevel\Player</Filter>
+      <Filter>Levels\01PlayLevel\Actor\Player</Filter>
     </ClCompile>
     <ClCompile Include="PlayLevel.cpp">
       <Filter>Levels\01PlayLevel</Filter>
@@ -93,6 +114,21 @@
     </ClCompile>
     <ClCompile Include="InputHandler.cpp">
       <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="TitlePlate.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleFence.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleGrass.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TitlePlants.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleGraphic.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

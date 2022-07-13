@@ -6,8 +6,9 @@
 #include <GameEngineBase/GameEngineSound.h>
 #pragma comment(lib, "GameEngineBase.lib")
 
-#include "PlayLevel.h"
 #include "TestLevel.h"
+#include "TitleLevel.h"
+#include "PlayLevel.h"
 
 ContentsCore::ContentsCore() 
 {
@@ -19,6 +20,12 @@ ContentsCore::~ContentsCore()
 
 void ContentsCore::Start()
 {
+	// < Level Laod >
+	CreateLevel<TestLevel>("TestLevel");
+	CreateLevel<TitleLevel>("TitleLevel");
+	CreateLevel<PlayLevel>("PlayLevel");
+	ChangeLevel("TitleLevel");
+
 	// < Resource Load >
 	// Image Load
 	{
@@ -58,10 +65,6 @@ void ContentsCore::Start()
 		}
 	}
 
-	// RTTI 런 타임 타입 인포메이션
-	CreateLevel<PlayLevel>("PlayLevel");
-	CreateLevel<TestLevel>("TestLevel");
-	ChangeLevel("TestLevel");
 
 
 }
