@@ -12,10 +12,10 @@ TitleGrass::~TitleGrass()
 
 void TitleGrass::Start()
 {
-	Renderer = CreateComponent<GameEngineDefaultRenderer>();
+	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 640, 120, 0 });
-	Renderer->GetTransform().SetLocalPosition({ 0, 320, 0 });
-	Renderer->SetPipeLine("Texture");
+	Renderer->GetTransform().SetLocalPosition({ 0, -320, 0 });
+	Renderer->SetTexture("spr_title_grass_0.png");
 }
 
 void TitleGrass::Update(float _DeltaTime)

@@ -2,7 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
-class GameEngineDefaultRenderer;
+class GameEngineTextureRenderer;
 class TitleGraphic : public GameEngineActor
 {
 public:
@@ -23,6 +23,6 @@ protected:
 
 private:
 	// 639 x 360 : spr_titlegraphic_big_0
-	GameEngineDefaultRenderer* Renderer;
+	GameEngineTextureRenderer* Renderer;
 };
 

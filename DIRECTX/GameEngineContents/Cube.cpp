@@ -40,9 +40,9 @@ void Cube::Start()
 
 
 	{
-		bodyRenderer = CreateComponent<GameEngineDefaultRenderer>();
+		bodyRenderer = CreateComponent<GameEngineTextureRenderer>();
 		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
-		bodyRenderer->SetPipeLine("Texture");
+		bodyRenderer->SetTexture("spr_walk_0.png");
 	}
 
 	//{

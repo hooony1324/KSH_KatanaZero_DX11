@@ -12,14 +12,9 @@ TitlePlate::~TitlePlate()
 
 void TitlePlate::Start()
 {
-	Renderer = CreateComponent<GameEngineDefaultRenderer>();
+	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 640, 720, 0 });
-	Renderer->SetPipeLine("Color");
-	Renderer->PipeLineHelper.SetConstantBufferLink("ResultColor", BackColor);
-
-	BackColor.r = 0;
-	BackColor.g = 0;
-	BackColor.b = 0;
+	Renderer->SetTexture("spr_title_background_0.png");
 }
 
 void TitlePlate::Update(float _DeltaTime)

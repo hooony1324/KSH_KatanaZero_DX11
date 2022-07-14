@@ -12,9 +12,9 @@ TitleFence::~TitleFence()
 
 void TitleFence::Start()
 {
-	Renderer = CreateComponent<GameEngineDefaultRenderer>();
+	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 640, 720, 0 });
-	Renderer->SetPipeLine("Texture");
+	Renderer->SetTexture("spr_title_fence_0.png");
 }
 
 void TitleFence::Update(float _DeltaTime)

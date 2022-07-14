@@ -2,7 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
-class GameEngineDefaultRenderer;
+class GameEngineTextureRenderer;
 class TitlePlate : public GameEngineActor
 {
 public:
@@ -23,7 +23,6 @@ protected:
 
 private:
 	// 640 x 720 : spr_title_background_0
-	GameEngineDefaultRenderer* Renderer;
-	float4 BackColor;
+	GameEngineTextureRenderer* Renderer;
 };
 

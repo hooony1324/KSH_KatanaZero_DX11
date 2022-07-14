@@ -12,9 +12,9 @@ TitleGraphic::~TitleGraphic()
 
 void TitleGraphic::Start()
 {
-	Renderer = CreateComponent<GameEngineDefaultRenderer>();
+	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 639, 360, 0 });
-	Renderer->SetPipeLine("Texture");
+	Renderer->SetTexture("spr_titlegraphic_2.png");
 }
 
 void TitleGraphic::Update(float _DeltaTime)

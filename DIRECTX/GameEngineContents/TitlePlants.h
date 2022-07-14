@@ -2,7 +2,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
-class GameEngineDefaultRenderer;
+class GameEngineTextureRenderer;
 class TitlePlants : public GameEngineActor
 {
 public:
@@ -23,6 +23,6 @@ protected:
 
 private:
 	// 640 x 360 : spr_title_plants_0
-	GameEngineDefaultRenderer* Renderer;
+	GameEngineTextureRenderer* Renderer;
 };
 
