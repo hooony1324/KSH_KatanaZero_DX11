@@ -54,6 +54,8 @@ public:
 		return CutData[_Index];
 	}
 
+	void TextureLoad(const std::string& _Path);
+
 protected:
 
 private:
@@ -68,7 +70,7 @@ private:
 
 	std::vector<float4> CutData;
 
-	void TextureLoad(const std::string& _Path);
+
 	void Cut(UINT _X, UINT _Y);
 };
 

@@ -23,7 +23,7 @@ protected:
 	virtual void End() override;
 private:
 
-	void ImageLoad();
+	void TextureLoad();
 	void SoundLoad();
 };
 

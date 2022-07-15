@@ -1,10 +1,7 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
-#include <GameEngineBase/GameEngineDirectory.h>
-#include <GameEngineBase/GameEngineFile.h>
-#include <GameEngineCore/GameEngineTexture.h>
-#include <GameEngineBase/GameEngineSound.h>
 #pragma comment(lib, "GameEngineBase.lib")
+#include <GameEngineCore/CoreMinimal.h>
 
 #include "TestLevel.h"
 #include "TitleLevel.h"
@@ -21,14 +18,14 @@ ContentsCore::~ContentsCore()
 void ContentsCore::Start()
 {
 	// < Resource Load >
-	ImageLoad();
+	TextureLoad();
 	SoundLoad();
 
 	// < Level Laod >
-	CreateLevel<TestLevel>("TestLevel");
+	//CreateLevel<TestLevel>("TestLevel");
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
-	ChangeLevel("TestLevel");
+	ChangeLevel("TitleLevel");
 
 
 
@@ -42,26 +39,47 @@ void ContentsCore::End()
 {
 }
 
-void ContentsCore::ImageLoad()
+void ContentsCore::TextureLoad()
 {
+
 	GameEngineDirectory Dir;
 	Dir.MoveParentToExitsChildDirectory("Resources");
 	Dir.Move("Resources");
 	Dir.Move("Texture");
 
-	std::vector<std::string> ResourceDirs = { "Enemy", "Player", "Room", "Title"};
-
-	for (const std::string& Val : ResourceDirs)
+	// 단일 텍스처
 	{
-		Dir.Move(Val);
-		std::vector<GameEngineFile> Files = Dir.GetAllFile(".png");
-
-		for (size_t i = 0; i < Files.size(); i++)
+		GameEngineDirectory TexDir{Dir};
+		std::vector<std::string> ResourceDirs = { "Room", "Title" };
+		for (const std::string& Val : ResourceDirs)
 		{
-			GameEngineTexture::Load(Files[i].GetFullPath());
-		}
+			TexDir.Move(Val);
+			std::vector<GameEngineFile> Files = TexDir.GetAllFile();
 
-		Dir.MoveParentToExitsChildDirectory(Val);
+			for (size_t i = 0; i < Files.size(); i++)
+			{
+				GameEngineTexture::Load(Files[i].GetFullPath());
+			}
+
+			TexDir.MoveParentToExitsChildDirectory(Val);
+		}
+	}
+
+	// 애니메이션
+	{
+		// Player
+		GameEngineDirectory PlayerDir{ Dir };
+		PlayerDir.Move("Player");
+
+		std::vector<std::string> ResourceDirs = {
+			"attack", "fall", "idle", "idle_to_run", "jump", "roll", "run", "run_to_idle" };
+
+		for (const std::string& Path : ResourceDirs)
+		{
+			GameEngineDirectory AnimDir{ PlayerDir };
+			AnimDir.Move(Path);
+			GameEngineFolderTexture::Load(AnimDir.GetFullPath());
+		}
 	}
 }
 

@@ -10,10 +10,11 @@
 
 // Res
 #include <GameEngineCore/GameEngineTexture.h>
-#include <GameEngineCore/GameEngineTextureRenderer.h>
+#include <GameEngineCore/GameEngineFolderTexture.h>
 
 // Object
 #include <GameEngineCore/GameEngineLevel.h>
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineCore/GameEngineRenderer.h>
 #include <GameEngineCore/GameEngineDefaultRenderer.h>
+#include <GameEngineCore/GameEngineTextureRenderer.h>

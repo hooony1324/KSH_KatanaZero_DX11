@@ -52,6 +52,9 @@ public:
 
 	GameEngineTexture* SetTexture(const std::string& _Name, const std::string& _TextureName);
 
+	GameEngineTexture* SetTexture(const std::string& _Name, GameEngineTexture* _TextureName);
+
+
 protected:
 	void ShaderCheck(GameEngineShader* _Shader);
 

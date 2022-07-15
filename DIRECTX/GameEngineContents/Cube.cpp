@@ -42,7 +42,10 @@ void Cube::Start()
 	{
 		bodyRenderer = CreateComponent<GameEngineTextureRenderer>();
 		bodyRenderer->GetTransform().SetLocalScale({ 100, 100, 100 });
-		bodyRenderer->SetTexture("spr_walk_0.png");
+		bodyRenderer->CreateFrameAnimationFolder("player_run", FrameAnimation_DESC("run", 0.1f));
+		bodyRenderer->ChangeFrameAnimation("player_run");
+		//bodyRenderer->SetTexture("spr_walk_0.png");
+		//bodyRenderer->CreateFrameAnimationFolder()
 	}
 
 	//{

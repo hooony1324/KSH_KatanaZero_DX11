@@ -3,7 +3,7 @@
 
 #include "InputHandler.h"
 // Ό³Έν :
-class GameEngineDefaultRenderer;
+class GameEngineTextureRenderer;
 class Cube : public GameEngineActor
 {
 public:
