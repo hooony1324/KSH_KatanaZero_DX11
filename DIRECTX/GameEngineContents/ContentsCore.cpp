@@ -1,7 +1,6 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
 #pragma comment(lib, "GameEngineBase.lib")
-#include <GameEngineCore/CoreMinimal.h>
 
 #include "TestLevel.h"
 #include "TitleLevel.h"
@@ -22,10 +21,10 @@ void ContentsCore::Start()
 	SoundLoad();
 
 	// < Level Laod >
-	//CreateLevel<TestLevel>("TestLevel");
+	CreateLevel<TestLevel>("TestLevel");
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
-	ChangeLevel("TitleLevel");
+	ChangeLevel("TestLevel");
 
 
 
@@ -37,6 +36,7 @@ void ContentsCore::Update(float _DeltaTime)
 
 void ContentsCore::End()
 {
+	GameEngineSound::AllResourcesDestroy();
 }
 
 void ContentsCore::TextureLoad()
