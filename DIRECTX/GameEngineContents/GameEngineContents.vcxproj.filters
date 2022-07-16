@@ -42,9 +42,6 @@
     <ClInclude Include="TestLevel.h">
       <Filter>Levels\%40%40%40TestLevel%40%40%40</Filter>
     </ClInclude>
-    <ClInclude Include="Enums.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
     </ClInclude>
@@ -84,6 +81,9 @@
     </ClInclude>
     <ClInclude Include="TitleGraphic.h">
       <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +129,12 @@
     </ClCompile>
     <ClCompile Include="TitleGraphic.cpp">
       <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerZero_State.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

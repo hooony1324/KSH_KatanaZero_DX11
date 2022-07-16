@@ -26,7 +26,7 @@ Cube::~Cube()
 
 void Cube::Start()
 {
-	if (false == GameEngineInput::GetInst()->IsKey("PlayerLeft"))
+	if (false == GameEngineInput::GetInst()->IsKey("W"))
 	{
 		GameEngineInput::GetInst()->CreateKey("PlayerLeft", 'A');
 		GameEngineInput::GetInst()->CreateKey("PlayerRight", 'D');
@@ -88,7 +88,7 @@ void Cube::Update(float _DeltaTime)
 		Color.r -= 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetRightVector() * Speed * _DeltaTime);
 	}
-	if (STATE_PLAYER::JUMP == Input.HandleInput())
+	if (true == GameEngineInput::GetInst()->IsPress("PlayerUp"))
 	{
 		Color.g += 1.0f * _DeltaTime;
 		GetTransform().SetWorldMove(GetTransform().GetUpVector() * Speed * _DeltaTime);

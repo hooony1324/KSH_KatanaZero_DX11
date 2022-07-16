@@ -9,6 +9,7 @@ enum class ACTORGROUP
 	OBSTACLE,
 };
 
+
 // Ό³Έν :
 class GlobalValueManager
 {
@@ -25,21 +26,12 @@ public:
 		~Actors() {}
 	};
 
+	static std::vector<std::string> PlayerAnimations;
+
+
 private:
 	// constrcuter destructer
 	GlobalValueManager() {}
 	~GlobalValueManager() {}
 };
 
-enum class STATE_PLAYER
-{
-	IDLE,
-	JUMP,
-	LAND,
-	ROLL,
-	RUN,
-	SLASH,
-	WALLKICK,
-	WALLSLIDE,
-	DIE,
-};

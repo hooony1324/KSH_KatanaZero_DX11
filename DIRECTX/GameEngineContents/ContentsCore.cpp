@@ -24,7 +24,7 @@ void ContentsCore::Start()
 	CreateLevel<TestLevel>("TestLevel");
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
-	ChangeLevel("TestLevel");
+	ChangeLevel("PlayLevel");
 
 
 
@@ -50,7 +50,7 @@ void ContentsCore::TextureLoad()
 	// 단일 텍스처
 	{
 		GameEngineDirectory TexDir{Dir};
-		std::vector<std::string> ResourceDirs = { "Room", "Title" };
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title" };
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);
@@ -71,8 +71,7 @@ void ContentsCore::TextureLoad()
 		GameEngineDirectory PlayerDir{ Dir };
 		PlayerDir.Move("Player");
 
-		std::vector<std::string> ResourceDirs = {
-			"attack", "fall", "idle", "idle_to_run", "jump", "roll", "run", "run_to_idle" };
+		std::vector<std::string> ResourceDirs = GlobalValueManager::PlayerAnimations;
 
 		for (const std::string& Path : ResourceDirs)
 		{
