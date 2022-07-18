@@ -177,6 +177,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Ending_Background.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Ending_Logo.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GlobalValueManager.h">
       <SubType>
       </SubType>
@@ -248,6 +256,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="EndingLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Ending_Background.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Ending_Logo.cpp">
       <SubType>
       </SubType>
     </ClCompile>

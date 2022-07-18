@@ -80,7 +80,7 @@ void ContentsCore::TextureLoad()
 	// 단일 텍스처
 	{
 		GameEngineDirectory TexDir{Dir};
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title" };
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title", "Ending"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);
@@ -98,7 +98,7 @@ void ContentsCore::TextureLoad()
 	// 애니메이션(폴더)
 	{
 		GameEngineDirectory TexDir{ Dir };
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);
@@ -119,7 +119,7 @@ void ContentsCore::SoundLoad()
 	Dir.Move("Resources");
 	Dir.Move("Sound");
 
-	std::vector<GameEngineFile> Files = Dir.GetAllFile(".wav");
+	std::vector<GameEngineFile> Files = Dir.GetAllFile();
 
 	for (auto& File : Files)
 	{

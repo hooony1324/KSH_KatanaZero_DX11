@@ -26,5 +26,11 @@ private:
 	GameEngineDefaultRenderer* Background;
 	float4 Color_Background;
 	GameEngineTextureRenderer* Renderer;
+
+	// Lerp
+	float SumDeltaTime;
+	float4 Lerp_Start;
+	float4 Lerp_Dest;
+	float4 CurPos;
 };
 

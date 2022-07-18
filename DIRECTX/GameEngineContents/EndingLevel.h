@@ -1,7 +1,9 @@
 #pragma once
 #include <GameEngineCore/GameEngineLevel.h>
+#include <GameEngineBase/GameEngineSound.h>
 
 // Ό³Έν :
+class GameEngineActor;
 class EndingLevel : public GameEngineLevel
 {
 public:
@@ -17,9 +19,16 @@ public:
 
 protected:
 	void Start() override;
+	void OnEvent() override;
 	void Update(float _DeltaTime) override;
+	void OffEvent() override;
 	void End() override;
 private:
+	GameEngineActor* Logo;
+	float4 Lerp_Start;
+	float4 Lerp_Dest;
+	float SumDeltaTime;
 
+	GameEngineSoundPlayer SoundPlayer;
 };
 

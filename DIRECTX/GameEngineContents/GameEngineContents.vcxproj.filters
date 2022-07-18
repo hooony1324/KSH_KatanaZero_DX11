@@ -37,11 +37,14 @@
     <Filter Include="Levels\01PlayLevel\Actor\Rooms">
       <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\02BossLevel">
-      <UniqueIdentifier>{e12c75ab-499d-4f74-a64e-ffb651f16224}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\02EndingLevel">
       <UniqueIdentifier>{18a56f11-af60-46df-a902-7d8622a00a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\02EndingLevel\Actor">
+      <UniqueIdentifier>{ef078ca4-b0db-4a7c-8374-c43498ffd780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\02BossLevel">
+      <UniqueIdentifier>{e12c75ab-499d-4f74-a64e-ffb651f16224}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +99,12 @@
     </ClInclude>
     <ClInclude Include="BossLevel.h">
       <Filter>Levels\02BossLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Ending_Background.h">
+      <Filter>Levels\02EndingLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Ending_Logo.h">
+      <Filter>Levels\02EndingLevel\Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +162,12 @@
     </ClCompile>
     <ClCompile Include="BossLevel.cpp">
       <Filter>Levels\02BossLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Ending_Background.cpp">
+      <Filter>Levels\02EndingLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Ending_Logo.cpp">
+      <Filter>Levels\02EndingLevel\Actor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
