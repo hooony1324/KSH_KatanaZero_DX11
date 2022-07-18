@@ -37,6 +37,9 @@
     <Filter Include="Levels\01PlayLevel\Actor\Rooms">
       <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\EndingLevel">
+      <UniqueIdentifier>{18a56f11-af60-46df-a902-7d8622a00a26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestLevel.h">
@@ -84,6 +87,9 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingLevel.h">
+      <Filter>Levels\EndingLevel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingLevel.cpp">
+      <Filter>Levels\EndingLevel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

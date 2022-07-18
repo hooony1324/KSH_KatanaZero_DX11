@@ -27,7 +27,7 @@ void TitleLevel::Start()
 	// ¹è°æ
 	//GameEngineActor* Plate = CreateActor<TitlePlate>();
 	//GameEngineActor* Fence = CreateActor<TitleFence>();
-	//GameEngineActor* Graphic = CreateActor<TitleGraphic>();
+	GameEngineActor* Graphic = CreateActor<TitleGraphic>();
 	//GameEngineActor* Grass = CreateActor<TitleGrass>();
 	//GameEngineActor* Plants = CreateActor<TitlePlants>();
 }

@@ -11,7 +11,7 @@ void PlayerZero::AttackStart()
 
 void PlayerZero::AttackUpdate()
 {
-	if (true == AttackTimer->IsEnd())
+	if (true == Attack_AniEnd)
 	{
 		ChangeState(STATE_PLAYER::IDLE);
 	}
@@ -81,12 +81,13 @@ void PlayerZero::JumpUpdate()
 
 void PlayerZero::RollStart()
 {
+	RollTimer->Activate();
 	Renderer->ChangeFrameAnimation("roll");
 }
 
 void PlayerZero::RollUpdate()
 {
-	if (true == RollEnd)
+	if (true == Roll_AniEnd)
 	{
 		ChangeState(STATE_PLAYER::IDLE);
 	}
@@ -121,10 +122,12 @@ void PlayerZero::WallSlideUpdate()
 
 void PlayerZero::CrouchStart()
 {
+	Renderer->ChangeFrameAnimation("precrouch");
 }
 
 void PlayerZero::CrouchUpdate()
 {
+
 }
 
 void PlayerZero::RunToIdleStart()
@@ -134,7 +137,7 @@ void PlayerZero::RunToIdleStart()
 
 void PlayerZero::RunToIdleUpdate()
 {
-	if (true == RunIdleEnd)
+	if (true == RunIdle_AniEnd)
 	{
 		ChangeState(STATE_PLAYER::IDLE);
 	}
@@ -147,7 +150,7 @@ void PlayerZero::IdleToRunStart()
 
 void PlayerZero::IdleToRunUpdate()
 {
-	if (true == IdleRunEnd)
+	if (true == IdleRun_AniEnd)
 	{
 		ChangeState(STATE_PLAYER::RUN);
 	}

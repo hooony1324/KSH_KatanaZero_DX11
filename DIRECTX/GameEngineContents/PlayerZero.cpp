@@ -3,7 +3,10 @@
 
 #include "Timer.h"
 
-PlayerZero::PlayerZero() 
+PlayerZero::PlayerZero()
+	: Renderer(nullptr)
+	, AttackAble(true)
+	, RollAble(true)
 {
 }
 
@@ -37,14 +40,17 @@ void PlayerZero::Start()
 	Renderer->ChangeFrameAnimation("idle");
 
 	AttackTimer = CreateComponent<Timer>();
-	AttackTimer->Init(0.3f);
+	AttackTimer->Init(0.5f);
+	RollTimer = CreateComponent<Timer>();
+	RollTimer->Init(0.8f);
 
 	ChangeState(STATE_PLAYER::IDLE);
 }
 
 void PlayerZero::Update(float _DeltaTime)
 {
-	InputCheck();
+ 	InputCheck();
+	CoolTimeCheck();
 	UpdateState();
 
 	GetTransform().SetWorldMove(MoveDir);
@@ -59,7 +65,7 @@ void PlayerZero::InputCheck()
 	Input = PLAYERINPUT::NONE;
 	
 	// CLICK
-	if (GameEngineInput::GetInst()->IsPress("SpaceBar"))
+	if (GameEngineInput::GetInst()->IsPress("SpaceBar") && true == AttackAble)
 	{
 		Input = PLAYERINPUT::CLICK;
 		ChangeState(STATE_PLAYER::ATTACK);
@@ -119,6 +125,12 @@ void PlayerZero::InputCheck()
 
 
 
+}
+
+void PlayerZero::CoolTimeCheck()
+{
+	AttackAble = AttackTimer->IsEnd();
+	RollAble = RollTimer->IsEnd();
 }
 
 
@@ -182,8 +194,14 @@ void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
 			JumpStart();
 			break;
 		case STATE_PLAYER::ROLL:
+		{
+			if (false == RollAble)
+			{
+				return;
+			}
 			RollStart();
 			break;
+		}
 		case STATE_PLAYER::RUN:
 			RunStart();
 			break;
@@ -211,26 +229,29 @@ void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
 
 void PlayerZero::CreateAllAnimation()
 {
-	Renderer->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.08f });
+	Renderer->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.05f , false});
 	Renderer->CreateFrameAnimationFolder("fall", FrameAnimation_DESC{ "fall", 0.1125f });
 	Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "idle", 0.1125f });
-	Renderer->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.06f });
+	Renderer->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.05f , false});
 	Renderer->CreateFrameAnimationFolder("jump", FrameAnimation_DESC{ "jump", 0.1125f });
-	Renderer->CreateFrameAnimationFolder("postcrouch", FrameAnimation_DESC{ "postcrouch", 0.08f });
-	Renderer->CreateFrameAnimationFolder("precrouch", FrameAnimation_DESC{ "precrouch", 0.08f });
-	Renderer->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.04f });
+	Renderer->CreateFrameAnimationFolder("postcrouch", FrameAnimation_DESC{ "postcrouch", 0.08f , false});
+	Renderer->CreateFrameAnimationFolder("precrouch", FrameAnimation_DESC{ "precrouch", 0.08f , false});
+	Renderer->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.05f , false});
 	Renderer->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ "run", 0.08f });
-	Renderer->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.06f });
+	Renderer->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
 	Renderer->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f });
 	Renderer->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f });
 	
 	// ANIMATION BLEND
-	Renderer->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRunEnd = false; });
-	Renderer->AnimationBindEnd("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRunEnd = true; });
-	Renderer->AnimationBindStart("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdleEnd = false; });
-	Renderer->AnimationBindEnd("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdleEnd = true; });
-	Renderer->AnimationBindStart("roll", [this](const FrameAnimation_DESC&) { RollEnd = false; });
-	Renderer->AnimationBindEnd("roll", [this](const FrameAnimation_DESC&) { RollEnd = true; });
+	Renderer->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
+	Renderer->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (Input == PLAYERINPUT::NONE) { ChangeState(STATE_PLAYER::IDLE); }} );
+	Renderer->AnimationBindEnd("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
+	Renderer->AnimationBindStart("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
+	Renderer->AnimationBindEnd("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = true; });
+	Renderer->AnimationBindStart("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = false; });
+	Renderer->AnimationBindEnd("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = true; });
+	Renderer->AnimationBindStart("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = false; });
+	Renderer->AnimationBindEnd("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = true; });
 
 }
 

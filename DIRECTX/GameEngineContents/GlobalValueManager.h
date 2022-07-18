@@ -26,8 +26,6 @@ public:
 		~Actors() {}
 	};
 
-	static std::vector<std::string> PlayerAnimations;
-
 
 private:
 	// constrcuter destructer

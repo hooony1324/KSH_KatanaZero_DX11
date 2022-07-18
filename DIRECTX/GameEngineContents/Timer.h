@@ -9,16 +9,21 @@ public:
 	{
 		SettingTime = _SettingTime;
 		IsStart = false;
-		SumTime = 0.0f;
 	}
 
 	void Activate()
 	{
 		IsStart = true;
+		SumTime = 0.0f;
 	}
 
 	bool IsEnd()
 	{
+		if (false == IsStart)
+		{
+			return false;
+		}
+
 		if (SumTime >= SettingTime)
 		{
 			SumTime = 0.0f;

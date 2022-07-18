@@ -5,6 +5,7 @@
 #include "TestLevel.h"
 #include "TitleLevel.h"
 #include "PlayLevel.h"
+#include "EndingLevel.h"
 
 ContentsCore::ContentsCore() 
 {
@@ -24,9 +25,10 @@ void ContentsCore::Start()
 	CreateLevel<TestLevel>("TestLevel");
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
-	ChangeLevel("PlayLevel");
+	CreateLevel<EndingLevel>("EndingLevel");
+	ChangeLevel("EndingLevel");
 
-
+	//levelchange, Endinglevel
 
 }
 
@@ -65,19 +67,19 @@ void ContentsCore::TextureLoad()
 		}
 	}
 
-	// 애니메이션
+	// 애니메이션(폴더)
 	{
-		// Player
-		GameEngineDirectory PlayerDir{ Dir };
-		PlayerDir.Move("Player");
-
-		std::vector<std::string> ResourceDirs = GlobalValueManager::PlayerAnimations;
-
-		for (const std::string& Path : ResourceDirs)
+		GameEngineDirectory TexDir{ Dir };
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy" };
+		for (const std::string& Val : ResourceDirs)
 		{
-			GameEngineDirectory AnimDir{ PlayerDir };
-			AnimDir.Move(Path);
-			GameEngineFolderTexture::Load(AnimDir.GetFullPath());
+			TexDir.Move(Val);
+			for (GameEngineDirectory Path : TexDir.GetAllDirectory())
+			{
+				GameEngineFolderTexture::Load(Path.GetFullPath());
+			}
+
+			TexDir.MoveParentToExitsChildDirectory(Val);
 		}
 	}
 }

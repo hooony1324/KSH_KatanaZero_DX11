@@ -95,18 +95,27 @@ public:
 	void IdleToRunUpdate();
 
 	void InputCheck();
+	void CoolTimeCheck();
+
 private:
 	STATE_PLAYER PlayerState;
 	Timer* AttackTimer;
+	Timer* RollTimer;
 
 	// Animation
-	bool IdleRunEnd;
-	bool RunIdleEnd;
-	bool RollEnd;
+	bool IdleRun_AniEnd;
+	bool RunIdle_AniEnd;
+	bool Roll_AniEnd;
+	bool Attack_AniEnd;
+
+	// CoolTime
+	bool AttackAble;
+	bool RollAble;
 
 // 플레이어 정보
 private:
 	PLAYERINPUT Input;
+	float InputForce;
 	float4 MoveDir;
 };
 
