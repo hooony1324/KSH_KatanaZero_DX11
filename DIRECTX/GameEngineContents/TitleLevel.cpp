@@ -2,6 +2,7 @@
 #include "TitleLevel.h"
 #include <GameEngineCore/CoreMinimal.h>
 #include <GameEngineCore/GameEngineCameraActor.h>
+#include <GameEngineBase/GameEngineMath.h>
 
 #include "TitlePlate.h"
 #include "TitleFence.h"
@@ -26,9 +27,9 @@ void TitleLevel::Start()
 
 	// ¹è°æ
 	GameEngineActor* Plate = CreateActor<TitlePlate>();
-	GameEngineActor* Fence = CreateActor<TitleFence>();
-	GameEngineActor* Graphic = CreateActor<TitleGraphic>();
-	GameEngineActor* Grass = CreateActor<TitleGrass>();
+	//GameEngineActor* Fence = CreateActor<TitleFence>();
+	//GameEngineActor* Graphic = CreateActor<TitleGraphic>();
+	//GameEngineActor* Grass = CreateActor<TitleGrass>();
 	//GameEngineActor* Plants = CreateActor<TitlePlants>();
 }
 

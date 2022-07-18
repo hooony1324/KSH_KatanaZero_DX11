@@ -53,7 +53,6 @@ protected:
 
 // 초기화 관련
 private:
-	void CreateKey();
 	void CreateAllAnimation();
 
 private:

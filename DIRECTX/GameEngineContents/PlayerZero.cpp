@@ -14,23 +14,8 @@ PlayerZero::~PlayerZero()
 {
 }
 
-void PlayerZero::CreateKey()
-{
-	if (GameEngineInput::GetInst()->IsKey("W"))
-	{
-		return;
-	}
-
-	GameEngineInput::GetInst()->CreateKey("W", 'W');
-	GameEngineInput::GetInst()->CreateKey("A", 'A');
-	GameEngineInput::GetInst()->CreateKey("S", 'S');
-	GameEngineInput::GetInst()->CreateKey("D", 'D');
-	GameEngineInput::GetInst()->CreateKey("SpaceBar", VK_SPACE);
-}
-
 void PlayerZero::Start()
 {
-	CreateKey();
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 100, 100, 0 });
