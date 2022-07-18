@@ -26,9 +26,7 @@ void ContentsCore::Start()
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
-	ChangeLevel("EndingLevel");
-
-	//levelchange, Endinglevel
+	ChangeLevel("TitleLevel");
 
 }
 

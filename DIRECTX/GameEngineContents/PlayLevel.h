@@ -16,8 +16,8 @@ public:
 	PlayLevel& operator=(PlayLevel&& _Other) noexcept = delete;
 
 protected:
-	void OnEvent() override {};
 	void Start() override;
+	void OnEvent() override {};
 	void Update(float _DeltaTime) override;
 	void OffEvent() override {};
 	void End() override;

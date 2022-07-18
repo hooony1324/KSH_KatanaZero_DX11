@@ -44,4 +44,7 @@ void GameEngineFolderTexture::LoadFolder(const std::string& _Path)
 		Textures.push_back(NewTexture);
 	}
 
+
+
+	int a = 0;
 }

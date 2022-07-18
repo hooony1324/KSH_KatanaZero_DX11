@@ -31,6 +31,7 @@ void FrameAnimation::Update(float _Delta)
 
 	if (Info.Inter <= Info.FrameTime)
 	{
+		++Info.CurFrame;
 		if (nullptr != Frame)
 		{
 			Frame(Info);
@@ -49,8 +50,6 @@ void FrameAnimation::Update(float _Delta)
 		{
 			MsgBoxAssert("텍스처가 세팅되지 않은 애니메이션 입니다.");
 		}
-
-		++Info.CurFrame;
 
 		if (Info.CurFrame >= Info.End)
 		{
@@ -93,6 +92,16 @@ void GameEngineTextureRenderer::Start()
 	FrameData.SizeY = 1.0f;
 
 	ShaderResources.SetConstantBufferLink("AtlasData", FrameData);
+}
+
+void GameEngineTextureRenderer::SetSamplingModePoint()
+{
+	ShaderResources.SetSampler("Smp", "EngineSamplerPoint");
+}
+
+void GameEngineTextureRenderer::SetSamplingModeLiner()
+{
+	ShaderResources.SetSampler("Smp", "EngineSamplerLinear");
 }
 
 void GameEngineTextureRenderer::SetTexture(GameEngineTexture* _Texture)

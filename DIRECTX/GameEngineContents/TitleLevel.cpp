@@ -25,10 +25,10 @@ void TitleLevel::Start()
 	MainCam->GetTransform().SetLocalPosition({ 0, 0, 0 });
 
 	// ¹è°æ
-	//GameEngineActor* Plate = CreateActor<TitlePlate>();
-	//GameEngineActor* Fence = CreateActor<TitleFence>();
+	GameEngineActor* Plate = CreateActor<TitlePlate>();
+	GameEngineActor* Fence = CreateActor<TitleFence>();
 	GameEngineActor* Graphic = CreateActor<TitleGraphic>();
-	//GameEngineActor* Grass = CreateActor<TitleGrass>();
+	GameEngineActor* Grass = CreateActor<TitleGrass>();
 	//GameEngineActor* Plants = CreateActor<TitlePlants>();
 }
 
