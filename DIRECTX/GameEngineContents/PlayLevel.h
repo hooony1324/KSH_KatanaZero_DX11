@@ -2,6 +2,7 @@
 #include <GameEngineCore/GameEngineLevel.h>
 
 // ¼³¸í :
+class Room;
 class PlayLevel : public GameEngineLevel
 {
 public:
@@ -23,6 +24,15 @@ protected:
 	void End() override;
 
 private:
+	// ·ë º¯°æ
+	void RoomChange(Room* _Room);
+
+private:
+	// ·ë º¯°æ
+	Room* CurRoom;
+	Room* Room1;
+	Room* Room2;
+	Room* Room3;
 
 };
 

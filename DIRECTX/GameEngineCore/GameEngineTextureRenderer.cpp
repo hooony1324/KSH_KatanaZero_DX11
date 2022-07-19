@@ -31,7 +31,6 @@ void FrameAnimation::Update(float _Delta)
 
 	if (Info.Inter <= Info.FrameTime)
 	{
-		++Info.CurFrame;
 		if (nullptr != Frame)
 		{
 			Frame(Info);
@@ -50,6 +49,7 @@ void FrameAnimation::Update(float _Delta)
 		{
 			MsgBoxAssert("텍스처가 세팅되지 않은 애니메이션 입니다.");
 		}
+		++Info.CurFrame;
 
 		if (Info.CurFrame >= Info.End)
 		{
@@ -74,6 +74,8 @@ void FrameAnimation::Update(float _Delta)
 }
 
 GameEngineTextureRenderer::GameEngineTextureRenderer() 
+	: CurAni(nullptr)
+	, CurTex(nullptr)
 {
 }
 
@@ -216,7 +218,7 @@ void GameEngineTextureRenderer::CreateFrameAnimationFolder(const std::string& _A
 
 	if (NewAni.Info.End == -1)
 	{
-		NewAni.Info.End = NewAni.FolderTexture->GetTextureCount() - 1;
+		NewAni.Info.End = static_cast<unsigned int>(NewAni.FolderTexture->GetTextureCount() - 1);
 	}
 }
 
@@ -251,8 +253,8 @@ void GameEngineTextureRenderer::ChangeFrameAnimation(const std::string& _Animati
 	{
 		CurAni = &FrameAni[Name];
 		CurAni->Reset();
+		//SetTexture(CurAni->Texture, CurAni->Info.CurFrame);
 	}
-
 }
 
 void GameEngineTextureRenderer::FrameDataReset()
@@ -267,4 +269,11 @@ void GameEngineTextureRenderer::Update(float _Delta)
 	{
 		CurAni->Update(_Delta);
 	}
+}
+
+
+
+void GameEngineTextureRenderer::ScaleToTexture()
+{
+	GetTransform().SetLocalScale(CurTex->GetScale());
 }

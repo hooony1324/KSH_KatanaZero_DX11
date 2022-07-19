@@ -18,16 +18,18 @@ void PlayerZero::Start()
 {
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
-	Renderer->GetTransform().SetLocalScale({ 100, 100, 0 });
 	Renderer->SetTexture("spr_walk_0.png");
+	//Renderer->ScaleToTexture();
+	Renderer->GetTransform().SetLocalScale({ 50	, 50 });
 
 	CreateAllAnimation();
 	Renderer->ChangeFrameAnimation("idle");
 
+	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
-	AttackTimer->Init(0.5f);
+	AttackTimer->Init(0.4f);
 	RollTimer = CreateComponent<Timer>();
-	RollTimer->Init(0.8f);
+	RollTimer->Init(0.6f);
 
 	ChangeState(STATE_PLAYER::IDLE);
 }
@@ -35,8 +37,8 @@ void PlayerZero::Start()
 void PlayerZero::Update(float _DeltaTime)
 {
  	InputCheck();
-	CoolTimeCheck();
 	UpdateState();
+	CoolTimeCheck();
 
 	GetTransform().SetWorldMove(MoveDir);
 }
@@ -50,7 +52,7 @@ void PlayerZero::InputCheck()
 	Input = PLAYERINPUT::NONE;
 	
 	// CLICK
-	if (GameEngineInput::GetInst()->IsPress("SpaceBar") && true == AttackAble)
+	if (GameEngineInput::GetInst()->IsPress("SpaceBar"))
 	{
 		Input = PLAYERINPUT::CLICK;
 		ChangeState(STATE_PLAYER::ATTACK);
@@ -64,6 +66,7 @@ void PlayerZero::InputCheck()
 	}
 	if (GameEngineInput::GetInst()->IsPress("a"))
 	{
+		Renderer->GetTransform().PixLocalNegativeX();
 		InputDir[0] += -1;
 	}
 	if (GameEngineInput::GetInst()->IsPress("s"))
@@ -72,6 +75,7 @@ void PlayerZero::InputCheck()
 	}
 	if (GameEngineInput::GetInst()->IsPress("d"))
 	{
+		Renderer->GetTransform().PixLocalPositiveX();
 		InputDir[0] += 1;
 	}
 
@@ -114,8 +118,8 @@ void PlayerZero::InputCheck()
 
 void PlayerZero::CoolTimeCheck()
 {
-	AttackAble = AttackTimer->IsEnd();
-	RollAble = RollTimer->IsEnd();
+	AttackAble = !AttackTimer->IsCoolTime();
+	RollAble = !RollTimer->IsCoolTime();
 }
 
 
@@ -167,8 +171,14 @@ void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
 		switch (_PlayerState)
 		{
 		case STATE_PLAYER::ATTACK:
+		{
+			if (false == AttackAble)
+			{
+				return;
+			}
 			AttackStart();
 			break;
+		}
 		case STATE_PLAYER::FALL:
 			FallStart();
 			break;
@@ -214,7 +224,7 @@ void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
 
 void PlayerZero::CreateAllAnimation()
 {
-	Renderer->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.05f , false});
+	Renderer->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.06f , false});
 	Renderer->CreateFrameAnimationFolder("fall", FrameAnimation_DESC{ "fall", 0.1125f });
 	Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "idle", 0.1125f });
 	Renderer->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.05f , false});

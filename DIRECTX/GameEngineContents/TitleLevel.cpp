@@ -27,10 +27,10 @@ void TitleLevel::Start()
 
 	// ¹è°æ
 	GameEngineActor* Plate = CreateActor<TitlePlate>();
-	//GameEngineActor* Fence = CreateActor<TitleFence>();
-	//GameEngineActor* Graphic = CreateActor<TitleGraphic>();
-	//GameEngineActor* Grass = CreateActor<TitleGrass>();
-	//GameEngineActor* Plants = CreateActor<TitlePlants>();
+	GameEngineActor* Fence = CreateActor<TitleFence>();
+	GameEngineActor* Graphic = CreateActor<TitleGraphic>();
+	GameEngineActor* Grass = CreateActor<TitleGrass>();
+	GameEngineActor* Plants = CreateActor<TitlePlants>();
 }
 
 void TitleLevel::Update(float _DeltaTime)

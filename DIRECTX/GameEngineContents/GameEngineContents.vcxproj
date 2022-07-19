@@ -161,10 +161,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BossLevel.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="ContentsCore.h">
       <SubType>
       </SubType>
@@ -209,11 +205,31 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Room.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Room_Boss.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Room_Factory1.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Room_Factory2.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TestLevel.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Timer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="TitleButtons.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -243,10 +259,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BossLevel.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
     <ClCompile Include="ContentsCore.cpp">
       <SubType>
       </SubType>
@@ -296,11 +308,31 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Room_Boss.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Room_Factory1.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Room_Factory2.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TestLevel.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TitleButtons.cpp">
       <SubType>
       </SubType>
     </ClCompile>

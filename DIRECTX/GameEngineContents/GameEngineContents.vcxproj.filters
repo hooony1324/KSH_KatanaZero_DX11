@@ -43,9 +43,6 @@
     <Filter Include="Levels\02EndingLevel\Actor">
       <UniqueIdentifier>{ef078ca4-b0db-4a7c-8374-c43498ffd780}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\02BossLevel">
-      <UniqueIdentifier>{e12c75ab-499d-4f74-a64e-ffb651f16224}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestLevel.h">
@@ -97,14 +94,26 @@
     <ClInclude Include="EndingLevel.h">
       <Filter>Levels\02EndingLevel</Filter>
     </ClInclude>
-    <ClInclude Include="BossLevel.h">
-      <Filter>Levels\02BossLevel</Filter>
-    </ClInclude>
     <ClInclude Include="Ending_Background.h">
       <Filter>Levels\02EndingLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="Ending_Logo.h">
       <Filter>Levels\02EndingLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Room_Factory1.h">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Room_Factory2.h">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Room_Boss.h">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleButtons.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,14 +169,26 @@
     <ClCompile Include="EndingLevel.cpp">
       <Filter>Levels\02EndingLevel</Filter>
     </ClCompile>
-    <ClCompile Include="BossLevel.cpp">
-      <Filter>Levels\02BossLevel</Filter>
-    </ClCompile>
     <ClCompile Include="Ending_Background.cpp">
       <Filter>Levels\02EndingLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="Ending_Logo.cpp">
       <Filter>Levels\02EndingLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Room_Factory1.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="Room_Factory2.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="Room_Boss.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleButtons.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

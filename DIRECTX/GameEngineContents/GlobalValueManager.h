@@ -4,9 +4,11 @@
 enum class ACTORGROUP
 {
 	CAMERA,
+	MAP,
 	PLAYER,
 	ENEMY,
 	PROJECTILE,
+	NONE,
 };
 
 

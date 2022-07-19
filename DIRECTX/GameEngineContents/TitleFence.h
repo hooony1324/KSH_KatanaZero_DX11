@@ -24,5 +24,11 @@ protected:
 private:
 	// 640 x 720 : spr_title_fence_0
 	GameEngineTextureRenderer* Renderer;
+
+	// Lerp
+	float SumDeltaTime;
+	float4 Lerp_Start;
+	float4 Lerp_Dest;
+	float4 CurPos;
 };
 

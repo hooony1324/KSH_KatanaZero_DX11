@@ -2,7 +2,7 @@
 #include "TitlePlate.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-float PlateSpeed = 3.0f;
+const float LERP_DIST = 200.0f;
 
 TitlePlate::TitlePlate() 
 {
@@ -21,7 +21,7 @@ void TitlePlate::Start()
 	Color_Background.r = 0;
 	Color_Background.g = 0;
 	Color_Background.b = 0;
-	Color_Background.w = 0.8f;
+	Color_Background.w = 1.0f;
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 1280, 1440, 0 });
@@ -29,8 +29,9 @@ void TitlePlate::Start()
 	Renderer->SetTexture("spr_title_background_0.png");
 
 	// Lerp
-	Lerp_Start = Renderer->GetTransform().GetTransformData().WorldPosition;
-	Lerp_Dest = float4{ 0, 200, 0 };
+	float4 Pos = Renderer->GetTransform().GetTransformData().WorldPosition;
+	Lerp_Start = Pos;
+	Lerp_Dest = Pos + float4{ 0, LERP_DIST, 0 };
 }
 
 void TitlePlate::Update(float _DeltaTime)
@@ -40,7 +41,7 @@ void TitlePlate::Update(float _DeltaTime)
 
 	// 부드러운 Lerp
 	CurPos = Renderer->GetTransform().GetTransformData().WorldPosition;
-	float LerpSpeed = (Lerp_Dest - CurPos).Length() / 100;
+	float LerpSpeed = (Lerp_Dest - CurPos).Length() / 200;
 	SumDeltaTime += _DeltaTime * LerpSpeed;
 }
 

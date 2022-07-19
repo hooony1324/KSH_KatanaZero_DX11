@@ -36,28 +36,29 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("SpaceBar", VK_SPACE);
 	GameEngineInput::GetInst()->CreateKey("Shift", VK_SHIFT);
 
-	GameEngineInput::GetInst()->CreateKey("Numpad0", VK_NUMPAD0);
 	GameEngineInput::GetInst()->CreateKey("Numpad1", VK_NUMPAD1);
 	GameEngineInput::GetInst()->CreateKey("Numpad2", VK_NUMPAD2);
 	GameEngineInput::GetInst()->CreateKey("Numpad3", VK_NUMPAD3);
 	GameEngineInput::GetInst()->CreateKey("Numpad4", VK_NUMPAD4);
+	GameEngineInput::GetInst()->CreateKey("Numpad5", VK_NUMPAD5);
+	GameEngineInput::GetInst()->CreateKey("Numpad6", VK_NUMPAD6);
 
 }
 
 void ContentsCore::Update(float _DeltaTime)
 {
 	// 디버그용 레벨 체인지
-	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
+	if (true == GameEngineInput::GetInst()->IsDown("Numpad1"))
 	{
 		ChangeLevel("TitleLevel");
 	}
 
-	if (true == GameEngineInput::GetInst()->IsDown("Numpad1"))
+	if (true == GameEngineInput::GetInst()->IsDown("Numpad2"))
 	{
 		ChangeLevel("PlayLevel");
 	}
 
-	if (true == GameEngineInput::GetInst()->IsDown("Numpad2"))
+	if (true == GameEngineInput::GetInst()->IsDown("Numpad3"))
 	{
 		ChangeLevel("EndingLevel");
 	}

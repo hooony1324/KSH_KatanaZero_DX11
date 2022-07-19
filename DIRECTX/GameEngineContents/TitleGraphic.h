@@ -23,6 +23,14 @@ protected:
 
 private:
 	// 639 x 360 : spr_titlegraphic_big_0
-	GameEngineTextureRenderer* Renderer;
+	GameEngineTextureRenderer* Renderer_L;
+	GameEngineTextureRenderer* Renderer_R;
+	GameEngineTextureRenderer* Renderer_Logo;
+
+	// Lerp
+	float SumDeltaTime;
+	float4 Lerp_Start;
+	float4 Lerp_Dest;
+	float4 CurPos;
 };
 

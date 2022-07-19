@@ -17,44 +17,16 @@ public:
 		SumTime = 0.0f;
 	}
 
-	bool IsEnd()
+	bool IsCoolTime()
 	{
-		if (false == IsStart)
+		if (true == IsStart && SumTime >= 0.0f)
 		{
-			return false;
-		}
-
-		if (SumTime >= SettingTime)
-		{
-			SumTime = 0.0f;
-			IsStart = false;
 			return true;
 		}
 
 		return false;
 	}
 
-	bool IsCoolTime()
-	{
-		if (SumTime >= SettingTime)
-		{
-			SumTime = 0.0f;
-			return false;
-		}
-
-		return true;
-	}
-
-	void Pause()
-	{
-		IsStart = false;
-	}
-
-	void Stop()
-	{
-		IsStart = false;
-		SumTime = 0.0f;
-	}
 
 public:
 	// constrcuter destructer

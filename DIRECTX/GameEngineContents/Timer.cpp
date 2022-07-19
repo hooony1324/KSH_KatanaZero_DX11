@@ -13,5 +13,11 @@ void Timer::Update(float _DeltaTime)
 	}
 
 	SumTime += _DeltaTime;
+
+	if (SumTime >= SettingTime)
+	{
+		IsStart = false;
+		SumTime = 0.0f;
+	}
 }
 

@@ -13,6 +13,8 @@ void PlayerZero::AttackUpdate()
 {
 	if (true == Attack_AniEnd)
 	{
+		Attack_AniEnd = false;
+		AttackTimer;
 		ChangeState(STATE_PLAYER::IDLE);
 	}
 }
@@ -89,6 +91,7 @@ void PlayerZero::RollUpdate()
 {
 	if (true == Roll_AniEnd)
 	{
+		Roll_AniEnd = false;
 		ChangeState(STATE_PLAYER::IDLE);
 	}
 }
