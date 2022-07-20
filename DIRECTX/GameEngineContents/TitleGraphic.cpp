@@ -2,7 +2,7 @@
 #include "TitleGraphic.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-const float LERP_DIST = 100.0f;
+const float LERP_DIST = 125.0f;
 
 TitleGraphic::TitleGraphic() 
 {

@@ -9,6 +9,7 @@
 #include "TitleGraphic.h"
 #include "TitleGrass.h"
 #include "TitlePlants.h"
+#include "TitleButtons.h"
 
 TitleLevel::TitleLevel() 
 {
@@ -31,10 +32,23 @@ void TitleLevel::Start()
 	GameEngineActor* Graphic = CreateActor<TitleGraphic>();
 	GameEngineActor* Grass = CreateActor<TitleGrass>();
 	GameEngineActor* Plants = CreateActor<TitlePlants>();
+
+	GameEngineActor* Buttons = CreateActor<TitleButtons>();
+}
+
+void TitleLevel::OnEvent()
+{
+	SoundPlayer = GameEngineSound::SoundPlayControl("song_rainonbrick.ogg");
+	SoundPlayer.Volume(0.5f);
 }
 
 void TitleLevel::Update(float _DeltaTime)
 {
+}
+
+void TitleLevel::OffEvent()
+{
+	SoundPlayer.Stop();
 }
 
 void TitleLevel::End()
