@@ -18,9 +18,9 @@ void PlayerZero::Start()
 {
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
-	Renderer->SetTexture("spr_walk_0.png");
+	//Renderer->SetTexture("spr_walk_0.png");
 	//Renderer->ScaleToTexture();
-	Renderer->GetTransform().SetLocalScale({ 50	, 50 });
+	Renderer->GetTransform().SetLocalScale({ 100, 100 });
 
 	CreateAllAnimation();
 	Renderer->ChangeFrameAnimation("idle");
@@ -231,12 +231,12 @@ void PlayerZero::CreateAllAnimation()
 	Renderer->CreateFrameAnimationFolder("jump", FrameAnimation_DESC{ "jump", 0.1125f });
 	Renderer->CreateFrameAnimationFolder("postcrouch", FrameAnimation_DESC{ "postcrouch", 0.08f , false});
 	Renderer->CreateFrameAnimationFolder("precrouch", FrameAnimation_DESC{ "precrouch", 0.08f , false});
-	Renderer->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.05f , false});
+	Renderer->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.05f, false });
 	Renderer->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ "run", 0.08f });
 	Renderer->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
 	Renderer->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f });
 	Renderer->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f });
-	
+
 	// ANIMATION BLEND
 	Renderer->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
 	Renderer->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (Input == PLAYERINPUT::NONE) { ChangeState(STATE_PLAYER::IDLE); }} );
