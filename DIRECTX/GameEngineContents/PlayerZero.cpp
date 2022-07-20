@@ -18,12 +18,11 @@ void PlayerZero::Start()
 {
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
-	//Renderer->SetTexture("spr_walk_0.png");
-	//Renderer->ScaleToTexture();
-	Renderer->GetTransform().SetLocalScale({ 50, 50 });
-
+	Renderer->SetTexture("spr_idle_0.png");
+	Renderer->ScaleToTexture();
 	CreateAllAnimation();
 	Renderer->ChangeFrameAnimation("idle");
+	GetTransform().SetLocalScale({ 2, 2, 1.0f });
 
 	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
