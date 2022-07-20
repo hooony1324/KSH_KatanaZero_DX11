@@ -1,9 +1,9 @@
 #pragma once
-#include <GameEngineCore/GameEngineActor.h>
+#include "TitleUI.h"
 
 // Ό³Έν :
 class GameEngineTextureRenderer;
-class TitlePlate : public GameEngineActor
+class TitlePlate : public TitleUI
 {
 public:
 	// constrcuter destructer
@@ -16,6 +16,8 @@ public:
 	TitlePlate& operator=(const TitlePlate& _Other) = delete;
 	TitlePlate& operator=(TitlePlate&& _Other) noexcept = delete;
 
+
+
 protected:
 	void Start() override;
 	void Update(float _DeltaTime) override;
@@ -26,11 +28,5 @@ private:
 	GameEngineDefaultRenderer* Background;
 	float4 Color_Background;
 	GameEngineTextureRenderer* Renderer;
-
-	// Lerp
-	float SumDeltaTime;
-	float4 Lerp_Start;
-	float4 Lerp_Dest;
-	float4 CurPos;
 };
 

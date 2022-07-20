@@ -2,7 +2,7 @@
 #include "TitleGraphic.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-const float LERP_DIST = 125.0f;
+const float LERPIN_DIST = 125.0f;
 
 TitleGraphic::TitleGraphic() 
 {
@@ -31,20 +31,12 @@ void TitleGraphic::Start()
 	GetTransform().SetWorldPosition({ 0, -100, 0 });
 
 	// Lerp
-	float4 Pos = GetTransform().GetTransformData().WorldPosition;
-	Lerp_Start = Pos;
-	Lerp_Dest = Pos + float4{ 0, LERP_DIST, 0 };
+	LerpStart({ 0, -100 }, { 0, 25 }, 0.5f);
 }
 
 void TitleGraphic::Update(float _DeltaTime)
 {
-	float4 Pos = float4::LerpLimit(Lerp_Start, Lerp_Dest, SumDeltaTime);
-	GetTransform().SetWorldPosition(Pos);
-
-	// 부드러운 Lerp
-	CurPos = GetTransform().GetTransformData().WorldPosition;
-	float LerpSpeed = (Lerp_Dest - CurPos).Length() / 100;
-	SumDeltaTime += _DeltaTime * LerpSpeed;
+	LerpUpdate(_DeltaTime);
 }
 
 void TitleGraphic::End()

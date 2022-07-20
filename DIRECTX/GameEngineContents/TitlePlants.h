@@ -1,9 +1,9 @@
 #pragma once
-#include <GameEngineCore/GameEngineActor.h>
+#include "TitleUI.h"
 
 // Ό³Έν :
 class GameEngineTextureRenderer;
-class TitlePlants : public GameEngineActor
+class TitlePlants : public TitleUI
 {
 public:
 	// constrcuter destructer
@@ -25,10 +25,5 @@ private:
 	// 640 x 360 : spr_title_plants_0
 	GameEngineTextureRenderer* Renderer;
 
-	// Lerp
-	float SumDeltaTime;
-	float4 Lerp_Start;
-	float4 Lerp_Dest;
-	float4 CurPos;
 };
 

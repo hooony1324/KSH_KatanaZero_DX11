@@ -122,9 +122,6 @@ void PlayerZero::CoolTimeCheck()
 	RollAble = !RollTimer->IsCoolTime();
 }
 
-
-
-
 void PlayerZero::UpdateState()
 {
 	switch (PlayerState)

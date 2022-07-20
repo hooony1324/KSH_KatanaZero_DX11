@@ -115,6 +115,9 @@
     <ClInclude Include="TitleButtons.h">
       <Filter>Levels\00TitleLevel\Actor</Filter>
     </ClInclude>
+    <ClInclude Include="TitleUI.h">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestLevel.cpp">
@@ -188,6 +191,9 @@
       <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="TitleButtons.cpp">
+      <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleUI.cpp">
       <Filter>Levels\00TitleLevel\Actor</Filter>
     </ClCompile>
   </ItemGroup>
