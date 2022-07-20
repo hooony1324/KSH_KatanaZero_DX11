@@ -20,7 +20,7 @@ void PlayerZero::Start()
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	//Renderer->SetTexture("spr_walk_0.png");
 	//Renderer->ScaleToTexture();
-	Renderer->GetTransform().SetLocalScale({ 100, 100 });
+	Renderer->GetTransform().SetLocalScale({ 50, 50 });
 
 	CreateAllAnimation();
 	Renderer->ChangeFrameAnimation("idle");
