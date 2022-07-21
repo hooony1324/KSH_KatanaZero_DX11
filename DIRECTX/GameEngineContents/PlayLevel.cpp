@@ -51,6 +51,13 @@ void PlayLevel::Update(float _DeltaTime)
 	//		RoomChange(Room3);
 	//	}	
 	//}
+
+	// 프리카메라
+	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
+	{
+		GetMainCamera()->SetProjectionMode(CAMERAPROJECTIONMODE::PersPective);
+		GetMainCameraActor()->FreeCameraModeOnOff();
+	}
 }
 
 void PlayLevel::End()

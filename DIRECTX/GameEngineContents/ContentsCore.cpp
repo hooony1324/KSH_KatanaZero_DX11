@@ -36,6 +36,7 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("SpaceBar", VK_SPACE);
 	GameEngineInput::GetInst()->CreateKey("Shift", VK_SHIFT);
 
+	GameEngineInput::GetInst()->CreateKey("Numpad0", VK_NUMPAD0);
 	GameEngineInput::GetInst()->CreateKey("Numpad1", VK_NUMPAD1);
 	GameEngineInput::GetInst()->CreateKey("Numpad2", VK_NUMPAD2);
 	GameEngineInput::GetInst()->CreateKey("Numpad3", VK_NUMPAD3);

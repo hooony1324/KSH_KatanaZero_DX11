@@ -37,6 +37,13 @@ public:
 
 	float4 GetMouseWorldPosition();
 
+	float4 GetMouseWorldPositionToActor();
+
+	inline float4 GetMouseWorldDir() 
+	{
+		return MouseDir;
+	}
+
 	// 뷰포트는 계속 달라질수가 있으므로 다르게
 	// float4 GetMouseViewPortPosition();
 
@@ -49,6 +56,9 @@ private:
 	float4x4 ViewPort;
 	float4x4 Projection;
 	CAMERAPROJECTIONMODE Mode;
+
+	float4 PrevMouse;
+	float4 MouseDir;
 
 	D3D11_VIEWPORT ViewPortDesc;
 
@@ -68,5 +78,6 @@ private:
 
 	void Release(float _DelataTime);
 
+	void Update(float _DeltaTime) override;
 };
 
