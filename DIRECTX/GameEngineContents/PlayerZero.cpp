@@ -3,16 +3,18 @@
 
 #include "Timer.h"
 
-const float SPEED_PLAYER = 200.0f;
+const float FORCE_LIMIT = 200.0f;
+const float FORCE_INPUT = 100.0f;
 
 PlayerZero::PlayerZero()
 	: Renderer(nullptr)
 	, AttackAble(true)
 	, RollAble(true)
+	, PlayerSpeed(400.0f)
 {
 }
 
-PlayerZero::~PlayerZero() 
+PlayerZero::~PlayerZero()
 {
 }
 
@@ -37,20 +39,20 @@ void PlayerZero::Start()
 
 void PlayerZero::Update(float _DeltaTime)
 {
- 	InputCheck();
+	InputCheck(_DeltaTime);
 	UpdateState();
 	CoolTimeCheck();
 
-	GetTransform().SetWorldMove(MoveDir * _DeltaTime * SPEED_PLAYER);
+	GetTransform().SetWorldMove(MoveDir * _DeltaTime * InputForce * PlayerSpeed);
 }
 
 void PlayerZero::End()
 {
 }
 
-void PlayerZero::InputCheck()
+void PlayerZero::InputCheck(float _DeltaTime)
 {
-	
+
 	// CLICK
 	if (GameEngineInput::GetInst()->IsPress("SpaceBar"))
 	{
@@ -77,6 +79,23 @@ void PlayerZero::InputCheck()
 		Renderer->GetTransform().PixLocalPositiveX();
 		InputDir[0] += 1;
 	}
+
+	// Input정도 : 0 ~ 1
+	if (abs(InputDir.x) + abs(InputDir.y) <= 0)
+	{
+		InputForce = 0.0f;
+		InputTime = 0.0f;
+	}
+	else
+	{
+		InputTime += _DeltaTime * 2;
+		InputForce = InputTime * InputTime + 0.2f;
+		if (InputForce >= 1.0f)
+		{
+			InputForce = 1.0f;
+		}
+	}
+
 
 	// 벽 체크?
 

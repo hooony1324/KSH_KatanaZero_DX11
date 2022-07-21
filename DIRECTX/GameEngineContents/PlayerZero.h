@@ -93,7 +93,7 @@ public:
 	void IdleToRunStart();
 	void IdleToRunUpdate();
 
-	void InputCheck();
+	void InputCheck(float _DeltaTime);
 	void CoolTimeCheck();
 
 private:
@@ -115,7 +115,11 @@ private:
 private:
 	// WASD
 	float4 InputDir;
-	float InputForce;
 	float4 MoveDir;
+	float PlayerSpeed;
+
+	// InputForce
+	float InputForce;
+	float InputTime;
 };
 
