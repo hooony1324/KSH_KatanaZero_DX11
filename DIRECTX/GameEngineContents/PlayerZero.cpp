@@ -3,6 +3,8 @@
 
 #include "Timer.h"
 
+const float SPEED_PLAYER = 200.0f;
+
 PlayerZero::PlayerZero()
 	: Renderer(nullptr)
 	, AttackAble(true)
@@ -39,7 +41,7 @@ void PlayerZero::Update(float _DeltaTime)
 	UpdateState();
 	CoolTimeCheck();
 
-	GetTransform().SetWorldMove(MoveDir);
+	GetTransform().SetWorldMove(MoveDir * _DeltaTime * SPEED_PLAYER);
 }
 
 void PlayerZero::End()
@@ -48,17 +50,15 @@ void PlayerZero::End()
 
 void PlayerZero::InputCheck()
 {
-	Input = PLAYERINPUT::NONE;
 	
 	// CLICK
 	if (GameEngineInput::GetInst()->IsPress("SpaceBar"))
 	{
-		Input = PLAYERINPUT::CLICK;
 		ChangeState(STATE_PLAYER::ATTACK);
 	}
 
 	// WASD
-	int InputDir[2] = {0, 0};
+	InputDir = float4::ZERO;
 	if (GameEngineInput::GetInst()->IsPress("w"))
 	{
 		InputDir[1] += 1;
@@ -78,16 +78,9 @@ void PlayerZero::InputCheck()
 		InputDir[0] += 1;
 	}
 
-	if (InputDir[0] == 1 && InputDir[1] == -1)
-	{
-		Input = PLAYERINPUT::RIGHTDOWN;
-	}
+	// º® Ã¼Å©?
 
-	if (InputDir[0] == -1 && InputDir[1] == -1)
-	{
-		Input = PLAYERINPUT::LEFTDOWN;
-	}
-
+	MoveDir = InputDir;
 }
 
 void PlayerZero::CoolTimeCheck()
@@ -210,7 +203,7 @@ void PlayerZero::CreateAllAnimation()
 
 	// ANIMATION BLEND
 	Renderer->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
-	Renderer->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (Input == PLAYERINPUT::NONE) { ChangeState(STATE_PLAYER::IDLE); }} );
+	Renderer->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (InputDir.CompareInt2D({0, 0})) { ChangeState(STATE_PLAYER::IDLE); }});
 	Renderer->AnimationBindEnd("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
 	Renderer->AnimationBindStart("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
 	Renderer->AnimationBindEnd("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = true; });

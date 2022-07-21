@@ -113,7 +113,8 @@ private:
 
 // 플레이어 정보
 private:
-	PLAYERINPUT Input;
+	// WASD
+	float4 InputDir;
 	float InputForce;
 	float4 MoveDir;
 };

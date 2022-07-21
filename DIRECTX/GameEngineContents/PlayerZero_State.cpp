@@ -39,35 +39,9 @@ void PlayerZero::IdleUpdate()
 	// idle -> jump
 	// idle -> crouch
 	// idle -> attack
-	switch (Input)
+	if (abs(MoveDir.x) > 0)
 	{
-	case PLAYERINPUT::NONE:
-		break;
-	case PLAYERINPUT::UP:
-		break;
-	case PLAYERINPUT::UPRIGHT:
-		break;
-	case PLAYERINPUT::RIGHT:
-		ChangeState(STATE_PLAYER::IDLETORUN);
-		break;
-	case PLAYERINPUT::RIGHTDOWN:
-		ChangeState(STATE_PLAYER::ROLL);
-		break;
-	case PLAYERINPUT::DOWN:
-		break;
-	case PLAYERINPUT::LEFTDOWN:
-		ChangeState(STATE_PLAYER::ROLL);
-		break;
-	case PLAYERINPUT::LEFT:
-		ChangeState(STATE_PLAYER::IDLETORUN);
-		break;
-	case PLAYERINPUT::UPLEFT:
-		break;
-	case PLAYERINPUT::CLICK:
-		ChangeState(STATE_PLAYER::ATTACK);
-		break;
-	default:
-		break;
+		ChangeState(STATE_PLAYER::RUN);
 	}
 }
 
@@ -103,12 +77,13 @@ void PlayerZero::RunStart()
 
 void PlayerZero::RunUpdate()
 {
-	if (PLAYERINPUT::NONE == Input)
+	if (InputDir.CompareInt2D(float4::ZERO))
 	{
 		ChangeState(STATE_PLAYER::RUNTOIDLE);
 	}
 
-	if (PLAYERINPUT::LEFTDOWN == Input || PLAYERINPUT::RIGHTDOWN == Input)
+	float4 RollDir = float4{ abs(InputDir.x), InputDir.y };
+	if (RollDir.CompareInt2D({1, -1}))
 	{
 		ChangeState(STATE_PLAYER::ROLL);
 	}
