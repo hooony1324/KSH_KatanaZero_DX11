@@ -37,21 +37,7 @@ void FrameAnimation::Update(float _Delta)
 			Frame(Info);
 		}
 
-		if (nullptr != Texture)
-		{
-			ParentRenderer->SetTexture(Texture, Info.CurFrame);
-		}
-		else if(nullptr != FolderTexture)
-		{
-			ParentRenderer->FrameDataReset();
-			ParentRenderer->SetTexture(FolderTexture->GetTexture(Info.CurFrame));
-		}
-		else 
-		{
-			MsgBoxAssert("텍스처가 세팅되지 않은 애니메이션 입니다.");
-		}
-
-		if (Info.CurFrame >= Info.End)
+		if (Info.CurFrame > Info.End)
 		{
 			if (false == bOnceEnd && nullptr != End)
 			{
@@ -68,6 +54,20 @@ void FrameAnimation::Update(float _Delta)
 			{
 				Info.CurFrame = Info.End;
 			}
+		}
+
+		if (nullptr != Texture)
+		{
+			ParentRenderer->SetTexture(Texture, Info.CurFrame);
+		}
+		else if (nullptr != FolderTexture)
+		{
+			ParentRenderer->FrameDataReset();
+			ParentRenderer->SetTexture(FolderTexture->GetTexture(Info.CurFrame));
+		}
+		else
+		{
+			MsgBoxAssert("텍스처가 세팅되지 않은 애니메이션 입니다.");
 		}
 
 		Info.FrameTime -= Info.Inter;

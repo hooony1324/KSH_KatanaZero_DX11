@@ -78,40 +78,15 @@ void PlayerZero::InputCheck()
 		InputDir[0] += 1;
 	}
 
-	if (InputDir[0] == 0 && InputDir[1] == 1)
-	{
-		Input = PLAYERINPUT::UP;
-	}
-	if (InputDir[0] == 1 && InputDir[1] == 1)
-	{
-		Input = PLAYERINPUT::UPRIGHT;
-	}
-	if (InputDir[0] == 1 && InputDir[1] == 0)
-	{
-		Input = PLAYERINPUT::RIGHT;
-	}
 	if (InputDir[0] == 1 && InputDir[1] == -1)
 	{
 		Input = PLAYERINPUT::RIGHTDOWN;
 	}
-	if (InputDir[0] == 0 && InputDir[1] == -1)
-	{
-		Input = PLAYERINPUT::DOWN;
-	}
+
 	if (InputDir[0] == -1 && InputDir[1] == -1)
 	{
 		Input = PLAYERINPUT::LEFTDOWN;
 	}
-	if (InputDir[0] == -1 && InputDir[1] == 0)
-	{
-		Input = PLAYERINPUT::LEFT;
-	}
-	if (InputDir[0] == -1 && InputDir[1] == 1)
-	{
-		Input = PLAYERINPUT::UPLEFT;
-	}
-
-
 
 }
 

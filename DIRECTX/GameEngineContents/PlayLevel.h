@@ -34,5 +34,13 @@ private:
 	Room* Room2;
 	Room* Room3;
 
+	// FSM
+private:
+	enum class STATE
+	{
+
+	};
+
+
 };
 
