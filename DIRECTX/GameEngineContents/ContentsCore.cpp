@@ -2,7 +2,6 @@
 #include "ContentsCore.h"
 #pragma comment(lib, "GameEngineBase.lib")
 
-#include "TestLevel.h"
 #include "TitleLevel.h"
 #include "PlayLevel.h"
 #include "EndingLevel.h"
@@ -22,7 +21,6 @@ void ContentsCore::Start()
 	SoundLoad();
 
 	// < Level Laod >
-	CreateLevel<TestLevel>("TestLevel");
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");

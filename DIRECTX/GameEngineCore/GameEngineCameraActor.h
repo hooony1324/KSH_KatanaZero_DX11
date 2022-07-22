@@ -42,6 +42,8 @@ private:
 	float RotSpeed;
 
 	GameEngineCamera* CameraComponent;
+	GameEngineTransform OriginTrans;
+	CAMERAPROJECTIONMODE PrevMode;
 
 };
 

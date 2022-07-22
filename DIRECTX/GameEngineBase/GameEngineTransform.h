@@ -279,6 +279,8 @@ public:
 		return Data;
 	}
 
+	void Copy(GameEngineTransform& _Trans);
+
 protected:
 
 private:

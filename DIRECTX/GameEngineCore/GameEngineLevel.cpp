@@ -4,6 +4,7 @@
 #include "GameEngineRenderer.h"
 #include "GameEngineCamera.h"
 #include "GameEngineCameraActor.h"
+#include "GameEngineGUI.h"
 
 GameEngineLevel::GameEngineLevel() 
 	: MainCamera(nullptr)
@@ -80,6 +81,8 @@ void GameEngineLevel::Render(float _DelataTime)
 
 	// 이 사이에서 무언가를 해야 합니다.
 	MainCamera->Render(_DelataTime);
+
+	GameEngineGUI::GUIRender();
 
 	GameEngineDevice::RenderEnd();
 }

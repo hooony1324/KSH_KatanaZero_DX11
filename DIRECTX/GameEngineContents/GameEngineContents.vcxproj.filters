@@ -16,12 +16,6 @@
     <Filter Include="Levels\01PlayLevel">
       <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\%40%40%40TestLevel%40%40%40">
-      <UniqueIdentifier>{94c5b4f5-7bee-427e-b533-f509f1d13ee2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\%40%40%40TestLevel%40%40%40\TestLevelActor">
-      <UniqueIdentifier>{dd1ad5fb-a1eb-4e74-880b-223da2dd6448}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\00TitleLevel\Actor">
       <UniqueIdentifier>{cd620d5a-4fd5-426f-b37a-f7e28a3ffc84}</UniqueIdentifier>
     </Filter>
@@ -45,15 +39,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestLevel.h">
-      <Filter>Levels\%40%40%40TestLevel%40%40%40</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle.h">
-      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
-    </ClInclude>
     <ClInclude Include="GlobalValueManager.h">
       <Filter>Global</Filter>
     </ClInclude>
@@ -120,15 +105,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestLevel.cpp">
-      <Filter>Levels\%40%40%40TestLevel%40%40%40</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
-    </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
-      <Filter>Levels\%40%40%40TestLevel%40%40%40\TestLevelActor</Filter>
-    </ClCompile>
     <ClCompile Include="GlobalValueManager.cpp">
       <Filter>Global</Filter>
     </ClCompile>

@@ -1,5 +1,4 @@
 #pragma once
-#include "Obstacle.h"
 
 enum class ACTORGROUP
 {
@@ -11,6 +10,21 @@ enum class ACTORGROUP
 	NONE,
 };
 
+enum class RENDER_ORDER
+{
+	BACKGROUND_0,
+	BACKGROUND_1,
+	BACKGROUND_2,
+	BACKGROUND_3,
+	BACKGROUND_4,
+
+	BOSS,
+	ENEMY,
+	PLAYER,
+
+
+};
+
 
 // Ό³Έν :
 class GlobalValueManager
@@ -20,7 +34,7 @@ public:
 	class Actors
 	{
 	public:
-		static Obstacle* testObstacle;
+		//static Obstacle* testObstacle;
 
 	private:
 

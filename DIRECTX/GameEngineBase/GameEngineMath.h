@@ -443,6 +443,13 @@ public:
 		return DirectX::XMVectorDivide(DirectVector, float4(_Value).DirectVector);
 	}
 
+	float4& operator/=(const float _Value)
+	{
+		DirectVector = DirectX::XMVectorDivide(DirectVector, float4(_Value).DirectVector);
+
+		return *this;
+	}
+
 	float4 operator/(const float4& _Value) const
 	{
 		return DirectX::XMVectorDivide(DirectVector, _Value.DirectVector);
