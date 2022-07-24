@@ -61,7 +61,10 @@ void GameEngineGUI::GUIRender()
 
     ImGui::Begin(Text.c_str());
 
-    ImGui::Button(Button.c_str());
+
+    ImVec2 val = ImGui::GetMousePos();
+    std::string pos = "MousePos: { " + std::to_string(val.x) + ", " + std::to_string(val.y) + "}";
+    ImGui::Button(pos.c_str());
 
     ImGui::End();
 

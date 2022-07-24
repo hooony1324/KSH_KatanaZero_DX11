@@ -56,7 +56,8 @@ private:
 	void CreateAllAnimation();
 
 private:
-	GameEngineTextureRenderer* Renderer;
+	GameEngineTextureRenderer* Renderer_Player;
+	GameEngineTextureRenderer* Renderer_Slash;
 
 // FSM
 public:
@@ -93,7 +94,7 @@ public:
 	void IdleToRunStart();
 	void IdleToRunUpdate();
 
-	void InputCheck(float _DeltaTime);
+	void InputCheck();
 	void CoolTimeCheck();
 
 private:
@@ -113,13 +114,16 @@ private:
 
 // 플레이어 정보
 private:
-	// WASD
+	void CreateSlash();
+	
+private:
+	// 입력
+	float4 MousePos;
+	float4 MouseDir;
 	float4 InputDir;
 	float4 MoveDir;
 	float PlayerSpeed;
 
-	// InputForce
-	float InputForce;
-	float InputTime;
+	float MoveForce;
 };
 

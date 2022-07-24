@@ -28,14 +28,19 @@ void TitleLevel::Start()
 	// 카메라
 	GameEngineCameraActor* MainCam = CreateActor<GameEngineCameraActor>();
 	MainCam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	MainCam->GetTransform().SetLocalPosition({ 0, 0, 0 });
+	MainCam->GetTransform().SetLocalPosition({ 0, 0, -1000 });
 
 	// 배경
 	GameEngineActor* Plate = CreateActor<TitlePlate>();
+	Plate->GetTransform().SetWorldMove({ 0, 0, 500 });
 	GameEngineActor* Fence = CreateActor<TitleFence>();
+	Fence->GetTransform().SetWorldMove({ 0, 0, 400 });
 	Graphic = CreateActor<TitleGraphic>();
+	Graphic->GetTransform().SetWorldMove({ 0, 0, 300 });
 	GameEngineActor* Grass = CreateActor<TitleGrass>();
+	Grass->GetTransform().SetWorldMove({ 0, 0, 200 });
 	GameEngineActor* Plants = CreateActor<TitlePlants>();
+	Plants->GetTransform().SetWorldMove({ 0, 0, 100 });
 	GameEngineActor* Buttons = CreateActor<TitleButtons>();
 	AllActors.push_back(Plate);
 	AllActors.push_back(Fence);
@@ -54,6 +59,13 @@ void TitleLevel::OnEvent()
 
 void TitleLevel::Update(float _DeltaTime)
 {
+	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
+	{
+		GetMainCameraActor()->FreeCameraModeOnOff();
+	}
+
+
+
 	PlayLevelChangeCheck();
 
 	if (false == PlayLevelChange)

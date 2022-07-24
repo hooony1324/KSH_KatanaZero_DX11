@@ -7,6 +7,7 @@
 #include "Room_Factory1.h"
 #include "Room_Factory2.h"
 #include "Room_Boss.h"
+#include "Cursor.h"
 
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
@@ -25,11 +26,18 @@ void PlayLevel::Start()
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
+	Room1->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::BACKGROUND_0) });
 	//Room2 = CreateActor<Room_Factory2>(ACTORGROUP::MAP);
 	//Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
 	//RoomChange(Room1);
 	
+	// Player 소환
 	PlayerZero* Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
+	Player->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::PLAYER) });
+
+	// Cursor
+	Cursor* Mouse = CreateActor<Cursor>();
+	Mouse->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::CURSOR) });
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -55,9 +63,9 @@ void PlayLevel::Update(float _DeltaTime)
 	// 프리카메라
 	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
 	{
-		GetMainCamera()->SetProjectionMode(CAMERAPROJECTIONMODE::PersPective);
 		GetMainCameraActor()->FreeCameraModeOnOff();
 	}
+
 }
 
 void PlayLevel::End()

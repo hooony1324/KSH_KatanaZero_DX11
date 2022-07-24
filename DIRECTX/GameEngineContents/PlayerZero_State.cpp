@@ -1,20 +1,23 @@
 #include "PreCompile.h"
 #include "PlayerZero.h"
-
 #include "Timer.h"
+
+const float SPEED_PLAYER = 400.0f;
 
 void PlayerZero::AttackStart()
 {
+	CreateSlash();
 	AttackTimer->Activate();
-	Renderer->ChangeFrameAnimation("attack");
+	Renderer_Player->ChangeFrameAnimation("attack");
 }
 
 void PlayerZero::AttackUpdate()
 {
 	if (true == Attack_AniEnd)
 	{
+		MouseDir = float4::ZERO;
 		Attack_AniEnd = false;
-		AttackTimer;
+		Renderer_Slash->Off();
 		ChangeState(STATE_PLAYER::IDLE);
 	}
 }
@@ -30,7 +33,7 @@ void PlayerZero::FallUpdate()
 
 void PlayerZero::IdleStart()
 {
-	Renderer->ChangeFrameAnimation("idle");
+	Renderer_Player->ChangeFrameAnimation("idle");
 }
 
 void PlayerZero::IdleUpdate()
@@ -39,15 +42,18 @@ void PlayerZero::IdleUpdate()
 	// idle -> jump
 	// idle -> crouch
 	// idle -> attack
-	if (abs(MoveDir.x) > 0)
+	if (abs(InputDir.x) > 0)
 	{
-		ChangeState(STATE_PLAYER::RUN);
+		MoveDir.x = InputDir.x;
+		ChangeState(STATE_PLAYER::IDLETORUN);
 	}
+
+
 }
 
 void PlayerZero::JumpStart()
 {
-	Renderer->ChangeFrameAnimation("jump");
+	Renderer_Player->ChangeFrameAnimation("jump");
 }
 
 void PlayerZero::JumpUpdate()
@@ -58,7 +64,8 @@ void PlayerZero::JumpUpdate()
 void PlayerZero::RollStart()
 {
 	RollTimer->Activate();
-	Renderer->ChangeFrameAnimation("roll");
+	Renderer_Player->ChangeFrameAnimation("roll");
+	PlayerSpeed = SPEED_PLAYER * 2.0f;
 }
 
 void PlayerZero::RollUpdate()
@@ -66,13 +73,23 @@ void PlayerZero::RollUpdate()
 	if (true == Roll_AniEnd)
 	{
 		Roll_AniEnd = false;
-		ChangeState(STATE_PLAYER::IDLE);
+		PlayerSpeed = SPEED_PLAYER;
+
+		if (abs(MoveDir.x) > 0)
+		{
+			ChangeState(STATE_PLAYER::RUN);
+		}
+		else
+		{
+			ChangeState(STATE_PLAYER::IDLE);
+		}
 	}
 }
 
 void PlayerZero::RunStart()
 {
-	Renderer->ChangeFrameAnimation("run");
+	PlayerSpeed = SPEED_PLAYER;
+	Renderer_Player->ChangeFrameAnimation("run");
 }
 
 void PlayerZero::RunUpdate()
@@ -100,7 +117,7 @@ void PlayerZero::WallSlideUpdate()
 
 void PlayerZero::CrouchStart()
 {
-	Renderer->ChangeFrameAnimation("precrouch");
+	Renderer_Player->ChangeFrameAnimation("precrouch");
 }
 
 void PlayerZero::CrouchUpdate()
@@ -110,7 +127,7 @@ void PlayerZero::CrouchUpdate()
 
 void PlayerZero::RunToIdleStart()
 {
-	Renderer->ChangeFrameAnimation("run_to_idle");
+	Renderer_Player->ChangeFrameAnimation("run_to_idle");
 }
 
 void PlayerZero::RunToIdleUpdate()
@@ -123,7 +140,8 @@ void PlayerZero::RunToIdleUpdate()
 
 void PlayerZero::IdleToRunStart()
 {
-	Renderer->ChangeFrameAnimation("idle_to_run");
+	PlayerSpeed = 10.0f;
+	Renderer_Player->ChangeFrameAnimation("idle_to_run");
 }
 
 void PlayerZero::IdleToRunUpdate()

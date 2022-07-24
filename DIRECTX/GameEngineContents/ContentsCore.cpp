@@ -27,6 +27,7 @@ void ContentsCore::Start()
 	ChangeLevel("TitleLevel");
 
 	// Input Key
+	GameEngineInput::GetInst()->CreateKey("MouseLeft", VK_LBUTTON);
 	GameEngineInput::GetInst()->CreateKey("W", 'W');
 	GameEngineInput::GetInst()->CreateKey("A", 'A');
 	GameEngineInput::GetInst()->CreateKey("S", 'S');
@@ -41,6 +42,9 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("Numpad4", VK_NUMPAD4);
 	GameEngineInput::GetInst()->CreateKey("Numpad5", VK_NUMPAD5);
 	GameEngineInput::GetInst()->CreateKey("Numpad6", VK_NUMPAD6);
+
+	GameEngineInput::GetInst()->CreateKey("MousePosDebug", 'M');
+
 
 }
 
@@ -80,7 +84,7 @@ void ContentsCore::TextureLoad()
 	// 단일 텍스처
 	{
 		GameEngineDirectory TexDir{Dir};
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title", "Ending"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title", "Ending", "UI", "FX"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);
@@ -98,7 +102,7 @@ void ContentsCore::TextureLoad()
 	// 애니메이션(폴더)
 	{
 		GameEngineDirectory TexDir{ Dir };
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);

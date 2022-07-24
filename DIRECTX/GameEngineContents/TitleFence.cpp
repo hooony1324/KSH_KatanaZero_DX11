@@ -16,7 +16,7 @@ void TitleFence::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 1280, 1440, 0 });
-	Renderer->GetTransform().SetWorldPosition({ 0, -100, 0 });
+	Renderer->GetTransform().SetWorldPosition({ 0, -100 });
 	Renderer->SetTexture("spr_title_fence_0.png");
 
 	LerpStart({ 0, -100 }, { 0, 300 }, 0.9f);

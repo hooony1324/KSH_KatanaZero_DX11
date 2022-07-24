@@ -28,7 +28,7 @@ void TitleGraphic::Start()
 	Renderer_Logo->GetTransform().SetLocalPosition({ 0, 50, 0 });
 
 	GetTransform().SetLocalScale({ 1.3f, 1.3f, 0 });
-	GetTransform().SetWorldPosition({ 0, -100, 0 });
+	GetTransform().SetLocalPosition({ 0, -100});
 
 	// Lerp
 	LerpStart({ 0, -100 }, { 0, 25 }, 0.5f);

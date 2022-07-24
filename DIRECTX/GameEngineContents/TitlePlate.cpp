@@ -27,7 +27,7 @@ void TitlePlate::Start()
 	Renderer->SetTexture("spr_title_background_0.png");
 	Renderer->GetTransform().SetLocalScale({ 1280, 1440, 0 });
 
-	LerpStart({ 0, 100, 0 }, { 0, 300, 0 }, 0.3f);
+	LerpStart({ 0, 100 }, { 0, 300 }, 0.3f);
 }
 
 void TitlePlate::Update(float _DeltaTime)

@@ -37,6 +37,12 @@
     <Filter Include="Levels\02EndingLevel\Actor">
       <UniqueIdentifier>{ef078ca4-b0db-4a7c-8374-c43498ffd780}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor\UI">
+      <UniqueIdentifier>{ebf15720-a07a-4c7f-b537-d8b38fad3c84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor\FX">
+      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalValueManager.h">
@@ -102,6 +108,9 @@
     </ClInclude>
     <ClInclude Include="TitleUI.h">
       <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="TitleUI.cpp">
       <Filter>Levels\00TitleLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

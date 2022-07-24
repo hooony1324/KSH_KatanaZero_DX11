@@ -18,10 +18,10 @@ void TitleGrass::Start()
 	Renderer->SetTexture("spr_title_grass_0.png");
 	Renderer->ScaleToTexture();
 
-	GetTransform().SetWorldScale(float4{ 1.0f, 1.0f, 1.0f } * 1.5f);
+	GetTransform().SetWorldScale({ 1.5f, 1.5f, 1 });
 
 	// Lerp
-	LerpStart({ 0, -720, 0 }, { 0, -270 }, 0.7f);
+	LerpStart({ 0, -720}, { 0, -270 }, 0.7f);
 }
 
 void TitleGrass::Update(float _DeltaTime)

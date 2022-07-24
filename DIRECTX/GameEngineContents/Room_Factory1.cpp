@@ -15,7 +15,6 @@ void Room_Factory1::Start()
 	Background->SetTexture("room_factory_2.png");
 	Background->ScaleToTexture();
 
-	GetTransform().SetWorldPosition({ 100, 0, 0 });
 }
 
 void Room_Factory1::Update(float _DeltaTime)
