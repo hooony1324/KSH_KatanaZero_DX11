@@ -13,9 +13,11 @@ enum class ACTORGROUP
 enum class DEPTH_ACTOR
 {
 	CAMERA,
+	TRANSITION,
 
 	// ACTOR
 	CURSOR,
+	UI,
 	FX,
 	PLAYER,
 	ENEMY,

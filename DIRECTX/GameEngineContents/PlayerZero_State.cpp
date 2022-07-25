@@ -8,7 +8,7 @@ void PlayerZero::AttackStart()
 	AttackTimer->Activate();
 	Renderer_Player->ChangeFrameAnimation("attack");
 	MoveDir = MouseDir;
-	PlayerSpeed = 20.0f;
+	PlayerSpeed = 40.0f;
 
 	// Sound
 	std::string Sound = "sound_player_slash_";
@@ -26,7 +26,7 @@ void PlayerZero::AttackStart()
 
 void PlayerZero::AttackUpdate()
 {
-	MoveDir *= 0.7f;
+	MoveDir *= 0.9f;
 	if (true == Attack_AniEnd)
 	{
 		MouseDir = float4::ZERO;

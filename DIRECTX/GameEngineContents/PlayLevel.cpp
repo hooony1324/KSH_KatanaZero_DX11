@@ -26,7 +26,6 @@ void PlayLevel::Start()
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
-	Room1->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::BACKGROUND_0) });
 	Room2 = CreateActor<Room_Factory2>(ACTORGROUP::MAP);
 	Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
 	RoomChange(Room1);
@@ -77,11 +76,11 @@ void PlayLevel::RoomChange(Room* _Room)
 	if (nullptr == CurRoom)
 	{
 		CurRoom = _Room;
-		CurRoom->RoomOn();
+		CurRoom->OnEvent();
 		return;
 	}
 	
-	CurRoom->RoomOff();
+	CurRoom->OffEvent();
 	CurRoom = _Room;
-	CurRoom->RoomOn();
+	CurRoom->OnEvent();
 }

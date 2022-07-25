@@ -8,7 +8,7 @@ class Room : public GameEngineActor
 public:
 	// constrcuter destructer
 	Room();
-	~Room();
+	virtual ~Room();
 
 	// delete Function
 	Room(const Room& _Other) = delete;
@@ -16,12 +16,12 @@ public:
 	Room& operator=(const Room& _Other) = delete;
 	Room& operator=(Room&& _Other) noexcept = delete;
 
-	void RoomOn();
-	void RoomOff();
+	virtual void OnEvent() {}
+	virtual void OffEvent() {}
 
 protected:
 	GameEngineTextureRenderer* Background;
-
+	
 private:
 
 };

@@ -25,3 +25,11 @@ void Room_Factory2::Update(float _DeltaTime)
 void Room_Factory2::End()
 {
 }
+
+void Room_Factory2::OnEvent()
+{
+}
+
+void Room_Factory2::OffEvent()
+{
+}

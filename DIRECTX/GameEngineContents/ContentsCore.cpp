@@ -102,7 +102,7 @@ void ContentsCore::TextureLoad()
 	// 애니메이션(폴더)
 	{
 		GameEngineDirectory TexDir{ Dir };
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX", "Room"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);

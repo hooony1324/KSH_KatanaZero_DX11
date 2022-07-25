@@ -24,13 +24,10 @@ void PlayerZero::Start()
 {
 
 	Renderer_Player = CreateComponent<GameEngineTextureRenderer>();
-	//Renderer_Player->SetTexture("spr_idle_0.png");
-	//Renderer_Player->ScaleToTexture();
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
 
 	CreateAllAnimation();
 
-	Renderer_Player->GetTransform().SetLocalScale({ 60, 60, 1 });
 	Renderer_Player->SetTexture("spr_idle_0.png");
 	Renderer_Player->ScaleToTexture();
 	Renderer_Player->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::PLAYER) });

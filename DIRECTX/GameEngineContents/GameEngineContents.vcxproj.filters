@@ -115,6 +115,9 @@
     <ClInclude Include="EnemyGrunt.h">
       <Filter>Levels\01PlayLevel\Actor\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="RoomActor.h">
+      <Filter>Levels\01PlayLevel\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -189,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="EnemyGrunt.cpp">
       <Filter>Levels\01PlayLevel\Actor\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomActor.cpp">
+      <Filter>Levels\01PlayLevel\Actor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

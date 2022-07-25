@@ -209,6 +209,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="RoomActor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Room_Boss.h">
       <SubType>
       </SubType>
@@ -309,6 +313,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Room.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="RoomActor.cpp">
       <SubType>
       </SubType>
     </ClCompile>

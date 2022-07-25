@@ -25,3 +25,11 @@ void Room_Boss::Update(float _DeltaTime)
 void Room_Boss::End()
 {
 }
+
+void Room_Boss::OnEvent()
+{
+}
+
+void Room_Boss::OffEvent()
+{
+}
