@@ -46,6 +46,7 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("MousePosDebug", 'M');
 
 
+	GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
 }
 
 void ContentsCore::Update(float _DeltaTime)

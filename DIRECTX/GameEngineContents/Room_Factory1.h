@@ -2,6 +2,7 @@
 #include "Room.h"
 
 // Ό³Έν :
+class Door;
 class Room_Factory1 : public Room
 {
 public:
@@ -24,6 +25,6 @@ protected:
 	void OffEvent() override;
 
 private:
-
+	Door* PtrDoor;
 };
 

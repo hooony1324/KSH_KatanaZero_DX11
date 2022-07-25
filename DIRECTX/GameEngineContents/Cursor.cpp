@@ -27,7 +27,7 @@ void Cursor::Update(float _DeltaTime)
 {
 	Position = GetLevel()->GetMainCamera()->GetMouseWorldPositionToActor();
 	PositionToActor = GetLevel()->GetMainCamera()->GetMouseWorldPosition();
-	GetTransform().SetWorldPosition({ PositionToActor.x, PositionToActor.y });
+	GetTransform().SetWorldPosition({ Position.x, Position.y });
 
 	
 }

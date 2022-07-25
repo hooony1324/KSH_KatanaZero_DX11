@@ -16,6 +16,8 @@ void Room_Boss::Start()
 	Background->GetTransform().SetLocalScale({ 1280, 720 });
 	Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::BACKGROUND_0) });
 	Background->Off();
+
+	InitCameraClampArea();
 }
 
 void Room_Boss::Update(float _DeltaTime)

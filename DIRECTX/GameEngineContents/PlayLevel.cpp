@@ -20,9 +20,9 @@ PlayLevel::~PlayLevel()
 
 void PlayLevel::Start()
 {
-	GameEngineCameraActor* Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
+	Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
 	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	Cam->GetTransform().SetWorldPosition({ 0, 0, -1000 });
+	Cam->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::CAMERA)});
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
@@ -31,7 +31,7 @@ void PlayLevel::Start()
 	RoomChange(Room1);
 	
 	// Player 社発
-	PlayerZero* Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
+	Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
 	Player->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::PLAYER) });
 
 	// Cursor
@@ -65,6 +65,8 @@ void PlayLevel::Update(float _DeltaTime)
 		GetMainCameraActor()->FreeCameraModeOnOff();
 	}
 
+
+	CameraFollow();
 }
 
 void PlayLevel::End()
@@ -73,14 +75,39 @@ void PlayLevel::End()
 
 void PlayLevel::RoomChange(Room* _Room)
 {
+	// 置段税 号
 	if (nullptr == CurRoom)
 	{
 		CurRoom = _Room;
 		CurRoom->OnEvent();
+		CurRoom->GetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
 		return;
 	}
 	
+	// 号 嘘発
 	CurRoom->OffEvent();
 	CurRoom = _Room;
 	CurRoom->OnEvent();
+	CurRoom->GetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
+}
+
+void PlayLevel::CameraFollow()
+{
+	//float4 PlayerPos = Player->GetTransform().GetWorldPosition();
+	//float4 CamPos = Cam->GetTransform().GetWorldPosition();
+	//
+	//if (CamPos.x <= CamClamp_LeftTop.x || CamPos.x >= CamClamp_RightBottom.x
+	//	|| CamPos.y <= CamClamp_LeftTop.y || CamPos.y >= CamClamp_RightBottom.y)
+	//{
+	//	float4 MoveVec = float4{ 0, 0 } - CamPos;
+	//	MoveVec.z = 0;
+	//	Cam->GetTransform().SetWorldMove(MoveVec);
+	//	return;
+	//}
+
+	//Cam->GetTransform().SetWorldPosition(PlayerPos);
+
+	//
+
+	
 }

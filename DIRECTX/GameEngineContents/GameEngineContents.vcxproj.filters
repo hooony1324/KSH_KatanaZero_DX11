@@ -121,6 +121,9 @@
     <ClInclude Include="LiveActor.h">
       <Filter>Levels\01PlayLevel\Actor\LiveActor</Filter>
     </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -198,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="LiveActor.cpp">
       <Filter>Levels\01PlayLevel\Actor\LiveActor</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

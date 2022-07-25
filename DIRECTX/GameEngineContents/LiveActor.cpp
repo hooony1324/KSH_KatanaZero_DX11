@@ -3,6 +3,7 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 LiveActor::LiveActor() 
+	: Renderer_Character(nullptr)
 {
 }
 

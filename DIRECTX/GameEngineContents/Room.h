@@ -19,9 +19,17 @@ public:
 	virtual void OnEvent() {}
 	virtual void OffEvent() {}
 
+	void GetCameraClampArea(float4& _LeftTop, float4& _RightBottom);
+
+protected:
+	void InitCameraClampArea();
+
 protected:
 	GameEngineTextureRenderer* Background;
 	
+	float4 CamClamp_LeftTop;
+	float4 CamClamp_RightBottom;
+
 private:
 
 };

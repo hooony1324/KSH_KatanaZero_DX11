@@ -5,8 +5,7 @@
 #include "Cursor.h"
 
 PlayerZero::PlayerZero()
-	: Renderer_Player(nullptr)
-	, AttackAble(true)
+	: AttackAble(true)
 	, RollAble(true)
 	, PlayerSpeed(SPEED_PLAYER)
 	, InputDir(float4::ZERO)
@@ -24,19 +23,18 @@ PlayerZero::~PlayerZero()
 void PlayerZero::Start()
 {
 
-	Renderer_Player = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
 
 	CreateAllAnimation();
 
-	Renderer_Player->SetTexture("spr_idle_0.png");
-	Renderer_Player->ScaleToTexture();
-	Renderer_Player->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::PLAYER) });
+	Renderer_Character->SetTexture("spr_idle_0.png");
+	Renderer_Character->ScaleToTexture();
 	Renderer_Slash->SetTexture("spr_slash_0.png");
 	Renderer_Slash->ScaleToTexture();
-	Renderer_Slash->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::FX) });
+	Renderer_Slash->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::FX)});
 
-	Renderer_Player->ChangeFrameAnimation("idle");
+	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
 
 	// ÄðÅ¸ÀÓ ¼³Á¤
@@ -45,7 +43,7 @@ void PlayerZero::Start()
 	RollTimer = CreateComponent<Timer>();
 	RollTimer->Init(0.6f);
 
-	GetTransform().SetLocalScale({ 1.5f, 1.5f, 1 });
+	GetTransform().SetLocalScale({ 2, 2, 1 });
 	ChangeState(STATE_PLAYER::IDLE);
 
 }
@@ -61,11 +59,11 @@ void PlayerZero::Update(float _DeltaTime)
 
 	if (LookDir.x >= 0)
 	{
-		Renderer_Player->GetTransform().PixLocalPositiveX();
+		Renderer_Character->GetTransform().PixLocalPositiveX();
 	}
 	else
 	{
-		Renderer_Player->GetTransform().PixLocalNegativeX();
+		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
 }
 
@@ -212,66 +210,41 @@ void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
 void PlayerZero::CreateAllAnimation()
 {
 	// Player
-	Renderer_Player->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.05f , false});
-	Renderer_Player->CreateFrameAnimationFolder("fall", FrameAnimation_DESC{ "fall", 0.1125f });
-	Renderer_Player->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "idle", 0.1125f });
-	Renderer_Player->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.05f , false});
-	Renderer_Player->CreateFrameAnimationFolder("jump", FrameAnimation_DESC{ "jump", 0.1125f });
-	Renderer_Player->CreateFrameAnimationFolder("postcrouch", FrameAnimation_DESC{ "postcrouch", 0.08f , false});
-	Renderer_Player->CreateFrameAnimationFolder("precrouch", FrameAnimation_DESC{ "precrouch", 0.08f , false});
-	Renderer_Player->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.05f, false });
-	Renderer_Player->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ "run", 0.08f });
-	Renderer_Player->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
-	Renderer_Player->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f });
-	Renderer_Player->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f });
+	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.05f , false});
+	Renderer_Character->CreateFrameAnimationFolder("fall", FrameAnimation_DESC{ "fall", 0.1125f });
+	Renderer_Character->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "idle", 0.1125f });
+	Renderer_Character->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.05f , false});
+	Renderer_Character->CreateFrameAnimationFolder("jump", FrameAnimation_DESC{ "jump", 0.1125f });
+	Renderer_Character->CreateFrameAnimationFolder("postcrouch", FrameAnimation_DESC{ "postcrouch", 0.08f , false});
+	Renderer_Character->CreateFrameAnimationFolder("precrouch", FrameAnimation_DESC{ "precrouch", 0.08f , false});
+	Renderer_Character->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.05f, false });
+	Renderer_Character->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ "run", 0.08f });
+	Renderer_Character->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
+	Renderer_Character->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f });
+	Renderer_Character->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f });
 
 	// Player - ANIMATION BLEND
-	Renderer_Player->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
-	Renderer_Player->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (InputDir.CompareInt2D({0, 0})) { ChangeState(STATE_PLAYER::IDLE); }});
-	Renderer_Player->AnimationBindEnd("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
-	Renderer_Player->AnimationBindStart("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
-	Renderer_Player->AnimationBindEnd("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = true; });
-	Renderer_Player->AnimationBindStart("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = false; });
-	Renderer_Player->AnimationBindEnd("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = true; });
-	Renderer_Player->AnimationBindStart("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = false; });
-	Renderer_Player->AnimationBindEnd("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = true; });
+	Renderer_Character->AnimationBindStart("idle_to_run", &PlayerZero::IdleRunStart, this);
+	Renderer_Character->AnimationBindFrame("idle_to_run", &PlayerZero::StopIdleToRun, this);
+	Renderer_Character->AnimationBindEnd("idle_to_run", &PlayerZero::IdleRunEnd, this);
+	Renderer_Character->AnimationBindStart("run_to_idle", &PlayerZero::RunidleStart, this);
+	Renderer_Character->AnimationBindEnd("run_to_idle", &PlayerZero::RunidleEnd, this);
+	Renderer_Character->AnimationBindStart("roll", &PlayerZero::RollStart, this);
+	Renderer_Character->AnimationBindEnd("roll", &PlayerZero::RollEnd, this);
+	Renderer_Character->AnimationBindStart("attack", &PlayerZero::AttackStart, this);
+	Renderer_Character->AnimationBindEnd("attack", &PlayerZero::AttackEnd, this);
+	//Renderer_Character->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
+	//Renderer_Character->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (InputDir.CompareInt2D({0, 0})) { ChangeState(STATE_PLAYER::IDLE); }});
+	//Renderer_Character->AnimationBindEnd("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
+	//Renderer_Character->AnimationBindStart("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
+	//Renderer_Character->AnimationBindEnd("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = true; });
+	//Renderer_Character->AnimationBindStart("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = false; });
+	//Renderer_Character->AnimationBindEnd("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = true; });
+	//Renderer_Character->AnimationBindStart("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = false; });
+	//Renderer_Character->AnimationBindEnd("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = true; });
 
 	// Slash
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.09f, false });
 	Renderer_Slash->Off();
 }
 
-void PlayerZero::CreateSlash()
-{
-	float4 PlayerPos = GetTransform().GetWorldPosition();
-	PlayerPos.z = 0;
-
-	Renderer_Slash->On();
-	Renderer_Slash->CurAnimationReset();
-	MousePos = Cursor::GetCursorPosition();
-	MousePos.z = 0;
-
-	MouseDir = MousePos - PlayerPos;
-	MouseDir.z = 0;
-	MouseDir.Normalize();
-	MoveDir = MouseDir;
-
-	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
-	Renderer_Slash->GetTransform().SetWorldRotation({0, 0, Rot.z });
-	LookDir.x = MoveDir.x;
-
-	PlayerSpeed = 2000.0f;
-
-	// Sound
-	std::string Sound = "sound_player_slash_";
-	static int SoundIdx = 1;
-	Sound = Sound + std::to_string(SoundIdx) + ".wav";
-
-	GameEngineSoundPlayer SoundPlayer = GameEngineSound::SoundPlayControl(Sound);
-	SoundPlayer.Volume(0.5f);
-
-	if (++SoundIdx > 3)
-	{
-		SoundIdx = 1;
-	}
-}

@@ -16,7 +16,7 @@ public:
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
 protected:
-
+	GameEngineTextureRenderer* Renderer_Character;
 
 private:
 

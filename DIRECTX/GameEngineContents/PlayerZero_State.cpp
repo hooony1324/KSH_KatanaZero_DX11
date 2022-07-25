@@ -1,12 +1,13 @@
 #include "PreCompile.h"
 #include "PlayerZero.h"
 #include "Timer.h"
+#include "Cursor.h"
 
 void PlayerZero::AttackStart()
 {
 	CreateSlash();
 	AttackTimer->Activate();
-	Renderer_Player->ChangeFrameAnimation("attack");
+	Renderer_Character->ChangeFrameAnimation("attack");
 
 
 }
@@ -38,14 +39,12 @@ void PlayerZero::FallUpdate()
 
 void PlayerZero::IdleStart()
 {
-	Renderer_Player->ChangeFrameAnimation("idle");
+	Renderer_Character->ChangeFrameAnimation("idle");
 }
 
 void PlayerZero::IdleUpdate()
 {
-	// idle -> run
-	// idle -> jump
-	// idle -> attack
+
 	if (abs(InputDir.x) > 0)
 	{
 		MoveDir.x = InputDir.x;
@@ -57,7 +56,7 @@ void PlayerZero::IdleUpdate()
 
 void PlayerZero::JumpStart()
 {
-	Renderer_Player->ChangeFrameAnimation("jump");
+	Renderer_Character->ChangeFrameAnimation("jump");
 }
 
 void PlayerZero::JumpUpdate()
@@ -68,7 +67,7 @@ void PlayerZero::JumpUpdate()
 void PlayerZero::RollStart()
 {
 	RollTimer->Activate();
-	Renderer_Player->ChangeFrameAnimation("roll");
+	Renderer_Character->ChangeFrameAnimation("roll");
 	PlayerSpeed = SPEED_PLAYER * 2.0f;
 }
 
@@ -93,7 +92,7 @@ void PlayerZero::RollUpdate()
 void PlayerZero::RunStart()
 {
 	PlayerSpeed = SPEED_PLAYER;
-	Renderer_Player->ChangeFrameAnimation("run");
+	Renderer_Character->ChangeFrameAnimation("run");
 }
 
 void PlayerZero::RunUpdate()
@@ -122,7 +121,7 @@ void PlayerZero::WallSlideUpdate()
 
 void PlayerZero::CrouchStart()
 {
-	Renderer_Player->ChangeFrameAnimation("precrouch");
+	Renderer_Character->ChangeFrameAnimation("precrouch");
 }
 
 void PlayerZero::CrouchUpdate()
@@ -132,7 +131,7 @@ void PlayerZero::CrouchUpdate()
 
 void PlayerZero::RunToIdleStart()
 {
-	Renderer_Player->ChangeFrameAnimation("run_to_idle");
+	Renderer_Character->ChangeFrameAnimation("run_to_idle");
 }
 
 void PlayerZero::RunToIdleUpdate()
@@ -145,8 +144,8 @@ void PlayerZero::RunToIdleUpdate()
 
 void PlayerZero::IdleToRunStart()
 {
-	PlayerSpeed = 10.0f;
-	Renderer_Player->ChangeFrameAnimation("idle_to_run");
+	PlayerSpeed = 20.0f;
+	Renderer_Character->ChangeFrameAnimation("idle_to_run");
 }
 
 void PlayerZero::IdleToRunUpdate()
@@ -156,3 +155,40 @@ void PlayerZero::IdleToRunUpdate()
 		ChangeState(STATE_PLAYER::RUN);
 	}
 }
+
+void PlayerZero::CreateSlash()
+{
+	float4 PlayerPos = GetTransform().GetWorldPosition();
+	PlayerPos.z = 0;
+
+	Renderer_Slash->On();
+	Renderer_Slash->CurAnimationReset();
+	MousePos = Cursor::GetCursorPosition();
+	MousePos.z = 0;
+
+	MouseDir = MousePos - PlayerPos;
+	MouseDir.z = 0;
+	MouseDir.Normalize();
+	MoveDir = MouseDir;
+
+	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
+	Renderer_Slash->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
+	LookDir.x = MoveDir.x;
+
+	PlayerSpeed = 2000.0f;
+
+	// Sound
+	std::string Sound = "sound_player_slash_";
+	static int SoundIdx = 1;
+	Sound = Sound + std::to_string(SoundIdx) + ".wav";
+
+	GameEngineSoundPlayer SoundPlayer = GameEngineSound::SoundPlayControl(Sound);
+	SoundPlayer.Volume(0.5f);
+
+	if (++SoundIdx > 3)
+	{
+		SoundIdx = 1;
+	}
+}
+
+

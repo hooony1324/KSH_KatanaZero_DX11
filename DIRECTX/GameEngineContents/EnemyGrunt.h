@@ -24,6 +24,5 @@ protected:
 	void End() override;
 
 private:
-	GameEngineTextureRenderer* Renderer_Character;
 };
 

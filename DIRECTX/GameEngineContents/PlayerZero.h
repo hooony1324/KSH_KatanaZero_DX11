@@ -54,29 +54,54 @@ private:
 	void CreateAllAnimation();
 
 private:
-	GameEngineTextureRenderer* Renderer_Player;
+
 	GameEngineTextureRenderer* Renderer_Slash;
 
-// FSM
+
+// 플레이어 정보
+private:
+	void CreateSlash();
+	
+private:
+	// 입력
+	float4 MousePos;
+	float4 MouseDir;
+	float4 InputDir;
+	float4 MoveDir;
+	float4 LookDir;
+	float PlayerSpeed;
+
+	float MoveForce;
+
+
+
+
+
+
+
+
+
+
+	// FSM
 public:
 	void UpdateState();
 	void ChangeState(STATE_PLAYER _PlayerState);
 
 	void AttackStart();
 	void AttackUpdate();
-	
+
 	void FallStart();
 	void FallUpdate();
-	
+
 	void IdleStart();
 	void IdleUpdate();
-	
+
 	void JumpStart();
 	void JumpUpdate();
-	
+
 	void RollStart();
 	void RollUpdate();
-	
+
 	void RunStart();
 	void RunUpdate();
 
@@ -85,7 +110,7 @@ public:
 
 	void CrouchStart();
 	void CrouchUpdate();
-	
+
 	void RunToIdleStart();
 	void RunToIdleUpdate();
 
@@ -110,19 +135,58 @@ private:
 	bool AttackAble;
 	bool RollAble;
 
-// 플레이어 정보
+// Animation 바인딩
 private:
-	void CreateSlash();
-	
-private:
-	// 입력
-	float4 MousePos;
-	float4 MouseDir;
-	float4 InputDir;
-	float4 MoveDir;
-	float4 LookDir;
-	float PlayerSpeed;
 
-	float MoveForce;
+	inline void IdleRunStart(const FrameAnimation_DESC& _Info)
+	{
+		IdleRun_AniEnd = false;
+	}
+
+	inline void RunidleStart(const FrameAnimation_DESC& _Info)
+	{
+		RunIdle_AniEnd = false;
+	}
+
+	inline void RollStart(const FrameAnimation_DESC& _Info)
+	{
+		Roll_AniEnd = false;
+	}
+
+	inline void AttackStart(const FrameAnimation_DESC& _Info)
+	{
+		Attack_AniEnd = false;
+	}
+
+	inline void IdleRunEnd(const FrameAnimation_DESC& _Info)
+	{
+		IdleRun_AniEnd = true;
+	}
+
+	inline void RunidleEnd(const FrameAnimation_DESC& _Info)
+	{
+		RunIdle_AniEnd = true;
+	}
+
+	inline void RollEnd(const FrameAnimation_DESC& _Info)
+	{
+		Roll_AniEnd = true;
+	}
+
+	inline void AttackEnd(const FrameAnimation_DESC& _Info)
+	{
+		Attack_AniEnd = true;
+	}
+
+	void StopIdleToRun(const FrameAnimation_DESC& _Info)
+	{
+		GameEngineDebug::OutPutString("StopIdleToRun");
+		if (InputDir.CompareInt2D({ 0, 0 }))
+		{
+			MoveDir = float4::ZERO;
+			ChangeState(STATE_PLAYER::IDLE);
+		}
+	}
+
 };
 

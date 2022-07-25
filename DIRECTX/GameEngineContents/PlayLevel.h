@@ -3,6 +3,7 @@
 
 // ¼³¸í :
 class Room;
+class PlayerZero;
 class PlayLevel : public GameEngineLevel
 {
 public:
@@ -23,16 +24,22 @@ protected:
 	void OffEvent() override {};
 	void End() override;
 
+// ·ë
 private:
-	// ·ë º¯°æ
 	void RoomChange(Room* _Room);
+	void CameraFollow();
 
 private:
-	// ·ë º¯°æ
 	Room* CurRoom;
 	Room* Room1;
 	Room* Room2;
 	Room* Room3;
+
+	GameEngineCameraActor* Cam;
+	float4 CamClamp_LeftTop;
+	float4 CamClamp_RightBottom;
+
+	PlayerZero* Player;
 
 	// FSM
 private:
