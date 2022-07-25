@@ -38,6 +38,10 @@ private:
 private:
 	enum class STATE
 	{
+		RESTART,
+		REPLAY,
+
+		CHANGE_ROOM,
 
 	};
 

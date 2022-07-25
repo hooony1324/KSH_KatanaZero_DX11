@@ -14,7 +14,7 @@ void Room_Factory1::Start()
 	Background = CreateComponent<GameEngineTextureRenderer>();
 	Background->SetTexture("room_factory_2.png");
 	Background->ScaleToTexture();
-
+	Background->Off();
 }
 
 void Room_Factory1::Update(float _DeltaTime)

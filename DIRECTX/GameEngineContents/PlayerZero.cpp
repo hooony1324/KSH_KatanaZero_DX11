@@ -4,8 +4,6 @@
 #include "Timer.h"
 #include "Cursor.h"
 
-const float SPEED_PLAYER = 400.0f;
-
 PlayerZero::PlayerZero()
 	: Renderer_Player(nullptr)
 	, AttackAble(true)
@@ -57,6 +55,7 @@ void PlayerZero::Start()
 void PlayerZero::Update(float _DeltaTime)
 {
 	InputCheck();
+	// FallCheck(); ->ChangeState::FALL
 	UpdateState();
 	CoolTimeCheck();
 
@@ -69,6 +68,8 @@ void PlayerZero::End()
 
 void PlayerZero::InputCheck()
 {
+	MoveDir = float4::ZERO;
+	InputDir = float4::ZERO;
 	// CLICK
 	if (GameEngineInput::GetInst()->IsDown("MouseLeft"))
 	{
@@ -76,7 +77,6 @@ void PlayerZero::InputCheck()
 	}
 
 	// WASD
-	InputDir = float4::ZERO;
 	if (GameEngineInput::GetInst()->IsPress("w"))
 	{
 		InputDir[1] += 1;
@@ -102,16 +102,6 @@ void PlayerZero::InputCheck()
 	* asdfasdfasdf
 		return;
 	}*/
-
-	if (abs(InputDir.x) > 0 && abs(InputDir.y) <= 0.1f)
-	{
-		ChangeState(STATE_PLAYER::RUN);
-	}
-
-	if (abs(InputDir.x) > 0 && InputDir.y < 0)
-	{
-		ChangeState(STATE_PLAYER::ROLL);
-	}
 	
 
 }

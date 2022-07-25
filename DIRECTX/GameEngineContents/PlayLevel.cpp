@@ -27,9 +27,9 @@ void PlayLevel::Start()
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
 	Room1->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::BACKGROUND_0) });
-	//Room2 = CreateActor<Room_Factory2>(ACTORGROUP::MAP);
-	//Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
-	//RoomChange(Room1);
+	Room2 = CreateActor<Room_Factory2>(ACTORGROUP::MAP);
+	Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
+	RoomChange(Room1);
 	
 	// Player 소환
 	PlayerZero* Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
@@ -43,22 +43,22 @@ void PlayLevel::Start()
 void PlayLevel::Update(float _DeltaTime)
 {
 	//// 룸 변경 디버그용
-	//{
-	//	if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
-	//	{
-	//		RoomChange(Room1);
-	//	}
+	{
+		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
+		{
+			RoomChange(Room1);
+		}
 
-	//	if (true == GameEngineInput::GetInst()->IsDown("Numpad5"))
-	//	{
-	//		RoomChange(Room2);
-	//	}
+		if (true == GameEngineInput::GetInst()->IsDown("Numpad5"))
+		{
+			RoomChange(Room2);
+		}
 
-	//	if (true == GameEngineInput::GetInst()->IsDown("Numpad6"))
-	//	{
-	//		RoomChange(Room3);
-	//	}	
-	//}
+		if (true == GameEngineInput::GetInst()->IsDown("Numpad6"))
+		{
+			RoomChange(Room3);
+		}	
+	}
 
 	// 프리카메라
 	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
@@ -78,6 +78,7 @@ void PlayLevel::RoomChange(Room* _Room)
 	{
 		CurRoom = _Room;
 		CurRoom->RoomOn();
+		return;
 	}
 	
 	CurRoom->RoomOff();

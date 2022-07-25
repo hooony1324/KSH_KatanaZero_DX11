@@ -22,9 +22,6 @@
     <Filter Include="Levels\01PlayLevel\Actor">
       <UniqueIdentifier>{39ba30d1-0ded-465c-91d7-fd13a2421a5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\Enemy">
-      <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\01PlayLevel\Actor\Player">
       <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Levels\01PlayLevel\Actor\FX">
       <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01PlayLevel\Actor\Enemy">
+      <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +111,9 @@
     </ClInclude>
     <ClInclude Include="Cursor.h">
       <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyGrunt.h">
+      <Filter>Levels\01PlayLevel\Actor\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +186,9 @@
     </ClCompile>
     <ClCompile Include="Cursor.cpp">
       <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyGrunt.cpp">
+      <Filter>Levels\01PlayLevel\Actor\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

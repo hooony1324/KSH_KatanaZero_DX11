@@ -1,5 +1,8 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
+#include <GameEngineBase/GameEngineSound.h>
+
+const float SPEED_PLAYER = 400.0f;
 
 enum class STATE_PLAYER
 {
@@ -18,16 +21,10 @@ enum class STATE_PLAYER
 
 enum class PLAYERINPUT
 {
-	NONE,
 	UP,
-	UPRIGHT,
-	RIGHT,
-	RIGHTDOWN,
-	DOWN,
-	LEFTDOWN,
 	LEFT,
-	UPLEFT,
-	CLICK,
+	RIGHT,
+	DOWN,
 };
 
 // Ό³Έν :

@@ -12,8 +12,10 @@ Room_Boss::~Room_Boss()
 void Room_Boss::Start()
 {
 	Background = CreateComponent<GameEngineTextureRenderer>();
-	Background->SetTexture("spr_psychboss_bg_1_0.png");
-	Background->ScaleToTexture();
+	Background->SetTexture("spr_psychboss_background_0.png");
+	Background->GetTransform().SetLocalScale({ 1280, 720 });
+	Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::BACKGROUND_0) });
+	Background->Off();
 }
 
 void Room_Boss::Update(float _DeltaTime)
