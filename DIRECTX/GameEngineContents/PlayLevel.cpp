@@ -93,21 +93,16 @@ void PlayLevel::RoomChange(Room* _Room)
 
 void PlayLevel::CameraFollow()
 {
-	//float4 PlayerPos = Player->GetTransform().GetWorldPosition();
-	//float4 CamPos = Cam->GetTransform().GetWorldPosition();
-	//
-	//if (CamPos.x <= CamClamp_LeftTop.x || CamPos.x >= CamClamp_RightBottom.x
-	//	|| CamPos.y <= CamClamp_LeftTop.y || CamPos.y >= CamClamp_RightBottom.y)
-	//{
-	//	float4 MoveVec = float4{ 0, 0 } - CamPos;
-	//	MoveVec.z = 0;
-	//	Cam->GetTransform().SetWorldMove(MoveVec);
-	//	return;
-	//}
+	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
+	float4 CamPos = Cam->GetTransform().GetWorldPosition();
 
-	//Cam->GetTransform().SetWorldPosition(PlayerPos);
+	if (PlayerPos.x >= CamClamp_LeftTop.x && PlayerPos.x <= CamClamp_RightBottom.x &&
+		PlayerPos.y <= CamClamp_LeftTop.y && PlayerPos.y >= CamClamp_RightBottom.y)
+	{
+		Cam->GetTransform().SetWorldPosition(PlayerPos);
+	}
 
-	//
 
-	
+
+
 }
