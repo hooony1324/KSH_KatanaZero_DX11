@@ -28,7 +28,7 @@ void TitleLevel::Start()
 	// 카메라
 	GameEngineCameraActor* MainCam = CreateActor<GameEngineCameraActor>();
 	MainCam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	MainCam->GetTransform().SetLocalPosition({ 0, 0, -1000 });
+	MainCam->GetTransform().SetWorldPosition({ 0, 0, -1000 });
 
 	// 배경
 	GameEngineActor* Plate = CreateActor<TitlePlate>();
@@ -42,6 +42,7 @@ void TitleLevel::Start()
 	GameEngineActor* Plants = CreateActor<TitlePlants>();
 	Plants->GetTransform().SetWorldMove({ 0, 0, 100 });
 	GameEngineActor* Buttons = CreateActor<TitleButtons>();
+	Buttons->GetTransform().SetWorldMove({ 0, 0, 10 });
 	AllActors.push_back(Plate);
 	AllActors.push_back(Fence);
 	AllActors.push_back(Graphic);

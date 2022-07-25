@@ -12,6 +12,7 @@ PlayerZero::PlayerZero()
 	, InputDir(float4::ZERO)
 	, MouseDir(float4::ZERO)
 	, MoveDir(float4::ZERO)
+	, LookDir(float4::RIGHT)
 	, MoveForce(0.0f)
 {
 }
@@ -57,6 +58,15 @@ void PlayerZero::Update(float _DeltaTime)
 	CoolTimeCheck();
 
 	GetTransform().SetWorldMove(MoveDir * _DeltaTime * PlayerSpeed);
+
+	if (LookDir.x >= 0)
+	{
+		Renderer_Player->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Player->GetTransform().PixLocalNegativeX();
+	}
 }
 
 void PlayerZero::End()
@@ -65,7 +75,6 @@ void PlayerZero::End()
 
 void PlayerZero::InputCheck()
 {
-	MoveDir = float4::ZERO;
 	InputDir = float4::ZERO;
 	// CLICK
 	if (GameEngineInput::GetInst()->IsDown("MouseLeft"))
@@ -80,8 +89,8 @@ void PlayerZero::InputCheck()
 	}
 	if (GameEngineInput::GetInst()->IsPress("a"))
 	{
-		Renderer_Player->GetTransform().PixLocalNegativeX();
 		InputDir[0] += -1;
+		LookDir.x = -1;
 	}
 	if (GameEngineInput::GetInst()->IsPress("s"))
 	{
@@ -89,17 +98,11 @@ void PlayerZero::InputCheck()
 	}
 	if (GameEngineInput::GetInst()->IsPress("d"))
 	{
-		Renderer_Player->GetTransform().PixLocalPositiveX();
 		InputDir[0] += 1;
+		LookDir.x = 1;
 	}
 
-	// FALL Check
-	//if (fall)
-	/*{
-	* asdfasdfasdf
-		return;
-	}*/
-	
+
 
 }
 
@@ -241,6 +244,7 @@ void PlayerZero::CreateAllAnimation()
 void PlayerZero::CreateSlash()
 {
 	float4 PlayerPos = GetTransform().GetWorldPosition();
+	PlayerPos.z = 0;
 
 	Renderer_Slash->On();
 	Renderer_Slash->CurAnimationReset();
@@ -248,6 +252,26 @@ void PlayerZero::CreateSlash()
 	MousePos.z = 0;
 
 	MouseDir = MousePos - PlayerPos;
+	MouseDir.z = 0;
+	MouseDir.Normalize();
+	MoveDir = MouseDir;
+
 	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
 	Renderer_Slash->GetTransform().SetWorldRotation({0, 0, Rot.z });
+	LookDir.x = MoveDir.x;
+
+	PlayerSpeed = 2000.0f;
+
+	// Sound
+	std::string Sound = "sound_player_slash_";
+	static int SoundIdx = 1;
+	Sound = Sound + std::to_string(SoundIdx) + ".wav";
+
+	GameEngineSoundPlayer SoundPlayer = GameEngineSound::SoundPlayControl(Sound);
+	SoundPlayer.Volume(0.5f);
+
+	if (++SoundIdx > 3)
+	{
+		SoundIdx = 1;
+	}
 }

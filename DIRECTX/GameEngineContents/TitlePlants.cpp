@@ -24,6 +24,7 @@ void TitlePlants::Start()
 
 	// Lerp
 	LerpStart({ 0, -1000}, { 0, 0}, 0.8f);
+
 }
 
 void TitlePlants::Update(float _DeltaTime)

@@ -13,7 +13,7 @@ void Ending_Logo::Start()
 {
 	GameEngineTextureRenderer* Logo = CreateComponent<GameEngineTextureRenderer>();
 	Logo->SetTexture("spr_ending_title_0.png");
-	Logo->GetTransform().SetLocalScale({ 236, 24 });
+	Logo->GetTransform().SetLocalScale({ 236, 24, 1 });
 }
 
 void Ending_Logo::Update(float _DeltaTime)

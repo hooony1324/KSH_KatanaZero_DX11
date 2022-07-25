@@ -7,32 +7,21 @@ void PlayerZero::AttackStart()
 	CreateSlash();
 	AttackTimer->Activate();
 	Renderer_Player->ChangeFrameAnimation("attack");
-	MoveDir = MouseDir;
-	PlayerSpeed = 40.0f;
 
-	// Sound
-	std::string Sound = "sound_player_slash_";
-	static int SoundIdx = 1;
-	Sound = Sound + std::to_string(SoundIdx) + ".wav";
 
-	GameEngineSoundPlayer SoundPlayer = GameEngineSound::SoundPlayControl(Sound);
-	SoundPlayer.Volume(0.5f);
-
-	if (++SoundIdx > 3)
-	{
-		SoundIdx = 1;
-	}
 }
 
 void PlayerZero::AttackUpdate()
 {
-	MoveDir *= 0.9f;
+	PlayerSpeed *= 0.99f;
+
 	if (true == Attack_AniEnd)
 	{
+		PlayerSpeed = SPEED_PLAYER;
 		MouseDir = float4::ZERO;
+		MoveDir = float4::ZERO;
 		Attack_AniEnd = false;
 		Renderer_Slash->Off();
-		PlayerSpeed = SPEED_PLAYER;
 		ChangeState(STATE_PLAYER::IDLE);
 	}
 }

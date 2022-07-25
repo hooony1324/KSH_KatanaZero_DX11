@@ -42,7 +42,7 @@ void TitleButtons::Start()
 	ButtonsPos.push_back({ 0, 36 });
 	ButtonsPos.push_back({ 0, 76 });
 	ButtonIndex = 2;
-	Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
+	Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex] + float4{ 0, 0, -1 });
 
 	// 초기세팅
 	IsPlayLevelChange = false;
@@ -50,13 +50,6 @@ void TitleButtons::Start()
 	// Lerp 
 	LerpStart({ 0, -1000 }, { 0, -200 }, 0.9f);
 
-	// 화면 밑 그림자
-	GameEngineDefaultRenderer* Renderer_Shadow = CreateComponent<GameEngineDefaultRenderer>();
-	Renderer_Shadow->GetTransform().SetLocalScale({ 1280, 1000 });
-	Renderer_Shadow->GetTransform().SetLocalPosition({ 0, -650 });
-	Renderer_Shadow->SetPipeLine("Color");
-	Color_Shadow = float4{ 0, 0, 0, 1 };
-	Renderer_Shadow->ShaderResources.SetConstantBufferLink("ResultColor", Color_Shadow);
 }
 
 void TitleButtons::OnEvent()
@@ -88,7 +81,7 @@ void TitleButtons::CheckInput()
 		}
 
 		ButtonIndex++;
-		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
+		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex] + float4{0, 0, -1});
 	}
 
 	if (true == GameEngineInput::GetInst()->IsDown("S"))
@@ -102,7 +95,7 @@ void TitleButtons::CheckInput()
 		}
 
 		ButtonIndex--;
-		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
+		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex] + float4{ 0, 0, -1 });
 	}
 
 	if (true == GameEngineInput::GetInst()->IsDown("SpaceBar"))
