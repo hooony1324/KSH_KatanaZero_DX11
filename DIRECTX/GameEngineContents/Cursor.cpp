@@ -30,6 +30,14 @@ void Cursor::Update(float _DeltaTime)
 	GetTransform().SetWorldPosition({ Position.x, Position.y });
 
 	
+	std::string OutputString = "MousePos : { " + std::to_string(PositionToActor.x) + ", " + std::to_string(PositionToActor.y) + ", "
+		+ std::to_string(PositionToActor.z) + " }";
+
+	std::string OutputString2 = "MousePos : { " + std::to_string(Position.x) + ", " + std::to_string(Position.y) + ", "
+		+ std::to_string(Position.z) + " }";
+
+	GameEngineDebug::OutPutString(OutputString);
+	GameEngineDebug::OutPutString(OutputString2);
 }
 
 void Cursor::End()

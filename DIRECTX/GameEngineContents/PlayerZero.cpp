@@ -25,8 +25,8 @@ void PlayerZero::Start()
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
 
 	// DEPTH
-	Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
-	Renderer_Slash->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::FX) });
+	Renderer_Character->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
+	Renderer_Slash->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::FX) });
 
 	CreateAllAnimation();
 
@@ -51,22 +51,21 @@ void PlayerZero::Start()
 
 void PlayerZero::Update(float _DeltaTime)
 {
+	if (true == GetLevel()->GetMainCameraActor()->IsFreeCameraMode())
+	{
+		return;
+	}
+
 	InputCheck();
 	// FallCheck(); ->ChangeState::FALL
-	UpdateState();
+	//UpdateState();
 	CoolTimeCheck();
 
+
+
+
 	GetTransform().SetWorldMove(MoveDir * _DeltaTime * MoveSpeed);
-
-	if (LookDir.x >= 0)
-	{
-		Renderer_Character->GetTransform().PixLocalPositiveX();
-	}
-	else
-	{
-		Renderer_Character->GetTransform().PixLocalNegativeX();
-	}
-
+	
 }
 
 void PlayerZero::End()
@@ -102,7 +101,7 @@ void PlayerZero::InputCheck()
 		LookDir.x = 1;
 	}
 
-
+	MoveDir = InputDir;
 
 }
 
@@ -148,6 +147,16 @@ void PlayerZero::UpdateState()
 		break;
 	default:
 		break;
+	}
+
+	// 왼쪽 오른쪽 바라보기
+	if (LookDir.x >= 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
 }
 

@@ -3,11 +3,22 @@
 
 Room::Room() 
 {
-
 }
 
 Room::~Room() 
 {
+}
+
+void Room::RoomInit()
+{
+	Background = CreateComponent<GameEngineTextureRenderer>();
+	Background->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) });
+
+	Background_Collision = CreateComponent<GameEngineTextureRenderer>();
+	Background_Collision->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+
+
+	InitCameraClampArea();
 }
 
 void Room::InitCameraClampArea()

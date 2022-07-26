@@ -22,12 +22,11 @@ void EndingLevel::Start()
 
 
 	Ending_Background* BG = CreateActor<Ending_Background>();
-	BG->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
+
 
 	Logo = CreateActor<Ending_Logo>();
-	Logo->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_1)});
-	Lerp_Start = float4{ 0, -100 };
-	Lerp_Dest = float4{ 0, 50 };
+	Lerp_Start = float4{ 0, -100, GetDepth(ACTOR_DEPTH::LOGO) };
+	Lerp_Dest = float4{ 0, 50, GetDepth(ACTOR_DEPTH::LOGO) };
 }
 
 void EndingLevel::OnEvent()
@@ -43,7 +42,8 @@ void EndingLevel::Update(float _DeltaTime)
 {
 	// Lerp
 	float4 Pos = float4::LerpLimit(Lerp_Start, Lerp_Dest, SumDeltaTime);
-	Logo->GetTransform().SetWorldPosition(float4{ Pos.x, Pos.y });
+	Pos.z = 0;
+	Logo->GetTransform().SetWorldPosition(Pos);
 	SumDeltaTime += _DeltaTime;
 }
 

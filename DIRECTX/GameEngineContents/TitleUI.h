@@ -18,7 +18,7 @@ public:
 	void LerpStart(float4 _DestPos, float _Speed)
 	{
 		SumDeltaTime = 0;
-		Lerp_Start = GetTransform().GetTransformData().WorldPosition;
+		Lerp_Start = { GetTransform().GetWorldPosition().x, GetTransform().GetWorldPosition().y };
 		Lerp_Dest = _DestPos;
 		Lerp_Speed = _Speed;
 	}

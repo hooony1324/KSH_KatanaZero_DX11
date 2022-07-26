@@ -12,9 +12,10 @@ enum class ACTORGROUP
 
 enum class ACTOR_DEPTH
 {
-	CAMERA,
+	CAMERA = -1,
 
 	// SCREEN EFFECT
+	LOGO = 0,
 	TRANSITION,
 
 	// ACTOR
@@ -50,6 +51,8 @@ namespace Depth
 class GlobalValueManager
 {
 public:
+	// 콜리전 맵 정보
+	static GameEngineTextureRenderer* ColMap;
 
 	class Actors
 	{
@@ -69,3 +72,15 @@ private:
 	~GlobalValueManager() {}
 };
 
+
+
+
+enum class TITLE_DEPTH
+{
+	BUTTONS = 0,
+	GRAPHIC = 100,
+	PLANTS = 200,
+	GRASS = 300,
+	FENCE = 400,
+	PLATE = 500,
+};

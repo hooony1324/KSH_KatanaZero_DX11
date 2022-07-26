@@ -24,7 +24,7 @@ void ContentsCore::Start()
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
-	ChangeLevel("TitleLevel");
+	ChangeLevel("PlayLevel");
 
 	// Input Key
 	GameEngineInput::GetInst()->CreateKey("MouseLeft", VK_LBUTTON);
@@ -43,7 +43,7 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("Numpad5", VK_NUMPAD5);
 	GameEngineInput::GetInst()->CreateKey("Numpad6", VK_NUMPAD6);
 
-	GameEngineInput::GetInst()->CreateKey("MousePosDebug", 'M');
+	GameEngineInput::GetInst()->CreateKey("M", 'M');
 
 
 	GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);

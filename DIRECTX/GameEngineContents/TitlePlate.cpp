@@ -22,10 +22,12 @@ void TitlePlate::Start()
 	Color_Background.g = 0;
 	Color_Background.b = 0;
 	Color_Background.w = 1.0f;
+	Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::PLATE) });
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_title_background_0.png");
 	Renderer->GetTransform().SetLocalScale({ 1280, 1440, 0 });
+	Renderer->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::PLATE) - 1});
 
 	LerpStart({ 0, 100 }, { 0, 300 }, 0.3f);
 }

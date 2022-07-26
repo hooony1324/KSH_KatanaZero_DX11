@@ -19,7 +19,7 @@ public:
 
 protected:
 	void Start() override;
-	void OnEvent() override {};
+	void OnEvent() override;
 	void Update(float _DeltaTime) override;
 	void OffEvent() override {};
 	void End() override;

@@ -21,8 +21,8 @@ protected:
 	void Update(float _DeltaTime) override;
 	void End() override;
 
-	void OnEvent() override;
-	void OffEvent() override;
+	void Setting() override;
+	void Clear() override;
 
 private:
 	Door* PtrDoor;

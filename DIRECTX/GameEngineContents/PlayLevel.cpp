@@ -9,6 +9,8 @@
 #include "Room_Boss.h"
 #include "Cursor.h"
 
+
+
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
 {
@@ -24,17 +26,22 @@ void PlayLevel::Start()
 	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
 	Cam->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CAMERA) });
 
-	// Player 소환
-	Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
-
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
 	Room2 = CreateActor<Room_Factory2>(ACTORGROUP::MAP);
 	Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
-	RoomChange(Room1);
-	
+
+
 	// Cursor
 	Cursor* Mouse = CreateActor<Cursor>();
+}
+
+void PlayLevel::OnEvent()
+{
+	RoomChange(Room1);
+
+	// Player
+	Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -65,6 +72,12 @@ void PlayLevel::Update(float _DeltaTime)
 
 
 	CameraFollow();
+
+	// 충돌 맵 OnOff
+	if (true == GameEngineInput::GetInst()->IsDown("M"))
+	{
+		GlobalValueManager::ColMap->OnOffSwitch();
+	}
 }
 
 void PlayLevel::End()
@@ -77,30 +90,35 @@ void PlayLevel::RoomChange(Room* _Room)
 	if (nullptr == CurRoom)
 	{
 		CurRoom = _Room;
-		CurRoom->OnEvent();
-		CurRoom->GetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
-		return;
 	}
-	
-	// 방 교환
-	CurRoom->OffEvent();
-	CurRoom = _Room;
-	CurRoom->OnEvent();
+	else
+	{
+		// 방 교환
+		CurRoom->Clear();
+		CurRoom = _Room;
+	}
+
+	CurRoom->Setting();
 	CurRoom->GetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
+
 }
 
 void PlayLevel::CameraFollow()
 {
+	if (true == Cam->IsFreeCameraMode())
+	{
+		return;
+	}
 	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
 	float4 CamPos = Cam->GetTransform().GetWorldPosition();
 
-	if (PlayerPos.x >= CamClamp_LeftTop.x && PlayerPos.x <= CamClamp_RightBottom.x &&
-		PlayerPos.y <= CamClamp_LeftTop.y && PlayerPos.y >= CamClamp_RightBottom.y)
-	{
-		Cam->GetTransform().SetWorldPosition(PlayerPos);
-	}
+	//if (PlayerPos.x >= CamClamp_LeftTop.x && PlayerPos.x <= CamClamp_RightBottom.x &&
+	//	PlayerPos.y <= CamClamp_LeftTop.y && PlayerPos.y >= CamClamp_RightBottom.y)
+	//{
+	//	Cam->GetTransform().SetWorldPosition(PlayerPos);
+	//}
 
 
-
+	Cam->GetTransform().SetWorldPosition({ PlayerPos.x, PlayerPos.y, -100});
 
 }

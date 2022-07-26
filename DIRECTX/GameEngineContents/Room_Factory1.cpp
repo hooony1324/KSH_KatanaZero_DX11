@@ -12,11 +12,19 @@ Room_Factory1::~Room_Factory1()
 
 void Room_Factory1::Start()
 {
-	Background = CreateComponent<GameEngineTextureRenderer>();
+	RoomInit();
+
 	Background->SetTexture("room_factory_2.png");
 	Background->ScaleToTexture();
-	Background->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) });
+	Background->SetPivot(PIVOTMODE::LEFTTOP);
 	Background->Off();
+
+	Background_Collision->SetTexture("room_factory_2_colmap.png");
+	Background_Collision->ScaleToTexture();
+	Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
+
+	//Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
+	//Background_Collision->GetCurTexture()->GetPixel(0, 0);
 
 	// test
 	//GameEngineTextureRenderer* Transition = CreateComponent<GameEngineTextureRenderer>();
@@ -28,24 +36,23 @@ void Room_Factory1::Start()
 	PtrDoor = GetLevel()->CreateActor<Door>();
 	PtrDoor->GetTransform().SetWorldPosition({ -330, 72 });
 	PtrDoor->Off();
-	
-	InitCameraClampArea();
+
 }
 
-void Room_Factory1::OnEvent()
+void Room_Factory1::Setting()
 {
 	Background->On();
+	GlobalValueManager::ColMap = Background_Collision;
 
 	// 지형 소환
 	PtrDoor->Init();
 	PtrDoor->On();
-	
 
 	// 적 소환
 
 }
 
-void Room_Factory1::OffEvent()
+void Room_Factory1::Clear()
 {
 	Background->Off();
 

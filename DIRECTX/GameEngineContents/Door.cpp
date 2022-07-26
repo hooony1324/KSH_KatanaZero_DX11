@@ -26,7 +26,7 @@ void Door::Start()
 	Renderer->ChangeFrameAnimation("idle");
 
 	// -330, 72
-	Renderer->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::DOOR) });
+	Renderer->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::DOOR) });
 	GetTransform().SetLocalScale({ 2.0f, 2.0f, 1 });
 
 }

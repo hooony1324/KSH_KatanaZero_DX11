@@ -24,10 +24,12 @@ void TitleButtons::Start()
 	Renderer_Background->SetPipeLine("Color");
 	Color_Background = float4{ 0, 0, 0, 0.5f };
 	Renderer_Background->ShaderResources.SetConstantBufferLink("ResultColor", Color_Background);
+	Renderer_Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::BUTTONS) });
 
 	Renderer_Buttons = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Buttons->SetTexture("TitleButtons.png");
 	Renderer_Buttons->ScaleToTexture();
+	Renderer_Buttons->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::BUTTONS) - 1 });
 
 	// Selector
 	Renderer_Selector = CreateComponent<GameEngineDefaultRenderer>();
@@ -35,14 +37,15 @@ void TitleButtons::Start()
 	Renderer_Selector->SetPipeLine("Color");
 	Color_Selector = float4{ 1, 1, 1, 0.2f };
 	Renderer_Selector->ShaderResources.SetConstantBufferLink("ResultColor", Color_Selector);
+	Renderer_Selector->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
 
-	ButtonsPos.push_back({ 0, -84 });
-	ButtonsPos.push_back({ 0, -44 });
-	ButtonsPos.push_back({ 0, -4 });
-	ButtonsPos.push_back({ 0, 36 });
-	ButtonsPos.push_back({ 0, 76 });
+	ButtonsPos.push_back({ 0, -84 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
+	ButtonsPos.push_back({ 0, -44 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
+	ButtonsPos.push_back({ 0, -4 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
+	ButtonsPos.push_back({ 0, 36 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
+	ButtonsPos.push_back({ 0, 76 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
 	ButtonIndex = 2;
-	Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex] + float4{ 0, 0, -1 });
+	Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
 
 	// 초기세팅
 	IsPlayLevelChange = false;
@@ -81,7 +84,7 @@ void TitleButtons::CheckInput()
 		}
 
 		ButtonIndex++;
-		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex] + float4{0, 0, -1});
+		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
 	}
 
 	if (true == GameEngineInput::GetInst()->IsDown("S"))
@@ -95,7 +98,7 @@ void TitleButtons::CheckInput()
 		}
 
 		ButtonIndex--;
-		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex] + float4{ 0, 0, -1 });
+		Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
 	}
 
 	if (true == GameEngineInput::GetInst()->IsDown("SpaceBar"))

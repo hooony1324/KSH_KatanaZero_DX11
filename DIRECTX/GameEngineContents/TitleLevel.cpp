@@ -32,17 +32,11 @@ void TitleLevel::Start()
 
 	// ¹è°æ
 	GameEngineActor* Plate = CreateActor<TitlePlate>();
-	Plate->GetTransform().SetWorldMove({ 0, 0, 500 });
 	GameEngineActor* Fence = CreateActor<TitleFence>();
-	Fence->GetTransform().SetWorldMove({ 0, 0, 400 });
 	Graphic = CreateActor<TitleGraphic>();
-	Graphic->GetTransform().SetWorldMove({ 0, 0, 300 });
 	GameEngineActor* Grass = CreateActor<TitleGrass>();
-	Grass->GetTransform().SetWorldMove({ 0, 0, 200 });
 	GameEngineActor* Plants = CreateActor<TitlePlants>();
-	Plants->GetTransform().SetWorldMove({ 0, 0, 100 });
 	GameEngineActor* Buttons = CreateActor<TitleButtons>();
-	Buttons->GetTransform().SetWorldMove({ 0, 0, 10 });
 	AllActors.push_back(Plate);
 	AllActors.push_back(Fence);
 	AllActors.push_back(Graphic);

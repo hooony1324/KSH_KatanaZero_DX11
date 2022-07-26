@@ -16,18 +16,20 @@ public:
 	Room& operator=(const Room& _Other) = delete;
 	Room& operator=(Room&& _Other) noexcept = delete;
 
-	virtual void OnEvent() {}
-	virtual void OffEvent() {}
+	virtual void Setting() {}
+	virtual void Clear() {}
 
 	void GetCameraClampArea(float4& _LeftTop, float4& _RightBottom);
 
 protected:
+	void RoomInit();
 	void InitCameraClampArea();
 
 protected:
 	GameEngineTextureRenderer* Background;
 	
 	// Ãæµ¹¸Ê(¹ÝÅõ¸í ±¦ÂúÀ»µí)
+	GameEngineTextureRenderer* Background_Collision;
 
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;

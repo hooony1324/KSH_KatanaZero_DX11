@@ -17,6 +17,7 @@ void Ending_Background::Start()
 	BackGround->SetTexture("Rooftop.png");
 	BackGround->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "Ending_Rooftop", 0.1f });
 	BackGround->ChangeFrameAnimation("idle");
+	BackGround->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) });
 }
 
 void Ending_Background::Update(float _DeltaTime)

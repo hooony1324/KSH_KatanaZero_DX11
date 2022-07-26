@@ -16,6 +16,10 @@ public:
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
 protected:
+	void PixelCheck(GameEngineTextureRenderer* _ColMap, float4 _Pos);
+
+
+protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	float4 MoveDir;
 	float MoveSpeed;
