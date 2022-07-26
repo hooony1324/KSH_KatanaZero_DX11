@@ -27,6 +27,8 @@ protected:
 protected:
 	GameEngineTextureRenderer* Background;
 	
+	// Ãæµ¹¸Ê(¹ÝÅõ¸í ±¦ÂúÀ»µí)
+
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 

@@ -4,6 +4,7 @@
 
 LiveActor::LiveActor() 
 	: Renderer_Character(nullptr)
+	, MoveDir(float4::ZERO)
 {
 }
 

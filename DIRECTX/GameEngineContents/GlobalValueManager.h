@@ -10,27 +10,39 @@ enum class ACTORGROUP
 	NONE,
 };
 
-enum class DEPTH_ACTOR
+enum class ACTOR_DEPTH
 {
-	CAMERA = -1000,
-	TRANSITION = -500,
+	CAMERA,
+
+	// SCREEN EFFECT
+	TRANSITION,
 
 	// ACTOR
-	CURSOR = -400,
-	UI = -300,
-	FX = -200,
-	PLAYER = 0,
-	ENEMY = 100,
-	DOOR = 200,
-	BOSS = 300,
+	CURSOR,
+	UI,
+	FX,
+	PLAYER,
+	ENEMY,
+	DOOR,
+	BOSS,
 
 	// BACKGROUND
-	BACKGROUND_4 = 400,
-	BACKGROUND_3 = 500,
-	BACKGROUND_2 = 600,
-	BACKGROUND_1 = 700,
-	BACKGROUND_0 = 800,
+	BACKGROUND_COL,
+	BACKGROUND_4,
+	BACKGROUND_3,
+	BACKGROUND_2,
+	BACKGROUND_1,
+	BACKGROUND_0,
 
+};
+
+// DEPTH::GetDepth(ACTOR_DEPTH::PLAYER)
+namespace Depth
+{
+	static float GetDepth(ACTOR_DEPTH _Type)
+	{
+		return static_cast<float>(_Type) * 100.0f;
+	}
 };
 
 

@@ -18,8 +18,8 @@ void Cursor::Start()
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_cursor_0.png");
 	Renderer->ScaleToTexture();
-	GetTransform().SetLocalScale({2, 2, 1 });
-
+	Renderer->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CURSOR) });
+	GetTransform().SetLocalScale({1.5f, 1.5f, 1 });
 
 }
 

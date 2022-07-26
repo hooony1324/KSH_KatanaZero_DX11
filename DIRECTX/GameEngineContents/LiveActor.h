@@ -7,7 +7,7 @@ class LiveActor : public GameEngineActor
 public:
 	// constrcuter destructer
 	LiveActor();
-	~LiveActor();
+	virtual ~LiveActor();
 
 	// delete Function
 	LiveActor(const LiveActor& _Other) = delete;
@@ -17,6 +17,8 @@ public:
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
+	float4 MoveDir;
+	float MoveSpeed;
 
 private:
 

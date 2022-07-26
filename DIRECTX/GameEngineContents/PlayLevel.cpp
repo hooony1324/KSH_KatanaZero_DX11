@@ -22,7 +22,10 @@ void PlayLevel::Start()
 {
 	Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
 	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	Cam->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::CAMERA)});
+	Cam->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CAMERA) });
+
+	// Player 社発
+	Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
@@ -30,13 +33,8 @@ void PlayLevel::Start()
 	Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
 	RoomChange(Room1);
 	
-	// Player 社発
-	Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
-	Player->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::PLAYER) });
-
 	// Cursor
 	Cursor* Mouse = CreateActor<Cursor>();
-	Mouse->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::CURSOR) });
 }
 
 void PlayLevel::Update(float _DeltaTime)

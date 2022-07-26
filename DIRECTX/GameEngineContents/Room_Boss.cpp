@@ -14,7 +14,7 @@ void Room_Boss::Start()
 	Background = CreateComponent<GameEngineTextureRenderer>();
 	Background->SetTexture("spr_psychboss_background_0.png");
 	Background->GetTransform().SetLocalScale({ 1280, 720 });
-	Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::BACKGROUND_0) });
+	Background->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
 	Background->Off();
 
 	InitCameraClampArea();

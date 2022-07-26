@@ -25,11 +25,16 @@ void Door::Start()
 	Renderer->CreateFrameAnimationFolder("open", FrameAnimation_DESC{ "door_open", 0.1f, true });
 	Renderer->ChangeFrameAnimation("idle");
 
+	// -330, 72
+	Renderer->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::DOOR) });
 	GetTransform().SetLocalScale({ 2.0f, 2.0f, 1 });
+
 }
 
 void Door::Update(float _DeltaTime)
 {
+
+	auto val = GetTransform().GetWorldPosition();
 }
 
 void Door::End()

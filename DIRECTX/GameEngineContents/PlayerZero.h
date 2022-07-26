@@ -67,13 +67,7 @@ private:
 	float4 MousePos;
 	float4 MouseDir;
 	float4 InputDir;
-	float4 MoveDir;
 	float4 LookDir;
-	float PlayerSpeed;
-
-	float MoveForce;
-
-
 
 
 

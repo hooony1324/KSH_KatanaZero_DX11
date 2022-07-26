@@ -7,13 +7,11 @@
 PlayerZero::PlayerZero()
 	: AttackAble(true)
 	, RollAble(true)
-	, PlayerSpeed(SPEED_PLAYER)
 	, InputDir(float4::ZERO)
 	, MouseDir(float4::ZERO)
-	, MoveDir(float4::ZERO)
 	, LookDir(float4::RIGHT)
-	, MoveForce(0.0f)
 {
+	MoveSpeed = SPEED_PLAYER;
 }
 
 PlayerZero::~PlayerZero()
@@ -26,13 +24,16 @@ void PlayerZero::Start()
 	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
 
+	// DEPTH
+	Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
+	Renderer_Slash->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::FX) });
+
 	CreateAllAnimation();
 
 	Renderer_Character->SetTexture("spr_idle_0.png");
 	Renderer_Character->ScaleToTexture();
 	Renderer_Slash->SetTexture("spr_slash_0.png");
 	Renderer_Slash->ScaleToTexture();
-	Renderer_Slash->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::FX)});
 
 	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
@@ -55,7 +56,7 @@ void PlayerZero::Update(float _DeltaTime)
 	UpdateState();
 	CoolTimeCheck();
 
-	GetTransform().SetWorldMove(MoveDir * _DeltaTime * PlayerSpeed);
+	GetTransform().SetWorldMove(MoveDir * _DeltaTime * MoveSpeed);
 
 	if (LookDir.x >= 0)
 	{
@@ -65,6 +66,7 @@ void PlayerZero::Update(float _DeltaTime)
 	{
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
+
 }
 
 void PlayerZero::End()

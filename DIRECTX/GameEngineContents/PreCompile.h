@@ -29,3 +29,4 @@
 
 // contents
 #include <GameEngineContents/GlobalValueManager.h>
+using namespace Depth;

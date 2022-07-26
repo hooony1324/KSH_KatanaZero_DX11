@@ -14,11 +14,11 @@ void PlayerZero::AttackStart()
 
 void PlayerZero::AttackUpdate()
 {
-	PlayerSpeed *= 0.99f;
+	MoveSpeed *= 0.99f;
 
 	if (true == Attack_AniEnd)
 	{
-		PlayerSpeed = SPEED_PLAYER;
+		MoveSpeed = SPEED_PLAYER;
 		MouseDir = float4::ZERO;
 		MoveDir = float4::ZERO;
 		Attack_AniEnd = false;
@@ -68,7 +68,7 @@ void PlayerZero::RollStart()
 {
 	RollTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("roll");
-	PlayerSpeed = SPEED_PLAYER * 2.0f;
+	MoveSpeed = SPEED_PLAYER * 2.0f;
 }
 
 void PlayerZero::RollUpdate()
@@ -76,7 +76,7 @@ void PlayerZero::RollUpdate()
 	if (true == Roll_AniEnd)
 	{
 		Roll_AniEnd = false;
-		PlayerSpeed = SPEED_PLAYER;
+		MoveSpeed = SPEED_PLAYER;
 
 		if (abs(MoveDir.x) > 0)
 		{
@@ -91,7 +91,7 @@ void PlayerZero::RollUpdate()
 
 void PlayerZero::RunStart()
 {
-	PlayerSpeed = SPEED_PLAYER;
+	MoveSpeed = SPEED_PLAYER;
 	Renderer_Character->ChangeFrameAnimation("run");
 }
 
@@ -144,7 +144,7 @@ void PlayerZero::RunToIdleUpdate()
 
 void PlayerZero::IdleToRunStart()
 {
-	PlayerSpeed = 20.0f;
+	MoveSpeed = 20.0f;
 	Renderer_Character->ChangeFrameAnimation("idle_to_run");
 }
 
@@ -162,7 +162,7 @@ void PlayerZero::CreateSlash()
 	PlayerPos.z = 0;
 
 	Renderer_Slash->On();
-	Renderer_Slash->CurAnimationReset();
+	Renderer_Slash->ChangeFrameAnimation("slash");
 	MousePos = Cursor::GetCursorPosition();
 	MousePos.z = 0;
 
@@ -175,7 +175,7 @@ void PlayerZero::CreateSlash()
 	Renderer_Slash->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
 	LookDir.x = MoveDir.x;
 
-	PlayerSpeed = 2000.0f;
+	MoveSpeed = 2000.0f;
 
 	// Sound
 	std::string Sound = "sound_player_slash_";
