@@ -63,8 +63,9 @@ void PlayerZero::Update(float _DeltaTime)
 	CoolTimeCheck();
 
 	PixelCheck();
-
-	GetTransform().SetWorldMove(MoveDir * _DeltaTime * MoveSpeed);
+	FallCheck(_DeltaTime);
+	
+	GetTransform().SetWorldMove(Velocity);
 	
 }
 

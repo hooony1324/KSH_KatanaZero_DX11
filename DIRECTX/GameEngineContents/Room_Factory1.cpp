@@ -26,16 +26,6 @@ void Room_Factory1::Start()
 	Background_Collision->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_Collision->Off();
 
-	//Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
-	//Background_Collision->GetCurTexture()->GetPixel(0, 0);
-
-	// test
-	//GameEngineTextureRenderer* Transition = CreateComponent<GameEngineTextureRenderer>();
-	//Transition->CreateFrameAnimationFolder("transition_in", FrameAnimation_DESC{ "transition_in", 1.0f });
-	//Transition->GetTransform().SetLocalScale({32, 32, 1 });
-	//Transition->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(DEPTH_ACTOR::TRANSITION) });
-	//Transition->ChangeFrameAnimation("transition_in");
-
 	PtrDoor = GetLevel()->CreateActor<Door>();
 	PtrDoor->GetTransform().SetWorldPosition({ -330, 72, GetDepth(ACTOR_DEPTH::DOOR) });
 	PtrDoor->Off();

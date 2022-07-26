@@ -30,13 +30,24 @@ protected:
 
 protected:
 	void PixelCheck();
+	void FallCheck(float _DeltaTime);
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
-	float4 MoveDir;
-	float MoveSpeed;
+	float4 MoveDir;	// 방향
+	float MoveSpeed; // 속력
+	float4 Velocity; // 속도
 
+	float4 Up;
+	float4 Down;
+	float4 Left;
+	float4 Right;
+	float4 UpRight;
+	float4 DownRight;
+	float4 UpLeft;
+	float4 DownLeft;
 private:
-	float4 Pixel_Down;
+
+
 };
 
