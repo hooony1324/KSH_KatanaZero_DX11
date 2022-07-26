@@ -22,26 +22,26 @@ PlayLevel::~PlayLevel()
 
 void PlayLevel::Start()
 {
-	Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
+	Cam = CreateActor<GameEngineCameraActor>();
 	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
 	Cam->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CAMERA) });
 
 	// Rooms
-	Room1 = CreateActor<Room_Factory1>(ACTORGROUP::MAP);
-	Room2 = CreateActor<Room_Factory2>(ACTORGROUP::MAP);
-	Room3 = CreateActor<Room_Boss>(ACTORGROUP::MAP);
+	Room1 = CreateActor<Room_Factory1>();
+	//Room2 = CreateActor<Room_Factory2>();
+	//Room3 = CreateActor<Room_Boss>();
 
+	// Player
+	Player = CreateActor<PlayerZero>();
 
 	// Cursor
 	Cursor* Mouse = CreateActor<Cursor>();
+	Mouse->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CURSOR) });
 }
 
 void PlayLevel::OnEvent()
 {
 	RoomChange(Room1);
-
-	// Player
-	Player = CreateActor<PlayerZero>(ACTORGROUP::PLAYER);
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -78,6 +78,11 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
+
+	std::string PlayerPos = std::to_string(Player->GetTransform().GetWorldPosition().x)
+		+ "/" + std::to_string(Player->GetTransform().GetWorldPosition().y)
+		+ "/" + std::to_string(Player->GetTransform().GetWorldPosition().z);
+	GameEngineDebug::OutPutString(PlayerPos);
 }
 
 void PlayLevel::End()
@@ -90,16 +95,18 @@ void PlayLevel::RoomChange(Room* _Room)
 	if (nullptr == CurRoom)
 	{
 		CurRoom = _Room;
+		CurRoom->PlayerSpawn(Player);
 	}
 	else
 	{
 		// ¹æ ±³È¯
 		CurRoom->Clear();
 		CurRoom = _Room;
+		CurRoom->PlayerSpawn(Player);
 	}
 
 	CurRoom->Setting();
-	CurRoom->GetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
+	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
 
 }
 
@@ -109,6 +116,7 @@ void PlayLevel::CameraFollow()
 	{
 		return;
 	}
+
 	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
 	float4 CamPos = Cam->GetTransform().GetWorldPosition();
 
@@ -119,6 +127,6 @@ void PlayLevel::CameraFollow()
 	//}
 
 
-	Cam->GetTransform().SetWorldPosition({ PlayerPos.x, PlayerPos.y, -100});
+	Cam->GetTransform().SetWorldPosition({ PlayerPos.x, PlayerPos.y});
 
 }

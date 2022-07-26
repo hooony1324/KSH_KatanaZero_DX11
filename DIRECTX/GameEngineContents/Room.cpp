@@ -9,14 +9,10 @@ Room::~Room()
 {
 }
 
-void Room::RoomInit()
+void Room::EmptyRoomInit()
 {
 	Background = CreateComponent<GameEngineTextureRenderer>();
-	Background->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) });
-
 	Background_Collision = CreateComponent<GameEngineTextureRenderer>();
-	Background_Collision->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
-
 
 	InitCameraClampArea();
 }
@@ -28,8 +24,13 @@ void Room::InitCameraClampArea()
 	CamClamp_RightBottom = { Scale.x, -Scale.y };
 }
 
-void Room::GetCameraClampArea(float4& _LeftTop, float4& _RightBottom)
+void Room::SetCameraClampArea(float4& _LeftTop, float4& _RightBottom)
 {
 	_LeftTop = CamClamp_LeftTop;
 	_RightBottom = CamClamp_RightBottom;
+}
+
+void Room::PlayerSpawn(GameEngineActor* _Player)
+{
+	_Player->GetTransform().SetWorldPosition(PlayerSpawnPos);
 }

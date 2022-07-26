@@ -60,6 +60,7 @@ private:
 
 // 플레이어 정보
 private:
+	void WallPassCheck();
 	void CreateSlash();
 	
 private:

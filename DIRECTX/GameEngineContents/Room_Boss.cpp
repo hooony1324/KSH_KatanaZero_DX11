@@ -11,7 +11,7 @@ Room_Boss::~Room_Boss()
 
 void Room_Boss::Start()
 {
-	RoomInit();
+	EmptyRoomInit();
 
 	//Background = CreateComponent<GameEngineTextureRenderer>();
 	Background->SetTexture("spr_psychboss_background_0.png");

@@ -19,10 +19,11 @@ public:
 	virtual void Setting() {}
 	virtual void Clear() {}
 
-	void GetCameraClampArea(float4& _LeftTop, float4& _RightBottom);
+	void SetCameraClampArea(float4& _LeftTop, float4& _RightBottom);
+	void PlayerSpawn(GameEngineActor* _Player);
 
 protected:
-	void RoomInit();
+	void EmptyRoomInit();
 	void InitCameraClampArea();
 
 protected:
@@ -34,6 +35,7 @@ protected:
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 
+	float4 PlayerSpawnPos;
 private:
 
 };

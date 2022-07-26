@@ -6,6 +6,10 @@ class GameEngineTextureRenderer;
 class Door : public GameEngineActor
 {
 public:
+	void Close();
+	void Open();
+
+public:
 	// constrcuter destructer
 	Door();
 	~Door();
@@ -15,8 +19,6 @@ public:
 	Door(Door&& _Other) noexcept = delete;
 	Door& operator=(const Door& _Other) = delete;
 	Door& operator=(Door&& _Other) noexcept = delete;
-
-	void Init();
 
 protected:
 	void Start() override;

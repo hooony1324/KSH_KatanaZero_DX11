@@ -27,6 +27,7 @@ void PlayerZero::Start()
 	// DEPTH
 	Renderer_Character->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
 	Renderer_Slash->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::FX) });
+	GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
 
 	CreateAllAnimation();
 
@@ -58,11 +59,10 @@ void PlayerZero::Update(float _DeltaTime)
 
 	InputCheck();
 	// FallCheck(); ->ChangeState::FALL
-	//UpdateState();
+	UpdateState();
 	CoolTimeCheck();
 
-
-
+	PixelCheck();
 
 	GetTransform().SetWorldMove(MoveDir * _DeltaTime * MoveSpeed);
 	
@@ -100,8 +100,6 @@ void PlayerZero::InputCheck()
 		InputDir[0] += 1;
 		LookDir.x = 1;
 	}
-
-	MoveDir = InputDir;
 
 }
 

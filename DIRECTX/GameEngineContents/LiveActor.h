@@ -16,8 +16,20 @@ public:
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
 protected:
-	void PixelCheck(GameEngineTextureRenderer* _ColMap, float4 _Pos);
+	enum class STATE
+	{
+		UP_WALL,
+		RIGHT_WALL,
+		RIGHT_PASS, // 다음 스테이지 포탈
+		LEFT_WALL,
+		DOWN_WALL,
+		DOWN_PASS, // 통과 가능
+	};
 
+	STATE WallState;
+
+protected:
+	void PixelCheck();
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
@@ -25,6 +37,6 @@ protected:
 	float MoveSpeed;
 
 private:
-
+	float4 Pixel_Down;
 };
 

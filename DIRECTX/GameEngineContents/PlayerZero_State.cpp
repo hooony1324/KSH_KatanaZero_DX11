@@ -156,6 +156,14 @@ void PlayerZero::IdleToRunUpdate()
 	}
 }
 
+void PlayerZero::WallPassCheck()
+{
+	if (WallState == STATE::DOWN_PASS)
+	{
+		GetTransform().SetWorldMove({ 0, 1, 0, 0 });
+	}
+}
+
 void PlayerZero::CreateSlash()
 {
 	float4 PlayerPos = GetTransform().GetWorldPosition();
