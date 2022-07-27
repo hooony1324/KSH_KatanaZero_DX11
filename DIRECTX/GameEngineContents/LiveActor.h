@@ -18,14 +18,13 @@ public:
 protected:
 	enum class STATE
 	{
-		NOWALL, // 공중
+		NONE,
 		UP_WALL,
 		RIGHT_WALL,
 		RIGHT_PASS, // 다음 스테이지 포탈
 		LEFT_WALL,
 		DOWN_WALL, // 지면(중력X)
 		DOWN_GROUND, // 땅에 박힘
-		DOWN_PASS, // 통과 가능
 
 		RIGHTUP_SLOPE,
 		RIGHTDOWN_SLOPE,
@@ -35,10 +34,12 @@ protected:
 	};
 
 	STATE WallState;
+	bool IsFly; // 공중
 
 protected:
 	void PixelCheck();
 	void VelocityCheck(float _DeltaTime);
+	void LookCheck();
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
@@ -46,17 +47,21 @@ protected:
 	float MoveSpeed; // 속력
 	float4 MoveDir;	// 방향
 	float4 Velocity; // 속도
-	float SumDeltaTime;
+	int CurLookDir;	// 시선
+	int PrevLookDir;
 
-	float4 Down;
-	float4 DoubleDown;
-	float4 Up;
-	float4 Left;
-	float4 Right;
-	float4 UpRight;
-	float4 DownRight;
-	float4 UpLeft;
-	float4 DownLeft;
+	bool Up;
+	bool Down;
+	bool DownBlue;
+	bool Left_Up;
+	bool Left_Down;
+	bool Right_Up;
+	bool Right_Down;
+
+	bool Left;
+	bool Right;
+	
+
 private:
 
 

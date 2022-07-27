@@ -16,9 +16,9 @@ EndingLevel::~EndingLevel()
 
 void EndingLevel::Start()
 {
-	GameEngineCameraActor* Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
+	/*GameEngineCameraActor* Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
 	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	Cam->GetTransform().SetWorldPosition({ 0, 0, -100 });
+	Cam->GetTransform().SetWorldPosition({ 0, 0, -100 });*/
 
 
 	Ending_Background* BG = CreateActor<Ending_Background>();

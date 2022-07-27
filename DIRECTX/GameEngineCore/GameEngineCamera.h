@@ -2,6 +2,7 @@
 #include "GameEngineTransformComponent.h"
 #include <GameEngineBase/GameEngineMath.h>
 #include <GameEngineBase/GameEngineWindow.h>
+#include <GameEngineCore/GameEngineLevel.h>
 
 enum class CAMERAPROJECTIONMODE
 {

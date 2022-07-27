@@ -32,7 +32,7 @@ void Room_Factory1::Start()
 	PtrDoor->GetTransform().SetWorldPosition({ -330, 72, GetDepth(ACTOR_DEPTH::DOOR) });
 	PtrDoor->Off();
 
-	PlayerSpawnPos = float4{ 226, -540, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 226, -500, GetDepth(ACTOR_DEPTH::PLAYER) };
 }
 
 void Room_Factory1::Setting()

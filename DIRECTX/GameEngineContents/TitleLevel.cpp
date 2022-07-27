@@ -26,9 +26,9 @@ GameEngineActor* Graphic;
 void TitleLevel::Start()
 {
 	// 카메라
-	GameEngineCameraActor* MainCam = CreateActor<GameEngineCameraActor>();
-	MainCam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	MainCam->GetTransform().SetWorldPosition({ 0, 0, -1000 });
+	//GameEngineCameraActor* MainCam = CreateActor<GameEngineCameraActor>();
+	//MainCam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
+	//MainCam->GetTransform().SetWorldPosition({ 0, 0, -1000 });
 
 	// 배경
 	GameEngineActor* Plate = CreateActor<TitlePlate>();

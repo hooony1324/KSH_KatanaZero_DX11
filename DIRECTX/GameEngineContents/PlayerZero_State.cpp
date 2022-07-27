@@ -34,7 +34,7 @@ void PlayerZero::FallStart()
 
 void PlayerZero::FallUpdate()
 {
-	MoveDir = { 0, -1 };
+	
 }
 
 void PlayerZero::IdleStart()
@@ -158,10 +158,7 @@ void PlayerZero::IdleToRunUpdate()
 
 void PlayerZero::WallPassCheck()
 {
-	if (WallState == STATE::DOWN_PASS)
-	{
-		GetTransform().SetWorldMove({ 0, 1, 0, 0 });
-	}
+	
 }
 
 void PlayerZero::CreateSlash()
@@ -181,7 +178,7 @@ void PlayerZero::CreateSlash()
 
 	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
 	Renderer_Slash->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
-	LookDir.x = MoveDir.x;
+	
 
 	MoveSpeed = 2000.0f;
 

@@ -2,21 +2,15 @@
 #include "LiveActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-float FORCE_REACTION = 0.38f;
-
+const float FORCE_REACTION = 0.38f;
+const float4 GREEN = { 0, 1, 0, 0 };
+const float4 BLUE = { 1, 0, 0, 0 };
 
 LiveActor::LiveActor() 
 	: Renderer_Character(nullptr)
 	, MoveDir(float4::ZERO)
-	, Down(float4::ZERO)
-	, DoubleDown(float4::ZERO)
-	, Up(float4::ZERO)
-	, Left(float4::ZERO)
-	, Right(float4::ZERO)
-	, UpRight(float4::ZERO)
-	, DownRight(float4::ZERO)
-	, UpLeft(float4::ZERO)
-	, DownLeft(float4::ZERO)
+	, PrevLookDir(1)
+	, CurLookDir(1)
 {
 
 }
@@ -35,136 +29,168 @@ void LiveActor::PixelCheck()
 
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
-	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 31));
-	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 32));
-	Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y + 32));
-	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y));
-	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y));
+	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 34))
+		.CompareInt4D(GREEN);
+	Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y + 34))
+		.CompareInt4D(GREEN);
+	Left_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y + 34))
+		.CompareInt4D(GREEN);
+	Right_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y + 34))
+		.CompareInt4D(GREEN);
+	Right_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y - 34))
+		.CompareInt4D(GREEN);
+	Left_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y - 34))
+		.CompareInt4D(GREEN);
+	DownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 34))
+		.CompareInt4D(BLUE);
+	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y - 26))
+		.CompareInt4D(GREEN);
+	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y - 26))
+		.CompareInt4D(GREEN);
 
-	UpRight = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y + 32));
-	DownRight = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y - 32));
-	UpLeft = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y + 32));
-	DownLeft = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y - 32));
-	
-	WallState = STATE::NOWALL;
+	WallState = STATE::NONE;
 
-	// 공중
-	float4 SumPixel = Right + Down + Left;
-	if (SumPixel.CompareInt4D({ 3, 3, 3, 1 }))
+	// 바닥 확인 > 점프 확인 > 슬로프 확인, 벽 확인, 윗 벽 
+	if (Down || DownBlue)
 	{
-		WallState = STATE::NOWALL;
-		return;
+		IsFly = false;
+		WallState = STATE::DOWN_WALL;
 	}
-
-	// 아래 벽
-	if (DoubleDown.CompareInt4D({ 0, 1, 0, 0 }))
+	else
 	{
-		WallState = STATE::DOWN_WALL; // 지면(중력X)
-		if (Down.CompareInt4D({ 0, 1, 0, 0 }))
+		IsFly = true;
+		if (Up)
 		{
-			WallState = STATE::DOWN_GROUND; // 땅에 박힘
+			WallState = STATE::UP_WALL;
 			return;
 		}
 	}
 
-	// 왼쪽 벽 또는 왼쪽 경사
-	if (Velocity.x < 0 && Left.CompareInt4D({ 0, 1, 0, 0 }))
-	{
-		WallState = STATE::LEFT_WALL;
-		if (false == UpLeft.CompareInt4D({ 0, 1, 0, 0 }))
-		{
-			WallState = STATE::LEFTUP_SLOPE;
-		}
-		else if (false == DownLeft.CompareInt4D({ 0, 1, 0, 0 }))
-		{
-			WallState = STATE::LEFTDOWN_SLOPE;
-		}
-		return;
-	}
 
-	// 오른쪽 벽 또는 오른쪽 경사
-	if (Velocity.x > 0 && Right.CompareInt4D({ 0, 1, 0, 0 }))
+	// 시선 우
+	if (CurLookDir > 0)
 	{
-d		WallState = STATE::RIGHT_WALL;
-
-		if (false == UpRight.CompareInt4D({ 0, 1, 0, 0 }))
+		if (Right && Right_Up && Right_Down)
+		{
+			WallState = STATE::RIGHT_WALL;
+			return;
+		}
+		
+		if (Right_Down && Right && !Right_Up && !DownBlue)
 		{
 			WallState = STATE::RIGHTUP_SLOPE;
+			return;
 		}
-		else if (false == DownRight.CompareInt4D({ 0, 1, 0, 0 }))
+
+		if (Left_Down && !Down && !Right_Down && !Right && !DownBlue)
 		{
 			WallState = STATE::RIGHTDOWN_SLOPE;
+			return;
 		}
-		return;
+		
+	}
+	// 시선 좌
+	else
+	{
+		if (Left && Left_Up && Left_Down)
+		{
+			WallState = STATE::LEFT_WALL;
+			return;
+		}
+
+		if (Left_Down && Left && !Left_Up && !DownBlue)
+		{
+			WallState = STATE::LEFTUP_SLOPE;
+			return;
+		}
+
+		if (Right_Down && !Down && !Left_Down && !Left && !DownBlue)
+		{
+			WallState = STATE::LEFTDOWN_SLOPE;
+			return;
+		}
 	}
 
-	// 특수(땅 통과, 다음 스테이지 넘어가기, 위 벽)
-	if (Down.CompareInt4D({ 0, 0, 1, 0 }))
-	{
-		WallState = STATE::DOWN_PASS;
-		return;
-	}
 
-	if (Right.CompareInt4D({ 0, 0, 1, 0 })
-		&& UpRight.CompareInt4D({ 0, 0, 1, 0 })
-		&& DownRight.CompareInt4D({ 0, 0, 1, 0 }) 
-		)
-	{
-		WallState = STATE::RIGHT_PASS;
-		return;
-	}
-
-	if (Up.CompareInt4D({ 0, 1, 0, 0 }))
-	{
-		WallState = STATE::UP_WALL;
-	}
 }
 
 // 중력 적용/미적용 후 속도(속력 * 방향) 측정
 void LiveActor::VelocityCheck(float _DeltaTime)
 {
-	Velocity = MoveDir * _DeltaTime * MoveSpeed;
-
 	switch (WallState)
 	{
-	case LiveActor::STATE::NOWALL:
-
-		Velocity.y = Velocity.y - 270.0f * _DeltaTime;
+	case LiveActor::STATE::NONE:
 		break;
 	case LiveActor::STATE::UP_WALL:
-		Velocity.y += -1;
+		
 		break;
 	case LiveActor::STATE::RIGHT_WALL:
-		Velocity.x += -1;
+		 // 향후 벽타기 하려면 변경
 		break;
 	case LiveActor::STATE::RIGHT_PASS:
 		break;
 	case LiveActor::STATE::LEFT_WALL:
-		Velocity.x += 1;
+		
 		break;
 	case LiveActor::STATE::DOWN_WALL:
+		GetTransform().SetWorldMove({ 0, 1 , 0});
 		break;
 	case LiveActor::STATE::DOWN_GROUND:
-		Velocity.y += 1;
-		break;
-	case LiveActor::STATE::DOWN_PASS:
 		break;
 	case LiveActor::STATE::RIGHTUP_SLOPE:
+		GetTransform().SetWorldMove({ 0, 1 , 0});
 		break;
 	case LiveActor::STATE::RIGHTDOWN_SLOPE:
-		Velocity.y += -1;
+
 		break;
 	case LiveActor::STATE::LEFTUP_SLOPE:
+
 		break;
 	case LiveActor::STATE::LEFTDOWN_SLOPE:
-		Velocity.x = -1;
-		Velocity.y = -1;
+		GetTransform().SetWorldMove({ 0, -1 , 0});
 		break;
 	default:
 		break;
 	}
 
+	Velocity = MoveDir * _DeltaTime * MoveSpeed;
 
+	if (IsFly)
+	{
+		Velocity.y = Velocity.y - 270.0f * _DeltaTime;
+	}
+
+
+	GameEngineDebug::OutPutString(std::to_string((int)WallState));
+	LookCheck();
+}
+
+void LiveActor::LookCheck()
+{
+	// 왼쪽 오른쪽 바라보기
+	if (Velocity.x > 0)
+	{
+		CurLookDir = 1;
+	}
+	else if (Velocity.x < 0)
+	{
+		CurLookDir = -1;
+	}
+
+	// 렌더러 방향 결정
+	if (CurLookDir == PrevLookDir)
+	{
+		return;
+	}
+	else if (CurLookDir > 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
+	PrevLookDir = CurLookDir;
 }
 
 

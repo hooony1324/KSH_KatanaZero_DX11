@@ -68,11 +68,6 @@ private:
 	float4 MousePos;
 	float4 MouseDir;
 	float4 InputDir;
-	float4 LookDir;
-
-
-
-
 
 
 
@@ -175,7 +170,6 @@ private:
 
 	void StopIdleToRun(const FrameAnimation_DESC& _Info)
 	{
-		GameEngineDebug::OutPutString("StopIdleToRun");
 		if (InputDir.CompareInt2D({ 0, 0 }))
 		{
 			MoveDir = float4::ZERO;

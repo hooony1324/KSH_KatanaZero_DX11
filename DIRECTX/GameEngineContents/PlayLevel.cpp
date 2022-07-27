@@ -22,9 +22,9 @@ PlayLevel::~PlayLevel()
 
 void PlayLevel::Start()
 {
-	Cam = CreateActor<GameEngineCameraActor>();
-	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	Cam->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CAMERA) });
+	//Cam = CreateActor<GameEngineCameraActor>();
+	//Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
+	//Cam->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CAMERA) });
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>();
@@ -79,10 +79,6 @@ void PlayLevel::Update(float _DeltaTime)
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
 
-	std::string PlayerPos = std::to_string(Player->GetTransform().GetWorldPosition().x)
-		+ "/" + std::to_string(Player->GetTransform().GetWorldPosition().y)
-		+ "/" + std::to_string(Player->GetTransform().GetWorldPosition().z);
-	GameEngineDebug::OutPutString(PlayerPos);
 }
 
 void PlayLevel::End()
@@ -112,15 +108,15 @@ void PlayLevel::RoomChange(Room* _Room)
 
 void PlayLevel::CameraFollow(float _DeltaTime)
 {
-	if (true == Cam->IsFreeCameraMode())
+	if (true == GetMainCameraActor()->IsFreeCameraMode())
 	{
 		return;
 	}
 
 	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
-	float4 CamPos = Cam->GetTransform().GetWorldPosition();
+	float4 CamPos = GetMainCameraActor()->GetTransform().GetWorldPosition();
 
 	float4 Pos = float4::Lerp(CamPos, PlayerPos, _DeltaTime * 4.5f);
-	Cam->GetTransform().SetWorldPosition({ Pos.x, Pos.y});
+	GetMainCameraActor()->GetTransform().SetWorldPosition({ Pos.x, Pos.y});
 
 }

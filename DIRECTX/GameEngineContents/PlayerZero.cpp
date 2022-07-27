@@ -9,7 +9,6 @@ PlayerZero::PlayerZero()
 	, RollAble(true)
 	, InputDir(float4::ZERO)
 	, MouseDir(float4::ZERO)
-	, LookDir(float4::RIGHT)
 {
 	InitSpeed = SPEED_PLAYER;
 	MoveSpeed = InitSpeed;
@@ -67,7 +66,8 @@ void PlayerZero::Update(float _DeltaTime)
 	VelocityCheck(_DeltaTime);
 	
 	GetTransform().SetWorldMove(Velocity);
-	
+
+
 }
 
 void PlayerZero::End()
@@ -91,7 +91,6 @@ void PlayerZero::InputCheck()
 	if (GameEngineInput::GetInst()->IsPress("a"))
 	{
 		InputDir[0] += -1;
-		LookDir.x = -1;
 	}
 	if (GameEngineInput::GetInst()->IsPress("s"))
 	{
@@ -100,9 +99,10 @@ void PlayerZero::InputCheck()
 	if (GameEngineInput::GetInst()->IsPress("d"))
 	{
 		InputDir[0] += 1;
-		LookDir.x = 1;
 	}
 
+
+	//MoveDir = InputDir;
 }
 
 void PlayerZero::CoolTimeCheck()
@@ -149,15 +149,6 @@ void PlayerZero::UpdateState()
 		break;
 	}
 
-	// 왼쪽 오른쪽 바라보기
-	if (LookDir.x >= 0)
-	{
-		Renderer_Character->GetTransform().PixLocalPositiveX();
-	}
-	else
-	{
-		Renderer_Character->GetTransform().PixLocalNegativeX();
-	}
 }
 
 void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
