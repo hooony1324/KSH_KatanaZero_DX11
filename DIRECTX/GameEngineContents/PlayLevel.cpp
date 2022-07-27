@@ -28,7 +28,7 @@ void PlayLevel::Start()
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>();
-	//Room2 = CreateActor<Room_Factory2>();
+	Room2 = CreateActor<Room_Factory2>();
 	//Room3 = CreateActor<Room_Boss>();
 
 	// Player
@@ -71,7 +71,7 @@ void PlayLevel::Update(float _DeltaTime)
 	}
 
 
-	CameraFollow();
+	CameraFollow(_DeltaTime);
 
 	// Ãæµ¹ ¸Ê OnOff
 	if (true == GameEngineInput::GetInst()->IsDown("M"))
@@ -110,7 +110,7 @@ void PlayLevel::RoomChange(Room* _Room)
 
 }
 
-void PlayLevel::CameraFollow()
+void PlayLevel::CameraFollow(float _DeltaTime)
 {
 	if (true == Cam->IsFreeCameraMode())
 	{
@@ -120,13 +120,7 @@ void PlayLevel::CameraFollow()
 	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
 	float4 CamPos = Cam->GetTransform().GetWorldPosition();
 
-	//if (PlayerPos.x >= CamClamp_LeftTop.x && PlayerPos.x <= CamClamp_RightBottom.x &&
-	//	PlayerPos.y <= CamClamp_LeftTop.y && PlayerPos.y >= CamClamp_RightBottom.y)
-	//{
-	//	Cam->GetTransform().SetWorldPosition(PlayerPos);
-	//}
-
-
-	Cam->GetTransform().SetWorldPosition({ PlayerPos.x, PlayerPos.y});
+	float4 Pos = float4::Lerp(CamPos, PlayerPos, _DeltaTime * 4.5f);
+	Cam->GetTransform().SetWorldPosition({ Pos.x, Pos.y});
 
 }

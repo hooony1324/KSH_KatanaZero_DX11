@@ -68,7 +68,7 @@ void PlayerZero::RollStart()
 {
 	RollTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("roll");
-	MoveSpeed = SPEED_PLAYER * 2.0f;
+	MoveSpeed = SPEED_PLAYER * 1.5f;
 }
 
 void PlayerZero::RollUpdate()
@@ -170,7 +170,7 @@ void PlayerZero::CreateSlash()
 	PlayerPos.z = 0;
 
 	Renderer_Slash->On();
-	Renderer_Slash->ChangeFrameAnimation("slash");
+	Renderer_Slash->CurAnimationReset();
 	MousePos = Cursor::GetCursorPosition();
 	MousePos.z = 0;
 

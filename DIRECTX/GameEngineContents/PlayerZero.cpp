@@ -11,7 +11,8 @@ PlayerZero::PlayerZero()
 	, MouseDir(float4::ZERO)
 	, LookDir(float4::RIGHT)
 {
-	MoveSpeed = SPEED_PLAYER;
+	InitSpeed = SPEED_PLAYER;
+	MoveSpeed = InitSpeed;
 }
 
 PlayerZero::~PlayerZero()
@@ -43,7 +44,7 @@ void PlayerZero::Start()
 	AttackTimer = CreateComponent<Timer>();
 	AttackTimer->Init(0.35f);
 	RollTimer = CreateComponent<Timer>();
-	RollTimer->Init(0.6f);
+	RollTimer->Init(0.4f);
 
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 	ChangeState(STATE_PLAYER::IDLE);
@@ -63,7 +64,7 @@ void PlayerZero::Update(float _DeltaTime)
 	CoolTimeCheck();
 
 	PixelCheck();
-	FallCheck(_DeltaTime);
+	VelocityCheck(_DeltaTime);
 	
 	GetTransform().SetWorldMove(Velocity);
 	

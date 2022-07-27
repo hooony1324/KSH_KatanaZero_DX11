@@ -2,9 +2,21 @@
 #include "LiveActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+float FORCE_REACTION = 0.38f;
+
+
 LiveActor::LiveActor() 
 	: Renderer_Character(nullptr)
 	, MoveDir(float4::ZERO)
+	, Down(float4::ZERO)
+	, DoubleDown(float4::ZERO)
+	, Up(float4::ZERO)
+	, Left(float4::ZERO)
+	, Right(float4::ZERO)
+	, UpRight(float4::ZERO)
+	, DownRight(float4::ZERO)
+	, UpLeft(float4::ZERO)
+	, DownLeft(float4::ZERO)
 {
 
 }
@@ -23,8 +35,9 @@ void LiveActor::PixelCheck()
 
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
+	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 31));
+	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 32));
 	Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y + 32));
-	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x, -(CharacterPos.y - 32));
 	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y));
 	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x + 34, -(CharacterPos.y));
 
@@ -33,70 +46,124 @@ void LiveActor::PixelCheck()
 	UpLeft = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y + 32));
 	DownLeft = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.x - 34, -(CharacterPos.y - 32));
 	
-	if (Down.CompareInt4D({ 0, 1, 0, 0 }))
+	WallState = STATE::NOWALL;
+
+	// 공중
+	float4 SumPixel = Right + Down + Left;
+	if (SumPixel.CompareInt4D({ 3, 3, 3, 1 }))
 	{
-		WallState = STATE::DOWN_WALL;
-		GetTransform().SetWorldMove({ 0, 1, 0, 0 });
+		WallState = STATE::NOWALL;
+		return;
+	}
+
+	// 아래 벽
+	if (DoubleDown.CompareInt4D({ 0, 1, 0, 0 }))
+	{
+		WallState = STATE::DOWN_WALL; // 지면(중력X)
+		if (Down.CompareInt4D({ 0, 1, 0, 0 }))
+		{
+			WallState = STATE::DOWN_GROUND; // 땅에 박힘
+			return;
+		}
+	}
+
+	// 왼쪽 벽 또는 왼쪽 경사
+	if (Velocity.x < 0 && Left.CompareInt4D({ 0, 1, 0, 0 }))
+	{
+		WallState = STATE::LEFT_WALL;
+		if (false == UpLeft.CompareInt4D({ 0, 1, 0, 0 }))
+		{
+			WallState = STATE::LEFTUP_SLOPE;
+		}
+		else if (false == DownLeft.CompareInt4D({ 0, 1, 0, 0 }))
+		{
+			WallState = STATE::LEFTDOWN_SLOPE;
+		}
+		return;
+	}
+
+	// 오른쪽 벽 또는 오른쪽 경사
+	if (Velocity.x > 0 && Right.CompareInt4D({ 0, 1, 0, 0 }))
+	{
+d		WallState = STATE::RIGHT_WALL;
+
+		if (false == UpRight.CompareInt4D({ 0, 1, 0, 0 }))
+		{
+			WallState = STATE::RIGHTUP_SLOPE;
+		}
+		else if (false == DownRight.CompareInt4D({ 0, 1, 0, 0 }))
+		{
+			WallState = STATE::RIGHTDOWN_SLOPE;
+		}
+		return;
+	}
+
+	// 특수(땅 통과, 다음 스테이지 넘어가기, 위 벽)
+	if (Down.CompareInt4D({ 0, 0, 1, 0 }))
+	{
+		WallState = STATE::DOWN_PASS;
+		return;
+	}
+
+	if (Right.CompareInt4D({ 0, 0, 1, 0 })
+		&& UpRight.CompareInt4D({ 0, 0, 1, 0 })
+		&& DownRight.CompareInt4D({ 0, 0, 1, 0 }) 
+		)
+	{
+		WallState = STATE::RIGHT_PASS;
+		return;
 	}
 
 	if (Up.CompareInt4D({ 0, 1, 0, 0 }))
 	{
 		WallState = STATE::UP_WALL;
-		GetTransform().SetWorldMove({ 0, -1, 0, 0 });
-	}
-
-	if (Left.CompareInt4D({ 0, 1, 0, 0 }))
-	{
-		WallState = STATE::LEFT_WALL;
-		GetTransform().SetWorldMove({ 1, 0, 0, 0 });
-		if (false == UpLeft.CompareInt4D({ 0, 1, 0, 0 }))
-		{
-			GetTransform().SetWorldMove({ 0, 1, 0, 0 });
-		}
-		else if (false == DownLeft.CompareInt4D({ 0, 1, 0, 0 }))
-		{
-			GetTransform().SetWorldMove({ 0, -1, 0, 0 });
-		}
-	}
-
-	// 오른쪽 벽 또는 오른쪽 경사
-	if (Right.CompareInt4D({ 0, 1, 0, 0 }))
-	{
-		WallState = STATE::RIGHT_WALL;
-		GetTransform().SetWorldMove({ -1, 0, 0, 0 });
-		if (false == UpRight.CompareInt4D({ 0, 1, 0, 0 }))
-		{
-			GetTransform().SetWorldMove({ 0, 1, 0, 0 });
-		}
-		else if (false == DownRight.CompareInt4D({ 0, 1, 0, 0 }))
-		{
-			GetTransform().SetWorldMove({ 0, -1, 0, 0 });
-		}
-	}
-
-	// 특수(땅 통과, 다음 스테이지 넘어가기)
-	if (Down.CompareInt4D({ 0, 0, 1, 0 }))
-	{
-		WallState = STATE::DOWN_PASS;
-		GetTransform().SetWorldMove({ 0, 1, 0, 0 });
-	}
-
-	if (Right.CompareInt4D({ 0, 0, 1, 0 }))
-	{
-		WallState = STATE::RIGHT_PASS;
 	}
 }
 
-void LiveActor::FallCheck(float _DeltaTime)
+// 중력 적용/미적용 후 속도(속력 * 방향) 측정
+void LiveActor::VelocityCheck(float _DeltaTime)
 {
 	Velocity = MoveDir * _DeltaTime * MoveSpeed;
-	if (false == Down.CompareInt4D({ 0, 1, 0, 0 }) 
-		&& false == DownRight.CompareInt4D({ 0, 1, 0, 0 })
-		&& false == DownLeft.CompareInt4D({ 0, 1, 0, 0 })
-		)
+
+	switch (WallState)
 	{
-		Velocity.y += Velocity.y - 9.8f * _DeltaTime * 40;
+	case LiveActor::STATE::NOWALL:
+
+		Velocity.y = Velocity.y - 270.0f * _DeltaTime;
+		break;
+	case LiveActor::STATE::UP_WALL:
+		Velocity.y += -1;
+		break;
+	case LiveActor::STATE::RIGHT_WALL:
+		Velocity.x += -1;
+		break;
+	case LiveActor::STATE::RIGHT_PASS:
+		break;
+	case LiveActor::STATE::LEFT_WALL:
+		Velocity.x += 1;
+		break;
+	case LiveActor::STATE::DOWN_WALL:
+		break;
+	case LiveActor::STATE::DOWN_GROUND:
+		Velocity.y += 1;
+		break;
+	case LiveActor::STATE::DOWN_PASS:
+		break;
+	case LiveActor::STATE::RIGHTUP_SLOPE:
+		break;
+	case LiveActor::STATE::RIGHTDOWN_SLOPE:
+		Velocity.y += -1;
+		break;
+	case LiveActor::STATE::LEFTUP_SLOPE:
+		break;
+	case LiveActor::STATE::LEFTDOWN_SLOPE:
+		Velocity.x = -1;
+		Velocity.y = -1;
+		break;
+	default:
+		break;
 	}
+
 
 }
 

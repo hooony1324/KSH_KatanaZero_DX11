@@ -3,7 +3,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineBase/GameEngineSound.h>
 
-const float SPEED_PLAYER = 400.0f;
+const float SPEED_PLAYER = 500.0f;
 
 enum class STATE_PLAYER
 {

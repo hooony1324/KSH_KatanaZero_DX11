@@ -27,7 +27,7 @@ protected:
 // ·ë
 private:
 	void RoomChange(Room* _Room);
-	void CameraFollow();
+	void CameraFollow(float _DeltaTime);
 
 private:
 	Room* CurRoom;

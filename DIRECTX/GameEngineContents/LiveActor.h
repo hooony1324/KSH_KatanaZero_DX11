@@ -18,28 +18,39 @@ public:
 protected:
 	enum class STATE
 	{
+		NOWALL, // 공중
 		UP_WALL,
 		RIGHT_WALL,
 		RIGHT_PASS, // 다음 스테이지 포탈
 		LEFT_WALL,
-		DOWN_WALL,
+		DOWN_WALL, // 지면(중력X)
+		DOWN_GROUND, // 땅에 박힘
 		DOWN_PASS, // 통과 가능
+
+		RIGHTUP_SLOPE,
+		RIGHTDOWN_SLOPE,
+		LEFTUP_SLOPE,
+		LEFTDOWN_SLOPE,
+
 	};
 
 	STATE WallState;
 
 protected:
 	void PixelCheck();
-	void FallCheck(float _DeltaTime);
+	void VelocityCheck(float _DeltaTime);
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
-	float4 MoveDir;	// 방향
+	float InitSpeed;
 	float MoveSpeed; // 속력
+	float4 MoveDir;	// 방향
 	float4 Velocity; // 속도
+	float SumDeltaTime;
 
-	float4 Up;
 	float4 Down;
+	float4 DoubleDown;
+	float4 Up;
 	float4 Left;
 	float4 Right;
 	float4 UpRight;

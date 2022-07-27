@@ -35,7 +35,7 @@ protected:
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 
-	float4 PlayerSpawnPos;
+	float4 PlayerSpawnPos; // 룸 마다 꼭 설정해주어야 함
 private:
 
 };

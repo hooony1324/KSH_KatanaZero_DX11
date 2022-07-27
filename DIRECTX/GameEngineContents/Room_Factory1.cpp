@@ -26,11 +26,13 @@ void Room_Factory1::Start()
 	Background_Collision->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_Collision->Off();
 
+
+	// 스폰위치, 지형지물 등
 	PtrDoor = GetLevel()->CreateActor<Door>();
 	PtrDoor->GetTransform().SetWorldPosition({ -330, 72, GetDepth(ACTOR_DEPTH::DOOR) });
 	PtrDoor->Off();
 
-	PlayerSpawnPos = float4{ 40, -560, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 226, -540, GetDepth(ACTOR_DEPTH::PLAYER) };
 }
 
 void Room_Factory1::Setting()
