@@ -24,6 +24,7 @@ void Door::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_door_animation_0.png");
+	Renderer->SetSamplingModePoint();
 	Renderer->ScaleToTexture();
 	Renderer->GetTransform().PixLocalNegativeX();
 	Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "door_idle", 0.1f, true });

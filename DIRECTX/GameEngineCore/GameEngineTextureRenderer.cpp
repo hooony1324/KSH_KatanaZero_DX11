@@ -115,12 +115,12 @@ void GameEngineTextureRenderer::Start()
 
 void GameEngineTextureRenderer::SetSamplingModePoint()
 {
-	ShaderResources.SetSampler("Smp", "EngineSamplerPoint");
+	ShaderResources.SetSampler("SAM", "EngineSamplerPoint");
 }
 
 void GameEngineTextureRenderer::SetSamplingModeLiner()
 {
-	ShaderResources.SetSampler("Smp", "EngineSamplerLinear");
+	ShaderResources.SetSampler("SAM", "EngineSamplerLinear");
 }
 
 void GameEngineTextureRenderer::SetPivot()
@@ -290,5 +290,5 @@ void GameEngineTextureRenderer::CurAnimationReset()
 
 void GameEngineTextureRenderer::CurAnimationSetStartPivotFrame(int SetFrame)
 {
-	CurAni->Info.CurFrame += CurAni->Info.Start + SetFrame;
+	CurAni->Info.CurFrame = CurAni->Info.Start + SetFrame;
 }

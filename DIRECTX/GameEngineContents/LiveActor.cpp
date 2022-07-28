@@ -2,7 +2,7 @@
 #include "LiveActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-const float FORCE_REACTION = 0.38f;
+const float FORCE_REACTION = 1.0f; // 반작용 강도
 const float4 GREEN = { 0, 1, 0, 0 };
 const float4 BLUE = { 1, 0, 0, 0 };
 
@@ -31,6 +31,8 @@ void LiveActor::PixelCheck()
 	float4 CharacterPos = GetTransform().GetWorldPosition();
 	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 34))
 		.CompareInt4D(GREEN);
+	MiddleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 24))
+		.CompareInt4D(GREEN);
 	Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() + 34))
 		.CompareInt4D(GREEN);
 	Left_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))
@@ -55,6 +57,29 @@ void LiveActor::PixelCheck()
 	{
 		IsFly = false;
 		WallState = STATE::DOWN_WALL;
+		// 땅에 박혔나
+		if (!MiddleDown)
+		{
+			return;
+		}
+
+		if (Left && Right)
+		{
+			WallState = STATE::UNDER_GROUND;
+			return;
+		}
+
+		if (Left_Down && Right)
+		{
+			WallState = STATE::UNDER_RIGHTUP_SLOPE;
+			return;
+		}
+
+		if (Right_Down && Left)
+		{
+			WallState = STATE::UNDER_LEFTUP_SLOPE;
+			return;
+		}
 	}
 	else
 	{
@@ -122,32 +147,39 @@ void LiveActor::VelocityCheck(float _DeltaTime)
 	case LiveActor::STATE::NONE:
 		break;
 	case LiveActor::STATE::UP_WALL:
-		
+		GetTransform().SetWorldMove({ 0, -FORCE_REACTION * 10 , 0 });
 		break;
 	case LiveActor::STATE::RIGHT_WALL:
-		 // 향후 벽타기 하려면 변경
+		GetTransform().SetWorldMove({ -FORCE_REACTION * 2, 0 , 0 });
 		break;
 	case LiveActor::STATE::RIGHT_PASS:
 		break;
 	case LiveActor::STATE::LEFT_WALL:
-		
+		GetTransform().SetWorldMove({ FORCE_REACTION * 2, 0 , 0 });
 		break;
 	case LiveActor::STATE::DOWN_WALL:
-		GetTransform().SetWorldMove({ 0, 1 , 0});
+		GetTransform().SetWorldMove({ 0, FORCE_REACTION , 0});
 		break;
-	case LiveActor::STATE::DOWN_GROUND:
+	case LiveActor::STATE::UNDER_GROUND:
+		GetTransform().SetWorldMove({ 0, FORCE_REACTION * 10.0f , 0 });
 		break;
 	case LiveActor::STATE::RIGHTUP_SLOPE:
-		GetTransform().SetWorldMove({ 0, 1 , 0});
+		GetTransform().SetWorldMove({ 0, FORCE_REACTION , 0});
 		break;
 	case LiveActor::STATE::RIGHTDOWN_SLOPE:
-
+		GetTransform().SetWorldMove({ 0, -FORCE_REACTION , 0 });
 		break;
 	case LiveActor::STATE::LEFTUP_SLOPE:
-
+		GetTransform().SetWorldMove({ 0, FORCE_REACTION , 0 });
 		break;
 	case LiveActor::STATE::LEFTDOWN_SLOPE:
-		GetTransform().SetWorldMove({ 0, -1 , 0});
+		GetTransform().SetWorldMove({ 0, -FORCE_REACTION , 0});
+		break;
+	case LiveActor::STATE::UNDER_LEFTUP_SLOPE:
+		GetTransform().SetWorldMove({ 0.7f, 0.7f , 0 });
+		break;
+	case LiveActor::STATE::UNDER_RIGHTUP_SLOPE:
+		GetTransform().SetWorldMove({ -0.7f, 0.7f , 0 });
 		break;
 	default:
 		break;
@@ -159,7 +191,6 @@ void LiveActor::VelocityCheck(float _DeltaTime)
 	{
 		Velocity.y = Velocity.y - 270.0f * _DeltaTime;
 	}
-
 
 	GameEngineDebug::OutPutString(std::to_string((int)WallState));
 	LookCheck();

@@ -24,7 +24,9 @@ protected:
 		RIGHT_PASS, // 다음 스테이지 포탈
 		LEFT_WALL,
 		DOWN_WALL, // 지면(중력X)
-		DOWN_GROUND, // 땅에 박힘
+		UNDER_GROUND, // 땅에 박힘
+		UNDER_RIGHTUP_SLOPE,
+		UNDER_LEFTUP_SLOPE,
 
 		RIGHTUP_SLOPE,
 		RIGHTDOWN_SLOPE,
@@ -52,6 +54,7 @@ protected:
 
 	bool Up;
 	bool Down;
+	bool MiddleDown;
 	bool DownBlue;
 	bool Left_Up;
 	bool Left_Down;
