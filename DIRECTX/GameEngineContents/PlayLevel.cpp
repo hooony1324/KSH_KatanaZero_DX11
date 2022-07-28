@@ -64,12 +64,15 @@ void PlayLevel::Update(float _DeltaTime)
 		}	
 	}
 
+	CurRoom;
+	Player;
+
+
 	// 프리카메라
 	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
 	{
 		GetMainCameraActor()->FreeCameraModeOnOff();
 	}
-
 
 	CameraFollow(_DeltaTime);
 

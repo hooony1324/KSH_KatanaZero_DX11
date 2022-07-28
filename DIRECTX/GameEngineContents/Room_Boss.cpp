@@ -16,13 +16,13 @@ void Room_Boss::Start()
 	//Background = CreateComponent<GameEngineTextureRenderer>();
 	Background->SetTexture("spr_psychboss_background_0.png");
 	Background->GetTransform().SetLocalScale({ 1280, 720 });
-	Background->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
+	Background->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
 	Background->Off();
 
 	Background_Collision->SetTexture("room_factory_3_colmap.png");
 	Background_Collision->ScaleToTexture();
 	Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
-	Background_Collision->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+	Background_Collision->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_Collision->Off();
 
 	// 스폰위치, 지형지물 등

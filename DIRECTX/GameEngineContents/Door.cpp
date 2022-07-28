@@ -32,6 +32,7 @@ void Door::Start()
 
 	// -330, 72
 	GetTransform().SetLocalScale({ 2.0f, 2.0f, 1 });
+	GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::DOOR) });
 
 }
 

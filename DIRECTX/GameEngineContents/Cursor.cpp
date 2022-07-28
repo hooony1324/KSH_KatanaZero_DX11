@@ -28,6 +28,10 @@ void Cursor::Update(float _DeltaTime)
 	Position = GetLevel()->GetMainCamera()->GetMouseWorldPositionToActor();
 	PositionToActor = GetLevel()->GetMainCamera()->GetMouseWorldPosition();
 	GetTransform().SetWorldPosition({ Position.x, Position.y, GetDepth(ACTOR_DEPTH::CURSOR) });
+
+	float4 Pos = GetTransform().GetWorldPosition();
+	std::string Output = std::to_string(Pos.x) + " / " + std::to_string(Pos.y) + " / " + std::to_string(Pos.z);
+	GameEngineDebug::OutPutString(Output);
 }
 
 void Cursor::End()

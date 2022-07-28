@@ -25,9 +25,8 @@ void PlayerZero::Start()
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
 
 	// DEPTH
-	Renderer_Character->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
-	Renderer_Slash->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::FX) });
-	GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
+	//Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
+	Renderer_Slash->GetTransform().SetLocalPosition({ 0, 0, -5 });
 
 	CreateAllAnimation();
 

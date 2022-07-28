@@ -17,22 +17,22 @@ void Room_Factory1::Start()
 	Background->SetTexture("room_factory_2.png");
 	Background->ScaleToTexture();
 	Background->SetPivot(PIVOTMODE::LEFTTOP);
-	Background->GetTransform().SetWorldMove({0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
+	Background->GetTransform().SetLocalMove({0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
 	Background->Off();
 
 	Background_Collision->SetTexture("room_factory_2_colmap.png");
 	Background_Collision->ScaleToTexture();
 	Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
-	Background_Collision->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+	Background_Collision->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_Collision->Off();
 
 
 	// 스폰위치, 지형지물 등
 	PtrDoor = GetLevel()->CreateActor<Door>();
-	PtrDoor->GetTransform().SetWorldPosition({ -330, 72, GetDepth(ACTOR_DEPTH::DOOR) });
+	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 	PtrDoor->Off();
 
-	PlayerSpawnPos = float4{ 226, -500, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 220, -500, GetDepth(ACTOR_DEPTH::PLAYER) };
 }
 
 void Room_Factory1::Setting()
