@@ -14,22 +14,18 @@ TitlePlate::~TitlePlate()
 
 void TitlePlate::Start()
 {
-	Background = CreateComponent<GameEngineDefaultRenderer>();
-	Background->GetTransform().SetLocalScale({ 1280, 1440, 0 });
-	Background->SetPipeLine("color");
-	Background->ShaderResources.SetConstantBufferLink("RESULTCOLOR", Color_Background);
-	Color_Background.r = 0;
-	Color_Background.g = 0;
-	Color_Background.b = 0;
-	Color_Background.w = 1.0f;
-	Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::PLATE) });
+	Background = CreateComponent<GameEngineTextureRenderer>();
+	Background->SetTexture("spr_title_background_black.png");
+	Background->GetTransform().SetLocalScale({ 1280, 1440, 1 });
+	Background->GetTransform().SetLocalPosition({0, 0, 10});
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_title_background_0.png");
-	Renderer->GetTransform().SetLocalScale({ 1280, 1440, 0 });
-	Renderer->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::PLATE) - 1});
+	Renderer->GetTransform().SetLocalScale({ 1280, 1440, 1 });
+	Renderer->GetTransform().SetLocalPosition({ 0, 0, -1});
 
-	LerpStart({ 0, 100 }, { 0, 300 }, 0.3f);
+	float Depth = static_cast<float>(TITLE_DEPTH::PLATE);
+	LerpStart({ 0, 100, Depth }, { 0, 300, Depth }, 0.3f);
 }
 
 void TitlePlate::Update(float _DeltaTime)

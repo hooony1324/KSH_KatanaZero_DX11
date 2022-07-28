@@ -8,7 +8,7 @@
 #include "Room_Factory2.h"
 #include "Room_Boss.h"
 #include "Cursor.h"
-
+#include "UIManager.h"
 
 
 PlayLevel::PlayLevel() 
@@ -37,6 +37,9 @@ void PlayLevel::Start()
 	// Cursor
 	Cursor* Mouse = CreateActor<Cursor>();
 	Mouse->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CURSOR) });
+
+	// UI
+	UIManager* UI = CreateActor<UIManager>();
 }
 
 void PlayLevel::OnEvent()
@@ -46,7 +49,7 @@ void PlayLevel::OnEvent()
 
 void PlayLevel::Update(float _DeltaTime)
 {
-	//// 룸 변경 디버그용
+	// 룸 변경
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
 		{
@@ -64,16 +67,11 @@ void PlayLevel::Update(float _DeltaTime)
 		}	
 	}
 
-	CurRoom;
-	Player;
-
-
 	// 프리카메라
 	if (true == GameEngineInput::GetInst()->IsDown("Numpad0"))
 	{
 		GetMainCameraActor()->FreeCameraModeOnOff();
 	}
-
 	CameraFollow(_DeltaTime);
 
 	// 충돌 맵 OnOff

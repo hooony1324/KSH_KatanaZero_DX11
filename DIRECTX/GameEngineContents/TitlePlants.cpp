@@ -20,12 +20,12 @@ void TitlePlants::Start()
 	Renderer->CreateFrameAnimationFolder("title_plants", FrameAnimation_DESC{ "title_plants", 0.1f });
 	Renderer->ChangeFrameAnimation("title_plants");
 	
-	GetTransform().SetLocalPosition({ 0, -1000 });
-	Renderer->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::PLANTS) });
-
+	//Renderer->GetTransform().SetLocalPosition({ 0, -1000 });
+	//Renderer->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::PLANTS) });
 
 	// Lerp
-	LerpStart({ 0, -1000}, { 0, 0}, 0.8f);
+	float Depth = static_cast<float>(TITLE_DEPTH::PLANTS);
+	LerpStart({ 0, -1000, Depth }, { 0, 0, Depth }, 0.8f);
 
 }
 

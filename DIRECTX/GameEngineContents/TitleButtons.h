@@ -33,12 +33,9 @@ private:
 	void CheckInput();
 
 private:
-	GameEngineDefaultRenderer* Renderer_Background;
+	GameEngineTextureRenderer* Renderer_Background;
 	GameEngineTextureRenderer* Renderer_Buttons;
-	GameEngineDefaultRenderer* Renderer_Selector;
-
-	float4 Color_Background;
-	float4 Color_Selector;
+	GameEngineTextureRenderer* Renderer_Selector;
 
 	// Selector
 	std::vector<float4> ButtonsPos;

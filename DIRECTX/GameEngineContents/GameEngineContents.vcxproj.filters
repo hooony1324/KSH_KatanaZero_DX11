@@ -124,6 +124,9 @@
     <ClInclude Include="Door.h">
       <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -204,6 +207,9 @@
     </ClCompile>
     <ClCompile Include="Door.cpp">
       <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

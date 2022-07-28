@@ -24,6 +24,5 @@ protected:
 private:
 	// 640 x 120 : spr_title_grass_0
 	GameEngineTextureRenderer* Renderer;
-	float4 Color_Shadow;
 };
 

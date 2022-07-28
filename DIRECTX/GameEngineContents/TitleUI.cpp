@@ -13,7 +13,6 @@ void TitleUI::LerpUpdate(float _DeltaTime)
 {
 
 	float4 Pos = float4::LerpLimit(Lerp_Start, Lerp_Dest, SumDeltaTime);
-	Pos.z = Lerp_Start.z;
 	GetTransform().SetWorldPosition(Pos);
 
 	// 부드러운 Lerp

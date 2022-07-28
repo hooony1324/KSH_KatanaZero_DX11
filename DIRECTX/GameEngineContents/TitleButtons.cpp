@@ -4,7 +4,7 @@
 
 #include <GameEngineBase/GameEngineWindow.h>
 
-const float LERPIN_DIST = 800.0f;
+
 
 TitleButtons::TitleButtons() 
 	: Renderer_Background(nullptr)
@@ -19,31 +19,28 @@ TitleButtons::~TitleButtons()
 
 void TitleButtons::Start()
 {
-	Renderer_Background = CreateComponent<GameEngineDefaultRenderer>();
-	Renderer_Background->GetTransform().SetLocalScale({ 530, 227 });
-	Renderer_Background->SetPipeLine("Color");
-	Color_Background = float4{ 0, 0, 0, 0.5f };
-	Renderer_Background->ShaderResources.SetConstantBufferLink("ResultColor", Color_Background);
-	Renderer_Background->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::BUTTONS) });
+	Renderer_Background = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Background->SetTexture("spr_title_background_black_alpha.png");
+	Renderer_Background->GetTransform().SetLocalScale({ 530, 227, 1, 0.2f });
+	Renderer_Background->GetTransform().SetLocalPosition({ 0, 0, 0 });
 
 	Renderer_Buttons = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Buttons->SetTexture("TitleButtons.png");
 	Renderer_Buttons->ScaleToTexture();
-	Renderer_Buttons->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::BUTTONS) - 1 });
+	Renderer_Buttons->GetTransform().SetLocalPosition({ 0, 0, -1 });
 
 	// Selector
-	Renderer_Selector = CreateComponent<GameEngineDefaultRenderer>();
-	Renderer_Selector->GetTransform().SetLocalScale({ 510, 42 });
-	Renderer_Selector->SetPipeLine("Color");
-	Color_Selector = float4{ 1, 1, 1, 0.2f };
-	Renderer_Selector->ShaderResources.SetConstantBufferLink("ResultColor", Color_Selector);
-	Renderer_Selector->GetTransform().SetWorldPosition({ 0, 0, static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
+	Renderer_Selector = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Selector->SetTexture("spr_title_background_white.png");
+	Renderer_Selector->GetTransform().SetLocalScale({ 510, 42, 1 });
+	Renderer_Selector->GetTransform().SetLocalPosition({ 0, 0, -2 });
 
-	ButtonsPos.push_back({ 0, -84 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
-	ButtonsPos.push_back({ 0, -44 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
-	ButtonsPos.push_back({ 0, -4 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
-	ButtonsPos.push_back({ 0, 36 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
-	ButtonsPos.push_back({ 0, 76 , static_cast<float>(TITLE_DEPTH::BUTTONS) - 2 });
+	float Depth = static_cast<float>(TITLE_DEPTH::BUTTONS);
+	ButtonsPos.push_back({ 0, -84 , Depth - 2 });
+	ButtonsPos.push_back({ 0, -44 , Depth - 2 });
+	ButtonsPos.push_back({ 0, -4 , Depth - 2 });
+	ButtonsPos.push_back({ 0, 36 , Depth - 2 });
+	ButtonsPos.push_back({ 0, 76 , Depth - 2 });
 	ButtonIndex = 2;
 	Renderer_Selector->GetTransform().SetLocalPosition(ButtonsPos[ButtonIndex]);
 
@@ -51,7 +48,7 @@ void TitleButtons::Start()
 	IsPlayLevelChange = false;
 
 	// Lerp 
-	LerpStart({ 0, -1000 }, { 0, -200 }, 0.9f);
+	LerpStart({ 0, -1000, Depth}, { 0, -200, Depth }, 0.9f);
 
 }
 

@@ -25,8 +25,7 @@ protected:
 
 private:
 	// 640 x 720 : spr_title_background_0
-	GameEngineDefaultRenderer* Background;
-	float4 Color_Background;
+	GameEngineTextureRenderer* Background;
 	GameEngineTextureRenderer* Renderer;
 };
 
