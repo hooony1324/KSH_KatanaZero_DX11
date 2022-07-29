@@ -4,6 +4,8 @@
 #include "Timer.h"
 #include "Cursor.h"
 
+const float4 Gravity = { 0, -9.8f, 0 };
+
 PlayerZero::PlayerZero()
 	: AttackAble(true)
 	, RollAble(true)
@@ -47,26 +49,43 @@ void PlayerZero::Start()
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 	ChangeState(STATE_PLAYER::IDLE);
 
+
 }
 
 void PlayerZero::Update(float _DeltaTime)
 {
+	DeltaTime = _DeltaTime;
+
 	if (true == GetLevel()->GetMainCameraActor()->IsFreeCameraMode())
 	{
 		return;
 	}
 
-	InputCheck();
-	// FallCheck(); ->ChangeState::FALL
-	UpdateState();
-	CoolTimeCheck();
-
 	PixelCheck();
-	VelocityCheck(_DeltaTime);
+	WallCheck();
+	GravityCheck(_DeltaTime);
+	InputCheck();			
+	UpdateState();
+
+	// ÀÌµ¿
+
+
+	if (IsJump)
+	{
+		Velocity = MoveDir * MoveSpeed * _DeltaTime;
+	}
+	else
+	{
+		Velocity = GrabityForce + MoveDir * MoveSpeed * _DeltaTime;
+	}
 	
 	GetTransform().SetWorldMove(Velocity);
+	std::string Output = std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
+	GameEngineDebug::OutPutString(Output);
 
-
+	LookCheck(InputDir.x);
+	CoolTimeCheck();
+	PrintPlayerDebug();
 }
 
 void PlayerZero::End()
@@ -100,8 +119,11 @@ void PlayerZero::InputCheck()
 		InputDir[0] += 1;
 	}
 
+	if (InputDir.y > 0 && !IsFloat)
+	{
+		ChangeState(STATE_PLAYER::JUMP);
+	}
 
-	//MoveDir = InputDir;
 }
 
 void PlayerZero::CoolTimeCheck()

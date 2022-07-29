@@ -40,33 +40,36 @@ protected:
 
 protected:
 	void PixelCheck();
-	void VelocityCheck(float _DeltaTime);
-	void LookCheck();
+	void WallCheck();
+	void GravityCheck(float _DeltaTime);
+	void LookCheck(float _InputOrVelocityDir);
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	float InitSpeed;
 	float MoveSpeed; // 속력
 	float4 MoveDir;	// 방향
+
 	float4 Velocity; // 속도
+	float4 GrabityForce; // 중력 방향
+
 	int CurLookDir;	// 시선
 	int PrevLookDir;
 
 	bool Up;
-	bool Down;
 	bool MiddleDown;
-	bool DownBlue;
+	bool Down;
+	bool DoubleDown;
+	bool DoubleDownBlue;
 	bool Left_Up;
 	bool Left_Down;
 	bool Right_Up;
 	bool Right_Down;
-
 	bool Left;
 	bool Right;
-	
+
+	bool IsFloat; // 공중에 떠있음
 
 private:
-
-
 };
 

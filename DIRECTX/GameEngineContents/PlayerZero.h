@@ -54,12 +54,12 @@ private:
 	void CreateAllAnimation();
 
 private:
-
 	GameEngineTextureRenderer* Renderer_Slash;
 
 
 // 플레이어 정보
 private:
+	void PrintPlayerDebug();
 	void WallPassCheck();
 	void CreateSlash();
 	
@@ -69,8 +69,10 @@ private:
 	float4 MouseDir;
 	float4 InputDir;
 
-
-
+	// 상태
+	float DeltaTime;
+	float JumpDeltaTime;
+	bool IsJump;
 
 	// FSM
 public:

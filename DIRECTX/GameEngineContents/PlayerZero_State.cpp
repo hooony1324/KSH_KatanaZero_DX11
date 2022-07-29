@@ -29,38 +29,64 @@ void PlayerZero::AttackUpdate()
 
 void PlayerZero::FallStart()
 {
-
+	Renderer_Character->ChangeFrameAnimation("fall");
 }
 
 void PlayerZero::FallUpdate()
 {
-	
+
+	if (false == IsFloat)
+	{
+		MoveDir = float4::ZERO;
+		ChangeState(STATE_PLAYER::IDLE);
+	}
 }
 
 void PlayerZero::IdleStart()
 {
+	IsJump = false;
 	Renderer_Character->ChangeFrameAnimation("idle");
 }
 
 void PlayerZero::IdleUpdate()
 {
+	if (IsFloat && !IsJump)
+	{
+		ChangeState(STATE_PLAYER::FALL);
+	}
 
 	if (abs(InputDir.x) > 0)
 	{
-		MoveDir.x = InputDir.x;
 		ChangeState(STATE_PLAYER::IDLETORUN);
 	}
-
 
 }
 
 void PlayerZero::JumpStart()
 {
+	IsJump = true;
+	MoveDir = InputDir;
+	JumpDeltaTime = 0.0f;
+
+
+
 	Renderer_Character->ChangeFrameAnimation("jump");
 }
 
 void PlayerZero::JumpUpdate()
 {
+	MoveDir.x = InputDir.x;
+
+	MoveDir.y = MoveDir.y - ( JumpDeltaTime * JumpDeltaTime / 25);
+
+	JumpDeltaTime += DeltaTime;
+	//포물선 y 성분 0 이면
+	if (MoveDir.y <= 0)
+	{
+		IsJump = false;
+		JumpDeltaTime = 0;
+		ChangeState(STATE_PLAYER::FALL);
+	}
 
 }
 
@@ -91,15 +117,17 @@ void PlayerZero::RollUpdate()
 
 void PlayerZero::RunStart()
 {
+	MoveDir.x = InputDir.x;
 	MoveSpeed = SPEED_PLAYER;
 	Renderer_Character->ChangeFrameAnimation("run");
 }
 
 void PlayerZero::RunUpdate()
 {
+
 	if (InputDir.CompareInt2D(float4::ZERO))
 	{
-		MoveDir = float4::ZERO;
+		MoveDir.x = 0;
 		ChangeState(STATE_PLAYER::RUNTOIDLE);
 	}
 
@@ -174,6 +202,7 @@ void PlayerZero::CreateSlash()
 	MouseDir = MousePos - PlayerPos;
 	MouseDir.z = 0;
 	MouseDir.Normalize();
+	InputDir.x = MouseDir.x;
 	MoveDir = MouseDir;
 
 	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
@@ -197,3 +226,45 @@ void PlayerZero::CreateSlash()
 }
 
 
+
+void PlayerZero::PrintPlayerDebug()
+{
+	switch (PlayerState)
+	{
+	case STATE_PLAYER::NONE:
+		GameEngineDebug::OutPutString("NONE");
+		break;
+	case STATE_PLAYER::ATTACK:
+		GameEngineDebug::OutPutString("ATTACK");
+		break;
+	case STATE_PLAYER::FALL:
+		GameEngineDebug::OutPutString("FALL");
+		break;
+	case STATE_PLAYER::IDLE:
+		GameEngineDebug::OutPutString("IDLE");
+		break;
+	case STATE_PLAYER::JUMP:
+		GameEngineDebug::OutPutString("JUMP");
+		break;
+	case STATE_PLAYER::ROLL:
+		GameEngineDebug::OutPutString("ROLL");
+		break;
+	case STATE_PLAYER::RUN:
+		GameEngineDebug::OutPutString("RUN");
+		break;
+	case STATE_PLAYER::WALLSLIDE:
+		GameEngineDebug::OutPutString("WALLSLIDE");
+		break;
+	case STATE_PLAYER::CROUCH:
+		GameEngineDebug::OutPutString("CROUCH");
+		break;
+	case STATE_PLAYER::RUNTOIDLE:
+		GameEngineDebug::OutPutString("RUNTOIDLE");
+		break;
+	case STATE_PLAYER::IDLETORUN:
+		GameEngineDebug::OutPutString("IDLETORUN");
+		break;
+	default:
+		break;
+	}
+}

@@ -30,180 +30,114 @@ void LiveActor::PixelCheck()
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
 	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 34))
-		.CompareInt4D(GREEN);
+		.CompareInt3D(GREEN);
 	MiddleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 24))
-		.CompareInt4D(GREEN);
+		.CompareInt3D(GREEN);
 	Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() + 34))
-		.CompareInt4D(GREEN);
+		.CompareInt3D(GREEN);
 	Left_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))
-		.CompareInt4D(GREEN);
+		.CompareInt3D(GREEN);
 	Right_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 34))
-		.CompareInt4D(GREEN);
+		.CompareInt3D(GREEN);
 	Right_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
-		.CompareInt4D(GREEN);
+		.CompareInt3D(GREEN);
 	Left_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
-		.CompareInt4D(GREEN);
-	DownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 34))
-		.CompareInt4D(BLUE);
-	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 26))
-		.CompareInt4D(GREEN);
-	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 26))
-		.CompareInt4D(GREEN);
-
-	WallState = STATE::NONE;
-
-	// 바닥 확인 > 점프 확인 > 슬로프 확인, 벽 확인, 윗 벽 
-	if (Down || DownBlue)
-	{
-		IsFly = false;
-		WallState = STATE::DOWN_WALL;
-		// 땅에 박혔나
-		if (!MiddleDown)
-		{
-			return;
-		}
-
-		if (Left && Right)
-		{
-			WallState = STATE::UNDER_GROUND;
-			return;
-		}
-
-		if (Left_Down && Right)
-		{
-			WallState = STATE::UNDER_RIGHTUP_SLOPE;
-			return;
-		}
-
-		if (Right_Down && Left)
-		{
-			WallState = STATE::UNDER_LEFTUP_SLOPE;
-			return;
-		}
-	}
-	else
-	{
-		IsFly = true;
-		if (Up)
-		{
-			WallState = STATE::UP_WALL;
-			return;
-		}
-	}
-
-
-	// 시선 우
-	if (CurLookDir > 0)
-	{
-		if (Right && Right_Up && Right_Down)
-		{
-			WallState = STATE::RIGHT_WALL;
-			return;
-		}
-		
-		if (Right_Down && Right && !Right_Up && !DownBlue)
-		{
-			WallState = STATE::RIGHTUP_SLOPE;
-			return;
-		}
-
-		if (Left_Down && !Down && !Right_Down && !Right && !DownBlue)
-		{
-			WallState = STATE::RIGHTDOWN_SLOPE;
-			return;
-		}
-		
-	}
-	// 시선 좌
-	else
-	{
-		if (Left && Left_Up && Left_Down)
-		{
-			WallState = STATE::LEFT_WALL;
-			return;
-		}
-
-		if (Left_Down && Left && !Left_Up && !DownBlue)
-		{
-			WallState = STATE::LEFTUP_SLOPE;
-			return;
-		}
-
-		if (Right_Down && !Down && !Left_Down && !Left && !DownBlue)
-		{
-			WallState = STATE::LEFTDOWN_SLOPE;
-			return;
-		}
-	}
-
+		.CompareInt3D(GREEN);
+	DoubleDownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
+		.CompareInt3D(BLUE);
+	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 0))
+		.CompareInt3D(GREEN);
+	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 0))
+		.CompareInt3D(GREEN);
+	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
+		.CompareInt3D(GREEN);
 
 }
 
-// 중력 적용/미적용 후 속도(속력 * 방향) 측정
-void LiveActor::VelocityCheck(float _DeltaTime)
+void LiveActor::WallCheck()
 {
-	switch (WallState)
+	// 땅바닥에 박힘
+	if (Down && DoubleDown)
 	{
-	case LiveActor::STATE::NONE:
-		break;
-	case LiveActor::STATE::UP_WALL:
-		GetTransform().SetWorldMove({ 0, -FORCE_REACTION * 10 , 0 });
-		break;
-	case LiveActor::STATE::RIGHT_WALL:
-		GetTransform().SetWorldMove({ -FORCE_REACTION * 2, 0 , 0 });
-		break;
-	case LiveActor::STATE::RIGHT_PASS:
-		break;
-	case LiveActor::STATE::LEFT_WALL:
-		GetTransform().SetWorldMove({ FORCE_REACTION * 2, 0 , 0 });
-		break;
-	case LiveActor::STATE::DOWN_WALL:
-		GetTransform().SetWorldMove({ 0, FORCE_REACTION , 0});
-		break;
-	case LiveActor::STATE::UNDER_GROUND:
-		GetTransform().SetWorldMove({ 0, FORCE_REACTION * 10.0f , 0 });
-		break;
-	case LiveActor::STATE::RIGHTUP_SLOPE:
-		GetTransform().SetWorldMove({ 0, FORCE_REACTION , 0});
-		break;
-	case LiveActor::STATE::RIGHTDOWN_SLOPE:
-		GetTransform().SetWorldMove({ 0, -FORCE_REACTION , 0 });
-		break;
-	case LiveActor::STATE::LEFTUP_SLOPE:
-		GetTransform().SetWorldMove({ 0, FORCE_REACTION , 0 });
-		break;
-	case LiveActor::STATE::LEFTDOWN_SLOPE:
-		GetTransform().SetWorldMove({ 0, -FORCE_REACTION , 0});
-		break;
-	case LiveActor::STATE::UNDER_LEFTUP_SLOPE:
-		GetTransform().SetWorldMove({ 0.7f, 0.7f , 0 });
-		break;
-	case LiveActor::STATE::UNDER_RIGHTUP_SLOPE:
-		GetTransform().SetWorldMove({ -0.7f, 0.7f , 0 });
-		break;
-	default:
-		break;
+		GetTransform().SetWorldMove({ 0, 1, 0 });
+		return;
 	}
 
-	Velocity = MoveDir * _DeltaTime * MoveSpeed;
-
-	if (IsFly)
+	// 공중판정
+	if (!Down && !DoubleDown && !DoubleDownBlue)
 	{
-		Velocity.y = Velocity.y - 270.0f * _DeltaTime;
+		IsFloat = true;
 	}
 
-	GameEngineDebug::OutPutString(std::to_string((int)WallState));
-	LookCheck();
+	// 딱 지면
+	if (!Down && DoubleDown || DoubleDownBlue)
+	{
+		IsFloat = false;
+	}
+
+	// 벽
+	if (Right_Up && Right_Down)
+	{
+		GetTransform().SetWorldMove({ -1, 0, 0 });
+	}
+
+	if (Left_Up && Left_Down)
+	{
+		GetTransform().SetWorldMove({ 1, 0, 0 });
+	}
+
+	// 경사
+	// 오른쪽 볼 때
+	if (Velocity.x > 0)
+	{
+		if (!Left_Down && DoubleDown && Right_Down)
+		{
+			GetTransform().SetWorldMove({ 0, 1, 0 });
+		}
+		else if (Left_Down && DoubleDown && !Right_Down)
+		{
+			GetTransform().SetWorldMove({ 0, -1, 0 });
+		}
+	}
+	else if (Velocity.x < 0)
+	{
+		if (Left_Down && !DoubleDown && !Right_Down)
+		{
+			GetTransform().SetWorldMove({ 0, 1, 0 });
+		}
+		else if (!Left_Down && !DoubleDown && Right_Down)
+		{
+			GetTransform().SetWorldMove({ 0, -1, 0 });
+		}
+	}
+	
+	if (Up)
+	{
+		GetTransform().SetWorldMove({ 0, -2, 0 });
+	}
+
 }
 
-void LiveActor::LookCheck()
+void LiveActor::GravityCheck(float _DeltaTime)
+{
+	if (true == IsFloat)
+	{
+		GrabityForce = float4{ 0, -9.8f, 0, 0 } * _DeltaTime * 25;
+	}
+	else
+	{
+		GrabityForce = float4::ZERO;
+	}
+}
+
+void LiveActor::LookCheck(float _InputOrVelocityDir)
 {
 	// 왼쪽 오른쪽 바라보기
-	if (Velocity.x > 0)
+	if (_InputOrVelocityDir > 0)
 	{
 		CurLookDir = 1;
 	}
-	else if (Velocity.x < 0)
+	else if (_InputOrVelocityDir < 0)
 	{
 		CurLookDir = -1;
 	}
