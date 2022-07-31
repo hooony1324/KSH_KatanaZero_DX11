@@ -59,6 +59,7 @@ private:
 
 // 플레이어 정보
 private:
+	void PlayerMove(float _DeltaTime);
 	void PrintPlayerDebug();
 	void CreateSlash();
 	
@@ -69,9 +70,7 @@ private:
 	float4 InputDir;
 
 	// 상태
-	float DeltaTime;
-	float FloatDeltaTime;
-	float MoveForce;
+	float JumpInput;
 
 	// FSM
 public:

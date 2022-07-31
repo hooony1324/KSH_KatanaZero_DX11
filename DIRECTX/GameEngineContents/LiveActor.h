@@ -41,7 +41,7 @@ protected:
 protected:
 	void PixelCheck();
 	void WallCheck();
-	void GravityCheck(float _DeltaTime);
+	void FloatCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
 
 protected:
@@ -70,7 +70,7 @@ protected:
 
 	bool IsJump;
 	bool IsFall; // 중력 적용해서 떨어짐
-	float FallDeltaTime;
+	float FloatDeltaTime; // 총 공중에 있는 시간만큼 중력 세게 적용
 
 };
 

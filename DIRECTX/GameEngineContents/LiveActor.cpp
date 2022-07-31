@@ -39,9 +39,9 @@ void LiveActor::PixelCheck()
 		.CompareInt3D(GREEN);
 	Right_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 34))
 		.CompareInt3D(GREEN);
-	Right_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
+	Right_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 35))
 		.CompareInt3D(GREEN);
-	Left_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
+	Left_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 35))
 		.CompareInt3D(GREEN);
 	DoubleDownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
 		.CompareInt3D(BLUE);
@@ -70,7 +70,7 @@ void LiveActor::WallCheck()
 	}
 
 	// 딱 지면
-	if (!Down && DoubleDown || DoubleDownBlue)
+	if (!Down && DoubleDown || !Down && DoubleDownBlue)
 	{
 		IsFall = false;
 	}
@@ -86,54 +86,24 @@ void LiveActor::WallCheck()
 		GetTransform().SetWorldMove({ 1, 0, 0 });
 	}
 
-
 	if (Up)
 	{
 		GetTransform().SetWorldMove({ 0, -2, 0 });
 	}
 
-	if (IsJump)
-	{
-		return;
-	}
-
-	// 경사
-	// 오른쪽 볼 때
-	if (Velocity.x > 0)
-	{
-		if (!Left_Down && DoubleDown && Right_Down)
-		{
-			GetTransform().SetWorldMove({ 0, 1, 0 });
-		}
-		else if (Left_Down && DoubleDown && !Right_Down)
-		{
-			GetTransform().SetWorldMove({ 0, -1, 0 });
-		}
-	}
-	else if (Velocity.x < 0)
-	{
-		if (Left_Down && !DoubleDown && !Right_Down)
-		{
-			GetTransform().SetWorldMove({ 0, 1, 0 });
-		}
-		else if (!Left_Down && !DoubleDown && Right_Down)
-		{
-			GetTransform().SetWorldMove({ 0, -1, 0 });
-		}
-	}
 
 
 }
 
-void LiveActor::GravityCheck(float _DeltaTime)
+void LiveActor::FloatCheck(float _DeltaTime)
 {
 	if (true == IsFall)
 	{
-		GrabityForce = float4{ 0, -9.8f, 0, 0 } * _DeltaTime * 25;
+		FloatDeltaTime += _DeltaTime;
 	}
 	else
 	{
-		GrabityForce = float4::ZERO;
+		FloatDeltaTime = 0;
 	}
 }
 

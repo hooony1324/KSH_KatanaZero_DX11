@@ -6,7 +6,7 @@
 
 float FlyAngle;
 float4 FlyVector;
-const float AntiGravity = 5.0f;
+const float AntiGravity = 5.2f;
 
 void PlayerZero::IdleStart(const StateInfo& _Info)
 {
@@ -30,12 +30,14 @@ void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// ¶¥ ¶Õ°í ³»·Á°¡±â
-	if (InputDir.y < 0 && !IsFall && DoubleDownBlue)
+	if (InputDir.y < 0 && DoubleDownBlue)
 	{
-		GetTransform().SetWorldMove({ 0, -2, 0 });
+		GetTransform().SetWorldMove({ 0, -4, 0 });
+		PlayerStateManager.ChangeState("Fall");
+
 	}
 
-	if (true == IsFall)
+	if (true == IsFall && !IsJump)
 	{
 		PlayerStateManager.ChangeState("Fall");
 	}
@@ -50,19 +52,21 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 	
 	// Æ÷¹°¼±
 	MoveVec = InputDir;
-	FloatDeltaTime = 0;
-	FlyAngle = float4::VectorXYtoDegree({ 0, 0 }, MoveVec);
-	MoveVec.x = static_cast<float>(cosf(FlyAngle * GameEngineMath::DegreeToRadian));
+	MoveSpeed = SPEED_PLAYER;
+	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
+	MoveVec.x = static_cast<float>(cosf(FlyAngle));
 }
 
 void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float Dt = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle * GameEngineMath::DegreeToRadian)) - 9.8f * Dt / AntiGravity;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * Dt / AntiGravity - FloatDeltaTime / 2;
 
-	if (MoveVec.y <= 0.0005f)
+
+	if (true == Attack_AniEnd)
 	{
+		MoveVec.y = 0.0f;
 		Attack_AniEnd = false;
 		Renderer_Slash->Off();
 		PlayerStateManager.ChangeState("Fall");
@@ -72,14 +76,19 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayerZero::FallStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("fall");
-	FlyAngle = float4::VectorXYtoDegree({ 0, 0 }, {1, 0});
+
+	if (abs(MoveVec.x) <= 0.0005f)
+	{
+		MoveVec.x = 0.001f * CurLookDir;
+	}
+	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, { MoveVec.x, MoveVec.y });
 }
 
 void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float Dt = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle * GameEngineMath::DegreeToRadian)) - 9.8f * Dt / AntiGravity;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * Dt / AntiGravity;
 
 
 	if (false == IsFall)
@@ -97,30 +106,32 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayerZero::JumpStart(const StateInfo& _Info)
 {
 	IsJump = true;
+	MoveSpeed = SPEED_PLAYER;
 	Renderer_Character->ChangeFrameAnimation("jump");
-	MoveVec = InputDir;
-	FlyAngle = float4::VectorXYtoDegree({ 0, 0 }, InputDir);
+	MoveVec = InputDir.NormalizeReturn();
+	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
 }
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float Dt = _Info.StateTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle * GameEngineMath::DegreeToRadian)) - 9.8f * Dt / AntiGravity;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * Dt / AntiGravity;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
 
-	if (MoveVec.y <= 0.0005f && IsFall)
+	if (MoveVec.y <= 0)
 	{
 		IsJump = false;
 		PlayerStateManager.ChangeState("Fall");
 	}
 
+	GameEngineDebug::OutPutString(_Info.PrevState);
 }
 
 void PlayerZero::RollStart(const StateInfo& _Info)
 {
 	RollTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("roll");
-	MoveSpeed = SPEED_PLAYER * 1.5f;
+	MoveSpeed = SPEED_PLAYER * 1.3f;
 }
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -173,6 +184,11 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		PlayerStateManager.ChangeState("RunToIdle");
 	}
 
+	if (IsFall)
+	{
+		PlayerStateManager.ChangeState("Fall");
+	}
+
 }
 
 void PlayerZero::WallSlideStart(const StateInfo& _Info)
@@ -221,6 +237,7 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == IdleRun_AniEnd)
 	{
+		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Run");
 	}
 
@@ -270,9 +287,9 @@ void PlayerZero::PrintPlayerDebug()
 
 	
 
-	std::string Output = "Velocity : " + std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
-	GameEngineDebug::OutPutString(Output);
+	//std::string Output = "Velocity : " + std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
+	//GameEngineDebug::OutPutString(Output);
 
-	std::string Output2 = "MoveDir : " + std::to_string(MoveVec.x) + "/" + std::to_string(MoveVec.y);
-	GameEngineDebug::OutPutString(Output2);
+	//std::string Output2 = "MoveDir : " + std::to_string(MoveVec.x) + "/" + std::to_string(MoveVec.y);
+	//GameEngineDebug::OutPutString(Output2);
 }

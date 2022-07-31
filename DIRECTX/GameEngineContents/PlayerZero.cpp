@@ -39,7 +39,7 @@ void PlayerZero::Start()
 
 	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
-	AttackTimer->Init(0.35f);
+	AttackTimer->Init(0.36f);
 	RollTimer = CreateComponent<Timer>();
 	RollTimer->Init(0.4f);
 
@@ -59,7 +59,10 @@ void PlayerZero::Start()
 
 void PlayerZero::Update(float _DeltaTime)
 {
-	DeltaTime = _DeltaTime;
+	if (_DeltaTime >= 0.1f)
+	{
+		_DeltaTime = 0.1f;
+	}
 
 	// 프리카메라 모드면 움직임 X
 	if (true == GetLevel()->GetMainCameraActor()->IsFreeCameraMode())
@@ -69,13 +72,12 @@ void PlayerZero::Update(float _DeltaTime)
 
 	PixelCheck();
 	WallCheck();
-	InputCheck();			
+	InputCheck();	
 	PlayerStateManager.Update(_DeltaTime);
+	FloatCheck(_DeltaTime);
 
 	// 이동
-	Velocity = MoveVec * MoveSpeed * _DeltaTime;
-	GetTransform().SetWorldMove(Velocity);
-
+	PlayerMove(_DeltaTime);
 
 	LookCheck(InputDir.x);
 	CoolTimeCheck();
@@ -112,6 +114,41 @@ void PlayerZero::InputCheck()
 	{
 		InputDir[0] += 1;
 	}
+}
+
+void PlayerZero::PlayerMove(float _DeltaTime)
+{
+	// 경사면에서
+	if (MoveVec.y <= 0.0005f && !DoubleDownBlue)
+	{
+		if (Velocity.x > 0)
+		{
+			if (!Left_Down && DoubleDown && Right_Down)
+			{
+				GetTransform().SetWorldMove({ 0, 1, 0 });
+			}
+			else if (Left_Down && DoubleDown && !Right_Down)
+			{
+				GetTransform().SetWorldMove({ 0, -1, 0 });
+			}
+		}
+		else if (Velocity.x < 0)
+		{
+			if (Left_Down && !DoubleDown && !Right_Down)
+			{
+				GetTransform().SetWorldMove({ 0, 1, 0 });
+			}
+			else if (!Left_Down && !DoubleDown && Right_Down)
+			{
+				GetTransform().SetWorldMove({ 0, -1, 0 });
+			}
+		}
+
+	}
+
+
+	Velocity = MoveVec * MoveSpeed * _DeltaTime;
+	GetTransform().SetWorldMove(Velocity);
 }
 
 void PlayerZero::CoolTimeCheck()
