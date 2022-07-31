@@ -22,14 +22,10 @@ PlayerZero::~PlayerZero()
 
 void PlayerZero::Start()
 {
-
+	// ·»´õ·¯
 	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
-
-	// DEPTH
-	//Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, GetDepth(ACTOR_DEPTH::PLAYER) });
 	Renderer_Slash->GetTransform().SetLocalPosition({ 0, 0, -5 });
-
 	CreateAllAnimation();
 
 	Renderer_Character->SetTexture("spr_idle_0.png");
@@ -39,6 +35,7 @@ void PlayerZero::Start()
 
 	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
+	GetTransform().SetLocalScale({ 2, 2, 1 });
 
 	// ÄðÅ¸ÀÓ ¼³Á¤
 	AttackTimer = CreateComponent<Timer>();
@@ -46,10 +43,18 @@ void PlayerZero::Start()
 	RollTimer = CreateComponent<Timer>();
 	RollTimer->Init(0.4f);
 
-	GetTransform().SetLocalScale({ 2, 2, 1 });
-	ChangeState(STATE_PLAYER::IDLE);
+	
 
-
+	// PlayerStateManager
+	PlayerStateManager.CreateStateMember("Idle", this, &PlayerZero::IdleUpdate, &PlayerZero::IdleStart);
+	PlayerStateManager.CreateStateMember("Jump", this, &PlayerZero::JumpUpdate, &PlayerZero::JumpStart);
+	PlayerStateManager.CreateStateMember("Fall", this, &PlayerZero::FallUpdate, &PlayerZero::FallStart);
+	PlayerStateManager.CreateStateMember("Attack", this, &PlayerZero::AttackUpdate, &PlayerZero::AttackStart);
+	PlayerStateManager.CreateStateMember("Roll", this, &PlayerZero::RollUpdate, &PlayerZero::RollStart);
+	PlayerStateManager.CreateStateMember("Run", this, &PlayerZero::RunUpdate, &PlayerZero::RunStart);
+	PlayerStateManager.CreateStateMember("RunToIdle", this, &PlayerZero::RunToIdleUpdate, &PlayerZero::RunToIdleStart);
+	PlayerStateManager.CreateStateMember("IdleToRun", this, &PlayerZero::IdleToRunUpdate, &PlayerZero::IdleToRunStart);
+	PlayerStateManager.ChangeState("Idle");
 }
 
 void PlayerZero::Update(float _DeltaTime)
@@ -63,25 +68,22 @@ void PlayerZero::Update(float _DeltaTime)
 
 	PixelCheck();
 	WallCheck();
-	GravityCheck(_DeltaTime);
 	InputCheck();			
-	UpdateState();
+	//UpdateState();
+	PlayerStateManager.Update(_DeltaTime);
 
 	// ÀÌµ¿
-
-
-	if (IsJump)
-	{
-		Velocity = MoveDir * MoveSpeed * _DeltaTime;
-	}
-	else
-	{
-		Velocity = GrabityForce + MoveDir * MoveSpeed * _DeltaTime;
-	}
-	
+	//if (IsJump)
+	//{
+	//	Velocity = MoveDir * MoveSpeed * _DeltaTime;
+	//}
+	//else
+	//{
+	//	Velocity = GrabityForce + MoveDir * MoveSpeed * _DeltaTime;
+	//}	
+	Velocity = MoveDir * MoveSpeed * _DeltaTime;
 	GetTransform().SetWorldMove(Velocity);
-	std::string Output = std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
-	GameEngineDebug::OutPutString(Output);
+
 
 	LookCheck(InputDir.x);
 	CoolTimeCheck();
@@ -98,7 +100,7 @@ void PlayerZero::InputCheck()
 	// CLICK
 	if (GameEngineInput::GetInst()->IsDown("MouseLeft"))
 	{
-		ChangeState(STATE_PLAYER::ATTACK);
+		PlayerStateManager.ChangeState("Attack");
 	}
 
 	// WASD
@@ -119,11 +121,6 @@ void PlayerZero::InputCheck()
 		InputDir[0] += 1;
 	}
 
-	if (InputDir.y > 0 && !IsFloat)
-	{
-		ChangeState(STATE_PLAYER::JUMP);
-	}
-
 }
 
 void PlayerZero::CoolTimeCheck()
@@ -134,99 +131,100 @@ void PlayerZero::CoolTimeCheck()
 
 void PlayerZero::UpdateState()
 {
-	switch (PlayerState)
-	{
-	case STATE_PLAYER::ATTACK:
-		AttackUpdate();
-		break;
-	case STATE_PLAYER::FALL:
-		FallUpdate();
-		break;
-	case STATE_PLAYER::IDLE:
-		IdleUpdate();
-		break;
-	case STATE_PLAYER::JUMP:
-		JumpUpdate();
-		break;
-	case STATE_PLAYER::ROLL:
-		RollUpdate();
-		break;
-	case STATE_PLAYER::RUN:
-		RunUpdate();
-		break;
-	case STATE_PLAYER::WALLSLIDE:
-		WallSlideUpdate();
-		break;
-	case STATE_PLAYER::CROUCH:
-		CrouchUpdate();
-		break;
-	case STATE_PLAYER::IDLETORUN:
-		IdleToRunUpdate();
-		break;
-	case STATE_PLAYER::RUNTOIDLE:
-		RunToIdleUpdate();
-		break;
-	default:
-		break;
-	}
+	//switch (PlayerState)
+	//{
+	//case STATE_PLAYER::ATTACK:
+	//	AttackUpdate();
+	//	break;
+	//case STATE_PLAYER::FALL:
+	//	FallUpdate();
+	//	break;
+	//case STATE_PLAYER::IDLE:
+	//	IdleUpdate();
+	//	break;
+	//case STATE_PLAYER::JUMP:
+	//	JumpUpdate();
+	//	break;
+	//case STATE_PLAYER::ROLL:
+	//	RollUpdate();
+	//	break;
+	//case STATE_PLAYER::RUN:
+	//	RunUpdate();
+	//	break;
+	//case STATE_PLAYER::WALLSLIDE:
+	//	WallSlideUpdate();
+	//	break;
+	//case STATE_PLAYER::CROUCH:
+	//	CrouchUpdate();
+	//	break;
+	//case STATE_PLAYER::IDLETORUN:
+	//	IdleToRunUpdate();
+	//	break;
+	//case STATE_PLAYER::RUNTOIDLE:
+	//	RunToIdleUpdate();
+	//	break;
+	//default:
+	//	break;
+	//}
 
 }
 
 void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
 {
-	if (PlayerState != _PlayerState)
-	{
-		switch (_PlayerState)
-		{
-		case STATE_PLAYER::ATTACK:
-		{
-			if (false == AttackAble)
-			{
-				return;
-			}
-			AttackStart();
-			break;
-		}
-		case STATE_PLAYER::FALL:
-			FallStart();
-			break;
-		case STATE_PLAYER::IDLE:
-			IdleStart();
-			break;
-		case STATE_PLAYER::JUMP:
-			JumpStart();
-			break;
-		case STATE_PLAYER::ROLL:
-		{
-			if (false == RollAble)
-			{
-				return;
-			}
-			RollStart();
-			break;
-		}
-		case STATE_PLAYER::RUN:
-			RunStart();
-			break;
-		case STATE_PLAYER::WALLSLIDE:
-			WallSlideStart();
-			break;
-		case STATE_PLAYER::CROUCH:
-			CrouchStart();
-			break;
-		case STATE_PLAYER::IDLETORUN:
-			IdleToRunStart();
-			break;
-		case STATE_PLAYER::RUNTOIDLE:
-			RunToIdleStart();
-			break;
-		default:
-			break;
-		}
-	}
+	//if (PlayerState != _PlayerState)
+	//{
+	//	switch (_PlayerState)
+	//	{
+	//	case STATE_PLAYER::ATTACK:
+	//	{
+	//		if (false == AttackAble)
+	//		{
+	//			return;
+	//		}
+	//		AttackStart();
+	//		break;
+	//	}
+	//	case STATE_PLAYER::FALL:
+	//		FallStart();
+	//		break;
+	//	case STATE_PLAYER::IDLE:
+	//		IdleStart();
+	//		break;
+	//	case STATE_PLAYER::JUMP:
+	//		JumpStart();
+	//		break;
+	//	case STATE_PLAYER::ROLL:
+	//	{
+	//		if (false == RollAble)
+	//		{
+	//			return;
+	//		}
+	//		RollStart();
+	//		break;
+	//	}
+	//	case STATE_PLAYER::RUN:
+	//		RunStart();
+	//		break;
+	//	case STATE_PLAYER::WALLSLIDE:
+	//		WallSlideStart();
+	//		break;
+	//	case STATE_PLAYER::CROUCH:
+	//		CrouchStart();
+	//		break;
+	//	case STATE_PLAYER::IDLETORUN:
+	//		IdleToRunStart();
+	//		break;
+	//	case STATE_PLAYER::RUNTOIDLE:
+	//		RunToIdleStart();
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
 
-	PlayerState = _PlayerState;
+	//PlayerState = _PlayerState;
 }
+
 
 
 

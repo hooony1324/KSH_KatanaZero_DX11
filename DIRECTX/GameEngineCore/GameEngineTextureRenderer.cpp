@@ -115,12 +115,12 @@ void GameEngineTextureRenderer::Start()
 
 void GameEngineTextureRenderer::SetSamplingModePoint()
 {
-	ShaderResources.SetSampler("SAM", "EngineSamplerPoint");
+	ShaderResources.SetSampler("Smp", "EngineSamplerPoint");
 }
 
 void GameEngineTextureRenderer::SetSamplingModeLiner()
 {
-	ShaderResources.SetSampler("SAM", "EngineSamplerLinear");
+	ShaderResources.SetSampler("Smp", "EngineSamplerLinear");
 }
 
 void GameEngineTextureRenderer::SetPivot()

@@ -218,8 +218,6 @@ bool GameEngineShaderResourcesHelper::IsSampler(const std::string& _Name)
 {
 	std::string Key = GameEngineString::ToUpperReturn(_Name);
 
-	auto val = SamplerSettingMap.find(Key);
-
 	if (SamplerSettingMap.end() != SamplerSettingMap.find(Key))
 	{
 		return true;

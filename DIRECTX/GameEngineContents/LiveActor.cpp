@@ -66,13 +66,13 @@ void LiveActor::WallCheck()
 	// 공중판정
 	if (!Down && !DoubleDown && !DoubleDownBlue)
 	{
-		IsFloat = true;
+		IsFall = true;
 	}
 
 	// 딱 지면
 	if (!Down && DoubleDown || DoubleDownBlue)
 	{
-		IsFloat = false;
+		IsFall = false;
 	}
 
 	// 벽
@@ -84,6 +84,17 @@ void LiveActor::WallCheck()
 	if (Left_Up && Left_Down)
 	{
 		GetTransform().SetWorldMove({ 1, 0, 0 });
+	}
+
+
+	if (Up)
+	{
+		GetTransform().SetWorldMove({ 0, -2, 0 });
+	}
+
+	if (IsJump)
+	{
+		return;
 	}
 
 	// 경사
@@ -110,17 +121,13 @@ void LiveActor::WallCheck()
 			GetTransform().SetWorldMove({ 0, -1, 0 });
 		}
 	}
-	
-	if (Up)
-	{
-		GetTransform().SetWorldMove({ 0, -2, 0 });
-	}
+
 
 }
 
 void LiveActor::GravityCheck(float _DeltaTime)
 {
-	if (true == IsFloat)
+	if (true == IsFall)
 	{
 		GrabityForce = float4{ 0, -9.8f, 0, 0 } * _DeltaTime * 25;
 	}

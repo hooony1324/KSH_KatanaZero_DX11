@@ -60,7 +60,6 @@ private:
 // 플레이어 정보
 private:
 	void PrintPlayerDebug();
-	void WallPassCheck();
 	void CreateSlash();
 	
 private:
@@ -71,48 +70,54 @@ private:
 
 	// 상태
 	float DeltaTime;
+	float FallDeltaTime;
 	float JumpDeltaTime;
-	bool IsJump;
+	float MoveForce;
 
 	// FSM
 public:
 	void UpdateState();
 	void ChangeState(STATE_PLAYER _PlayerState);
 
-	void AttackStart();
-	void AttackUpdate();
+	void IdleOrFall(float _DeltaTime, const StateInfo& _Info);
 
-	void FallStart();
-	void FallUpdate();
+	void AttackStart(const StateInfo& _Info);
+	void AttackUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void IdleStart();
-	void IdleUpdate();
+	void FallStart(const StateInfo& _Info);
+	void FallUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void JumpStart();
-	void JumpUpdate();
+	void IdleStart(const StateInfo& _Info);
+	void IdleUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void RollStart();
-	void RollUpdate();
+	void JumpStart(const StateInfo& _Info);
+	void JumpUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void RunStart();
-	void RunUpdate();
+	void RollStart(const StateInfo& _Info);
+	void RollUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void WallSlideStart();
-	void WallSlideUpdate();
+	void RunStart(const StateInfo& _Info);
+	void RunUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void WallSlideStart(const StateInfo& _Info);
+	void WallSlideUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void RunToIdleStart(const StateInfo& _Info);
+	void RunToIdleUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void IdleToRunStart(const StateInfo& _Info);
+	void IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	void CrouchStart();
 	void CrouchUpdate();
 
-	void RunToIdleStart();
-	void RunToIdleUpdate();
 
-	void IdleToRunStart();
-	void IdleToRunUpdate();
 
 	void InputCheck();
 	void CoolTimeCheck();
 
 private:
+	GameEngineStateManager PlayerStateManager;
 	STATE_PLAYER PlayerState;
 	Timer* AttackTimer;
 	Timer* RollTimer;

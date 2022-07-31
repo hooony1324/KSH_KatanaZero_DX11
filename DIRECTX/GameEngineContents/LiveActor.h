@@ -68,8 +68,9 @@ protected:
 	bool Left;
 	bool Right;
 
-	bool IsFloat; // 공중에 떠있음
+	bool IsJump;
+	bool IsFall; // 중력 적용해서 떨어짐
+	float FallDeltaTime;
 
-private:
 };
 
