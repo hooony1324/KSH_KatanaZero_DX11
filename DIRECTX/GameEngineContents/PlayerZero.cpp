@@ -61,6 +61,7 @@ void PlayerZero::Update(float _DeltaTime)
 {
 	DeltaTime = _DeltaTime;
 
+	// 프리카메라 모드면 움직임 X
 	if (true == GetLevel()->GetMainCameraActor()->IsFreeCameraMode())
 	{
 		return;
@@ -69,19 +70,10 @@ void PlayerZero::Update(float _DeltaTime)
 	PixelCheck();
 	WallCheck();
 	InputCheck();			
-	//UpdateState();
 	PlayerStateManager.Update(_DeltaTime);
 
 	// 이동
-	//if (IsJump)
-	//{
-	//	Velocity = MoveDir * MoveSpeed * _DeltaTime;
-	//}
-	//else
-	//{
-	//	Velocity = GrabityForce + MoveDir * MoveSpeed * _DeltaTime;
-	//}	
-	Velocity = MoveDir * MoveSpeed * _DeltaTime;
+	Velocity = MoveVec * MoveSpeed * _DeltaTime;
 	GetTransform().SetWorldMove(Velocity);
 
 
@@ -98,7 +90,7 @@ void PlayerZero::InputCheck()
 {
 	InputDir = float4::ZERO;
 	// CLICK
-	if (GameEngineInput::GetInst()->IsDown("MouseLeft"))
+	if (GameEngineInput::GetInst()->IsDown("MouseLeft") && AttackAble)
 	{
 		PlayerStateManager.ChangeState("Attack");
 	}
@@ -120,7 +112,6 @@ void PlayerZero::InputCheck()
 	{
 		InputDir[0] += 1;
 	}
-
 }
 
 void PlayerZero::CoolTimeCheck()
@@ -128,104 +119,6 @@ void PlayerZero::CoolTimeCheck()
 	AttackAble = !AttackTimer->IsCoolTime();
 	RollAble = !RollTimer->IsCoolTime();
 }
-
-void PlayerZero::UpdateState()
-{
-	//switch (PlayerState)
-	//{
-	//case STATE_PLAYER::ATTACK:
-	//	AttackUpdate();
-	//	break;
-	//case STATE_PLAYER::FALL:
-	//	FallUpdate();
-	//	break;
-	//case STATE_PLAYER::IDLE:
-	//	IdleUpdate();
-	//	break;
-	//case STATE_PLAYER::JUMP:
-	//	JumpUpdate();
-	//	break;
-	//case STATE_PLAYER::ROLL:
-	//	RollUpdate();
-	//	break;
-	//case STATE_PLAYER::RUN:
-	//	RunUpdate();
-	//	break;
-	//case STATE_PLAYER::WALLSLIDE:
-	//	WallSlideUpdate();
-	//	break;
-	//case STATE_PLAYER::CROUCH:
-	//	CrouchUpdate();
-	//	break;
-	//case STATE_PLAYER::IDLETORUN:
-	//	IdleToRunUpdate();
-	//	break;
-	//case STATE_PLAYER::RUNTOIDLE:
-	//	RunToIdleUpdate();
-	//	break;
-	//default:
-	//	break;
-	//}
-
-}
-
-void PlayerZero::ChangeState(STATE_PLAYER _PlayerState)
-{
-	//if (PlayerState != _PlayerState)
-	//{
-	//	switch (_PlayerState)
-	//	{
-	//	case STATE_PLAYER::ATTACK:
-	//	{
-	//		if (false == AttackAble)
-	//		{
-	//			return;
-	//		}
-	//		AttackStart();
-	//		break;
-	//	}
-	//	case STATE_PLAYER::FALL:
-	//		FallStart();
-	//		break;
-	//	case STATE_PLAYER::IDLE:
-	//		IdleStart();
-	//		break;
-	//	case STATE_PLAYER::JUMP:
-	//		JumpStart();
-	//		break;
-	//	case STATE_PLAYER::ROLL:
-	//	{
-	//		if (false == RollAble)
-	//		{
-	//			return;
-	//		}
-	//		RollStart();
-	//		break;
-	//	}
-	//	case STATE_PLAYER::RUN:
-	//		RunStart();
-	//		break;
-	//	case STATE_PLAYER::WALLSLIDE:
-	//		WallSlideStart();
-	//		break;
-	//	case STATE_PLAYER::CROUCH:
-	//		CrouchStart();
-	//		break;
-	//	case STATE_PLAYER::IDLETORUN:
-	//		IdleToRunStart();
-	//		break;
-	//	case STATE_PLAYER::RUNTOIDLE:
-	//		RunToIdleStart();
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-
-	//PlayerState = _PlayerState;
-}
-
-
 
 
 void PlayerZero::CreateAllAnimation()
@@ -265,7 +158,7 @@ void PlayerZero::CreateAllAnimation()
 	//Renderer_Character->AnimationBindEnd("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = true; });
 
 	// Slash
-	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.09f, false });
+	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.07f, false });
 	Renderer_Slash->Off();
 }
 

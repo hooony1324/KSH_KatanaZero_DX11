@@ -8,7 +8,7 @@ const float4 BLUE = { 1, 0, 0, 0 };
 
 LiveActor::LiveActor() 
 	: Renderer_Character(nullptr)
-	, MoveDir(float4::ZERO)
+	, MoveVec(float4::ZERO)
 	, PrevLookDir(1)
 	, CurLookDir(1)
 {

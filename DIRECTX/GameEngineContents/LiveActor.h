@@ -48,7 +48,7 @@ protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	float InitSpeed;
 	float MoveSpeed; // 속력
-	float4 MoveDir;	// 방향
+	float4 MoveVec;	// 방향
 
 	float4 Velocity; // 속도
 	float4 GrabityForce; // 중력 방향

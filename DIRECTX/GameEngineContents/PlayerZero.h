@@ -3,7 +3,7 @@
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineBase/GameEngineSound.h>
 
-const float SPEED_PLAYER = 500.0f;
+const float SPEED_PLAYER = 400.0f;
 
 enum class STATE_PLAYER
 {
@@ -70,17 +70,11 @@ private:
 
 	// ป๓ลย
 	float DeltaTime;
-	float FallDeltaTime;
-	float JumpDeltaTime;
+	float FloatDeltaTime;
 	float MoveForce;
 
 	// FSM
 public:
-	void UpdateState();
-	void ChangeState(STATE_PLAYER _PlayerState);
-
-	void IdleOrFall(float _DeltaTime, const StateInfo& _Info);
-
 	void AttackStart(const StateInfo& _Info);
 	void AttackUpdate(float _DeltaTime, const StateInfo& _Info);
 
@@ -110,7 +104,6 @@ public:
 
 	void CrouchStart();
 	void CrouchUpdate();
-
 
 
 	void InputCheck();
@@ -179,8 +172,8 @@ private:
 	{
 		if (InputDir.CompareInt2D({ 0, 0 }))
 		{
-			MoveDir = float4::ZERO;
-			ChangeState(STATE_PLAYER::IDLE);
+			MoveVec = float4::ZERO;
+			PlayerStateManager.ChangeState("Idle");
 		}
 	}
 

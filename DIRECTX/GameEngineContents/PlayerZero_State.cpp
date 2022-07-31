@@ -4,8 +4,9 @@
 #include "Cursor.h"
 #include <algorithm>
 
-float JumpAngle;
-float4 JumpVector;
+float FlyAngle;
+float4 FlyVector;
+const float AntiGravity = 5.0f;
 
 void PlayerZero::IdleStart(const StateInfo& _Info)
 {
@@ -15,10 +16,6 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 
 void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true == IsFall)
-	{
-		PlayerStateManager.ChangeState("Fall");
-	}
 
 	// Jump
 	if (InputDir.y > 0 && !IsFall)
@@ -38,6 +35,11 @@ void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 		GetTransform().SetWorldMove({ 0, -2, 0 });
 	}
 
+	if (true == IsFall)
+	{
+		PlayerStateManager.ChangeState("Fall");
+	}
+
 }
 
 void PlayerZero::AttackStart(const StateInfo& _Info)
@@ -45,19 +47,22 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 	CreateSlash();
 	AttackTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("attack");
-	MoveSpeed = 1600.0f;
-
+	
+	// 포물선
+	MoveVec = InputDir;
+	FloatDeltaTime = 0;
+	FlyAngle = float4::VectorXYtoDegree({ 0, 0 }, MoveVec);
+	MoveVec.x = static_cast<float>(cosf(FlyAngle * GameEngineMath::DegreeToRadian));
 }
 
 void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	MoveSpeed *= 0.99f;
+	float Dt = _Info.StateTime;
+	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle * GameEngineMath::DegreeToRadian)) - 9.8f * Dt / AntiGravity;
 
-	if (true == Attack_AniEnd)
+	if (MoveVec.y <= 0.0005f)
 	{
-		MoveSpeed = SPEED_PLAYER;
-		MouseDir = float4::ZERO;
-		MoveDir = float4::ZERO;
 		Attack_AniEnd = false;
 		Renderer_Slash->Off();
 		PlayerStateManager.ChangeState("Fall");
@@ -66,22 +71,20 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayerZero::FallStart(const StateInfo& _Info)
 {
-	FallDeltaTime = 0;
-	MoveDir.y = 0;
 	Renderer_Character->ChangeFrameAnimation("fall");
+	FlyAngle = float4::VectorXYtoDegree({ 0, 0 }, {1, 0});
 }
 
 void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	MoveDir.x = InputDir.x * 0.3f;
-	MoveDir.y = sinf(0)* FallDeltaTime - 0.5f * 9.8f * pow(FallDeltaTime, 2);
-	FallDeltaTime += _DeltaTime;
+	float Dt = _Info.StateTime;
+	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle * GameEngineMath::DegreeToRadian)) - 9.8f * Dt / AntiGravity;
 
 
 	if (false == IsFall)
 	{
-		FallDeltaTime = 0;
-		MoveDir = float4::ZERO;
+		MoveVec = float4::ZERO;
 		Velocity = float4::ZERO;
 		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Idle");
@@ -94,28 +97,19 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayerZero::JumpStart(const StateInfo& _Info)
 {
 	IsJump = true;
-	JumpDeltaTime = 0.0f;
-	MoveForce = std::clamp(GameEngineInput::GetInst()->GetTime("W") * 100, 0.0f, 1.0f);
-	JumpVector = InputDir.NormalizeReturn();
-	JumpVector.y *= MoveForce;
-	JumpAngle = float4::VectorXYtoDegree(float4::ZERO, JumpVector); // W 입력 시간에 따른 점프강도
-	MoveSpeed = 500.0f;
 	Renderer_Character->ChangeFrameAnimation("jump");
+	MoveVec = InputDir;
+	FlyAngle = float4::VectorXYtoDegree({ 0, 0 }, InputDir);
 }
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	MoveDir.x = InputDir.x * 0.3;
-	JumpDeltaTime += DeltaTime;
-	MoveDir.y = sinf(90) - 0.5f * 9.8f * pow(JumpDeltaTime, 2);
+	float Dt = _Info.StateTime;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle * GameEngineMath::DegreeToRadian)) - 9.8f * Dt / AntiGravity;
+	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
 
-	
-	if (MoveDir.y <= 0.005f && IsFall)
+	if (MoveVec.y <= 0.0005f && IsFall)
 	{
-		MoveSpeed = SPEED_PLAYER;
-		JumpDeltaTime = 0;
-		MoveForce = 0;
-		MoveDir.y = 0;
 		IsJump = false;
 		PlayerStateManager.ChangeState("Fall");
 	}
@@ -136,7 +130,7 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 		Roll_AniEnd = false;
 		MoveSpeed = SPEED_PLAYER;
 
-		if (abs(MoveDir.x) > 0)
+		if (abs(MoveVec.x) > 0)
 		{
 			PlayerStateManager.ChangeState("Run");
 		}
@@ -149,7 +143,7 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayerZero::RunStart(const StateInfo& _Info)
 {
-	MoveDir.x = InputDir.x;
+	MoveVec.x = InputDir.x;
 	MoveSpeed = SPEED_PLAYER;
 	Renderer_Character->ChangeFrameAnimation("run");
 }
@@ -162,7 +156,7 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 중간 방향전환
-	if (InputDir.x * MoveDir.x < 0)
+	if (InputDir.x * MoveVec.x < 0)
 	{
 		PlayerStateManager.ChangeState("IdleToRun");
 	}
@@ -175,7 +169,7 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (InputDir.CompareInt2D(float4::ZERO))
 	{
-		MoveDir.x = 0;
+		MoveVec.x = 0;
 		PlayerStateManager.ChangeState("RunToIdle");
 	}
 
@@ -232,6 +226,7 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (InputDir.y > 0)
 	{
+		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Jump");
 	}
 }
@@ -250,8 +245,7 @@ void PlayerZero::CreateSlash()
 	MouseDir = MousePos - PlayerPos;
 	MouseDir.z = 0;
 	MouseDir.Normalize();
-	InputDir.x = MouseDir.x;
-	MoveDir = MouseDir;
+	InputDir = MouseDir;
 
 	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
 	Renderer_Slash->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
@@ -273,12 +267,12 @@ void PlayerZero::CreateSlash()
 
 void PlayerZero::PrintPlayerDebug()
 {
-	std::string State = PlayerStateManager.GetPrevState();
-	GameEngineDebug::OutPutString(State);
+
+	
 
 	std::string Output = "Velocity : " + std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
 	GameEngineDebug::OutPutString(Output);
 
-	std::string Output2 = "MoveDir : " + std::to_string(MoveDir.x) + "/" + std::to_string(MoveDir.y);
+	std::string Output2 = "MoveDir : " + std::to_string(MoveVec.x) + "/" + std::to_string(MoveVec.y);
 	GameEngineDebug::OutPutString(Output2);
 }
