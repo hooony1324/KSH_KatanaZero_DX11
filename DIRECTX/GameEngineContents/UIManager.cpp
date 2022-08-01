@@ -16,7 +16,7 @@ void UIManager::Start()
 	GameEngineUIRenderer* TimerUI = CreateComponent<GameEngineUIRenderer>();
 	TimerUI->SetTexture("spr_hud_timer_1.png");
 	TimerUI->ScaleToTexture();
-	TimerUI->GetTransform().SetLocalPosition({ 0, 700, GetDepth(ACTOR_DEPTH::UI) });
+	TimerUI->GetTransform().SetLocalPosition({ 0, 350, GetDepth(ACTOR_DEPTH::UI)});
 
 }
 

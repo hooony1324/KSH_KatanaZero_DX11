@@ -15,6 +15,11 @@ public:
 	LiveActor& operator=(const LiveActor& _Other) = delete;
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
+	inline bool IsRoomChangeAvailable()
+	{
+		return Right_UpBlue && Right_DownBlue;
+	}
+
 protected:
 	enum class STATE_WALL
 	{
@@ -28,6 +33,7 @@ protected:
 		RIGHTSLOPE,
 		LEFTSLOPE,
 
+		RIGHTPORTAL,
 	};
 
 	STATE_WALL WallState;
@@ -58,8 +64,10 @@ protected:
 	bool DoubleDownBlue;
 	bool Left_Up;
 	bool Left_Down;
+	bool Right_UpBlue;
 	bool Right_Up;
 	bool Right_Down;
+	bool Right_DownBlue;
 	bool Left;
 	bool Right;
 

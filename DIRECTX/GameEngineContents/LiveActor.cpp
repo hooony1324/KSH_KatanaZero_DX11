@@ -3,8 +3,8 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 const float FORCE_REACTION = 1.0f; // 반작용 강도
-const float4 GREEN = { 0, 1, 0, 1 };
-const float4 BLUE = { 1, 0, 0, 1 };
+const float4 GREEN = { 0, 1, 0, 0 };
+const float4 BLUE = { 1, 0, 0, 0 };
 
 LiveActor::LiveActor() 
 	: Renderer_Character(nullptr)
@@ -31,8 +31,6 @@ void LiveActor::PixelCheck()
 	float4 CharacterPos = GetTransform().GetWorldPosition();
 	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 34))
 		.CompareInt3D(GREEN);
-	MiddleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 24))
-		.CompareInt3D(GREEN);
 	Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() + 34))
 		.CompareInt3D(GREEN);
 	Left_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))
@@ -51,7 +49,10 @@ void LiveActor::PixelCheck()
 		.CompareInt3D(GREEN);
 	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
 		.CompareInt3D(GREEN);
-
+	Right_UpBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 20))
+		.CompareInt3D(BLUE);
+	Right_DownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 20))
+		.CompareInt3D(BLUE);
 }
 
 void LiveActor::WallCheck()

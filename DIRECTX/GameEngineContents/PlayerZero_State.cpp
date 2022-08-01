@@ -77,6 +77,7 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Slash->Off();
 		PlayerStateManager.ChangeState("Fall");
 	}
+
 }
 
 void PlayerZero::FallStart(const StateInfo& _Info)
@@ -85,7 +86,7 @@ void PlayerZero::FallStart(const StateInfo& _Info)
 
 	if (abs(MoveVec.x) <= 0.0005f)
 	{
-		MoveVec.x = 0.001f * CurLookDir;
+		MoveVec.x = 0.02f * CurLookDir;
 	}
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, { MoveVec.x, MoveVec.y });
 }
@@ -130,7 +131,7 @@ void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 		PlayerStateManager.ChangeState("Fall");
 	}
 
-	GameEngineDebug::OutPutString(_Info.PrevState);
+	
 }
 
 void PlayerZero::RollStart(const StateInfo& _Info)
@@ -199,8 +200,19 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
+void PlayerZero::WallGrabStart(const StateInfo& _Info)
+{
+	// MoveVec 이 음수면 잠깐 멈추고
+	// MoveVec 이 양수면 조금 올라간다
+}
+
+void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+}
+
 void PlayerZero::WallSlideStart(const StateInfo& _Info)
 {
+	
 }
 
 void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)

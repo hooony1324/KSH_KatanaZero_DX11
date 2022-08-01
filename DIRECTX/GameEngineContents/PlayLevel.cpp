@@ -47,7 +47,7 @@ void PlayLevel::OnEvent()
 
 void PlayLevel::Update(float _DeltaTime)
 {
-	// ·ë º¯°æ
+	// ·ë º¯°æ(µð¹ö±×)
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
 		{
@@ -78,6 +78,10 @@ void PlayLevel::Update(float _DeltaTime)
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
 
+	if (Player->IsRoomChangeAvailable())
+	{
+		RoomChange(Room2);
+	}
 }
 
 void PlayLevel::End()

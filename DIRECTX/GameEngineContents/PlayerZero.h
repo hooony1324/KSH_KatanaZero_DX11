@@ -92,6 +92,11 @@ public:
 	void RunStart(const StateInfo& _Info);
 	void RunUpdate(float _DeltaTime, const StateInfo& _Info);
 
+	// »ó½Â
+	void WallGrabStart(const StateInfo& _Info);
+	void WallGrabUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	// ÇÏ°­
 	void WallSlideStart(const StateInfo& _Info);
 	void WallSlideUpdate(float _DeltaTime, const StateInfo& _Info);
 

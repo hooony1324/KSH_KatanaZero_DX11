@@ -41,16 +41,9 @@ private:
 
 	PlayerZero* Player;
 
-	// FSM
+// FSM : RoomChange, RoomPlay, RoomEnd
 private:
-	enum class STATE
-	{
-		RESTART,
-		REPLAY,
-
-		CHANGE_ROOM,
-
-	};
+	GameEngineStateManager LevelStateManager;
 
 
 };
