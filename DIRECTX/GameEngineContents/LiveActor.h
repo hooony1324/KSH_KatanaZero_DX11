@@ -16,32 +16,27 @@ public:
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
 protected:
-	enum class STATE
+	enum class STATE_WALL
 	{
 		NONE,
-		UP_WALL,
-		RIGHT_WALL,
-		RIGHT_PASS, // 다음 스테이지 포탈
-		LEFT_WALL,
-		DOWN_WALL, // 지면(중력X)
-		UNDER_GROUND, // 땅에 박힘
-		UNDER_RIGHTUP_SLOPE,
-		UNDER_LEFTUP_SLOPE,
+		RIGHT,
+		LEFT,
+		UP,
+		DOWN,
+		UNDERGROUND,
 
-		RIGHTUP_SLOPE,
-		RIGHTDOWN_SLOPE,
-		LEFTUP_SLOPE,
-		LEFTDOWN_SLOPE,
+		RIGHTSLOPE,
+		LEFTSLOPE,
 
 	};
 
-	STATE WallState;
+	STATE_WALL WallState;
 	bool IsFly; // 공중
 
 protected:
 	void PixelCheck();
 	void WallCheck();
-	void FloatCheck(float _DeltaTime);
+	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
 
 protected:

@@ -3,8 +3,8 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 const float FORCE_REACTION = 1.0f; // ¹ÝÀÛ¿ë °­µµ
-const float4 GREEN = { 0, 1, 0, 0 };
-const float4 BLUE = { 1, 0, 0, 0 };
+const float4 GREEN = { 0, 1, 0, 1 };
+const float4 BLUE = { 1, 0, 0, 1 };
 
 LiveActor::LiveActor() 
 	: Renderer_Character(nullptr)
@@ -45,9 +45,9 @@ void LiveActor::PixelCheck()
 		.CompareInt3D(GREEN);
 	DoubleDownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
 		.CompareInt3D(BLUE);
-	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 0))
+	Left = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 15))
 		.CompareInt3D(GREEN);
-	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 0))
+	Right = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 15))
 		.CompareInt3D(GREEN);
 	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
 		.CompareInt3D(GREEN);
@@ -56,46 +56,64 @@ void LiveActor::PixelCheck()
 
 void LiveActor::WallCheck()
 {
-	// ¶¥¹Ù´Ú¿¡ ¹ÚÈû
-	if (Down && DoubleDown)
+	// ¶¥¿¡ ¹ÚÈû
+	if (Down)
 	{
-		GetTransform().SetWorldMove({ 0, 1, 0 });
+		WallState = STATE_WALL::UNDERGROUND;
+		IsFall = false;
 		return;
 	}
 
-	// °øÁßÆÇÁ¤
-	if (!Down && !DoubleDown && !DoubleDownBlue)
+	// ¸Ó¸® À§ ºÎµúÈû
+	if (Up)
 	{
+		WallState = STATE_WALL::UP;
+		IsFall = true;
+		return;
+	}
+
+	// °øÁß
+	if (!Down && !DoubleDown && !Left_Down && !Right_Down)
+	{
+		WallState = STATE_WALL::NONE;
 		IsFall = true;
 	}
 
-	// µü Áö¸é
+	// ¹Ù´Ú 
 	if (!Down && DoubleDown || !Down && DoubleDownBlue)
 	{
+		WallState = STATE_WALL::DOWN;
 		IsFall = false;
 	}
 
-	// º®
-	if (Right_Up && Right_Down)
+	// ¿ÞÂÊ ¿À¸¥ÂÊ º®
+	if (Left && Left_Up)
 	{
-		GetTransform().SetWorldMove({ -1, 0, 0 });
+		WallState = STATE_WALL::LEFT;
+		return;
+	}
+	if (Right && Right_Up)
+	{
+		WallState = STATE_WALL::RIGHT;
+		return;
 	}
 
-	if (Left_Up && Left_Down)
+	// ½½·ÎÇÁ Ã¼Å©
+	if (Left && Left_Down)
 	{
-		GetTransform().SetWorldMove({ 1, 0, 0 });
+		IsFall = false;
+		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (Up)
+	if (Right && Right_Down)
 	{
-		GetTransform().SetWorldMove({ 0, -2, 0 });
+		IsFall = false;
+		WallState = STATE_WALL::RIGHTSLOPE;
 	}
-
-
 
 }
 
-void LiveActor::FloatCheck(float _DeltaTime)
+void LiveActor::FloatTimeCheck(float _DeltaTime)
 {
 	if (true == IsFall)
 	{

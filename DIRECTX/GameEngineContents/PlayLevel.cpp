@@ -22,9 +22,7 @@ PlayLevel::~PlayLevel()
 
 void PlayLevel::Start()
 {
-	//Cam = CreateActor<GameEngineCameraActor>();
-	//Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	//Cam->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CAMERA) });
+	GetMainCamera()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
 
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>();

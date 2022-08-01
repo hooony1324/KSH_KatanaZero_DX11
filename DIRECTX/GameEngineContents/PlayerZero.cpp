@@ -74,12 +74,12 @@ void PlayerZero::Update(float _DeltaTime)
 	WallCheck();
 	InputCheck();	
 	PlayerStateManager.Update(_DeltaTime);
-	FloatCheck(_DeltaTime);
+	FloatTimeCheck(_DeltaTime);
 
 	// 이동
+	LookCheck(InputDir.x);
 	PlayerMove(_DeltaTime);
 
-	LookCheck(InputDir.x);
 	CoolTimeCheck();
 	PrintPlayerDebug();
 }
@@ -117,38 +117,76 @@ void PlayerZero::InputCheck()
 }
 
 void PlayerZero::PlayerMove(float _DeltaTime)
-{
-	// 경사면에서
-	if (MoveVec.y <= 0.0005f && !DoubleDownBlue)
-	{
-		if (Velocity.x > 0)
-		{
-			if (!Left_Down && DoubleDown && Right_Down)
-			{
-				GetTransform().SetWorldMove({ 0, 1, 0 });
-			}
-			else if (Left_Down && DoubleDown && !Right_Down)
-			{
-				GetTransform().SetWorldMove({ 0, -1, 0 });
-			}
-		}
-		else if (Velocity.x < 0)
-		{
-			if (Left_Down && !DoubleDown && !Right_Down)
-			{
-				GetTransform().SetWorldMove({ 0, 1, 0 });
-			}
-			else if (!Left_Down && !DoubleDown && Right_Down)
-			{
-				GetTransform().SetWorldMove({ 0, -1, 0 });
-			}
-		}
+{	
+	Velocity = MoveVec * MoveSpeed * _DeltaTime;
 
+	// 벽 막기
+	switch (WallState)
+	{
+	case LiveActor::STATE_WALL::NONE:
+		break;
+	case LiveActor::STATE_WALL::RIGHT:
+		Velocity.x = -1;
+		break;
+	case LiveActor::STATE_WALL::LEFT:
+		Velocity.x = 1;
+		break;
+	case LiveActor::STATE_WALL::UP:
+		Velocity.y = -1;
+		break;
+	case LiveActor::STATE_WALL::DOWN:
+		break;
+	case LiveActor::STATE_WALL::UNDERGROUND:
+		GetTransform().SetWorldMove({ 0, 1.0f, 0 });
+		break;
+	case LiveActor::STATE_WALL::RIGHTSLOPE:
+	{
+		if (Velocity.y > 0)
+		{
+			break;
+		}
+		// 우상향
+		if (Velocity.x > 0 && CurLookDir > 0)
+		{
+			GetTransform().SetWorldMove({ 0.3f, 0.3f, 0 });
+			return;
+		}
+		// 좌하향
+		else if(Velocity.x < 0 && CurLookDir < 0)
+		{
+			GetTransform().SetWorldMove({ -0.3f, -0.3f, 0 });
+			return;
+		}
+		break;
+	}
+	case LiveActor::STATE_WALL::LEFTSLOPE:
+	{
+		if (Velocity.y > 0)
+		{
+			break;
+		}
+		// 우하향
+		if (Velocity.x > 0 && CurLookDir > 0)
+		{
+			GetTransform().SetWorldMove({ 0.3f, -0.3f, 0 });
+			return;
+		}
+		// 좌상향
+		else if(Velocity.x < 0 && CurLookDir < 0)
+		{
+			GetTransform().SetWorldMove({ -0.3f, 0.3f, 0 });
+			return;
+		}
+		break;
+	}
+	default:
+		break;
 	}
 
 
-	Velocity = MoveVec * MoveSpeed * _DeltaTime;
 	GetTransform().SetWorldMove(Velocity);
+
+
 }
 
 void PlayerZero::CoolTimeCheck()

@@ -17,6 +17,11 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
+	if (true == IsFall && !IsJump)
+	{
+		PlayerStateManager.ChangeState("Fall");
+	}
+
 	// Jump
 	if (InputDir.y > 0 && !IsFall)
 	{
@@ -37,9 +42,10 @@ void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	}
 
-	if (true == IsFall && !IsJump)
+	float4 RollDir = float4{ abs(InputDir.x), InputDir.y };
+	if (RollDir.CompareInt2D({ 1, -1 }))
 	{
-		PlayerStateManager.ChangeState("Fall");
+		PlayerStateManager.ChangeState("Roll");
 	}
 
 }
@@ -132,6 +138,8 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 	RollTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("roll");
 	MoveSpeed = SPEED_PLAYER * 1.3f;
+	
+	MoveVec.x = InputDir.x;
 }
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -184,7 +192,7 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		PlayerStateManager.ChangeState("RunToIdle");
 	}
 
-	if (IsFall)
+	if (abs(InputDir.x) && IsFall)
 	{
 		PlayerStateManager.ChangeState("Fall");
 	}
@@ -284,8 +292,35 @@ void PlayerZero::CreateSlash()
 
 void PlayerZero::PrintPlayerDebug()
 {
-
-	
+	switch (WallState)
+	{
+	case LiveActor::STATE_WALL::NONE:
+		GameEngineDebug::OutPutString("NONE");
+		break;
+	case LiveActor::STATE_WALL::RIGHT:
+		GameEngineDebug::OutPutString("RIGHT");
+		break;
+	case LiveActor::STATE_WALL::LEFT:
+		GameEngineDebug::OutPutString("LEFT");
+		break;
+	case LiveActor::STATE_WALL::UP:
+		GameEngineDebug::OutPutString("UP");
+		break;
+	case LiveActor::STATE_WALL::DOWN:
+		GameEngineDebug::OutPutString("DOWN");
+		break;
+	case LiveActor::STATE_WALL::RIGHTSLOPE:
+		GameEngineDebug::OutPutString("RIGHTSLOPE");
+		break;
+	case LiveActor::STATE_WALL::LEFTSLOPE:
+		GameEngineDebug::OutPutString("LEFTSLOPE");
+		break;
+	case LiveActor::STATE_WALL::UNDERGROUND:
+		GameEngineDebug::OutPutString("UNDERGROUND");
+		break;
+	default:
+		break;
+	}
 
 	//std::string Output = "Velocity : " + std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
 	//GameEngineDebug::OutPutString(Output);
