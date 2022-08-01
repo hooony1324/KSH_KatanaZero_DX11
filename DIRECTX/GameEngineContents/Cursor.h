@@ -3,6 +3,7 @@
 
 // Ό³Έν :
 class GameEngineTextureRenderer;
+class GameEngineUIRenderer;
 class Cursor : public GameEngineActor
 {
 public:
@@ -33,7 +34,7 @@ protected:
 	void End() override;
 
 private:
-	GameEngineTextureRenderer* Renderer;
+	GameEngineUIRenderer* Renderer;
 	static float4 Position;
 	static float4 PositionToActor;
 };

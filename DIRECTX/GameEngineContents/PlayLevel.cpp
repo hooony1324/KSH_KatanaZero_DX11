@@ -38,6 +38,7 @@ void PlayLevel::Start()
 
 	// UI
 	UIManager* UI = CreateActor<UIManager>();
+	UI->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::UI) });
 }
 
 void PlayLevel::OnEvent()
