@@ -56,6 +56,7 @@ void PlayerZero::Start()
 	PlayerStateManager.CreateStateMember("IdleToRun", this, &PlayerZero::IdleToRunUpdate, &PlayerZero::IdleToRunStart);
 	PlayerStateManager.CreateStateMember("WallGrab", this, &PlayerZero::WallGrabUpdate, &PlayerZero::WallGrabStart);
 	PlayerStateManager.CreateStateMember("WallSlide", this, &PlayerZero::WallSlideUpdate, &PlayerZero::WallSlideStart);
+	PlayerStateManager.CreateStateMember("Flip", this, &PlayerZero::FlipUpdate, &PlayerZero::FlipStart);
 
 	PlayerStateManager.ChangeState("Idle");
 }
@@ -226,6 +227,7 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
 	Renderer_Character->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f, false });
+	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.08f, false });
 
 	// Player - ANIMATION BLEND
 	Renderer_Character->AnimationBindStart("idle_to_run", &PlayerZero::IdleRunStart, this);

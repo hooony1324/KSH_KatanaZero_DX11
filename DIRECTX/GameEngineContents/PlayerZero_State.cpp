@@ -220,6 +220,11 @@ void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		PlayerStateManager.ChangeState("WallSlide");
 	}
+
+	if (InputDir.y > 0)
+	{
+		PlayerStateManager.ChangeState("Flip");
+	}
 }
 
 void PlayerZero::WallSlideStart(const StateInfo& _Info)
@@ -240,17 +245,44 @@ void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 		Velocity = float4::ZERO;
 		PlayerStateManager.ChangeState("Idle");
 	}
+
+	if (InputDir.y > 0)
+	{
+		PlayerStateManager.ChangeState("Flip");
+	}
 }
 
-void PlayerZero::CrouchStart()
+void PlayerZero::FlipStart(const StateInfo& _Info)
 {
-	Renderer_Character->ChangeFrameAnimation("precrouch");
+	Renderer_Character->ChangeFrameAnimation("flip");
+	
+	if (WallState == STATE_WALL::LEFT)
+	{
+		FlyVector = { 1, 1 };
+	}
+	else
+	{
+		FlyVector = { -1, 1 };
+	}
+	MoveVec.x = FlyVector.x;
 }
 
-void PlayerZero::CrouchUpdate()
+void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	float DT = _Info.StateTime;
+	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
+	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+
+	if (false == IsFall)
+	{
+		MoveVec = float4::ZERO;
+		Velocity = float4::ZERO;
+		PlayerStateManager.ChangeState("Idle");
+	}
+
 
 }
+
 
 void PlayerZero::RunToIdleStart(const StateInfo& _Info)
 {
@@ -333,14 +365,15 @@ void PlayerZero::WallGrabCheck()
 
 	if (InputDir.x > 0 && WallState == STATE_WALL::RIGHT)
 	{
-		PlayerStateManager.ChangeState("WallGrab");
+		Renderer_Character->GetTransform().PixLocalPositiveX();
 	}
 	
 	if (InputDir.x < 0 && WallState == STATE_WALL::LEFT)
 	{
-		PlayerStateManager.ChangeState("WallGrab");
+		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
 
+	PlayerStateManager.ChangeState("WallGrab");
 
 }
 

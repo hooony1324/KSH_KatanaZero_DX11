@@ -93,23 +93,20 @@ public:
 	void RunStart(const StateInfo& _Info);
 	void RunUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	// »ó½Â
 	void WallGrabStart(const StateInfo& _Info);
 	void WallGrabUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	// ÇÏ°­
 	void WallSlideStart(const StateInfo& _Info);
 	void WallSlideUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void FlipStart(const StateInfo& _Info);
+	void FlipUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	void RunToIdleStart(const StateInfo& _Info);
 	void RunToIdleUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	void IdleToRunStart(const StateInfo& _Info);
 	void IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info);
-
-	void CrouchStart();
-	void CrouchUpdate();
-
 
 	void InputCheck();
 	void CoolTimeCheck();
