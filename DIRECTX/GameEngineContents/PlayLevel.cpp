@@ -107,7 +107,7 @@ void PlayLevel::RoomChange(Room* _Room)
 
 	CurRoom->Setting();
 	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
-
+	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
 }
 
 void PlayLevel::CameraFollow(float _DeltaTime)
@@ -117,10 +117,30 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 		return;
 	}
 
-	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
 	float4 CamPos = GetMainCameraActor()->GetTransform().GetWorldPosition();
+	float4 NextCamPos;
+	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
+	NextCamPos = float4::Lerp(CamPos, PlayerPos, _DeltaTime * 4.5f);
 
-	float4 Pos = float4::Lerp(CamPos, PlayerPos, _DeltaTime * 4.5f);
-	GetMainCameraActor()->GetTransform().SetWorldPosition({ Pos.x, Pos.y});
+	if (NextCamPos.x < CamClamp_LeftTop.x)
+	{
+		NextCamPos.x = CamClamp_LeftTop.x;
+	} 
+	
+	if (NextCamPos.x > CamClamp_RightBottom.x)
+	{
+		NextCamPos.x = CamClamp_RightBottom.x;
+	}
+	
+	if (NextCamPos.y > CamClamp_LeftTop.y)
+	{
+		NextCamPos.y = CamClamp_LeftTop.y;
+	}
 
+	if (NextCamPos.y < CamClamp_RightBottom.y)
+	{
+		NextCamPos.y = CamClamp_RightBottom.y;
+	}
+
+	GetMainCameraActor()->GetTransform().SetWorldPosition({ NextCamPos.x, NextCamPos.y });
 }

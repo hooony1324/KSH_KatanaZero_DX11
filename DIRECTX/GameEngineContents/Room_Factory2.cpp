@@ -26,6 +26,8 @@ void Room_Factory2::Start()
 	Background_Collision->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_Collision->Off();
 
+	InitCameraClampArea();
+
 	// 스폰위치, 지형지물 등
 	PlayerSpawnPos = float4{ 156, -1147, GetDepth(ACTOR_DEPTH::PLAYER) };
 }

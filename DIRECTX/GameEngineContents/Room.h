@@ -19,9 +19,11 @@ public:
 	virtual void Setting() {}
 	virtual void Clear() {}
 
+	// 해당하는 레벨의 클램프정보에 세팅해줌
 	void SetCameraClampArea(float4& _LeftTop, float4& _RightBottom);
 	void PlayerSpawn(GameEngineActor* _Player);
 
+	float4 CamClamp_Center;
 protected:
 	void EmptyRoomInit();
 	void InitCameraClampArea();

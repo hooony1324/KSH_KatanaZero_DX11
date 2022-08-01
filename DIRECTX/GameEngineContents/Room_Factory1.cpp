@@ -25,14 +25,16 @@ void Room_Factory1::Start()
 	Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
 	Background_Collision->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_Collision->Off();
-
+	
+	// 배경 설정되고 카메라 클램프 영역 세팅
+	InitCameraClampArea();
 
 	// 스폰위치, 지형지물 등
 	PtrDoor = GetLevel()->CreateActor<Door>();
 	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 	PtrDoor->Off();
 
-	PlayerSpawnPos = float4{ 220, -530, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 220, -620, GetDepth(ACTOR_DEPTH::PLAYER) };
 }
 
 void Room_Factory1::Setting()
