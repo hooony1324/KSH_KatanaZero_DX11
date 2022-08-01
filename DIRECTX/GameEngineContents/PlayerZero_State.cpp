@@ -65,9 +65,9 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 
 void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float Dt = _Info.StateTime;
+	float DT = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * Dt / AntiGravity - FloatDeltaTime / 2;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - FloatDeltaTime / 2;
 
 
 	if (true == Attack_AniEnd)
@@ -93,9 +93,9 @@ void PlayerZero::FallStart(const StateInfo& _Info)
 
 void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float Dt = _Info.StateTime;
+	float DT = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * Dt / AntiGravity;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity;
 
 
 	if (false == IsFall)
@@ -105,8 +105,6 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Idle");
 	}
-
-
 }
 
 
@@ -121,8 +119,8 @@ void PlayerZero::JumpStart(const StateInfo& _Info)
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float Dt = _Info.StateTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * Dt / AntiGravity;
+	float DT = _Info.StateTime;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
 
 	if (MoveVec.y <= 0)
@@ -130,8 +128,6 @@ void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 		IsJump = false;
 		PlayerStateManager.ChangeState("Fall");
 	}
-
-	
 }
 
 void PlayerZero::RollStart(const StateInfo& _Info)
@@ -202,21 +198,48 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayerZero::WallGrabStart(const StateInfo& _Info)
 {
+	Renderer_Character->ChangeFrameAnimation("wallgrab");
+	Renderer_Character->GetTransform().SetLocalPosition({ 10, 0, 0 }); // 렌더러만 벽에 붙임
+
 	// MoveVec 이 음수면 잠깐 멈추고
-	// MoveVec 이 양수면 조금 올라간다
+	// MoveVec 이 양수면 조금 올라간다(Grab)
+	// MoveVec 이 음수면 내려간다(Slide)
+	MoveVec.x = 0; 
+	FlyVector = { 0, MoveVec.y * 1.3f };
+	MoveVec.y = 0;
+	IsFly = false;
+	
 }
 
 void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	float DT = _Info.StateTime;
+	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
+
+	if (MoveVec.y <= 0.00005f)
+	{
+		PlayerStateManager.ChangeState("WallSlide");
+	}
 }
 
 void PlayerZero::WallSlideStart(const StateInfo& _Info)
 {
-	
+	Renderer_Character->ChangeFrameAnimation("wallslide");
+
+	FlyVector = { 0, MoveVec.y };
 }
 
 void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	float DT = _Info.StateTime;
+	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
+
+	if (false == IsFall)
+	{
+		MoveVec = float4::ZERO;
+		Velocity = float4::ZERO;
+		PlayerStateManager.ChangeState("Idle");
+	}
 }
 
 void PlayerZero::CrouchStart()
@@ -299,6 +322,26 @@ void PlayerZero::CreateSlash()
 	{
 		SoundIdx = 1;
 	}
+}
+
+void PlayerZero::WallGrabCheck()
+{
+	if (false == (WallState == STATE_WALL::RIGHT || WallState == STATE_WALL::LEFT))
+	{
+		return;
+	}
+
+	if (InputDir.x > 0 && WallState == STATE_WALL::RIGHT)
+	{
+		PlayerStateManager.ChangeState("WallGrab");
+	}
+	
+	if (InputDir.x < 0 && WallState == STATE_WALL::LEFT)
+	{
+		PlayerStateManager.ChangeState("WallGrab");
+	}
+
+
 }
 
 

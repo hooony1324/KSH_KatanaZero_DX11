@@ -62,6 +62,7 @@ private:
 	void PlayerMove(float _DeltaTime);
 	void PrintPlayerDebug();
 	void CreateSlash();
+	void WallGrabCheck();
 	
 private:
 	// ют╥б

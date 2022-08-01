@@ -54,6 +54,9 @@ void PlayerZero::Start()
 	PlayerStateManager.CreateStateMember("Run", this, &PlayerZero::RunUpdate, &PlayerZero::RunStart);
 	PlayerStateManager.CreateStateMember("RunToIdle", this, &PlayerZero::RunToIdleUpdate, &PlayerZero::RunToIdleStart);
 	PlayerStateManager.CreateStateMember("IdleToRun", this, &PlayerZero::IdleToRunUpdate, &PlayerZero::IdleToRunStart);
+	PlayerStateManager.CreateStateMember("WallGrab", this, &PlayerZero::WallGrabUpdate, &PlayerZero::WallGrabStart);
+	PlayerStateManager.CreateStateMember("WallSlide", this, &PlayerZero::WallSlideUpdate, &PlayerZero::WallSlideStart);
+
 	PlayerStateManager.ChangeState("Idle");
 }
 
@@ -126,11 +129,23 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	case LiveActor::STATE_WALL::NONE:
 		break;
 	case LiveActor::STATE_WALL::RIGHT:
+	{
 		Velocity.x = -1;
+		if (IsFall && InputDir.x > 0)
+		{
+			WallGrabCheck();
+		}
 		break;
+	}
 	case LiveActor::STATE_WALL::LEFT:
+	{
 		Velocity.x = 1;
+		if (IsFall && InputDir.x > 0)
+		{
+			WallGrabCheck();
+		}
 		break;
+	}		
 	case LiveActor::STATE_WALL::UP:
 		Velocity.y = -1;
 		break;
