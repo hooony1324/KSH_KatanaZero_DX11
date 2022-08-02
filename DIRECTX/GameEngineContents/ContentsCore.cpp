@@ -73,7 +73,6 @@ void ContentsCore::Update(float _DeltaTime)
 
 void ContentsCore::End()
 {
-	GameEngineSound::AllResourcesDestroy();
 }
 
 void ContentsCore::TextureLoad()

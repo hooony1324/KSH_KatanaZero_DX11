@@ -37,7 +37,6 @@ protected:
 	};
 
 	STATE_WALL WallState;
-	bool IsFly; // 공중
 
 protected:
 	void PixelCheck();
@@ -73,6 +72,7 @@ protected:
 
 	bool IsJump;
 	bool IsFall; // 중력 적용해서 떨어짐
+	bool WallGrab;
 	float FloatDeltaTime; // 총 공중에 있는 시간만큼 중력 세게 적용
 
 };

@@ -72,6 +72,8 @@ private:
 
 	// ป๓ลย
 	float JumpInput;
+	bool IsFlip;
+	bool IsAttack;
 
 	// FSM
 public:

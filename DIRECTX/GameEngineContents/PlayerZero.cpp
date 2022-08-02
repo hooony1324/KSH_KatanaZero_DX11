@@ -43,7 +43,10 @@ void PlayerZero::Start()
 	RollTimer = CreateComponent<Timer>();
 	RollTimer->Init(0.4f);
 
-	
+	// Positive Negative 디버그용
+	GameEngineTextureRenderer* Middle = CreateComponent<GameEngineTextureRenderer>();
+	Middle->SetTexture("None.png");
+	Middle->ScaleToTexture();
 
 	// PlayerStateManager
 	PlayerStateManager.CreateStateMember("Idle", this, &PlayerZero::IdleUpdate, &PlayerZero::IdleStart);
@@ -106,7 +109,7 @@ void PlayerZero::InputCheck()
 	{
 		InputDir[1] += 1;
 	}
-	if (GameEngineInput::GetInst()->IsPress("a"))
+	if (GameEngineInput::GetInst()->IsPress("a") && !WallGrab)
 	{
 		InputDir[0] += -1;
 	}
@@ -114,7 +117,7 @@ void PlayerZero::InputCheck()
 	{
 		InputDir[1] += -1;
 	}
-	if (GameEngineInput::GetInst()->IsPress("d"))
+	if (GameEngineInput::GetInst()->IsPress("d") && !WallGrab)
 	{
 		InputDir[0] += 1;
 	}
@@ -132,7 +135,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	case LiveActor::STATE_WALL::RIGHT:
 	{
 		Velocity.x = -1;
-		if (IsFall && InputDir.x > 0)
+		if (!IsAttack && IsFall && InputDir.x > 0 || IsFlip)
 		{
 			WallGrabCheck();
 		}
@@ -141,7 +144,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	case LiveActor::STATE_WALL::LEFT:
 	{
 		Velocity.x = 1;
-		if (IsFall && InputDir.x > 0)
+		if (!IsAttack && IsFall && InputDir.x < 0 || IsFlip)
 		{
 			WallGrabCheck();
 		}
@@ -153,7 +156,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	case LiveActor::STATE_WALL::DOWN:
 		break;
 	case LiveActor::STATE_WALL::UNDERGROUND:
-		GetTransform().SetWorldMove({ 0, 1.0f, 0 });
+		GetTransform().SetWorldMove({ 0, 1.2f, 0 });
 		break;
 	case LiveActor::STATE_WALL::RIGHTSLOPE:
 	{
@@ -227,7 +230,7 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
 	Renderer_Character->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f, false });
-	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.08f, false });
+	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.05f, false });
 
 	// Player - ANIMATION BLEND
 	Renderer_Character->AnimationBindStart("idle_to_run", &PlayerZero::IdleRunStart, this);

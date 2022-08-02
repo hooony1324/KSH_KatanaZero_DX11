@@ -88,27 +88,27 @@ void LiveActor::WallCheck()
 	}
 
 	// 왼쪽 오른쪽 벽
-	if (Left && Left_Up)
+	if (Left_Up)
 	{
 		WallState = STATE_WALL::LEFT;
 		return;
 	}
-	if (Right && Right_Up)
+	if (Right_Up)
 	{
 		WallState = STATE_WALL::RIGHT;
 		return;
 	}
 
 	// 슬로프 체크
-	if (Left && Left_Down)
+	if (!IsFall && Left && Left_Down)
 	{
-		IsFall = false;
+		//IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (Right && Right_Down)
+	if (!IsFall && Right && Right_Down)
 	{
-		IsFall = false;
+		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
 	}
 
@@ -139,11 +139,21 @@ void LiveActor::LookCheck(float _InputOrVelocityDir)
 	}
 
 	// 렌더러 방향 결정
-	if (CurLookDir == PrevLookDir)
-	{
-		return;
-	}
-	else if (CurLookDir > 0)
+	//if (CurLookDir == PrevLookDir)
+	//{
+	//	return;
+	//}
+	//else if (CurLookDir > 0)
+	//{
+	//	Renderer_Character->GetTransform().PixLocalPositiveX();
+	//}
+	//else
+	//{
+	//	Renderer_Character->GetTransform().PixLocalNegativeX();
+	//}
+	//PrevLookDir = CurLookDir;
+
+	if (PrevLookDir > 0)
 	{
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 	}
@@ -151,6 +161,7 @@ void LiveActor::LookCheck(float _InputOrVelocityDir)
 	{
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
+
 	PrevLookDir = CurLookDir;
 }
 
