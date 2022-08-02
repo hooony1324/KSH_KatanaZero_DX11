@@ -5,8 +5,6 @@ bool (*GameEngineCollision::CollisionFunction[static_cast<int>(CollisionType::CT
 
 class GameEngineCollisionFunctionInit
 {
-
-
 public:
 	GameEngineCollisionFunctionInit() 
 	{
