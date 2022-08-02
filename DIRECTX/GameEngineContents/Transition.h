@@ -43,9 +43,20 @@ private:
 
 private:
 	std::vector<std::vector<GameEngineUIRenderer*>> TransitionParticles;
+	GameEngineUIRenderer* TransitionParticle;
 	int YNUM;
 	int XNUM;
 	int XIndex;
 	float SumDeltaTime;
+	float StartAbleDeltaTime;
+
+private:
+	bool IsTransitionEnd;
+	void TransitionEnd(const FrameAnimation_DESC& _Info)
+	{
+		IsTransitionEnd = true;
+		State = STATE::NONE;
+		Off();
+	}
 };
 

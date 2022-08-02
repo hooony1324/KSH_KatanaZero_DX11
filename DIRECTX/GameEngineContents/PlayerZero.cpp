@@ -43,11 +43,6 @@ void PlayerZero::Start()
 	RollTimer = CreateComponent<Timer>();
 	RollTimer->Init(0.4f);
 
-	// Positive Negative 디버그용
-	GameEngineTextureRenderer* Middle = CreateComponent<GameEngineTextureRenderer>();
-	Middle->SetTexture("None.png");
-	Middle->ScaleToTexture();
-
 	// PlayerStateManager
 	PlayerStateManager.CreateStateMember("Idle", this, &PlayerZero::IdleUpdate, &PlayerZero::IdleStart);
 	PlayerStateManager.CreateStateMember("Jump", this, &PlayerZero::JumpUpdate, &PlayerZero::JumpStart);
@@ -171,7 +166,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			break;
 		}
 		// 우상향
-		float Vector = 400 * _DeltaTime;
+		float Vector = MoveSpeed * _DeltaTime;
 		if (Velocity.x > 0 && CurLookDir > 0)
 		{
 			GetTransform().SetWorldMove({ Vector, Vector, 0 });
@@ -192,7 +187,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			break;
 		}
 		// 우하향
-		float Vector = 400 * _DeltaTime;
+		float Vector = MoveSpeed * _DeltaTime;
 		if (Velocity.x > 0 && CurLookDir > 0)
 		{
 			GetTransform().SetWorldMove({ Vector, -Vector, 0 });

@@ -2,8 +2,8 @@
 #include "Transition.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-float ParticleInterTime = 0.2f;
-float FadeInterTime = 2.0f;
+const float FadeInterTime = 0.25f;
+const float ParticleSize = 16.0f * 2.f;
 
 void Transition::Activate()
 {
@@ -23,34 +23,42 @@ void Transition::Start()
 {
 	// 해상도에 맞게 트렌지션 채움
 	float4 ScreenSize = { 1280, 720 };
-	int YNUM = ScreenSize.y / 16;
-	int XNUM = ScreenSize.x / 16;
-	TransitionParticles = std::vector<std::vector<GameEngineUIRenderer*>>(YNUM, std::vector<GameEngineUIRenderer*>());
+	YNUM = ScreenSize.y / ParticleSize;
+	XNUM = ScreenSize.x / ParticleSize;
 
-	for (int y = 0; y < YNUM; y++)
+	TransitionParticles =
+		std::vector<std::vector<GameEngineUIRenderer*>>(YNUM, std::vector<GameEngineUIRenderer*>(XNUM, nullptr));
+	for (int y = 0; y < YNUM; ++y)
 	{
-		for (int x = 0; x < XNUM; x++)
+		for (int x = 0; x < XNUM; ++x)
 		{
-			GameEngineUIRenderer* Square = CreateComponent<GameEngineUIRenderer>();
-			Square->SetTexture("spr_transition_square.png");
-			Square->ScaleToTexture();
-			Square->CreateFrameAnimationFolder("in", FrameAnimation_DESC{ "transition_in", 0.05f, false });
-			Square->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "transition_idle", 0.05f, false });
-			Square->CreateFrameAnimationFolder("out", FrameAnimation_DESC{ "transition_out", 0.05f, false });
-			Square->ChangeFrameAnimation("idle");
-			Square->GetTransform().SetWorldPosition({ 8.0f + (x * 16.0f), -8.0f - (y * 16.0f) });
-			//Square->Off();
-			TransitionParticles[y].push_back(Square);
+			GameEngineUIRenderer* Particle = CreateComponent<GameEngineUIRenderer>();
+			Particle->SetTexture("spr_transition_squarewhilte.png");
+			Particle->SetSamplingModePoint();
+			Particle->GetTransform().SetLocalScale({ ParticleSize, ParticleSize, 1 });
+			Particle->CreateFrameAnimationFolder("in", FrameAnimation_DESC{ "transition_in", 0.0125f, false });
+			Particle->CreateFrameAnimationFolder("out", FrameAnimation_DESC{ "transition_out", 0.0125f, false });
+			Particle->GetTransform().SetWorldPosition({ ParticleSize / 2.0f + x * ParticleSize, -(ParticleSize / 2.0f + y * ParticleSize), 0});
+
+			TransitionParticles[y][x] = Particle;
 		}
 	}
 
+	TransitionParticles[YNUM-1][0]->AnimationBindEnd("out", &Transition::TransitionEnd, this);
+
+
 	// 켜두면 프레임 20나옴
 	Off();
-	ChangeState(STATE::NONE);
+	State = STATE::NONE;
 }
 
 void Transition::Update(float _DeltaTime)
 {
+	if (State == STATE::NONE)
+	{
+		return;
+	}
+	UpdateState(_DeltaTime);
 }
 
 void Transition::End()
@@ -60,7 +68,8 @@ void Transition::End()
 
 void Transition::FadeInStart()
 {
-	XIndex = XNUM - 1; // 79
+	XIndex = XNUM - 1;
+	SumDeltaTime = 0.0f;
 }
 
 void Transition::FadeInUpdate(float _DeltaTime)
@@ -68,7 +77,15 @@ void Transition::FadeInUpdate(float _DeltaTime)
 	if (XIndex < 0)
 	{
 		ChangeState(STATE::FADEOUT);
+		return;
 	}
+
+	//SumDeltaTime += _DeltaTime;
+	//if (SumDeltaTime < ParticleInterTime)
+	//{
+	//	return;
+	//}
+	//SumDeltaTime = 0.0f;
 
 	for (int y = 0; y < YNUM; ++y)
 	{
@@ -87,31 +104,32 @@ void Transition::FadeOutStart()
 {
 	XIndex = XNUM - 1;
 	SumDeltaTime = 0.0f;
+	StartAbleDeltaTime = 0.0f;
 }
 
 void Transition::FadeOutUpdate(float _DeltaTime)
 {
-	SumDeltaTime += _DeltaTime;
-	if (SumDeltaTime < FadeInterTime)
+	if (XIndex < 0)
 	{
 		return;
 	}
 
-	if (XIndex < 0)
+	if (StartAbleDeltaTime < FadeInterTime)
 	{
-		Off();
-		for (int y = 0; y < YNUM; y++)
-		{
-			for (int x = 0; x < XNUM; x++)
-			{
-				TransitionParticles[y][x]->Off();
-				TransitionParticles[y][x]->ChangeFrameAnimation("idle");
-			}
-		}
-		
-		ChangeState(STATE::NONE);
+		StartAbleDeltaTime += _DeltaTime;
+		return;
 	}
 
+	//if (SumDeltaTime >= ParticleInterTime)
+	//{
+	//	SumDeltaTime = 0.0f;
+	//}
+	//else
+	//{
+	//	SumDeltaTime += _DeltaTime;
+	//	return;
+	//}
+	int a = 0;
 	for (int y = 0; y < YNUM; ++y)
 	{
 		TransitionParticles[y][XIndex]->ChangeFrameAnimation("out");
@@ -144,24 +162,16 @@ void Transition::UpdateState(float _DeltaTime)
 
 void Transition::ChangeState(STATE _State)
 {
-	if (_State == STATE::NONE)
+	switch (_State)
 	{
-		return;
-	}
-
-	if (State != _State)
-	{
-		switch (State)
-		{
-		case Transition::STATE::FADEIN:
-			FadeInStart();
-			break;
-		case Transition::STATE::FADEOUT:
-			FadeOutStart();
-			break;
-		default:
-			break;
-		}
+	case Transition::STATE::FADEIN:
+		FadeInStart();
+		break;
+	case Transition::STATE::FADEOUT:
+		FadeOutStart();
+		break;
+	default:
+		break;
 	}
 
 	State = _State;

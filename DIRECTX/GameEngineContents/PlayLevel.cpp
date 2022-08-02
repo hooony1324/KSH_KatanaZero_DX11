@@ -90,10 +90,6 @@ void PlayLevel::Update(float _DeltaTime)
 		RoomChange(Room2);
 	}
 
-	if (true == GameEngineInput::GetInst()->IsDown("T"))
-	{
-		//Effect_Transition->Activate();
-	}
 }
 
 void PlayLevel::End()
@@ -102,6 +98,7 @@ void PlayLevel::End()
 
 void PlayLevel::RoomChange(Room* _Room)
 {
+	
 	// 최초의 방
 	if (nullptr == CurRoom)
 	{
@@ -110,6 +107,7 @@ void PlayLevel::RoomChange(Room* _Room)
 	}
 	else
 	{
+		Effect_Transition->Activate();
 		// 방 교환
 		CurRoom->Clear();
 		CurRoom = _Room;
