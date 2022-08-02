@@ -165,15 +165,17 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			break;
 		}
 		// 우상향
+		float Vector = 400 * _DeltaTime;
 		if (Velocity.x > 0 && CurLookDir > 0)
 		{
-			GetTransform().SetWorldMove({ 0.3f, 0.3f, 0 });
+
+			GetTransform().SetWorldMove({ Vector, Vector, 0 });
 			return;
 		}
 		// 좌하향
 		else if(Velocity.x < 0 && CurLookDir < 0)
 		{
-			GetTransform().SetWorldMove({ -0.3f, -0.3f, 0 });
+			GetTransform().SetWorldMove({ -Vector, -Vector, 0 });
 			return;
 		}
 		break;
@@ -185,15 +187,16 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			break;
 		}
 		// 우하향
+		float Vector = 400 * _DeltaTime;
 		if (Velocity.x > 0 && CurLookDir > 0)
 		{
-			GetTransform().SetWorldMove({ 0.3f, -0.3f, 0 });
+			GetTransform().SetWorldMove({ Vector, -Vector, 0 });
 			return;
 		}
 		// 좌상향
 		else if(Velocity.x < 0 && CurLookDir < 0)
 		{
-			GetTransform().SetWorldMove({ -0.3f, 0.3f, 0 });
+			GetTransform().SetWorldMove({ -Vector, Vector, 0 });
 			return;
 		}
 		break;
