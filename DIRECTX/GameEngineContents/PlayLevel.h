@@ -4,6 +4,7 @@
 // Ό³Έν :
 class Room;
 class PlayerZero;
+class Transition;
 class PlayLevel : public GameEngineLevel
 {
 public:
@@ -40,6 +41,7 @@ private:
 	float4 CamClamp_RightBottom;
 
 	PlayerZero* Player;
+	Transition* Effect_Transition;
 
 // FSM : RoomChange, RoomPlay, RoomEnd
 private:

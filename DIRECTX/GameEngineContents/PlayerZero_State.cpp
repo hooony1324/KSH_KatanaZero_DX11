@@ -65,6 +65,7 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 
 	IsAttack = true;
 	IsFlip = false;
+
 }
 
 void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -72,6 +73,12 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	float DT = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - FloatDeltaTime / 2;
+
+	if (WallState == STATE_WALL::RIGHT || WallState == STATE_WALL::RIGHTSLOPE
+		|| WallState == STATE_WALL::LEFT || WallState == STATE_WALL::LEFTSLOPE)
+	{
+		MoveVec.x = 0;
+	}
 
 
 	if (true == Attack_AniEnd)

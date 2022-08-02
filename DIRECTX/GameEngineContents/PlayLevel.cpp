@@ -9,6 +9,7 @@
 #include "Room_Boss.h"
 #include "Cursor.h"
 #include "UIManager.h"
+#include "Transition.h"
 
 
 PlayLevel::PlayLevel() 
@@ -39,6 +40,11 @@ void PlayLevel::Start()
 	// UI
 	UIManager* UI = CreateActor<UIManager>();
 	UI->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::UI) });
+
+	// Transition
+	Effect_Transition = CreateActor<Transition>();
+	Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
+	Effect_Transition->Off();
 }
 
 void PlayLevel::OnEvent()
@@ -82,6 +88,11 @@ void PlayLevel::Update(float _DeltaTime)
 	if (Player->IsRoomChangeAvailable())
 	{
 		RoomChange(Room2);
+	}
+
+	if (true == GameEngineInput::GetInst()->IsDown("T"))
+	{
+		//Effect_Transition->Activate();
 	}
 }
 

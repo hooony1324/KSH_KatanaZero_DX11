@@ -127,6 +127,9 @@
     <ClInclude Include="UIManager.h">
       <Filter>Levels\01PlayLevel\Actor\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Transition.h">
+      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -209,6 +212,9 @@
       <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
+      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition.cpp">
       <Filter>Levels\01PlayLevel\Actor\UI</Filter>
     </ClCompile>
   </ItemGroup>

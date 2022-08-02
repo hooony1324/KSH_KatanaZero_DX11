@@ -45,7 +45,9 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("Numpad5", VK_NUMPAD5);
 	GameEngineInput::GetInst()->CreateKey("Numpad6", VK_NUMPAD6);
 
-	GameEngineInput::GetInst()->CreateKey("M", 'M');
+	GameEngineInput::GetInst()->CreateKey("M", 'M');	// 충돌맵 On/Off
+	GameEngineInput::GetInst()->CreateKey("T", 'T');	// Transition Test
+	GameEngineInput::GetInst()->CreateKey("C", 'C');	// 충돌체 On/Off
 
 
 	GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
@@ -104,7 +106,7 @@ void ContentsCore::TextureLoad()
 	// 애니메이션(폴더)
 	{
 		GameEngineDirectory TexDir{ Dir };
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX", "Room"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX", "Room", "UI"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);

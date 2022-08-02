@@ -154,9 +154,15 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		Velocity.y = -1;
 		break;
 	case LiveActor::STATE_WALL::DOWN:
+	{
+		if (MoveVec.y < 0)
+		{
+			MoveVec.y = 0;
+		}
 		break;
+	}
 	case LiveActor::STATE_WALL::UNDERGROUND:
-		GetTransform().SetWorldMove({ 0, 1.2f, 0 });
+		Velocity.y = 2.0f;
 		break;
 	case LiveActor::STATE_WALL::RIGHTSLOPE:
 	{
@@ -168,7 +174,6 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		float Vector = 400 * _DeltaTime;
 		if (Velocity.x > 0 && CurLookDir > 0)
 		{
-
 			GetTransform().SetWorldMove({ Vector, Vector, 0 });
 			return;
 		}
