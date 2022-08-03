@@ -35,8 +35,8 @@ void Transition::Start()
 {
 	// 해상도에 맞게 트렌지션 채움
 	float4 ScreenSize = { 1280, 720 };
-	YNUM = ScreenSize.y / ParticleSize;
-	XNUM = ScreenSize.x / ParticleSize;
+	YNUM = static_cast<int>(ScreenSize.y / ParticleSize);
+	XNUM = static_cast<int>(ScreenSize.x / ParticleSize);
 
 	TransitionParticles =
 		std::vector<std::vector<GameEngineUIRenderer*>>(YNUM, std::vector<GameEngineUIRenderer*>(XNUM, nullptr));
