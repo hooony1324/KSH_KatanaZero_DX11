@@ -125,9 +125,9 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	// º® ¸·±â
 	switch (WallState)
 	{
-	case LiveActor::STATE_WALL::NONE:
+	case STATE_WALL::NONE:
 		break;
-	case LiveActor::STATE_WALL::RIGHT:
+	case CharacterActor::STATE_WALL::RIGHT:
 	{
 		Velocity.x = -1;
 		if (!IsAttack && IsFall && InputDir.x > 0 || IsFlip)
@@ -136,7 +136,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		}
 		break;
 	}
-	case LiveActor::STATE_WALL::LEFT:
+	case CharacterActor::STATE_WALL::LEFT:
 	{
 		Velocity.x = 1;
 		if (!IsAttack && IsFall && InputDir.x < 0 || IsFlip)
@@ -145,10 +145,10 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		}
 		break;
 	}		
-	case LiveActor::STATE_WALL::UP:
+	case CharacterActor::STATE_WALL::UP:
 		Velocity.y = -1;
 		break;
-	case LiveActor::STATE_WALL::DOWN:
+	case CharacterActor::STATE_WALL::DOWN:
 	{
 		if (MoveVec.y < 0)
 		{
@@ -156,10 +156,10 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		}
 		break;
 	}
-	case LiveActor::STATE_WALL::UNDERGROUND:
+	case CharacterActor::STATE_WALL::UNDERGROUND:
 		Velocity.y = 2.0f;
 		break;
-	case LiveActor::STATE_WALL::RIGHTSLOPE:
+	case CharacterActor::STATE_WALL::RIGHTSLOPE:
 	{
 		if (Velocity.y > 0)
 		{
@@ -180,7 +180,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		}
 		break;
 	}
-	case LiveActor::STATE_WALL::LEFTSLOPE:
+	case CharacterActor::STATE_WALL::LEFTSLOPE:
 	{
 		if (Velocity.y > 0)
 		{

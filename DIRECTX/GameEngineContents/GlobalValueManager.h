@@ -22,6 +22,7 @@ enum class ACTOR_DEPTH
 	CURSOR,
 	UI,
 	FX,
+	FOREGROUND,
 	PLAYER,
 	ENEMY,
 	DOOR,

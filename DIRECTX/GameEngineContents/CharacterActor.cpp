@@ -1,12 +1,12 @@
 #include "PreCompile.h"
-#include "LiveActor.h"
+#include "CharacterActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
 const float FORCE_REACTION = 1.0f; // 반작용 강도
 const float4 GREEN = { 0, 1, 0, 0 };
 const float4 BLUE = { 1, 0, 0, 0 };
 
-LiveActor::LiveActor() 
+CharacterActor::CharacterActor()
 	: Renderer_Character(nullptr)
 	, MoveVec(float4::ZERO)
 	, PrevLookDir(1)
@@ -15,11 +15,11 @@ LiveActor::LiveActor()
 
 }
 
-LiveActor::~LiveActor() 
+CharacterActor::~CharacterActor()
 {
 }
 
-void LiveActor::PixelCheck()
+void CharacterActor::PixelCheck()
 {
 	GameEngineTextureRenderer* CollisionMap = GlobalValueManager::ColMap;
 	if (nullptr == CollisionMap)
@@ -55,7 +55,7 @@ void LiveActor::PixelCheck()
 		.CompareInt3D(BLUE);
 }
 
-void LiveActor::WallCheck()
+void CharacterActor::WallCheck()
 {
 	// 땅에 박힘
 	if (Down)
@@ -114,7 +114,7 @@ void LiveActor::WallCheck()
 
 }
 
-void LiveActor::FloatTimeCheck(float _DeltaTime)
+void CharacterActor::FloatTimeCheck(float _DeltaTime)
 {
 	if (true == IsFall)
 	{
@@ -126,7 +126,7 @@ void LiveActor::FloatTimeCheck(float _DeltaTime)
 	}
 }
 
-void LiveActor::LookCheck(float _InputOrVelocityDir)
+void CharacterActor::LookCheck(float _InputOrVelocityDir)
 {
 	// 왼쪽 오른쪽 바라보기
 	if (_InputOrVelocityDir > 0)
@@ -137,21 +137,6 @@ void LiveActor::LookCheck(float _InputOrVelocityDir)
 	{
 		CurLookDir = -1;
 	}
-
-	// 렌더러 방향 결정
-	//if (CurLookDir == PrevLookDir)
-	//{
-	//	return;
-	//}
-	//else if (CurLookDir > 0)
-	//{
-	//	Renderer_Character->GetTransform().PixLocalPositiveX();
-	//}
-	//else
-	//{
-	//	Renderer_Character->GetTransform().PixLocalNegativeX();
-	//}
-	//PrevLookDir = CurLookDir;
 
 	if (PrevLookDir > 0)
 	{

@@ -5,6 +5,7 @@
 
 #include "Ending_Background.h"
 #include "Ending_Logo.h"
+#include "Ending_Transition.h"
 
 EndingLevel::EndingLevel() 
 {
@@ -16,17 +17,14 @@ EndingLevel::~EndingLevel()
 
 void EndingLevel::Start()
 {
-	/*GameEngineCameraActor* Cam = CreateActor<GameEngineCameraActor>(ACTORGROUP::CAMERA);
-	Cam->GetCameraComponent()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
-	Cam->GetTransform().SetWorldPosition({ 0, 0, -100 });*/
-
-
 	Ending_Background* BG = CreateActor<Ending_Background>();
-
 
 	Logo = CreateActor<Ending_Logo>();
 	Lerp_Start = float4{ 0, -100, GetDepth(ACTOR_DEPTH::LOGO) };
 	Lerp_Dest = float4{ 0, 50, GetDepth(ACTOR_DEPTH::LOGO) };
+
+	Ending_Transition* Transition = CreateActor<Ending_Transition>();
+	Transition->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::TRANSITION) });
 }
 
 void EndingLevel::OnEvent()
@@ -40,6 +38,11 @@ void EndingLevel::OnEvent()
 
 void EndingLevel::Update(float _DeltaTime)
 {
+	if (GetAccTime() < 2.0f)
+	{
+		return;
+	}
+
 	// Lerp
 	float4 Pos = float4::LerpLimit(Lerp_Start, Lerp_Dest, SumDeltaTime);
 	Pos.z = 0;

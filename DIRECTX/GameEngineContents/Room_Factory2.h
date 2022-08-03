@@ -2,6 +2,7 @@
 #include "Room.h"
 
 // Ό³Έν :
+class Fan;
 class Room_Factory2 : public Room
 {
 public:
@@ -24,6 +25,8 @@ protected:
 	void Clear() override;
 
 private:
+	Fan* PtrFan;
+	GameEngineTextureRenderer* FanGuard;
 
 };
 

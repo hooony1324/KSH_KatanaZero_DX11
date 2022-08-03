@@ -1,5 +1,5 @@
 #pragma once
-#include "LiveActor.h"
+#include "CharacterActor.h"
 #include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineBase/GameEngineSound.h>
 
@@ -31,7 +31,7 @@ enum class PLAYERINPUT
 // Ό³Έν :
 class GameEngineTextureRenderer;
 class Timer;
-class PlayerZero : public LiveActor
+class PlayerZero : public CharacterActor
 {
 public:
 	// constrcuter destructer

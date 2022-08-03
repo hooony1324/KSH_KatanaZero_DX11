@@ -185,11 +185,23 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Ending_Transition.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="EnemyActor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EnemyCop.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="EnemyGrunt.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Fan.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -201,7 +213,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="LiveActor.h">
+    <ClInclude Include="CharacterActor.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -303,11 +315,23 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Ending_Transition.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="EnemyActor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EnemyCop.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="EnemyGrunt.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Fan.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -319,7 +343,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="LiveActor.cpp">
+    <ClCompile Include="CharacterActor.cpp">
       <SubType>
       </SubType>
     </ClCompile>

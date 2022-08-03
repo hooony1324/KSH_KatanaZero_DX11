@@ -26,7 +26,7 @@ void ContentsCore::Start()
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
-	ChangeLevel("TitleLevel");
+	ChangeLevel("PlayLevel");
 
 	// Input Key
 	GameEngineInput::GetInst()->CreateKey("MouseLeft", VK_LBUTTON);

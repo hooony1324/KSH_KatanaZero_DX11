@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "Room_Factory1.h"
+
 #include "Door.h"
+#include "EnemyGrunt.h"
 
 Room_Factory1::Room_Factory1() 
 {
@@ -39,6 +41,7 @@ void Room_Factory1::Start()
 
 void Room_Factory1::Setting()
 {
+	// 맵 관련
 	Background->On();
 	GlobalValueManager::ColMap = Background_Collision;
 
@@ -48,15 +51,25 @@ void Room_Factory1::Setting()
 
 
 	// 적 소환
-
+	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
+	Grunt->GetTransform().SetWorldPosition({ 1075, -320, GetDepth(ACTOR_DEPTH::ENEMY)});
 }
 
 void Room_Factory1::Clear()
 {
+	// 맵 관련
 	Background->Off();
-	PtrDoor->Off();
 	GlobalValueManager::ColMap->Off();
 	GlobalValueManager::ColMap = nullptr;
+	
+	// 지형 관련
+	PtrDoor->Off();
+
+	// 적 관련
+	if (false == Grunt->IsDeath())
+	{
+		Grunt->Death();
+	}
 }
 
 void Room_Factory1::Update(float _DeltaTime)

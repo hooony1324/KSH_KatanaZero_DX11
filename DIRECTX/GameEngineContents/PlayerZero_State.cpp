@@ -439,28 +439,28 @@ void PlayerZero::PrintPlayerDebug()
 {
 	switch (WallState)
 	{
-	case LiveActor::STATE_WALL::NONE:
+	case CharacterActor::STATE_WALL::NONE:
 		GameEngineDebug::OutPutString("NONE");
 		break;
-	case LiveActor::STATE_WALL::RIGHT:
+	case CharacterActor::STATE_WALL::RIGHT:
 		GameEngineDebug::OutPutString("RIGHT");
 		break;
-	case LiveActor::STATE_WALL::LEFT:
+	case CharacterActor::STATE_WALL::LEFT:
 		GameEngineDebug::OutPutString("LEFT");
 		break;
-	case LiveActor::STATE_WALL::UP:
+	case CharacterActor::STATE_WALL::UP:
 		GameEngineDebug::OutPutString("UP");
 		break;
-	case LiveActor::STATE_WALL::DOWN:
+	case CharacterActor::STATE_WALL::DOWN:
 		GameEngineDebug::OutPutString("DOWN");
 		break;
-	case LiveActor::STATE_WALL::RIGHTSLOPE:
+	case CharacterActor::STATE_WALL::RIGHTSLOPE:
 		GameEngineDebug::OutPutString("RIGHTSLOPE");
 		break;
-	case LiveActor::STATE_WALL::LEFTSLOPE:
+	case CharacterActor::STATE_WALL::LEFTSLOPE:
 		GameEngineDebug::OutPutString("LEFTSLOPE");
 		break;
-	case LiveActor::STATE_WALL::UNDERGROUND:
+	case CharacterActor::STATE_WALL::UNDERGROUND:
 		GameEngineDebug::OutPutString("UNDERGROUND");
 		break;
 	default:

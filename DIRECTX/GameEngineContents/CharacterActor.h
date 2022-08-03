@@ -1,19 +1,20 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
 
-// 설명 :
-class LiveActor : public GameEngineActor
+// 설명 : 플레이어(제로, 드래곤, ...), 또는 보스 몬스터
+class GameEngineTextureRenderer;
+class CharacterActor : public GameEngineActor
 {
 public:
 	// constrcuter destructer
-	LiveActor();
-	virtual ~LiveActor();
+	CharacterActor();
+	virtual ~CharacterActor();
 
 	// delete Function
-	LiveActor(const LiveActor& _Other) = delete;
-	LiveActor(LiveActor&& _Other) noexcept = delete;
-	LiveActor& operator=(const LiveActor& _Other) = delete;
-	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
+	CharacterActor(const CharacterActor& _Other) = delete;
+	CharacterActor(CharacterActor&& _Other) noexcept = delete;
+	CharacterActor& operator=(const CharacterActor& _Other) = delete;
+	CharacterActor& operator=(CharacterActor&& _Other) noexcept = delete;
 
 	inline bool IsRoomChangeAvailable()
 	{
@@ -29,11 +30,8 @@ protected:
 		UP,
 		DOWN,
 		UNDERGROUND,
-
 		RIGHTSLOPE,
 		LEFTSLOPE,
-
-		RIGHTPORTAL,
 	};
 
 	STATE_WALL WallState;
@@ -74,6 +72,5 @@ protected:
 	bool IsFall; // 중력 적용해서 떨어짐
 	bool WallGrab;
 	float FloatDeltaTime; // 총 공중에 있는 시간만큼 중력 세게 적용
-
 };
 

@@ -1,11 +1,9 @@
 #pragma once
-#include "LiveActor.h"
-#include <GameEngineCore/GameEngineActor.h>
+#include "EnemyActor.h"
 #include <GameEngineBase/GameEngineSound.h>
 
 // Ό³Έν :
-class GameEngineTextureRenderer;
-class EnemyGrunt : public LiveActor
+class EnemyGrunt : public EnemyActor
 {
 public:
 	// constrcuter destructer

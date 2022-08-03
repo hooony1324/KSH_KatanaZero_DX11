@@ -26,5 +26,6 @@ protected:
 
 private:
 	Door* PtrDoor;
+	GameEngineActor* Grunt;
 };
 
