@@ -5,10 +5,22 @@
 const float FadeInterTime = 0.25f;
 const float ParticleSize = 16.0f * 2.f;
 
-void Transition::Activate()
+void Transition::FadeIn()
 {
-	On();
+	if (false == IsUpdate())
+	{
+		On();
+	}
 	ChangeState(STATE::FADEIN);
+}
+
+void Transition::FadeOut()
+{
+	if (false == IsUpdate())
+	{
+		On();
+	}
+	ChangeState(STATE::FADEOUT);
 }
 
 Transition::Transition()
@@ -33,17 +45,22 @@ void Transition::Start()
 		for (int x = 0; x < XNUM; ++x)
 		{
 			GameEngineUIRenderer* Particle = CreateComponent<GameEngineUIRenderer>();
-			Particle->SetTexture("spr_transition_squarewhilte.png");
+			Particle->SetTexture("spr_transition_square.png");
 			Particle->SetSamplingModePoint();
 			Particle->GetTransform().SetLocalScale({ ParticleSize, ParticleSize, 1 });
 			Particle->CreateFrameAnimationFolder("in", FrameAnimation_DESC{ "transition_in", 0.0125f, false });
+			Particle->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "transition_idle", 2.0f });
 			Particle->CreateFrameAnimationFolder("out", FrameAnimation_DESC{ "transition_out", 0.0125f, false });
 			Particle->GetTransform().SetWorldPosition({ ParticleSize / 2.0f + x * ParticleSize, -(ParticleSize / 2.0f + y * ParticleSize), 0});
-
+			Particle->ChangeFrameAnimation("idle");
 			TransitionParticles[y][x] = Particle;
 		}
 	}
+	
+	TransitionParticles[0][XNUM-1]->AnimationBindStart("in", &Transition::TransitionStart, this);
+	TransitionParticles[0][XNUM-1]->AnimationBindStart("out", &Transition::TransitionStart, this);
 
+	TransitionParticles[YNUM-1][0]->AnimationBindEnd("in", &Transition::TransitionEnd, this);
 	TransitionParticles[YNUM-1][0]->AnimationBindEnd("out", &Transition::TransitionEnd, this);
 
 
@@ -58,6 +75,7 @@ void Transition::Update(float _DeltaTime)
 	{
 		return;
 	}
+
 	UpdateState(_DeltaTime);
 }
 
@@ -76,7 +94,6 @@ void Transition::FadeInUpdate(float _DeltaTime)
 {
 	if (XIndex < 0)
 	{
-		ChangeState(STATE::FADEOUT);
 		return;
 	}
 
@@ -120,16 +137,6 @@ void Transition::FadeOutUpdate(float _DeltaTime)
 		return;
 	}
 
-	//if (SumDeltaTime >= ParticleInterTime)
-	//{
-	//	SumDeltaTime = 0.0f;
-	//}
-	//else
-	//{
-	//	SumDeltaTime += _DeltaTime;
-	//	return;
-	//}
-	int a = 0;
 	for (int y = 0; y < YNUM; ++y)
 	{
 		TransitionParticles[y][XIndex]->ChangeFrameAnimation("out");

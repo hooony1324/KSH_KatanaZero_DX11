@@ -35,6 +35,8 @@ private:
 	Room* Room1;
 	Room* Room2;
 	Room* Room3;
+	std::list<Room*> Rooms;
+	std::list<Room*>::iterator RoomIter;
 
 	GameEngineCameraActor* Cam;
 	float4 CamClamp_LeftTop;
@@ -43,10 +45,20 @@ private:
 	PlayerZero* Player;
 	Transition* Effect_Transition;
 
-// FSM : RoomChange, RoomPlay, RoomEnd
+// FSM : RoomPlay, RoomReplay, RoomChange
 private:
-	GameEngineStateManager LevelStateManager;
+	GameEngineStateManager RoomStateManager;
 
+	void RoomChangeStart(const StateInfo& _Info);
+	void RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info);
+	void RoomChangeEnd(const StateInfo& _Info);
 
+	void RoomPlayStart(const StateInfo& _Info);
+	void RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info);
+	void RoomPlayEnd(const StateInfo& _Info);
+
+	void RoomExitStart(const StateInfo& _Info);
+	void RoomExitUpdate(float _DeltaTime, const StateInfo& _Info);
+	void RoomExitEnd(const StateInfo& _Info);
 };
 

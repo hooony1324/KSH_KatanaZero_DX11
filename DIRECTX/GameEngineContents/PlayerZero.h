@@ -110,6 +110,8 @@ public:
 	void IdleToRunStart(const StateInfo& _Info);
 	void IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info);
 
+	// Á×À½
+
 	void InputCheck();
 	void CoolTimeCheck();
 

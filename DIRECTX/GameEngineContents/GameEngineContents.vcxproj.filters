@@ -130,6 +130,9 @@
     <ClInclude Include="Transition.h">
       <Filter>Levels\01PlayLevel\Actor\UI</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyCop.h">
+      <Filter>Levels\01PlayLevel\Actor\LiveActor\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -216,6 +219,9 @@
     </ClCompile>
     <ClCompile Include="Transition.cpp">
       <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyCop.cpp">
+      <Filter>Levels\01PlayLevel\Actor\LiveActor\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

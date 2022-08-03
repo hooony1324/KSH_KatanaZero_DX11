@@ -6,7 +6,12 @@ class GameEngineUIRenderer;
 class Transition : public GameEngineActor
 {
 public:
-	void Activate();
+	void FadeIn();
+	void FadeOut();
+	inline bool IsTransitionEnd()
+	{
+		return TranstionEnd;
+	}
 
 public:
 	// constrcuter destructer
@@ -51,10 +56,15 @@ private:
 	float StartAbleDeltaTime;
 
 private:
-	bool IsTransitionEnd;
+	bool TranstionEnd;
+
+	void TransitionStart(const FrameAnimation_DESC& _Info)
+	{
+		TranstionEnd = false;
+	}
 	void TransitionEnd(const FrameAnimation_DESC& _Info)
 	{
-		IsTransitionEnd = true;
+		TranstionEnd = true;
 		State = STATE::NONE;
 		Off();
 	}

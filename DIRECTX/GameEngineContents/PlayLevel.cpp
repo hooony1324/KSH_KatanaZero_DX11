@@ -1,7 +1,6 @@
 #include "PreCompile.h"
 #include "PlayLevel.h"
 #include <GameEngineCore/CoreMinimal.h>
-#include <GameEngineCore/GameEngineCameraActor.h>
 
 #include "PlayerZero.h"
 #include "Room_Factory1.h"
@@ -10,7 +9,7 @@
 #include "Cursor.h"
 #include "UIManager.h"
 #include "Transition.h"
-
+#include <GameEngineCore/GEngine.h>
 
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
@@ -29,9 +28,13 @@ void PlayLevel::Start()
 	Room1 = CreateActor<Room_Factory1>();
 	Room2 = CreateActor<Room_Factory2>();
 	//Room3 = CreateActor<Room_Boss>();
+	Rooms.push_back(Room1);
+	Rooms.push_back(Room2);
+	RoomIter = Rooms.begin();
 
 	// Player
 	Player = CreateActor<PlayerZero>();
+	Player->Off();
 
 	// Cursor
 	Cursor* Mouse = CreateActor<Cursor>();
@@ -45,16 +48,22 @@ void PlayLevel::Start()
 	Effect_Transition = CreateActor<Transition>();
 	Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 	Effect_Transition->Off();
+
+	RoomStateManager.CreateStateMember("RoomChange", this, &PlayLevel::RoomChangeUpdate, &PlayLevel::RoomChangeStart, &PlayLevel::RoomChangeEnd);
+	RoomStateManager.CreateStateMember("RoomPlay", this, &PlayLevel::RoomPlayUpdate, &PlayLevel::RoomPlayStart, &PlayLevel::RoomPlayEnd);
+	RoomStateManager.CreateStateMember("RoomExit", this, &PlayLevel::RoomExitUpdate, &PlayLevel::RoomExitStart);
 }
 
 void PlayLevel::OnEvent()
 {
-	RoomChange(Room1);
+	RoomStateManager.ChangeState("RoomChange");
 }
 
 void PlayLevel::Update(float _DeltaTime)
 {
-	// 룸 변경(디버그)
+	RoomStateManager.Update(_DeltaTime);
+
+	// 룸 변경(디버그용)
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
 		{
@@ -85,10 +94,6 @@ void PlayLevel::Update(float _DeltaTime)
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
 
-	if (Player->IsRoomChangeAvailable())
-	{
-		RoomChange(Room2);
-	}
 
 }
 
@@ -96,24 +101,23 @@ void PlayLevel::End()
 {
 }
 
+// 디버그용 방 변경
 void PlayLevel::RoomChange(Room* _Room)
 {
-	
 	// 최초의 방
 	if (nullptr == CurRoom)
 	{
-		CurRoom = _Room;
+		CurRoom = Rooms.front();
 		CurRoom->PlayerSpawn(Player);
 	}
 	else
 	{
-		Effect_Transition->Activate();
 		// 방 교환
 		CurRoom->Clear();
 		CurRoom = _Room;
-		CurRoom->PlayerSpawn(Player);
 	}
 
+	CurRoom->PlayerSpawn(Player);
 	CurRoom->Setting();
 	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
 	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
@@ -152,4 +156,96 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 	}
 
 	GetMainCameraActor()->GetTransform().SetWorldPosition({ NextCamPos.x, NextCamPos.y });
+}
+
+void PlayLevel::RoomChangeStart(const StateInfo& _Info)
+{
+	Effect_Transition->FadeOut();
+	// 최초의 방
+	//if (CurRoom == nullptr)
+	//{
+	//	CurRoom = *RoomIter;
+	//}
+	//else
+	//{
+	//	CurRoom = *RoomIter;
+	//}
+	CurRoom = *RoomIter;
+
+
+	// 다음 방 세팅
+	CurRoom->Setting();
+	CurRoom->PlayerSpawn(Player);
+	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
+	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
+
+	Player->On();
+}
+
+void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (Effect_Transition->IsTransitionEnd())
+	{
+		RoomStateManager.ChangeState("RoomPlay");
+		return;
+	}
+}
+
+void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
+{
+
+}
+
+void PlayLevel::RoomPlayStart(const StateInfo& _Info)
+{
+	
+}
+
+// @@@ 게임 플레이 @@@
+void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+
+	// 몬스터를 다 죽였고, 파란 영역에 도달했다면
+	if (Player->IsRoomChangeAvailable())
+	{
+		// 방 변경
+		RoomStateManager.ChangeState("RoomExit");
+	}
+}
+
+void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
+{
+	
+}
+
+void PlayLevel::RoomExitStart(const StateInfo& _Info)
+{
+	Effect_Transition->FadeIn();
+}
+
+void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (Effect_Transition->IsTransitionEnd())
+	{
+		Player->Off();			// 콜리전 맵을 계속 인식해서 잠깐 꺼주어야 함
+		CurRoom->Clear();
+		++RoomIter;
+
+		// 마지막 방이면 엔딩
+		if (RoomIter == Rooms.end())
+		{
+			GEngine::ChangeLevel("EndingLevel");
+			return;
+		}
+
+		RoomStateManager.ChangeState("RoomChange");
+	}
+}
+
+void PlayLevel::RoomExitEnd(const StateInfo& _Info)
+{
+
+
+
+
 }
