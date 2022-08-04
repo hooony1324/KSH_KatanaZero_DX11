@@ -73,7 +73,6 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 슬래쉬 애니메이션 끝나면 콜리전 끄기
 
 
-
 	float DT = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - FloatDeltaTime / 2;
@@ -398,31 +397,31 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayerZero::CreateSlash()
 {
-	float4 PlayerPos = GetTransform().GetWorldPosition();
-	PlayerPos.z = 0;
-
+	// 렌더러
 	Renderer_Slash->On();
 	Renderer_Slash->CurAnimationReset();
 
+	// 마우스 좌표 얻어오기
+	float4 PlayerPos = GetTransform().GetWorldPosition();
+	PlayerPos.z = 0;
 	MousePos = Cursor::GetCursorPosition();
 	MousePos.z = 0;
-
 	MouseDir = MousePos - PlayerPos;
 	MouseDir.z = 0;
 	MouseDir.Normalize();
 	InputDir = MouseDir;
 
+	// 회전
 	float4 Rot = float4::VectorXYtoDegree(PlayerPos, MousePos);
 	Renderer_Slash->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
-	
-	// Sound
+	Collision_Slash->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
+
+	// 소리(3개 있음)
 	std::string Sound = "sound_player_slash_";
 	static int SoundIdx = 1;
 	Sound = Sound + std::to_string(SoundIdx) + ".wav";
-
 	GameEngineSoundPlayer SoundPlayer = GameEngineSound::SoundPlayControl(Sound);
 	SoundPlayer.Volume(0.5f);
-
 	if (++SoundIdx > 3)
 	{
 		SoundIdx = 1;

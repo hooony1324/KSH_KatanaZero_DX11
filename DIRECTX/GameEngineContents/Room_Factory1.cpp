@@ -53,7 +53,7 @@ void Room_Factory1::Setting()
 
 	// Àû ¼ÒÈ¯
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	Grunt->GetTransform().SetWorldPosition({ 1400, -340, GetDepth(ACTOR_DEPTH::ENEMY)});
+	Grunt->GetTransform().SetWorldPosition({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY)});
 
 	Cop = GetLevel()->CreateActor<EnemyCop>();
 	Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
@@ -73,6 +73,7 @@ void Room_Factory1::Clear()
 	if (false == Grunt->IsDeath())
 	{
 		Grunt->Death();
+		Cop->Death();
 	}
 }
 

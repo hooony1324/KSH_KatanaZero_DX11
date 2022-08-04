@@ -40,6 +40,7 @@ void PlayerZero::Start()
 	Collision_Slash = CreateComponent<GameEngineCollision>();
 	Collision_Slash->GetTransform().SetLocalScale(Renderer_Slash->GetTransform().GetLocalScale());
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
+	Collision_Slash->Off();
 
 	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
@@ -80,7 +81,6 @@ void PlayerZero::Update(float _DeltaTime)
 		return;
 	}
 
-	PixelCheck();
 	WallCheck();
 	InputCheck();	
 	PlayerStateManager.Update(_DeltaTime);
@@ -244,27 +244,19 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.05f, false });
 
 	// Player - ANIMATION BLEND
-	Renderer_Character->AnimationBindStart("idle_to_run", &PlayerZero::IdleRunStart, this);
+	Renderer_Character->AnimationBindStart("idle_to_run", &PlayerZero::IdleRunAniStart, this);
 	Renderer_Character->AnimationBindFrame("idle_to_run", &PlayerZero::StopIdleToRun, this);
-	Renderer_Character->AnimationBindEnd("idle_to_run", &PlayerZero::IdleRunEnd, this);
-	Renderer_Character->AnimationBindStart("run_to_idle", &PlayerZero::RunidleStart, this);
-	Renderer_Character->AnimationBindEnd("run_to_idle", &PlayerZero::RunidleEnd, this);
-	Renderer_Character->AnimationBindStart("roll", &PlayerZero::RollStart, this);
-	Renderer_Character->AnimationBindEnd("roll", &PlayerZero::RollEnd, this);
-	Renderer_Character->AnimationBindStart("attack", &PlayerZero::AttackStart, this);
-	Renderer_Character->AnimationBindEnd("attack", &PlayerZero::AttackEnd, this);
-	//Renderer_Character->AnimationBindStart("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
-	//Renderer_Character->AnimationBindFrame("idle_to_run", [this](const FrameAnimation_DESC&) {  if (InputDir.CompareInt2D({0, 0})) { ChangeState(STATE_PLAYER::IDLE); }});
-	//Renderer_Character->AnimationBindEnd("idle_to_run", [this](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
-	//Renderer_Character->AnimationBindStart("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
-	//Renderer_Character->AnimationBindEnd("run_to_idle", [this](const FrameAnimation_DESC&) { RunIdle_AniEnd = true; });
-	//Renderer_Character->AnimationBindStart("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = false; });
-	//Renderer_Character->AnimationBindEnd("roll", [this](const FrameAnimation_DESC&) { Roll_AniEnd = true; });
-	//Renderer_Character->AnimationBindStart("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = false; });
-	//Renderer_Character->AnimationBindEnd("attack", [this](const FrameAnimation_DESC&) { Attack_AniEnd = true; });
+	Renderer_Character->AnimationBindEnd("idle_to_run", &PlayerZero::IdleRunAniEnd, this);
+	Renderer_Character->AnimationBindStart("run_to_idle", &PlayerZero::RunidleAniStart, this);
+	Renderer_Character->AnimationBindEnd("run_to_idle", &PlayerZero::RunidleAniEnd, this);
+	Renderer_Character->AnimationBindStart("roll", &PlayerZero::RollAniStart, this);
+	Renderer_Character->AnimationBindEnd("roll", &PlayerZero::RollAniEnd, this);
+	Renderer_Character->AnimationBindStart("attack", &PlayerZero::AttackAniStart, this);
+	Renderer_Character->AnimationBindEnd("attack", &PlayerZero::AttackAniEnd, this);
 
 	// Slash
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.07f, false });
 	Renderer_Slash->Off();
+	Renderer_Slash->AnimationBindFrame("slash", &PlayerZero::SlashAniUpdate, this);
 }
 

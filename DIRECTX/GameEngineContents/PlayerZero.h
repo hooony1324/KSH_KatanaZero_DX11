@@ -111,43 +111,43 @@ private:
 // Animation ¹ÙÀÎµù
 private:
 
-	inline void IdleRunStart(const FrameAnimation_DESC& _Info)
+	inline void IdleRunAniStart(const FrameAnimation_DESC& _Info)
 	{
 		IdleRun_AniEnd = false;
 	}
 
-	inline void RunidleStart(const FrameAnimation_DESC& _Info)
+	inline void RunidleAniStart(const FrameAnimation_DESC& _Info)
 	{
 		RunIdle_AniEnd = false;
 	}
 
-	inline void RollStart(const FrameAnimation_DESC& _Info)
+	inline void RollAniStart(const FrameAnimation_DESC& _Info)
 	{
 		Roll_AniEnd = false;
 	}
 
-	inline void AttackStart(const FrameAnimation_DESC& _Info)
+	inline void AttackAniStart(const FrameAnimation_DESC& _Info)
 	{
 		Collision_Slash->On();
 		Attack_AniEnd = false;
 	}
 
-	inline void IdleRunEnd(const FrameAnimation_DESC& _Info)
+	inline void IdleRunAniEnd(const FrameAnimation_DESC& _Info)
 	{
 		IdleRun_AniEnd = true;
 	}
 
-	inline void RunidleEnd(const FrameAnimation_DESC& _Info)
+	inline void RunidleAniEnd(const FrameAnimation_DESC& _Info)
 	{
 		RunIdle_AniEnd = true;
 	}
 
-	inline void RollEnd(const FrameAnimation_DESC& _Info)
+	inline void RollAniEnd(const FrameAnimation_DESC& _Info)
 	{
 		Roll_AniEnd = true;
 	}
 
-	inline void AttackEnd(const FrameAnimation_DESC& _Info)
+	inline void AttackAniEnd(const FrameAnimation_DESC& _Info)
 	{
 		Collision_Slash->Off();
 		Attack_AniEnd = true;
@@ -160,6 +160,12 @@ private:
 			MoveVec = float4::ZERO;
 			PlayerStateManager.ChangeState("Idle");
 		}
+	}
+
+	void SlashAniUpdate(const FrameAnimation_DESC& _Info)
+	{
+		return;
+		//Collision_Slash->On();
 	}
 
 };

@@ -19,7 +19,7 @@ CharacterActor::~CharacterActor()
 {
 }
 
-void CharacterActor::PixelCheck()
+void CharacterActor::WallCheck()
 {
 	GameEngineTextureRenderer* CollisionMap = GlobalValueManager::ColMap;
 	if (nullptr == CollisionMap)
@@ -53,10 +53,7 @@ void CharacterActor::PixelCheck()
 		.CompareInt3D(BLUE);
 	Right_DownBlue = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 20))
 		.CompareInt3D(BLUE);
-}
 
-void CharacterActor::WallCheck()
-{
 	// ¶¥¿¡ ¹ÚÈû
 	if (Down)
 	{
@@ -111,7 +108,6 @@ void CharacterActor::WallCheck()
 		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
 	}
-
 }
 
 void CharacterActor::FloatTimeCheck(float _DeltaTime)

@@ -21,6 +21,9 @@ protected:
 	void Update(float _DeltaTime) override;
 	void End() override;
 
+protected:
+	virtual bool PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollision* _Other) override;
+
 private:
 
 };

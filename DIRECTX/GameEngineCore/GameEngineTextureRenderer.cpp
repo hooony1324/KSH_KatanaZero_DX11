@@ -235,7 +235,7 @@ void GameEngineTextureRenderer::CreateFrameAnimationFolder(const std::string& _A
 
 	if (NewAni.Info.Frames.size() == 0)
 	{
-		for (unsigned int i = 0; i < NewAni.FolderTexture->GetTextureCount() - 1; i++)
+		for (unsigned int i = 0; i < NewAni.FolderTexture->GetTextureCount(); i++)
 		{
 			NewAni.Info.Frames.push_back(i);
 		}

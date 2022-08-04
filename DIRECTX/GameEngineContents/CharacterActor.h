@@ -37,7 +37,6 @@ protected:
 	STATE_WALL WallState;
 
 protected:
-	void PixelCheck();
 	void WallCheck();
 	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
