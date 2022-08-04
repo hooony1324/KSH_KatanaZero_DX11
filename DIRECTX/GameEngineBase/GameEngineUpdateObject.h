@@ -132,7 +132,7 @@ public:
 
 		while (nullptr != CurObject->GetParent())
 		{
-			CurObject = GetParent();
+			CurObject = CurObject->GetParent();
 		}
 
 		return CurObject;
