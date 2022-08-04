@@ -70,6 +70,10 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 
 void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 슬래쉬 애니메이션 끝나면 콜리전 끄기
+
+
+
 	float DT = _Info.StateTime;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - FloatDeltaTime / 2;
@@ -399,6 +403,7 @@ void PlayerZero::CreateSlash()
 
 	Renderer_Slash->On();
 	Renderer_Slash->CurAnimationReset();
+
 	MousePos = Cursor::GetCursorPosition();
 	MousePos.z = 0;
 

@@ -3,6 +3,7 @@
 
 #include "Door.h"
 #include "EnemyGrunt.h"
+#include "EnemyCop.h"
 
 Room_Factory1::Room_Factory1() 
 {
@@ -52,7 +53,10 @@ void Room_Factory1::Setting()
 
 	// Àû ¼ÒÈ¯
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	Grunt->GetTransform().SetWorldPosition({ 1075, -320, GetDepth(ACTOR_DEPTH::ENEMY)});
+	Grunt->GetTransform().SetWorldPosition({ 1400, -340, GetDepth(ACTOR_DEPTH::ENEMY)});
+
+	Cop = GetLevel()->CreateActor<EnemyCop>();
+	Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
 }
 
 void Room_Factory1::Clear()

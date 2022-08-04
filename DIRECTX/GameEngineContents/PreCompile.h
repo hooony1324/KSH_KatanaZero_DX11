@@ -26,6 +26,11 @@
 
 // core
 #include <GameEngineCore/CoreMinimal.h>
+#include <GameEngineCore/GEngine.h>
+#include <GameEngineCore/GameEngineCollision.h>
+#include <GameEngineCore/GameEngineFont.h>
+#include <GameEngineCore/GameEngineFontRenderer.h>
+
 
 // contents
 #include <GameEngineContents/GlobalValueManager.h>

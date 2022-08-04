@@ -21,6 +21,8 @@ void Cursor::Start()
 
 	GetTransform().SetLocalScale({1.5f, 1.5f, 1 });
 
+
+	ShowCursor(false);
 }
 
 void Cursor::Update(float _DeltaTime)

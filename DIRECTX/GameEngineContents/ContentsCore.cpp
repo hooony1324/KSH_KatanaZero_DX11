@@ -16,8 +16,6 @@ ContentsCore::~ContentsCore()
 
 void ContentsCore::Start()
 {
-	ShowCursor(true);
-
 	// < Resource Load >
 	TextureLoad();
 	SoundLoad();

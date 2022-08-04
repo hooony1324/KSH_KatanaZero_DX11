@@ -35,7 +35,11 @@ void PlayerZero::Start()
 
 	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
-	GetTransform().SetLocalScale({ 2, 2, 1 });
+	
+	// 콜리전
+	Collision_Slash = CreateComponent<GameEngineCollision>();
+	Collision_Slash->GetTransform().SetLocalScale(Renderer_Slash->GetTransform().GetLocalScale());
+	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 
 	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
@@ -57,6 +61,10 @@ void PlayerZero::Start()
 	PlayerStateManager.CreateStateMember("Flip", this, &PlayerZero::FlipUpdate, &PlayerZero::FlipStart);
 
 	PlayerStateManager.ChangeState("Idle");
+
+
+	// 크기 키움
+	GetTransform().SetLocalScale({ 2, 2, 1 });
 }
 
 void PlayerZero::Update(float _DeltaTime)

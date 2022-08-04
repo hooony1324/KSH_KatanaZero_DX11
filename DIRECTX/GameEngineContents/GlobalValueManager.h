@@ -10,6 +10,15 @@ enum class ACTORGROUP
 	NONE,
 };
 
+enum class COLLISIONGROUP
+{
+	PLAYER,
+	PLAYER_ATTACK,
+	ENEMY,
+	ENEMY_ATTACK,
+
+};
+
 enum class ACTOR_DEPTH
 {
 	CAMERA = -1,
@@ -48,7 +57,6 @@ namespace Depth
 };
 
 
-// Ό³Έν :
 class GlobalValueManager
 {
 public:

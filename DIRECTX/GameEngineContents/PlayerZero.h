@@ -5,32 +5,10 @@
 
 const float SPEED_PLAYER = 400.0f;
 
-enum class STATE_PLAYER
-{
-	NONE,
-	ATTACK,
-	FALL,
-	IDLE,
-	JUMP,
-	ROLL,
-	RUN,
-	WALLSLIDE,
-	CROUCH,
-	RUNTOIDLE,
-	IDLETORUN,
-};
-
-enum class PLAYERINPUT
-{
-	UP,
-	LEFT,
-	RIGHT,
-	DOWN,
-};
-
 // 설명 :
-class GameEngineTextureRenderer;
 class Timer;
+class GameEngineTextureRenderer;
+class GameEngineCollision;
 class PlayerZero : public CharacterActor
 {
 public:
@@ -55,7 +33,7 @@ private:
 
 private:
 	GameEngineTextureRenderer* Renderer_Slash;
-
+	GameEngineCollision* Collision_Slash;
 
 // 플레이어 정보
 private:
@@ -117,7 +95,6 @@ public:
 
 private:
 	GameEngineStateManager PlayerStateManager;
-	STATE_PLAYER PlayerState;
 	Timer* AttackTimer;
 	Timer* RollTimer;
 
@@ -151,6 +128,7 @@ private:
 
 	inline void AttackStart(const FrameAnimation_DESC& _Info)
 	{
+		Collision_Slash->On();
 		Attack_AniEnd = false;
 	}
 
@@ -171,6 +149,7 @@ private:
 
 	inline void AttackEnd(const FrameAnimation_DESC& _Info)
 	{
+		Collision_Slash->Off();
 		Attack_AniEnd = true;
 	}
 

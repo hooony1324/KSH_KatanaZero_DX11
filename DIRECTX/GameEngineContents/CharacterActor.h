@@ -42,6 +42,7 @@ protected:
 	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
 
+// 이동 관련
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	float InitSpeed;
@@ -72,5 +73,9 @@ protected:
 	bool IsFall; // 중력 적용해서 떨어짐
 	bool WallGrab;
 	float FloatDeltaTime; // 총 공중에 있는 시간만큼 중력 세게 적용
+
+// 공격 관련
+protected:
+
 };
 
