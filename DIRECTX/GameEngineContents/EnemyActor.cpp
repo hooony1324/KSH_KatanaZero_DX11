@@ -117,6 +117,39 @@ void EnemyActor::ChooseAction()
 	CurAction = ENEMYACTION::PATROL;
 }
 
+void EnemyActor::Move(float _DeltaTime)
+{
+
+
+
+	switch (WallState)
+	{
+	case EnemyActor::STATE_WALL::NONE:
+		break;
+	case EnemyActor::STATE_WALL::RIGHT:
+		break;
+	case EnemyActor::STATE_WALL::LEFT:
+		break;
+	case EnemyActor::STATE_WALL::UP:
+		MoveVec.y = -0.02f;
+		break;
+	case EnemyActor::STATE_WALL::DOWN:
+		break;
+	case EnemyActor::STATE_WALL::UNDERGROUND:
+		MoveVec.y = 1;
+		break;
+	case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		break;
+	case EnemyActor::STATE_WALL::LEFTSLOPE:
+		break;
+	default:
+		break;
+	}
+
+	Velocity = MoveVec * MoveSpeed * _DeltaTime;
+	GetTransform().SetWorldMove(Velocity);
+}
+
 void EnemyActor::CreateAllFolderAnimation()
 {
 	if (EnemyName.empty())

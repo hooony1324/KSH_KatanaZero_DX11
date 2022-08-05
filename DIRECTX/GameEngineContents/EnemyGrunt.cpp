@@ -30,6 +30,7 @@ void EnemyGrunt::Start()
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
 	Collision_ChaseSensor->GetTransform().SetLocalScale({ 400, 100, GetDepth(ACTOR_DEPTH::COLLISION)});
 
+	// FSM
 	StateManager.CreateStateMember("Idle"
 		, std::bind(&EnemyGrunt::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyGrunt::IdleStart, this, std::placeholders::_1));
@@ -93,38 +94,7 @@ bool EnemyGrunt::PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollisi
 	return true;
 }
 
-void EnemyGrunt::Move(float _DeltaTime)
-{
 
-
-
-	switch (WallState)
-	{
-	case EnemyActor::STATE_WALL::NONE:
-		break;
-	case EnemyActor::STATE_WALL::RIGHT:
-		break;
-	case EnemyActor::STATE_WALL::LEFT:
-		break;
-	case EnemyActor::STATE_WALL::UP:
-		MoveVec.y = -0.02f;
-		break;
-	case EnemyActor::STATE_WALL::DOWN:
-		break;
-	case EnemyActor::STATE_WALL::UNDERGROUND:
-		MoveVec.y = 1;
-		break;
-	case EnemyActor::STATE_WALL::RIGHTSLOPE:
-		break;
-	case EnemyActor::STATE_WALL::LEFTSLOPE:
-		break;
-	default:
-		break;
-	}
-
-	Velocity = MoveVec * MoveSpeed* _DeltaTime;
-	GetTransform().SetWorldMove(Velocity);
-}
 
 void EnemyGrunt::IdleStart(const StateInfo& _Info)
 {

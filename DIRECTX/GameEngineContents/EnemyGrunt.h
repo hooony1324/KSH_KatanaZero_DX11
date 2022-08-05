@@ -25,7 +25,7 @@ protected:
 	bool PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollision* _Other) override;
 
 private:
-	void Move(float _DeltaTime);
+
 
 
 	void IdleStart(const StateInfo& _Info);
@@ -39,7 +39,6 @@ private:
 
 	//GameEngineStateManager MoveStateManager;
 private:
-	GameEngineStateManager StateManager;
 
 };
 

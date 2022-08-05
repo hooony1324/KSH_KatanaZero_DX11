@@ -48,7 +48,7 @@ protected:
 	bool IsFall;
 
 
-// 액션 상태
+// 상태
 protected:
 	enum class ENEMYACTION
 	{
@@ -64,25 +64,27 @@ protected:
 	ENEMYACTION PrevAction;
 	ENEMYACTION CurAction;
 
+	void Move(float _DeltaTime);
 protected:
+
 	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineCollision* Collision_Character;
-	GameEngineCollision* Collision_ChaseSensor;			// 플레이어 근처 식별
+	GameEngineCollision* Collision_ChaseSensor;	
 
-	float AttackRange;	// Chase -> Attack 할 수 있는 거리
+	float AttackRange;
 	float4 Velocity;
 	float4 MoveVec;
 	float MoveSpeed;
 
-	// 죽을 때 날라감
 	float4 FlyVec;
 	float FlyRadian;
 
 	int Hp;
 
-// Animation
+// 애니메이션
 protected:
 	std::string EnemyName;
+	GameEngineStateManager StateManager;
 	GameEngineStateManager AnimationStateManager;
 
 	void CreateAllFolderAnimation();

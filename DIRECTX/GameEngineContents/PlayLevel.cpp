@@ -173,15 +173,7 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
 	Effect_Transition->FadeOut();
-	// 최초의 방
-	//if (CurRoom == nullptr)
-	//{
-	//	CurRoom = *RoomIter;
-	//}
-	//else
-	//{
-	//	CurRoom = *RoomIter;
-	//}
+
 	CurRoom = *RoomIter;
 
 
@@ -256,8 +248,6 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomExitEnd(const StateInfo& _Info)
 {
-
-
 
 
 }

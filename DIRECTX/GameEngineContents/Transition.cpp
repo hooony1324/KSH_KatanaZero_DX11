@@ -7,19 +7,13 @@ const float ParticleSize = 16.0f * 2.f;
 
 void Transition::FadeIn()
 {
-	if (false == IsUpdate())
-	{
-		On();
-	}
+	On();
 	ChangeState(STATE::FADEIN);
 }
 
 void Transition::FadeOut()
 {
-	if (false == IsUpdate())
-	{
-		On();
-	}
+	On();
 	ChangeState(STATE::FADEOUT);
 }
 
@@ -49,7 +43,7 @@ void Transition::Start()
 			Particle->SetSamplingModePoint();
 			Particle->GetTransform().SetLocalScale({ ParticleSize, ParticleSize, 1 });
 			Particle->CreateFrameAnimationFolder("in", FrameAnimation_DESC{ "transition_in", 0.0125f, false });
-			Particle->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "transition_idle", 2.0f });
+			Particle->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "transition_idle", 5.0f, false });
 			Particle->CreateFrameAnimationFolder("out", FrameAnimation_DESC{ "transition_out", 0.0125f, false });
 			Particle->GetTransform().SetWorldPosition({ ParticleSize / 2.0f + x * ParticleSize, -(ParticleSize / 2.0f + y * ParticleSize), 0});
 			Particle->ChangeFrameAnimation("idle");
@@ -57,17 +51,18 @@ void Transition::Start()
 		}
 	}
 	
-	
+	// 우상단 
+	TransitionParticles[0][XNUM - 1]->AnimationBindStart("out", [=](const FrameAnimation_DESC&) { TranstionEnd = false; });
 	TransitionParticles[0][XNUM - 1]->AnimationBindStart("in", [=](const FrameAnimation_DESC&) { TranstionEnd = false; });
-	TransitionParticles[0][XNUM - 1]->AnimationBindStart("out", 
-		[=](const FrameAnimation_DESC&) 
-		{ 
+
+	// 좌하단
+	TransitionParticles[YNUM-1][0]->AnimationBindEnd("in",
+		[=](const FrameAnimation_DESC&)
+		{
 			TranstionEnd = true;
 			State = STATE::NONE;
 			Off();
-		});
-
-	TransitionParticles[YNUM-1][0]->AnimationBindEnd("in", [=](const FrameAnimation_DESC&) { TranstionEnd = true; });
+		}); 
 	TransitionParticles[YNUM-1][0]->AnimationBindEnd("out",
 		[=](const FrameAnimation_DESC&)
 		{
@@ -98,6 +93,7 @@ void Transition::End()
 
 void Transition::FadeInStart()
 {
+	TranstionEnd = false;
 	XIndex = XNUM - 1;
 	SumDeltaTime = 0.0f;
 }
@@ -109,16 +105,17 @@ void Transition::FadeInUpdate(float _DeltaTime)
 		return;
 	}
 
-	//SumDeltaTime += _DeltaTime;
-	//if (SumDeltaTime < ParticleInterTime)
-	//{
-	//	return;
-	//}
-	//SumDeltaTime = 0.0f;
+
+	if (SumDeltaTime < 0.02f)
+	{
+		SumDeltaTime += _DeltaTime;
+		return;
+	}
+	SumDeltaTime = 0.0f;
 
 	for (int y = 0; y < YNUM; ++y)
 	{
-		TransitionParticles[y][XIndex]->On();
+		//TransitionParticles[y][XIndex]->On();
 		TransitionParticles[y][XIndex]->ChangeFrameAnimation("in");
 	}
 	
@@ -131,6 +128,7 @@ void Transition::FadeInUpdate(float _DeltaTime)
 
 void Transition::FadeOutStart()
 {
+	TranstionEnd = false;
 	XIndex = XNUM - 1;
 	SumDeltaTime = 0.0f;
 	StartAbleDeltaTime = 0.0f;
@@ -148,6 +146,13 @@ void Transition::FadeOutUpdate(float _DeltaTime)
 		StartAbleDeltaTime += _DeltaTime;
 		return;
 	}
+
+	if (SumDeltaTime < 0.02f)
+	{
+		SumDeltaTime += _DeltaTime;
+		return;
+	}
+
 
 	for (int y = 0; y < YNUM; ++y)
 	{

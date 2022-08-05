@@ -58,15 +58,5 @@ private:
 private:
 	bool TranstionEnd;
 
-	void TransitionStart(const FrameAnimation_DESC& _Info)
-	{
-		TranstionEnd = false;
-	}
-	void TransitionEnd(const FrameAnimation_DESC& _Info)
-	{
-		TranstionEnd = true;
-		State = STATE::NONE;
-		Off();
-	}
 };
 
