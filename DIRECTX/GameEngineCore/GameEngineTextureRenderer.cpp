@@ -53,7 +53,7 @@ void FrameAnimation::Update(float _Delta)
 			}
 			else 
 			{
-				Info.CurFrame = Info.Frames.size() - 1;
+				Info.CurFrame = static_cast<unsigned int>(Info.Frames.size()) - 1;
 			}
 		}
 
@@ -239,8 +239,6 @@ void GameEngineTextureRenderer::CreateFrameAnimationFolder(const std::string& _A
 		{
 			NewAni.Info.Frames.push_back(i);
 		}
-		//NewAni.Info.Start = 0;
-		//NewAni.Info.End = static_cast<unsigned int>(NewAni.FolderTexture->GetTextureCount() - 1);
 	}
 }
 

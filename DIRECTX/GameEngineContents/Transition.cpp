@@ -57,12 +57,24 @@ void Transition::Start()
 		}
 	}
 	
-	TransitionParticles[0][XNUM-1]->AnimationBindStart("in", &Transition::TransitionStart, this);
-	TransitionParticles[0][XNUM-1]->AnimationBindStart("out", &Transition::TransitionStart, this);
+	
+	TransitionParticles[0][XNUM - 1]->AnimationBindStart("in", [=](const FrameAnimation_DESC&) { TranstionEnd = false; });
+	TransitionParticles[0][XNUM - 1]->AnimationBindStart("out", 
+		[=](const FrameAnimation_DESC&) 
+		{ 
+			TranstionEnd = true;
+			State = STATE::NONE;
+			Off();
+		});
 
-	TransitionParticles[YNUM-1][0]->AnimationBindEnd("in", &Transition::TransitionEnd, this);
-	TransitionParticles[YNUM-1][0]->AnimationBindEnd("out", &Transition::TransitionEnd, this);
-
+	TransitionParticles[YNUM-1][0]->AnimationBindEnd("in", [=](const FrameAnimation_DESC&) { TranstionEnd = true; });
+	TransitionParticles[YNUM-1][0]->AnimationBindEnd("out",
+		[=](const FrameAnimation_DESC&)
+		{
+			TranstionEnd = true;
+			State = STATE::NONE;
+			Off();
+		});
 
 	// 켜두면 프레임 20나옴
 	Off();

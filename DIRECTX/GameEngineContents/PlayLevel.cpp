@@ -49,9 +49,22 @@ void PlayLevel::Start()
 	Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 	Effect_Transition->Off();
 
-	RoomStateManager.CreateStateMember("RoomChange", this, &PlayLevel::RoomChangeUpdate, &PlayLevel::RoomChangeStart, &PlayLevel::RoomChangeEnd);
-	RoomStateManager.CreateStateMember("RoomPlay", this, &PlayLevel::RoomPlayUpdate, &PlayLevel::RoomPlayStart, &PlayLevel::RoomPlayEnd);
-	RoomStateManager.CreateStateMember("RoomExit", this, &PlayLevel::RoomExitUpdate, &PlayLevel::RoomExitStart);
+
+
+	RoomStateManager.CreateStateMember("RoomChange"
+		, std::bind(&PlayLevel::RoomChangeUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomChangeStart, this, std::placeholders::_1)
+		, std::bind(&PlayLevel::RoomChangeEnd, this, std::placeholders::_1));
+
+	RoomStateManager.CreateStateMember("RoomPlay"
+		, std::bind(&PlayLevel::RoomPlayUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomPlayStart, this, std::placeholders::_1)
+		, std::bind(&PlayLevel::RoomPlayEnd, this, std::placeholders::_1));
+
+	RoomStateManager.CreateStateMember("RoomExit"
+		, std::bind(&PlayLevel::RoomExitUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomExitStart, this, std::placeholders::_1));
+
 }
 
 void PlayLevel::OnEvent()
@@ -93,7 +106,6 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
-
 
 }
 

@@ -3,6 +3,7 @@
 
 // 설명 : 플레이어(제로, 드래곤, ...), 또는 보스 몬스터
 class GameEngineTextureRenderer;
+class GameEngineCollision;
 class CharacterActor : public GameEngineActor
 {
 public:
@@ -44,6 +45,7 @@ protected:
 // 이동 관련
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
+	GameEngineCollision* Collision_Character;
 	float InitSpeed;
 	float MoveSpeed; // 속력
 	float4 MoveVec;	// 방향

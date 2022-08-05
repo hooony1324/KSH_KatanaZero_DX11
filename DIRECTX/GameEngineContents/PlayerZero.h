@@ -108,59 +108,10 @@ private:
 	bool AttackAble;
 	bool RollAble;
 
-// Animation 바인딩
+// 바인딩
 private:
+	void StateManagerInit();
 
-	inline void IdleRunAniStart(const FrameAnimation_DESC& _Info)
-	{
-		IdleRun_AniEnd = false;
-	}
-
-	inline void RunidleAniStart(const FrameAnimation_DESC& _Info)
-	{
-		RunIdle_AniEnd = false;
-	}
-
-	inline void RollAniStart(const FrameAnimation_DESC& _Info)
-	{
-		Roll_AniEnd = false;
-	}
-
-	inline void AttackAniStart(const FrameAnimation_DESC& _Info)
-	{
-		Collision_Slash->On();
-		Attack_AniEnd = false;
-	}
-
-	inline void IdleRunAniEnd(const FrameAnimation_DESC& _Info)
-	{
-		IdleRun_AniEnd = true;
-	}
-
-	inline void RunidleAniEnd(const FrameAnimation_DESC& _Info)
-	{
-		RunIdle_AniEnd = true;
-	}
-
-	inline void RollAniEnd(const FrameAnimation_DESC& _Info)
-	{
-		Roll_AniEnd = true;
-	}
-
-	inline void AttackAniEnd(const FrameAnimation_DESC& _Info)
-	{
-		Collision_Slash->Off();
-		Attack_AniEnd = true;
-	}
-
-	void StopIdleToRun(const FrameAnimation_DESC& _Info)
-	{
-		if (InputDir.CompareInt2D({ 0, 0 }))
-		{
-			MoveVec = float4::ZERO;
-			PlayerStateManager.ChangeState("Idle");
-		}
-	}
 
 	void SlashAniUpdate(const FrameAnimation_DESC& _Info)
 	{

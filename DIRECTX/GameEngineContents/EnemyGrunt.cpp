@@ -28,15 +28,19 @@ void EnemyGrunt::Start()
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
 	Collision_ChaseSensor->GetTransform().SetLocalScale({ 400, 100, GetDepth(ACTOR_DEPTH::COLLISION)});
 
-	GetTransform().SetLocalScale({ 2, 2, 1 });
+	StateManager.CreateStateMember("Idle"
+		, std::bind(&EnemyGrunt::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyGrunt::IdleStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("Dead"
+		, std::bind(&EnemyGrunt::DeathUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyGrunt::DeathStart, this, std::placeholders::_1));
+	
 
 
 	// 기본 정보
 	MoveSpeed = 300.0f;
-	
-	StateManager.CreateStateMember("Idle", this, &EnemyGrunt::IdleUpdate, &EnemyGrunt::IdleStart);
-	StateManager.CreateStateMember("Dead", this, &EnemyGrunt::DeathUpdate, &EnemyGrunt::DeathStart);
 	StateManager.ChangeState("Idle");
+	GetTransform().SetLocalScale({ 2, 2, 1 });
 }
 
 void EnemyGrunt::Update(float _DeltaTime)

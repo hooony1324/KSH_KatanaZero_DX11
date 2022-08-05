@@ -5,6 +5,7 @@
 #include "Cursor.h"
 
 const float4 Gravity = { 0, -9.8f, 0 };
+const float4 RedAlpha = { 1.0f, 0, 0, 0.5f };
 
 PlayerZero::PlayerZero()
 	: AttackAble(true)
@@ -37,6 +38,10 @@ void PlayerZero::Start()
 	Renderer_Slash->ChangeFrameAnimation("slash");
 	
 	// 콜리전
+	Collision_Character = CreateComponent<GameEngineCollision>();
+	Collision_Character->GetTransform().SetLocalScale(Renderer_Character->GetTransform().GetLocalScale());
+	Collision_Character->ChangeOrder(COLLISIONGROUP::PLAYER);
+
 	Collision_Slash = CreateComponent<GameEngineCollision>();
 	Collision_Slash->GetTransform().SetLocalScale(Renderer_Slash->GetTransform().GetLocalScale());
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
@@ -49,22 +54,11 @@ void PlayerZero::Start()
 	RollTimer->Init(0.4f);
 
 	// PlayerStateManager
-	PlayerStateManager.CreateStateMember("Idle", this, &PlayerZero::IdleUpdate, &PlayerZero::IdleStart);
-	PlayerStateManager.CreateStateMember("Jump", this, &PlayerZero::JumpUpdate, &PlayerZero::JumpStart);
-	PlayerStateManager.CreateStateMember("Fall", this, &PlayerZero::FallUpdate, &PlayerZero::FallStart);
-	PlayerStateManager.CreateStateMember("Attack", this, &PlayerZero::AttackUpdate, &PlayerZero::AttackStart);
-	PlayerStateManager.CreateStateMember("Roll", this, &PlayerZero::RollUpdate, &PlayerZero::RollStart);
-	PlayerStateManager.CreateStateMember("Run", this, &PlayerZero::RunUpdate, &PlayerZero::RunStart);
-	PlayerStateManager.CreateStateMember("RunToIdle", this, &PlayerZero::RunToIdleUpdate, &PlayerZero::RunToIdleStart);
-	PlayerStateManager.CreateStateMember("IdleToRun", this, &PlayerZero::IdleToRunUpdate, &PlayerZero::IdleToRunStart);
-	PlayerStateManager.CreateStateMember("WallGrab", this, &PlayerZero::WallGrabUpdate, &PlayerZero::WallGrabStart);
-	PlayerStateManager.CreateStateMember("WallSlide", this, &PlayerZero::WallSlideUpdate, &PlayerZero::WallSlideStart);
-	PlayerStateManager.CreateStateMember("Flip", this, &PlayerZero::FlipUpdate, &PlayerZero::FlipStart);
+	StateManagerInit();
 
+
+	// 최초 상태
 	PlayerStateManager.ChangeState("Idle");
-
-
-	// 크기 키움
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 }
 
@@ -91,6 +85,7 @@ void PlayerZero::Update(float _DeltaTime)
 	PlayerMove(_DeltaTime);
 
 	CoolTimeCheck();
+	GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 0, 0, 0.25f });
 	PrintPlayerDebug();
 }
 
@@ -225,6 +220,55 @@ void PlayerZero::CoolTimeCheck()
 	RollAble = !RollTimer->IsCoolTime();
 }
 
+void PlayerZero::StateManagerInit()
+{
+	PlayerStateManager.CreateStateMember("Idle"
+		, std::bind(&PlayerZero::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::IdleStart, this, std::placeholders::_1)
+	);;
+
+	PlayerStateManager.CreateStateMember("Jump"
+		, std::bind(&PlayerZero::JumpUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::JumpStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("Fall"
+		, std::bind(&PlayerZero::FallUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::FallStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("Attack"
+		, std::bind(&PlayerZero::AttackUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::AttackStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("Roll"
+		, std::bind(&PlayerZero::RollUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::RollStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("Run"
+		, std::bind(&PlayerZero::RunUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::RunStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("RunToIdle"
+		, std::bind(&PlayerZero::RunToIdleUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::RunToIdleStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("IdleToRun"
+		, std::bind(&PlayerZero::IdleToRunUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::IdleToRunStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("WallGrab"
+		, std::bind(&PlayerZero::WallGrabUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::WallGrabStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("WallSlide"
+		, std::bind(&PlayerZero::WallSlideUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::WallSlideStart, this, std::placeholders::_1)
+	);;
+	PlayerStateManager.CreateStateMember("Flip"
+		, std::bind(&PlayerZero::FlipUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::FlipStart, this, std::placeholders::_1)
+	);;
+}
+
 
 void PlayerZero::CreateAllAnimation()
 {
@@ -243,20 +287,53 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.05f, false });
 
-	// Player - ANIMATION BLEND
-	Renderer_Character->AnimationBindStart("idle_to_run", &PlayerZero::IdleRunAniStart, this);
-	Renderer_Character->AnimationBindFrame("idle_to_run", &PlayerZero::StopIdleToRun, this);
-	Renderer_Character->AnimationBindEnd("idle_to_run", &PlayerZero::IdleRunAniEnd, this);
-	Renderer_Character->AnimationBindStart("run_to_idle", &PlayerZero::RunidleAniStart, this);
-	Renderer_Character->AnimationBindEnd("run_to_idle", &PlayerZero::RunidleAniEnd, this);
-	Renderer_Character->AnimationBindStart("roll", &PlayerZero::RollAniStart, this);
-	Renderer_Character->AnimationBindEnd("roll", &PlayerZero::RollAniEnd, this);
-	Renderer_Character->AnimationBindStart("attack", &PlayerZero::AttackAniStart, this);
-	Renderer_Character->AnimationBindEnd("attack", &PlayerZero::AttackAniEnd, this);
-
 	// Slash
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.07f, false });
 	Renderer_Slash->Off();
-	Renderer_Slash->AnimationBindFrame("slash", &PlayerZero::SlashAniUpdate, this);
+
+
+	// 애니메이션 바인딩
+	Renderer_Character->AnimationBindStart("idle_to_run", [=](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
+	Renderer_Character->AnimationBindFrame("idle_to_run", [=](const FrameAnimation_DESC&) 
+		{
+			if (InputDir.CompareInt2D({ 0, 0 }))
+			{
+				MoveVec = float4::ZERO;
+				PlayerStateManager.ChangeState("Idle");
+			}
+		});
+	Renderer_Character->AnimationBindEnd("idle_to_run", [=](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
+
+	Renderer_Character->AnimationBindStart("run_to_idle", [=](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
+	Renderer_Character->AnimationBindEnd("run_to_idle", [=](const FrameAnimation_DESC&) { RunIdle_AniEnd = true; });
+
+	Renderer_Character->AnimationBindStart("roll", [=](const FrameAnimation_DESC&) { Roll_AniEnd = false; });
+	Renderer_Character->AnimationBindEnd("roll", [=](const FrameAnimation_DESC&) { Roll_AniEnd = true; });
+
+	Renderer_Character->AnimationBindStart("attack", [=](const FrameAnimation_DESC&) 
+		{ 		
+			Collision_Slash->On();
+			Attack_AniEnd = false;
+		});
+	Renderer_Character->AnimationBindEnd("attack", [=](const FrameAnimation_DESC&) 
+		{
+			Collision_Slash->Off();
+			Attack_AniEnd = true;
+		});
+
+
+	Renderer_Slash->AnimationBindFrame("slash", [=](const FrameAnimation_DESC& _Info)
+		{
+			_Info.CurFrame;
+			if (_Info.CurFrame == 1)
+			{
+				Collision_Slash->On();
+			}
+		});
+
+	Renderer_Slash->AnimationBindEnd("slash", [=](const FrameAnimation_DESC& _Info)
+		{
+			Collision_Slash->Off();
+		});
 }
 
