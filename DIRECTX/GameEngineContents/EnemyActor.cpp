@@ -13,6 +13,14 @@ EnemyActor::~EnemyActor()
 	
 }
 
+void EnemyActor::OnEvent()
+{
+	if (nullptr == Collision_ChaseSensor)
+	{
+		MsgBoxAssert("Enemy의 콜리전 센서가 nullptr 입니다");
+	}
+}
+
 void EnemyActor::WallCheck()
 {
 	GameEngineTextureRenderer* CollisionMap = GlobalValueManager::ColMap;
@@ -24,17 +32,17 @@ void EnemyActor::WallCheck()
 
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
-	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 34))
+	Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 36))
 		.CompareInt3D(float4::GREEN);
-	Left_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))
+	Left_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() + 37))
 		.CompareInt3D(float4::GREEN);
-	Right_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 34))
+	Right_Up = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
 		.CompareInt3D(float4::GREEN);
-	Right_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 35))
+	Right_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 37))
 		.CompareInt3D(float4::GREEN);
-	Left_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 35))
+	Left_Down = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
 		.CompareInt3D(float4::GREEN);
-	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 35))
+	DoubleDown = CollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 37))
 		.CompareInt3D(float4::GREEN);
 
 	// 벽 체크
@@ -102,6 +110,9 @@ void EnemyActor::ChooseAction()
 
 
 
+
+
+
 	//PrevAction = CurAction;
 	CurAction = ENEMYACTION::PATROL;
 }
@@ -116,9 +127,9 @@ void EnemyActor::CreateAllFolderAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ EnemyName + "_idle", 0.1125f });
 	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ EnemyName + "_attack", 0.05f , false });
 	Renderer_Character->CreateFrameAnimationFolder("walk", FrameAnimation_DESC{ EnemyName + "_walk", 0.1125f });
-	Renderer_Character->CreateFrameAnimationFolder("turn", FrameAnimation_DESC{ EnemyName + "_turn", 0.1125f });
+	Renderer_Character->CreateFrameAnimationFolder("turn", FrameAnimation_DESC{ EnemyName + "_turn", 0.1125f, false });
 	Renderer_Character->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ EnemyName + "_run", 0.1125f });
-	Renderer_Character->CreateFrameAnimationFolder("hurtfly", FrameAnimation_DESC{ EnemyName + "_hurtfly", 0.1125f });
+	Renderer_Character->CreateFrameAnimationFolder("hurtfly", FrameAnimation_DESC{ EnemyName + "_hurtfly", 0.1125f, false });
 	Renderer_Character->CreateFrameAnimationFolder("hurtground", FrameAnimation_DESC{ EnemyName + "_hurtground", 0.1125f, false });
 
 

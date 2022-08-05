@@ -1,9 +1,11 @@
 #include "PreCompile.h"
 #include "EnemyGrunt.h"
 
+
+
 EnemyGrunt::EnemyGrunt() 
 {
-	Hp = 1;
+	
 }
 
 EnemyGrunt::~EnemyGrunt() 
@@ -38,6 +40,7 @@ void EnemyGrunt::Start()
 
 
 	// 기본 정보
+	Hp = 1;
 	MoveSpeed = 300.0f;
 	StateManager.ChangeState("Idle");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
@@ -56,9 +59,10 @@ void EnemyGrunt::Update(float _DeltaTime)
 	// 액션 체크
 	ChooseAction();
 
+	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);
 
-	// 움직임 상태
+	// 움직임 상태 최종 MoveVec
 	Move(_DeltaTime);
 
 }
@@ -69,40 +73,46 @@ void EnemyGrunt::End()
 
 bool EnemyGrunt::PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	if (nullptr == Collision_Character)
+	if (Hp == 0)
 	{
-		MsgBoxAssert("this의 콜리전이 nullptr입니다");
+		return false;
 	}
+
+	// 플레이어의 공격 위치를 받아서 반대로 날려짐
 
 	Hp--;
 	if (Hp <= 0)
 	{
+		FlyVec = _This->GetTransform().GetWorldPosition() - _Other->GetTransform().GetWorldPosition();
+		FlyVec.z = 0;
+		FlyVec.Normalize();
 		StateManager.ChangeState("Dead");
 	}
 
-	// 플레이어의 공격 위치를 받아서 반대로 날려짐
-	float4 val = _Other->GetTransform().GetWorldPosition();
 
 	return true;
 }
 
 void EnemyGrunt::Move(float _DeltaTime)
 {
+
+
+
 	switch (WallState)
 	{
 	case EnemyActor::STATE_WALL::NONE:
-		GetTransform().SetWorldMove(float4::DOWN * MoveSpeed * _DeltaTime);
 		break;
 	case EnemyActor::STATE_WALL::RIGHT:
 		break;
 	case EnemyActor::STATE_WALL::LEFT:
 		break;
 	case EnemyActor::STATE_WALL::UP:
+		MoveVec.y = -0.02f;
 		break;
 	case EnemyActor::STATE_WALL::DOWN:
 		break;
 	case EnemyActor::STATE_WALL::UNDERGROUND:
-		GetTransform().SetWorldMove(float4::UP * MoveSpeed * _DeltaTime);
+		MoveVec.y = 1;
 		break;
 	case EnemyActor::STATE_WALL::RIGHTSLOPE:
 		break;
@@ -112,6 +122,8 @@ void EnemyGrunt::Move(float _DeltaTime)
 		break;
 	}
 
+	Velocity = MoveVec * MoveSpeed* _DeltaTime;
+	GetTransform().SetWorldMove(Velocity);
 }
 
 void EnemyGrunt::IdleStart(const StateInfo& _Info)
@@ -121,27 +133,38 @@ void EnemyGrunt::IdleStart(const StateInfo& _Info)
 
 void EnemyGrunt::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	switch (CurAction)
-	{
-	case EnemyActor::ENEMYACTION::PATROL:
+	
 
-		break;
-	case EnemyActor::ENEMYACTION::CHASE:
-		break;
-	case EnemyActor::ENEMYACTION::ATTACK:
-		break;
-	default:
-		break;
-	}
 }
 
 void EnemyGrunt::DeathStart(const StateInfo& _Info)
 {
-	Renderer_Character->ChangeFrameAnimation("hurtground");
+	Renderer_Character->ChangeFrameAnimation("hurtfly");
+
+	MoveVec = FlyVec * 1.2f;
+	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
+	MoveSpeed *= 1.5f;
 }
 
 void EnemyGrunt::DeathUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	float DT = _Info.StateTime;
 
+	static bool Played = false;
+	if (WallState == STATE_WALL::DOWN)
+	{
+		if (false == Played)
+		{
+			Death(3.0f);
+			Renderer_Character->ChangeFrameAnimation("hurtground");
+			Played = true;
+		}
+		MoveVec.y = 0;
+		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
+	}
+	else
+	{
+		MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
+	}
 }
 

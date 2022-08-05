@@ -20,6 +20,8 @@ public:
 
 // 벽 상태
 protected:
+	void OnEvent() override;
+
 	enum class STATE_WALL
 	{
 		NONE,
@@ -67,10 +69,14 @@ protected:
 	GameEngineCollision* Collision_Character;
 	GameEngineCollision* Collision_ChaseSensor;			// 플레이어 근처 식별
 
-	float AttackRange;									// Chase -> Attack 할 수 있는 거리
+	float AttackRange;	// Chase -> Attack 할 수 있는 거리
 	float4 Velocity;
 	float4 MoveVec;
 	float MoveSpeed;
+
+	// 죽을 때 날라감
+	float4 FlyVec;
+	float FlyRadian;
 
 	int Hp;
 
