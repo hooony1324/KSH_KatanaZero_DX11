@@ -108,6 +108,7 @@ void CharacterActor::WallCheck()
 		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
 	}
+
 }
 
 void CharacterActor::FloatTimeCheck(float _DeltaTime)

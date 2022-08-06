@@ -51,12 +51,12 @@ void Room_Factory1::Setting()
 	PtrDoor->On();
 
 
-	// 利 家券
+	// 利 家券 困摹 : 1400, -310
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	Grunt->GetTransform().SetWorldPosition({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY)});
+	Grunt->GetTransform().SetWorldPosition({ 420, -550, GetDepth(ACTOR_DEPTH::ENEMY)});
 
-	Cop = GetLevel()->CreateActor<EnemyCop>();
-	Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	//Cop = GetLevel()->CreateActor<EnemyCop>();
+	//Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
 }
 
 void Room_Factory1::Clear()
@@ -73,8 +73,8 @@ void Room_Factory1::Clear()
 	if (false == Grunt->IsDeath())
 	{
 		Grunt->Death();
-		Cop->Death();
 	}
+	//Cop->Death();
 }
 
 void Room_Factory1::Update(float _DeltaTime)

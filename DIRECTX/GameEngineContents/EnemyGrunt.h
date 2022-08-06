@@ -22,23 +22,7 @@ protected:
 	void End() override;
 
 protected:
-	bool PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollision* _Other) override;
-
-private:
-
-
-
-	void IdleStart(const StateInfo& _Info);
-	void IdleUpdate(float _DeltaTime, const StateInfo& _Info);
-
-	void DeathStart(const StateInfo& _Info);
-	void DeathUpdate(float _DeltaTime, const StateInfo& _Info);
-
-
-	//TODO:: Patrol, Chase, Attack 
-
-	//GameEngineStateManager MoveStateManager;
-private:
+//	bool PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollision* _Other) override;
 
 };
 

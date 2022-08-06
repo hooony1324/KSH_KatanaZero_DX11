@@ -45,9 +45,9 @@ void PlayLevel::Start()
 	UI->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::UI) });
 
 	// Transition
-	Effect_Transition = CreateActor<Transition>();
-	Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
-	Effect_Transition->Off();
+	//Effect_Transition = CreateActor<Transition>();
+	//Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
+	//Effect_Transition->Off();
 
 
 
@@ -172,7 +172,7 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
-	Effect_Transition->FadeOut();
+	//Effect_Transition->FadeOut();
 
 	CurRoom = *RoomIter;
 
@@ -188,7 +188,7 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (Effect_Transition->IsTransitionEnd())
+	if (true)//Effect_Transition->IsTransitionEnd())
 	{
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
@@ -229,7 +229,7 @@ void PlayLevel::RoomExitStart(const StateInfo& _Info)
 
 void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (Effect_Transition->IsTransitionEnd())
+	if (true)//Effect_Transition->IsTransitionEnd())
 	{
 		Player->Off();			// 콜리전 맵을 계속 인식해서 잠깐 꺼주어야 함
 		CurRoom->Clear();
