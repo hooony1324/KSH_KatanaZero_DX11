@@ -43,6 +43,8 @@ void EnemyGrunt::Update(float _DeltaTime)
 	// 움직임 상태 최종 MoveVec
 	Move(_DeltaTime);
 
+
+
 }
 
 void EnemyGrunt::End()

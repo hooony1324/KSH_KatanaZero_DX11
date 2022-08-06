@@ -32,10 +32,6 @@ void Room_Factory1::Start()
 	// 배경 설정되고 카메라 클램프 영역 세팅
 	InitCameraClampArea();
 
-	// 스폰위치, 지형지물 등
-	PtrDoor = GetLevel()->CreateActor<Door>();
-	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
-	PtrDoor->Off();
 
 	PlayerSpawnPos = float4{ 220, -620, GetDepth(ACTOR_DEPTH::PLAYER) };
 }
@@ -47,13 +43,15 @@ void Room_Factory1::Setting()
 	GlobalValueManager::ColMap = Background_Collision;
 
 	// 지형 소환
+	PtrDoor = GetLevel()->CreateActor<Door>();
+	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 	PtrDoor->Close();
-	PtrDoor->On();
+
 
 
 	// 적 소환 위치 : 1400, -310
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	Grunt->GetTransform().SetWorldPosition({ 420, -550, GetDepth(ACTOR_DEPTH::ENEMY)});
+	Grunt->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY)});
 
 	//Cop = GetLevel()->CreateActor<EnemyCop>();
 	//Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });

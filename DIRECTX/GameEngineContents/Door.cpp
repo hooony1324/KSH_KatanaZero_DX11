@@ -15,9 +15,14 @@ void Door::Close()
 	Renderer->ChangeFrameAnimation("idle");
 }
 
-void Door::Open()
+bool Door::Open(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	Renderer->ChangeFrameAnimation("open");
+
+	// 적 있으면 때림
+
+
+	return true;
 }
 
 void Door::Start()
@@ -28,8 +33,14 @@ void Door::Start()
 	Renderer->ScaleToTexture();
 	Renderer->GetTransform().PixLocalNegativeX();
 	Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "door_idle", 0.1f, true });
-	Renderer->CreateFrameAnimationFolder("open", FrameAnimation_DESC{ "door_open", 0.1f, true });
+	Renderer->CreateFrameAnimationFolder("open", FrameAnimation_DESC{ "door_open", 0.1f, false });
 	Renderer->ChangeFrameAnimation("idle");
+
+	Collision = CreateComponent<GameEngineCollision>();
+	float4 Scale = Renderer->GetTransform().GetLocalScale();
+	Collision->GetTransform().SetLocalScale(float4{ 15, Scale.y });
+	Collision->GetTransform().SetLocalPosition({ 20, 0 , 0 });
+	Collision->ChangeOrder(COLLISIONGROUP::DOOR);
 
 	// -330, 72
 	GetTransform().SetLocalScale({ 2.0f, 2.0f, 1 });
@@ -39,8 +50,10 @@ void Door::Start()
 
 void Door::Update(float _DeltaTime)
 {
-
-	auto val = GetTransform().GetWorldPosition();
+	GameEngineDebug::DrawBox(Collision->GetTransform(), { 1, 0, 0, 0.25f });
+	
+	Collision->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_AABB2D
+		, std::bind(&Door::Open, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void Door::End()

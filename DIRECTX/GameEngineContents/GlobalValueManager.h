@@ -16,7 +16,7 @@ enum class COLLISIONGROUP
 	PLAYER_ATTACK,
 	ENEMY,
 	ENEMY_ATTACK,
-
+	DOOR,
 };
 
 enum class ACTOR_DEPTH

@@ -39,6 +39,7 @@ protected:
 		LEFT,
 		UP,
 		DOWN,
+		DOWNBLUE,
 		UNDERGROUND,
 		RIGHTSLOPE,
 		LEFTSLOPE,

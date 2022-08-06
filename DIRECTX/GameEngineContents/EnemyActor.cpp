@@ -142,17 +142,10 @@ void EnemyActor::WallCheck()
 	}
 
 	// 공중
-	if (!Down && !DoubleDown && !Left_Down && !Right_Down)
+	if (!Down && !DoubleDown && !Left_Down && !Right_Down && !DoubleDownBlue)
 	{
 		WallState = STATE_WALL::NONE;
 		IsFall = true;
-	}
-
-	// 바닥 
-	if (!Down && DoubleDown)
-	{
-		WallState = STATE_WALL::DOWN;
-		IsFall = false;
 	}
 
 	// 왼쪽 오른쪽 벽
@@ -164,6 +157,15 @@ void EnemyActor::WallCheck()
 	if (Right_Up && Right_Down)
 	{
 		WallState = STATE_WALL::RIGHT;
+		return;
+	}
+
+
+	// 바닥 
+	if (DoubleDown || DoubleDownBlue)
+	{
+		WallState = STATE_WALL::DOWN;
+		IsFall = false;
 		return;
 	}
 
@@ -253,47 +255,51 @@ void EnemyActor::Move(float _DeltaTime)
 {
 
 
-	// 움직이는 도중에 브레이크 걸어줄만한 것
-
-	switch (WallState)
-	{
-	case EnemyActor::STATE_WALL::NONE:
-		if (MoveVec.y >= 0 && Hp > 0)
-		{
-			MoveVec.y = -2;
-			break;
-		}
-	case EnemyActor::STATE_WALL::UP:
-		if (MoveVec.y >= 0)
-		{
-			MoveVec.y = -1;
-			break;
-		}
-	case EnemyActor::STATE_WALL::DOWN:
-		MoveVec.y = 0;
-		break;
-	case EnemyActor::STATE_WALL::UNDERGROUND:
-		MoveVec.y = 1;
-		break;
-	case EnemyActor::STATE_WALL::RIGHTSLOPE:
-		break;
-	case EnemyActor::STATE_WALL::LEFTSLOPE:
-		break;
-	default:
-		break;
-	}
-
 
 	MoveVec.z = 0;
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
 	GetTransform().SetWorldMove(Velocity);
 
 	//LookDirCheck();
+
+	switch (WallState)
+	{
+	case EnemyActor::STATE_WALL::NONE:
+		GameEngineDebug::OutPutString("NONE");
+		break;
+	case EnemyActor::STATE_WALL::RIGHT:
+		GameEngineDebug::OutPutString("RIGHT");
+		break;
+	case EnemyActor::STATE_WALL::LEFT:
+		GameEngineDebug::OutPutString("LEFT");
+		break;
+	case EnemyActor::STATE_WALL::UP:
+		GameEngineDebug::OutPutString("UP");
+		break;
+	case EnemyActor::STATE_WALL::DOWN:
+		GameEngineDebug::OutPutString("DOWN");
+		break;
+	case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		GameEngineDebug::OutPutString("RIGHTSLOPE");
+		break;
+	case EnemyActor::STATE_WALL::LEFTSLOPE:
+		GameEngineDebug::OutPutString("LEFTSLOPE");
+		break;
+	case EnemyActor::STATE_WALL::UNDERGROUND:
+		GameEngineDebug::OutPutString("UNDERGROUND");
+		break;
+	default:
+		break;
+	}
 }
 
 
 void EnemyActor::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (WallState != STATE_WALL::DOWN)
+	{
+		MoveVec.y = -1.5f;
+	}
 
 	if (WallState == STATE_WALL::DOWN || WallState == STATE_WALL::UNDERGROUND)
 	{
@@ -394,9 +400,11 @@ void EnemyActor::DeadStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 
-	MoveVec = FlyVec * 1.2f;
+	FlyVec.x *= 1.3f;
+	FlyVec.y *= 1.5f;
+	MoveVec = FlyVec;
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
-	MoveSpeed *= 1.5f;
+	MoveSpeed *= 3.0f;
 
 }
 
@@ -405,7 +413,8 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	float DT = _Info.StateTime;
 
 	static bool IsGround = false;
-	if (WallState == STATE_WALL::DOWN)
+	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE 
+		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
 	{
 		if (false == IsGround)
 		{
@@ -420,6 +429,18 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
 	}
+
+	// 벽과 충돌 체크
+	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
+	{
+		MoveVec.x *= -0.3f;
+	}
+	
+	if (WallState == STATE_WALL::UP)
+	{
+		MoveVec.y = -1;
+	}
+
 }
 
 

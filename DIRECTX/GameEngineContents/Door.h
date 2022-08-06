@@ -7,7 +7,7 @@ class Door : public GameEngineActor
 {
 public:
 	void Close();
-	void Open();
+	bool Open(GameEngineCollision* _This, GameEngineCollision* _Other);
 
 public:
 	// constrcuter destructer
@@ -27,6 +27,6 @@ protected:
 
 private:
 	GameEngineTextureRenderer* Renderer;
-
+	GameEngineCollision* Collision;
 };
 

@@ -22,7 +22,6 @@ protected:
 	void End() override;
 
 protected:
-//	bool PlayerAttackCheck(GameEngineCollision* _This, GameEngineCollision* _Other) override;
 
 };
 
