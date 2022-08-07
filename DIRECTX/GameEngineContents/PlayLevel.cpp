@@ -224,7 +224,7 @@ void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
 
 void PlayLevel::RoomExitStart(const StateInfo& _Info)
 {
-	Effect_Transition->FadeIn();
+	//Effect_Transition->FadeIn();
 }
 
 void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)

@@ -22,6 +22,8 @@ protected:
 	void End() override;
 
 protected:
+	virtual void AttackStart(const StateInfo& _Info) override;
+	virtual void AttackUpdate(float _DeltaTime, const StateInfo& _Info) override;
 
 };
 

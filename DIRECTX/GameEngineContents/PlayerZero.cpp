@@ -37,6 +37,11 @@ void PlayerZero::Start()
 	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
 	
+	// 중심 디버그용
+	GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
+	test->SetTexture("None.png");
+	test->ScaleToTexture();
+
 	// 콜리전
 	Collision_Character = CreateComponent<GameEngineCollision>();
 	Collision_Character->GetTransform().SetLocalScale(Renderer_Character->GetTransform().GetLocalScale());
@@ -86,7 +91,7 @@ void PlayerZero::Update(float _DeltaTime)
 	PlayerMove(_DeltaTime);
 
 	CoolTimeCheck();
-	GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 0, 0, 0.25f });
+
 	PrintPlayerDebug();
 }
 

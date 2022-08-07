@@ -48,7 +48,6 @@ void Room_Factory1::Setting()
 	PtrDoor->Close();
 
 
-
 	// 적 소환 위치 : 1400, -310
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
 	Grunt->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY)});

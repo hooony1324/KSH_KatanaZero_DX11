@@ -30,14 +30,14 @@ protected:
 
 protected:
 	GameEngineTextureRenderer* Background;
-	
-	// 충돌맵(반투명 괜찮을듯)
 	GameEngineTextureRenderer* Background_Collision;
 
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 
 	float4 PlayerSpawnPos; // 룸 마다 꼭 설정해주어야 함
+	std::vector<float4> UpStairPoints;
+	std::vector<float4> DownStairPoints;
 private:
 
 };

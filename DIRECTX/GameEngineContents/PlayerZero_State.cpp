@@ -381,6 +381,7 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 	// ¶¥ ¶Õ°í ³»·Á°¡±â
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
+		MoveSpeed = SPEED_PLAYER;
 		GetTransform().SetWorldMove({ 0, -4, 0 });
 		PlayerStateManager.ChangeState("Fall");
 	}
@@ -441,6 +442,8 @@ void PlayerZero::WallGrabCheck()
 
 void PlayerZero::PrintPlayerDebug()
 {
+	GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 0, 0, 0.25f });
+
 	//switch (WallState)
 	//{
 	//case CharacterActor::STATE_WALL::NONE:

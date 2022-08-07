@@ -5,6 +5,7 @@
 class Door;
 class Room_Factory1 : public Room
 {
+
 public:
 	// constrcuter destructer
 	Room_Factory1();
@@ -28,5 +29,6 @@ private:
 	Door* PtrDoor;
 	GameEngineActor* Grunt;
 	GameEngineActor* Cop;
+
 };
 

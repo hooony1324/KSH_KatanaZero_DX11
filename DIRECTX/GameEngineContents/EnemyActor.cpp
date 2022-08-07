@@ -8,11 +8,11 @@ bool TurnEnd;
 static float ChaseSensorPaddingX = 25.0f;
 
 EnemyActor::EnemyActor() 
-	: CurAction(ENEMYACTION::PATROL)
-	, EnemyName(std::string())
+	: EnemyName(std::string())
 	, MoveVec(float4::DOWN)
 	, PrevLookDir(1)
 	, WallState(STATE_WALL::NONE)
+	, AttackAniEnd(false)
 {
 }
 
@@ -59,7 +59,7 @@ void EnemyActor::EnemyActorDebug()
 void EnemyActor::CreateRendererAndCollision()
 {
 	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
-	Renderer_Character->SetScaleModeImage();
+
 
 	Renderer_Alert = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Alert->SetTexture("spr_enemy_follow_0.png");
@@ -88,16 +88,20 @@ void EnemyActor::CreateAllFolderAnimation()
 	}
 
 	Renderer_Character->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ EnemyName + "_idle", 0.1125f });
-	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ EnemyName + "_attack", 0.05f , false });
-	Renderer_Character->CreateFrameAnimationFolder("walk", FrameAnimation_DESC{ EnemyName + "_walk", 0.1125f });
-	Renderer_Character->CreateFrameAnimationFolder("turn", FrameAnimation_DESC{ EnemyName + "_turn", 0.1125f, false });
-	Renderer_Character->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ EnemyName + "_run", 0.1125f });
+	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ EnemyName + "_attack", 0.1125f , false });
+	Renderer_Character->CreateFrameAnimationFolder("walk", FrameAnimation_DESC{ EnemyName + "_walk", 0.08f });
+	Renderer_Character->CreateFrameAnimationFolder("turn", FrameAnimation_DESC{ EnemyName + "_turn", 0.08f, false });
+	Renderer_Character->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ EnemyName + "_run", 0.08f });
 	Renderer_Character->CreateFrameAnimationFolder("hurtfly", FrameAnimation_DESC{ EnemyName + "_hurtfly", 0.1125f, false });
 	Renderer_Character->CreateFrameAnimationFolder("hurtground", FrameAnimation_DESC{ EnemyName + "_hurtground", 0.1125f, false });
 
 	// 바인드
 	Renderer_Character->AnimationBindStart("turn", [=](const FrameAnimation_DESC&) { TurnEnd = false; });
 	Renderer_Character->AnimationBindEnd("turn", [=](const FrameAnimation_DESC&) { TurnEnd = true; });
+	Renderer_Character->AnimationBindStart("attack", [=](const FrameAnimation_DESC&) { AttackAniEnd = false; });
+	Renderer_Character->AnimationBindEnd("attack", [=](const FrameAnimation_DESC&) { AttackAniEnd = true; });
+
+	Renderer_Character->SetScaleModeImage();
 }
 
 void EnemyActor::CreateAllState()
@@ -123,6 +127,11 @@ void EnemyActor::CreateAllState()
 	StateManager.CreateStateMember("Run"
 		, std::bind(&EnemyActor::RunUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyActor::RunStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("ChaseTurn"
+		, std::bind(&EnemyActor::ChaseTurnUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::ChaseTurnStart, this, std::placeholders::_1));
+
+
 }
 
 void EnemyActor::OnEvent()
@@ -283,9 +292,45 @@ void EnemyActor::PlayerAlertCheck()
 bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 느낌표 + 추적 시작
+	MoveVec.x = 0;
+	Renderer_Character->ChangeFrameAnimation("idle");
+	StateManager.ChangeState("Alert");
 	FindPlayer = true;
-	float4 PlayerPos = CharacterActor::CharacterPosition;
 	return true;
+}
+
+void EnemyActor::PlayerLeftRightCheck()
+{
+	if (false == FindPlayer)
+	{
+		return;
+	}
+
+	EnemyPos = GetTransform().GetWorldPosition();
+	PlayerPos = CharacterActor::CharacterPosition;
+	
+
+	// 같은층 다른층 판단
+	float HeightSub = PlayerPos.y - EnemyPos.y;
+	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y)
+	{
+
+	}
+	
+	// Ex) 적 2층, 플레이어 1층
+	// 1. 플레이어 위/아래 확인(아래에 있음) >>> 2. 아래로 가는 포인트중 가장 가까운 포인트 확인(그곳이 플레이어 방향)
+	// 3. 포인트까지 도달 후 슬로프 방향대로 대각선 하향 움직임 다음 추격
+	
+	// 같은층
+	if (EnemyPos.x - PlayerPos.x< 0)
+	{
+		// Ememy(800) Player(900) 플레이어 오른쪽
+		PlayerDir = 1;
+	}
+	else
+	{
+		PlayerDir = -1;
+	}
 }
 
 void EnemyActor::LookDirCheck()
@@ -314,8 +359,6 @@ void EnemyActor::LookDirCheck()
 
 void EnemyActor::Move(float _DeltaTime)
 {
-
-
 
 	MoveVec.z = 0;
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
@@ -356,12 +399,6 @@ void EnemyActor::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 		StateManager.ChangeState("Walk");
 		return;
 	}
-
-	if (true == FindPlayer)
-	{
-		StateManager.ChangeState("Alert");
-		return;
-	}
 }
 
 void EnemyActor::WalkStart(const StateInfo& _Info)
@@ -376,12 +413,6 @@ void EnemyActor::WalkUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveVec.x = 0;
 		StateManager.ChangeState("PatrolTurn");
-		return;
-	}
-
-	if (true == FindPlayer)
-	{
-		StateManager.ChangeState("Alert");
 		return;
 	}
 }
@@ -407,63 +438,102 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 
 void EnemyActor::PatrolTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true == FindPlayer)
-	{
-		StateManager.ChangeState("Alert");
-		return;
-	}
-
 	if (true == TurnEnd)
 	{
 		TurnEnd = false;
 		StateManager.ChangeState("Idle");
 		return;
 	}
-
-
 }
 
 void EnemyActor::AlertStart(const StateInfo& _Info)
 {
+	MoveSpeed *= 2.0f;
 	Renderer_Alert->On();
 }
 
 void EnemyActor::AlertUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 0.2f)
+	if (_Info.StateTime > 0.5f)
 	{
 		Renderer_Alert->SetTexture("spr_enemy_follow_1.png");
-		StateManager.ChangeState("Run");
+		
+		// 턴 할지 뛸 지 결정
+		if (PrevLookDir == PlayerDir)
+		{
+			StateManager.ChangeState("Run");
+		}
+		else
+		{
+			StateManager.ChangeState("ChaseTurn");
+		}
+
 	}
 }
 
 void EnemyActor::RunStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("run");
+	MoveVec.x = PrevLookDir;
 }
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 Turn
+	if (PrevLookDir != PlayerDir)
+	{
+		StateManager.ChangeState("ChaseTurn");
+		return;
+	}
+	
+	// 추격 알고리즘(보류)
+	// 사거리 밖이면 따라감
+	// 따라갈 때 LeftSlope RightSlope 나오면 플레이어 위층 아래층 체크
+	// 따라갈 때 벽에 부딪히는거 
+	// 사거리 안에 들어오면 Attack
+
+	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
+	{
+		StateManager.ChangeState("Attack");
+	}
 }
 
 void EnemyActor::ChaseTurnStart(const StateInfo& _Info)
 {
+	MoveVec.x = 0;
+	
+	// 왼쪽으로 돔
+	if (PrevLookDir > 0)
+	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 0 , 0 });
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+		PrevLookDir = -1;
+	}
+	// 오른쪽으로 돔
+	else if (PrevLookDir < 0)
+	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 0 , 0 });
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+		PrevLookDir = 1;
+	}
+	Renderer_Character->ChangeFrameAnimation("turn");
 }
 
 void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-}
+	if (false == TurnEnd)
+	{
+		return;
+	}
 
-void EnemyActor::AttackStart(const StateInfo& _Info)
-{
-}
-
-void EnemyActor::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
-{
+	// 턴 or 런 정해줘야됨
+	TurnEnd = false;
+	StateManager.ChangeState("Run");
 }
 
 void EnemyActor::DeadStart(const StateInfo& _Info)
 {
+	MoveSpeed = 150.0f;
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 
 	FlyVec.x *= 1.3f;

@@ -29,6 +29,7 @@ protected:
 
 	int Hp;
 	float AttackRange;
+	bool AttackAniEnd;
 
 // 벽 상태
 protected:
@@ -66,23 +67,18 @@ protected:
 
 // FSM
 protected:
-	enum class ENEMYACTION
-	{
-		PATROL,
-		CHASE,
-		ATTACK,
-	};
-
 	// 순찰, 추격
 	void PlayerAttackCheck();
 	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
 	void PlayerAlertCheck();
 	bool SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other);
+	void PlayerLeftRightCheck();
 	bool FindPlayer;
+	float4 PlayerPos;
+	float4 EnemyPos;
+	int PlayerDir;
 
 
-	// Spawn -> 소환시 지면으로
-	// 1. PATROL 2. CHASE
 	// PATROL : WALK / IDLE / TURN
 	// CHASE : RUN / TURN / ATTACK
 	virtual void SpawnUpdate(float _DeltaTime, const StateInfo& _Info);
@@ -107,15 +103,13 @@ protected:
 	virtual void ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	// 오버라이드 해야 될 듯(원거리 / 근거리, 이펙트 등등)
-	virtual void AttackStart(const StateInfo& _Info);
-	virtual void AttackUpdate(float _DeltaTime, const StateInfo& _Info);
+	virtual void AttackStart(const StateInfo& _Info) = 0;
+	virtual void AttackUpdate(float _DeltaTime, const StateInfo& _Info) = 0;
 
 	virtual void DeadStart(const StateInfo& _Info);
 	virtual void DeadUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	GameEngineStateManager StateManager;
-	ENEMYACTION PrevAction;
-	ENEMYACTION CurAction;
 
 	void Move(float _DeltaTime);
 	void LookDirCheck();
