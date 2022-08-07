@@ -3,6 +3,7 @@
 #include <GameEngineBase/GameEngineSound.h>
 
 // Ό³Έν :
+class GameEngineTextureRenderer;
 class EnemyGrunt : public EnemyActor
 {
 public:
@@ -24,6 +25,8 @@ protected:
 protected:
 	virtual void AttackStart(const StateInfo& _Info) override;
 	virtual void AttackUpdate(float _DeltaTime, const StateInfo& _Info) override;
+	GameEngineTextureRenderer* Renderer_Slash;
+	GameEngineCollision* Collision_Slash;
 
 };
 
