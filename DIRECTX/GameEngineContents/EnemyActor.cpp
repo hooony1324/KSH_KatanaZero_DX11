@@ -221,17 +221,16 @@ void EnemyActor::WallCheck()
 	{
 		WallState = STATE_WALL::DOWN;
 		IsFall = false;
-		return;
 	}
 
 	// ╫╫╥нга
-	if (!IsFall && Left && Left_Down)
+	if (Left_Down && !Right_Down)
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (!IsFall && Right && Right_Down)
+	if (Right_Down && !Left_Down)
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
@@ -373,8 +372,7 @@ void EnemyActor::WalkStart(const StateInfo& _Info)
 
 void EnemyActor::WalkUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (WallState == STATE_WALL::RIGHT || WallState == STATE_WALL::LEFT
-		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+	if (MoveVec.x > 0 && WallState == STATE_WALL::RIGHT || MoveVec.x < 0 && WallState == STATE_WALL::LEFT)
 	{
 		MoveVec.x = 0;
 		StateManager.ChangeState("PatrolTurn");
