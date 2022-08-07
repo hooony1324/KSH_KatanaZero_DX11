@@ -32,7 +32,6 @@ void EnemyCop::Update(float _DeltaTime)
 	WallCheck();
 
 	// 액션 체크
-	ChooseAction();
 
 	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);

@@ -35,7 +35,7 @@ void EnemyGrunt::Update(float _DeltaTime)
 	WallCheck();
 
 	// 액션 체크
-	ChooseAction();
+	PlayerAlertCheck();
 
 	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);
@@ -44,7 +44,7 @@ void EnemyGrunt::Update(float _DeltaTime)
 	Move(_DeltaTime);
 
 
-
+	EnemyActorDebug();
 }
 
 void EnemyGrunt::End()

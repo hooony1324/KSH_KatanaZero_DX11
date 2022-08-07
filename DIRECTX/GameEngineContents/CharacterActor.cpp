@@ -2,6 +2,8 @@
 #include "CharacterActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+
+float4 CharacterActor::CharacterPosition;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
 const float4 GREEN = { 0, 1, 0, 0 };
 const float4 BLUE = { 1, 0, 0, 0 };

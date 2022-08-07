@@ -2,7 +2,10 @@
 #include "EnemyActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include "CharacterActor.h"
+
 bool TurnEnd;
+static float ChaseSensorPaddingX = 25.0f;
 
 EnemyActor::EnemyActor() 
 	: CurAction(ENEMYACTION::PATROL)
@@ -18,10 +21,52 @@ EnemyActor::~EnemyActor()
 	
 }
 
+void EnemyActor::EnemyActorDebug()
+{
+	switch (WallState)
+	{
+	case EnemyActor::STATE_WALL::NONE:
+		GameEngineDebug::OutPutString("NONE");
+		break;
+	case EnemyActor::STATE_WALL::RIGHT:
+		GameEngineDebug::OutPutString("RIGHT");
+		break;
+	case EnemyActor::STATE_WALL::LEFT:
+		GameEngineDebug::OutPutString("LEFT");
+		break;
+	case EnemyActor::STATE_WALL::UP:
+		GameEngineDebug::OutPutString("UP");
+		break;
+	case EnemyActor::STATE_WALL::DOWN:
+		GameEngineDebug::OutPutString("DOWN");
+		break;
+	case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		GameEngineDebug::OutPutString("RIGHTSLOPE");
+		break;
+	case EnemyActor::STATE_WALL::LEFTSLOPE:
+		GameEngineDebug::OutPutString("LEFTSLOPE");
+		break;
+	case EnemyActor::STATE_WALL::UNDERGROUND:
+		GameEngineDebug::OutPutString("UNDERGROUND");
+		break;
+	default:
+		break;
+	}
+
+	GameEngineDebug::DrawBox(Collision_ChaseSensor->GetTransform(), { 0, 0, 1, 0.25f });
+}
+
 void EnemyActor::CreateRendererAndCollision()
 {
 	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Character->SetScaleModeImage();
+
+	Renderer_Alert = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Alert->SetTexture("spr_enemy_follow_0.png");
+	Renderer_Alert->ScaleToTexture();
+	Renderer_Alert->SetSamplingModePoint();
+	Renderer_Alert->GetTransform().SetLocalPosition({ 0, 30, 0 });
+	Renderer_Alert->Off();
 
 	float4 RendererScale = Renderer_Character->GetTransform().GetLocalScale();
 	Collision_Character = CreateComponent<GameEngineCollision>();
@@ -29,7 +74,10 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_Character->ChangeOrder(COLLISIONGROUP::ENEMY);
 
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
-	Collision_ChaseSensor->GetTransform().SetLocalScale({ 400, 100, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_ChaseSensor->GetTransform().SetLocalScale({ 120, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 0 , 0 });
+
+	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -68,6 +116,13 @@ void EnemyActor::CreateAllState()
 	StateManager.CreateStateMember("PatrolTurn"
 		, std::bind(&EnemyActor::PatrolTurnUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyActor::PatrolTurnStart, this, std::placeholders::_1));
+
+	StateManager.CreateStateMember("Alert"
+		, std::bind(&EnemyActor::AlertUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::AlertStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("Run"
+		, std::bind(&EnemyActor::RunUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::RunStart, this, std::placeholders::_1));
 }
 
 void EnemyActor::OnEvent()
@@ -184,23 +239,15 @@ void EnemyActor::WallCheck()
 
 }
 
-void EnemyActor::ChooseAction()
-{
-	// 플레이어가 Chase거리 밖에 있다 -> PATROL
-	// 플레이어가 Chase거리 안에 있다 -> Chase
-	// Chase이고 플레이어과의 거리가 AttackRange 안이다 -> Attack
-
-
-
-
-
-
-	//PrevAction = CurAction;
-	//CurAction = ENEMYACTION::PATROL;
-}
 
 void EnemyActor::PlayerAttackCheck()
 {
+	// 죽은 후에는 체크 안함
+	if (Hp <= 0)
+	{
+		return;
+	}
+
 	Collision_Character->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D,
 		std::bind(&EnemyActor::Damaged, this, std::placeholders::_1, std::placeholders::_2)
 	);
@@ -208,12 +255,6 @@ void EnemyActor::PlayerAttackCheck()
 
 bool EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	// 죽은 후에는 체크 안함
-	if (Hp <= 0)
-	{
-		return false;
-	}
-
 	// 플레이어의 공격 위치를 받아서 반대로 날려짐
 	Hp--;
 	if (Hp <= 0)
@@ -224,6 +265,27 @@ bool EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other
 		StateManager.ChangeState("Dead");
 	}
 
+	return true;
+}
+
+void EnemyActor::PlayerAlertCheck()
+{
+	// 죽은 후에는 체크 안함
+	if (Hp <= 0 || true == FindPlayer)
+	{
+		return;
+	}
+
+	// 범위안에 들어오면
+	Collision_ChaseSensor->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::PLAYER, CollisionType::CT_AABB2D,
+		std::bind(&EnemyActor::SeePlayer, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other)
+{
+	// 느낌표 + 추적 시작
+	FindPlayer = true;
+	float4 PlayerPos = CharacterActor::CharacterPosition;
 	return true;
 }
 
@@ -262,35 +324,7 @@ void EnemyActor::Move(float _DeltaTime)
 
 	//LookDirCheck();
 
-	switch (WallState)
-	{
-	case EnemyActor::STATE_WALL::NONE:
-		GameEngineDebug::OutPutString("NONE");
-		break;
-	case EnemyActor::STATE_WALL::RIGHT:
-		GameEngineDebug::OutPutString("RIGHT");
-		break;
-	case EnemyActor::STATE_WALL::LEFT:
-		GameEngineDebug::OutPutString("LEFT");
-		break;
-	case EnemyActor::STATE_WALL::UP:
-		GameEngineDebug::OutPutString("UP");
-		break;
-	case EnemyActor::STATE_WALL::DOWN:
-		GameEngineDebug::OutPutString("DOWN");
-		break;
-	case EnemyActor::STATE_WALL::RIGHTSLOPE:
-		GameEngineDebug::OutPutString("RIGHTSLOPE");
-		break;
-	case EnemyActor::STATE_WALL::LEFTSLOPE:
-		GameEngineDebug::OutPutString("LEFTSLOPE");
-		break;
-	case EnemyActor::STATE_WALL::UNDERGROUND:
-		GameEngineDebug::OutPutString("UNDERGROUND");
-		break;
-	default:
-		break;
-	}
+
 }
 
 
@@ -323,6 +357,12 @@ void EnemyActor::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 		StateManager.ChangeState("Walk");
 		return;
 	}
+
+	if (true == FindPlayer)
+	{
+		StateManager.ChangeState("Alert");
+		return;
+	}
 }
 
 void EnemyActor::WalkStart(const StateInfo& _Info)
@@ -338,18 +378,29 @@ void EnemyActor::WalkUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveVec.x = 0;
 		StateManager.ChangeState("PatrolTurn");
+		return;
+	}
+
+	if (true == FindPlayer)
+	{
+		StateManager.ChangeState("Alert");
+		return;
 	}
 }
 
 void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 {
+	// 왼쪽으로 돔
 	if (PrevLookDir > 0)
 	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 0 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
 	}
+	// 오른쪽으로 돔
 	else if (PrevLookDir < 0)
 	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 0 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		PrevLookDir = 1;
 	}
@@ -358,22 +409,39 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 
 void EnemyActor::PatrolTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (true == FindPlayer)
+	{
+		StateManager.ChangeState("Alert");
+		return;
+	}
+
 	if (true == TurnEnd)
 	{
+		TurnEnd = false;
 		StateManager.ChangeState("Idle");
+		return;
 	}
+
+
 }
 
 void EnemyActor::AlertStart(const StateInfo& _Info)
 {
+	Renderer_Alert->On();
 }
 
 void EnemyActor::AlertUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (_Info.StateTime > 0.2f)
+	{
+		Renderer_Alert->SetTexture("spr_enemy_follow_1.png");
+		StateManager.ChangeState("Run");
+	}
 }
 
 void EnemyActor::RunStart(const StateInfo& _Info)
 {
+	Renderer_Character->ChangeFrameAnimation("run");
 }
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)

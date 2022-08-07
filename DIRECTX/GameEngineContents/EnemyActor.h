@@ -18,12 +18,17 @@ public:
 	EnemyActor& operator=(const EnemyActor& _Other) = delete;
 	EnemyActor& operator=(EnemyActor&& _Other) noexcept = delete;
 
+	void EnemyActorDebug();
+
 // 초기화
 protected:
 	std::string EnemyName;
 	void CreateRendererAndCollision();
 	void CreateAllFolderAnimation();
 	void CreateAllState();
+
+	int Hp;
+	float AttackRange;
 
 // 벽 상태
 protected:
@@ -68,12 +73,13 @@ protected:
 		ATTACK,
 	};
 
-	// 피격 체크, true : 리전 체크 1회  false : 지속
+	// 순찰, 추격
 	void PlayerAttackCheck();
-	void PlayerAlertCheck();
 	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
-	void ChooseAction();
-	void LookDirCheck();
+	void PlayerAlertCheck();
+	bool SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other);
+	bool FindPlayer;
+
 
 	// Spawn -> 소환시 지면으로
 	// 1. PATROL 2. CHASE
@@ -112,14 +118,14 @@ protected:
 	ENEMYACTION CurAction;
 
 	void Move(float _DeltaTime);
+	void LookDirCheck();
 
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineTextureRenderer* Renderer_Alert;
 	GameEngineCollision* Collision_Character;
 	GameEngineCollision* Collision_ChaseSensor;	
-	bool ChasePlayer;
-	float AttackRange;
+	
 	float4 Velocity;
 	float4 MoveVec;
 	float MoveSpeed;
@@ -127,7 +133,7 @@ protected:
 	float FlyRadian;
 	int PrevLookDir;
 
-	int Hp;
+
 	
 };
 

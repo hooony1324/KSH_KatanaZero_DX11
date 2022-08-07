@@ -75,6 +75,7 @@ void PlayerZero::Update(float _DeltaTime)
 		return;
 	}
 
+	CharacterPosition = GetTransform().GetWorldPosition();
 	WallCheck();
 	InputCheck();	
 	PlayerStateManager.Update(_DeltaTime);
@@ -210,7 +211,6 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 
 
 	GetTransform().SetWorldMove(Velocity);
-
 
 }
 

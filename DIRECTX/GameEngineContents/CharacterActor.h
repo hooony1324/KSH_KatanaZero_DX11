@@ -6,6 +6,10 @@ class GameEngineTextureRenderer;
 class GameEngineCollision;
 class CharacterActor : public GameEngineActor
 {
+	// 적은 플레이어를 한번 인식하면 끝까지 쫓아온다
+public:
+	static float4 CharacterPosition;
+
 public:
 	// constrcuter destructer
 	CharacterActor();
