@@ -46,7 +46,7 @@ void EnemyGrunt::Start()
 
 	Renderer_Character->AnimationBindFrame("attack", [=](const FrameAnimation_DESC& _Info)
 		{
-			if (_Info.CurFrame == 2)
+			if (_Info.CurFrame == 3)
 			{
 				Renderer_Slash->On();
 				Renderer_Slash->ChangeFrameAnimation("slash");

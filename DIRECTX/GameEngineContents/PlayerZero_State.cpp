@@ -4,8 +4,7 @@
 #include "Cursor.h"
 #include <algorithm>
 
-float FlyAngle;
-float4 FlyVector;
+
 const float AntiGravity = 5.2f;
 
 bool Flipable = false;
@@ -395,6 +394,52 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
+void PlayerZero::DeadStart(const StateInfo& _Info)
+{
+	MoveSpeed = 150.0f;
+	Renderer_Character->ChangeFrameAnimation("hurtfly");
+
+	FlyVector.x *= 1;
+	FlyVector.y *= 1;
+	MoveVec = FlyVector;
+	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, FlyVector);
+	MoveSpeed *= 3.0f;
+}
+
+void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	float DT = _Info.StateTime;
+
+	static bool IsGround = false;
+	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE
+		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
+	{
+		if (false == IsGround)
+		{
+			IsGround = true;
+			Death(3.0f);
+			Renderer_Character->ChangeFrameAnimation("hurtground");
+		}
+		MoveVec.y = 0;
+		MoveVec.x = GameEngineMath::LerpLimit(FlyVector.x, 0, DT);
+	}
+	else
+	{
+		MoveVec.y = FlyVector.y * sinf(FlyAngle) - (9.8f * DT) / 6.0f;
+	}
+
+	// 벽과 충돌 체크
+	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
+	{
+		MoveVec.x *= -0.3f;
+	}
+
+	if (WallState == STATE_WALL::UP)
+	{
+		MoveVec.y = -1;
+	}
+}
+
 
 void PlayerZero::CreateSlash()
 {
@@ -442,7 +487,14 @@ void PlayerZero::WallGrabCheck()
 
 void PlayerZero::PrintPlayerDebug()
 {
-	GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 0, 0, 0.25f });
+	if (Collision_Slash->IsUpdate())
+	{
+		GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 1, 1, 0.25f });
+	}
+	if (Collision_Character->IsUpdate())
+	{
+		GameEngineDebug::DrawBox(Collision_Character->GetTransform(), { 1, 0, 0, 0.25f });
+	}
 
 	//switch (WallState)
 	//{

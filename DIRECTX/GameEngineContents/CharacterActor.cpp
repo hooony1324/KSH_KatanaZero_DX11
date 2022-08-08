@@ -10,6 +10,7 @@ CharacterActor::CharacterActor()
 	, MoveVec(float4::ZERO)
 	, PrevLookDir(1)
 	, CurLookDir(1)
+	, Hp(1)
 {
 
 }
@@ -148,6 +149,34 @@ void CharacterActor::LookCheck(float _InputOrVelocityDir)
 	}
 
 	PrevLookDir = CurLookDir;
+}
+
+void CharacterActor::EnemyAttackCheck()
+{
+	// 죽은 후에는 체크 안함
+	if (Hp <= 0)
+	{
+		return;
+	}
+
+	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_AABB2D,
+		std::bind(&CharacterActor::Damaged, this, std::placeholders::_1, std::placeholders::_2)
+	);
+}
+
+bool CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
+{
+	// 공격 위치를 받아서 반대로 날려짐
+	Hp--;
+	if (Hp <= 0)
+	{
+		FlyVector = _This->GetTransform().GetWorldPosition() - _Other->GetTransform().GetWorldPosition();
+		FlyVector.z = 0;
+		FlyVector.Normalize();
+		PlayerStateManager.ChangeState("Dead");
+	}
+
+	return true;
 }
 
 

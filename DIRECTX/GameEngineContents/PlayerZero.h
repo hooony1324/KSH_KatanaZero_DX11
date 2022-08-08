@@ -37,9 +37,9 @@ private:
 // 플레이어 정보
 private:
 	void PlayerMove(float _DeltaTime);
-	void PrintPlayerDebug();
 	void CreateSlash();
 	void WallGrabCheck();
+	void PrintPlayerDebug();
 	
 private:
 	// 입력
@@ -87,13 +87,14 @@ public:
 	void IdleToRunStart(const StateInfo& _Info);
 	void IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	// 죽음
+	void DeadStart(const StateInfo& _Info);
+	void DeadUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	void InputCheck();
 	void CoolTimeCheck();
 
 private:
-	GameEngineStateManager PlayerStateManager;
+	
 	Timer* AttackTimer;
 	Timer* RollTimer;
 
@@ -110,13 +111,6 @@ private:
 // 바인딩
 private:
 	void StateManagerInit();
-
-
-	void SlashAniUpdate(const FrameAnimation_DESC& _Info)
-	{
-		return;
-		//Collision_Slash->On();
-	}
 
 };
 

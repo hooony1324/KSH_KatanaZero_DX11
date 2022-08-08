@@ -68,11 +68,6 @@ void PlayerZero::Start()
 
 void PlayerZero::Update(float _DeltaTime)
 {
-	if (_DeltaTime >= 0.1f)
-	{
-		_DeltaTime = 0.1f;
-	}
-
 	// 프리카메라 모드면 움직임 X
 	if (true == GetLevel()->GetMainCameraActor()->IsFreeCameraMode())
 	{
@@ -80,8 +75,9 @@ void PlayerZero::Update(float _DeltaTime)
 	}
 
 	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
+	EnemyAttackCheck();
 	WallCheck();
-	InputCheck();	
+	InputCheck();
 	PlayerStateManager.Update(_DeltaTime);
 	FloatTimeCheck(_DeltaTime);
 
@@ -271,6 +267,12 @@ void PlayerZero::StateManagerInit()
 		, std::bind(&PlayerZero::FlipUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayerZero::FlipStart, this, std::placeholders::_1)
 	);;
+
+	// DEAD추가
+	PlayerStateManager.CreateStateMember("Dead"
+		, std::bind(&PlayerZero::DeadUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::DeadStart, this, std::placeholders::_1)
+	);;
 }
 
 
@@ -290,6 +292,10 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.05f, false });
+	
+	Renderer_Character->CreateFrameAnimationFolder("hurtfly", FrameAnimation_DESC{ "hurtfly", 0.1125f, false });
+	Renderer_Character->CreateFrameAnimationFolder("hurtground", FrameAnimation_DESC{ "hurtground", 0.1125f, false });
+
 
 	// Slash
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.07f, false });
@@ -316,12 +322,10 @@ void PlayerZero::CreateAllAnimation()
 
 	Renderer_Character->AnimationBindStart("attack", [=](const FrameAnimation_DESC&) 
 		{ 		
-			Collision_Slash->On();
 			Attack_AniEnd = false;
 		});
 	Renderer_Character->AnimationBindEnd("attack", [=](const FrameAnimation_DESC&) 
 		{
-			Collision_Slash->Off();
 			Attack_AniEnd = true;
 		});
 

@@ -37,10 +37,17 @@ protected:
 
 	STATE_WALL WallState;
 
+// 상태 체크
 protected:
 	void WallCheck();
 	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
+	
+	// 피격
+	void EnemyAttackCheck();
+	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
+
+	GameEngineStateManager PlayerStateManager;
 
 // 이동 관련
 protected:
@@ -75,8 +82,9 @@ protected:
 	bool WallGrab;
 	float FloatDeltaTime; // 총 공중에 있는 시간만큼 중력 세게 적용
 
-// 공격 관련
 protected:
-
+	int Hp;
+	float FlyAngle;
+	float4 FlyVector;
 };
 
