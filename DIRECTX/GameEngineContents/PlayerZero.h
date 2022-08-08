@@ -1,6 +1,5 @@
 #pragma once
 #include "CharacterActor.h"
-#include <GameEngineCore/GameEngineActor.h>
 #include <GameEngineBase/GameEngineSound.h>
 
 const float SPEED_PLAYER = 400.0f;

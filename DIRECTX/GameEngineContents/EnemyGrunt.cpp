@@ -1,7 +1,8 @@
 #include "PreCompile.h"
 #include "EnemyGrunt.h"
 
-
+const float SlashRendererPaddingX = 8.0f;
+const float SlashColPaddingX = 20.0f;
 
 EnemyGrunt::EnemyGrunt() 
 {
@@ -24,7 +25,7 @@ void EnemyGrunt::Start()
 	
 	
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
-	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{"grunt_slash", 0.08f, false});
+	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{"grunt_slash", 0.1125f, false});
 	Renderer_Slash->SetScaleModeImage();
 
 	Renderer_Slash->AnimationBindStart("slash", [=](const FrameAnimation_DESC& _Info)
@@ -39,7 +40,7 @@ void EnemyGrunt::Start()
 
 	Renderer_Slash->Off();
 	Collision_Slash = CreateComponent<GameEngineCollision>();
-	Collision_Slash->GetTransform().SetLocalScale({ 25, 70 , GetDepth(ACTOR_DEPTH::COLLISION)});
+	Collision_Slash->GetTransform().SetLocalScale({ 25, 35 , GetDepth(ACTOR_DEPTH::COLLISION)});
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::ENEMY_ATTACK);
 	Collision_Slash->Off();
 
@@ -101,6 +102,17 @@ void EnemyGrunt::AttackStart(const StateInfo& _Info)
 	MoveVec.x = 0;
 
 	// 슬래쉬 충돌체 위치 조정 PrevLookDir or MoveVec
+	Renderer_Slash->GetTransform().SetLocalPosition({ SlashRendererPaddingX * PrevLookDir, 10, 0 });
+	Collision_Slash->GetTransform().SetLocalPosition({ SlashColPaddingX * PrevLookDir, 10, 0 });
+
+	if (PrevLookDir > 0)
+	{
+		Renderer_Slash->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Slash->GetTransform().PixLocalNegativeX();
+	}
 }
 
 void EnemyGrunt::AttackUpdate(float _DeltaTime, const StateInfo& _Info)

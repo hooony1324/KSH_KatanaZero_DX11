@@ -1,5 +1,4 @@
 #pragma once
-#include <GameEngineCore/GameEngineActor.h>
 #include "EnemyActor.h"
 
 // Ό³Έν :

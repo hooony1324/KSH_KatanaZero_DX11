@@ -54,9 +54,6 @@
     <ClInclude Include="GlobalValueManager.h">
       <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="PreCompile.h">
-      <Filter>PreCompile</Filter>
-    </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="PlayerZero.h">
       <Filter>Levels\01PlayLevel\Actor\CharacterActor\Player</Filter>
@@ -145,13 +142,13 @@
     <ClInclude Include="Ending_Transition.h">
       <Filter>Levels\02EndingLevel\Actor</Filter>
     </ClInclude>
+    <ClInclude Include="PreCompile.h">
+      <Filter>PreCompile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
       <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="PreCompile.cpp">
-      <Filter>PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="PlayerZero.cpp">
@@ -243,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="Ending_Transition.cpp">
       <Filter>Levels\02EndingLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>PreCompile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

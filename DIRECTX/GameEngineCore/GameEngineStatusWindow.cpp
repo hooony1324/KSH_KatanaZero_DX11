@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "GameEngineStatusWindow.h"
 #include "GameEngineRenderTarget.h"
+#include "GameEngineCameraActor.h"
+#include "GEngine.h"
 
 void GameEngineImageShotWindow::RenderTextureSetting(ImTextureID _RenderTexture, ImVec2 _Size) 
 {
@@ -39,6 +41,18 @@ void GameEngineStatusWindow::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 
 	std::string Name = "FPS : " + std::to_string(FPS);
 	ImGui::Text(Name.c_str());
+
+	if (true == ImGui::Button("CollisionDebugSwtich"))
+	{
+		GEngine::CollisionDebugSwitch();
+	}
+
+	if (true == ImGui::Button("FreeCameaOnOff"))
+	{
+		// ;
+		GEngine::GetCurrentLevel()->GetMainCameraActor()->FreeCameraModeOnOff();
+	}
+
 
 	std::string AllRenderTarget = "AllRenderTarget";
 	ImGui::Text(AllRenderTarget.c_str());

@@ -5,7 +5,6 @@
 #include "Cursor.h"
 
 const float4 Gravity = { 0, -9.8f, 0 };
-const float4 RedAlpha = { 1.0f, 0, 0, 0.5f };
 
 PlayerZero::PlayerZero()
 	: AttackAble(true)
@@ -38,9 +37,9 @@ void PlayerZero::Start()
 	Renderer_Slash->ChangeFrameAnimation("slash");
 	
 	// 중심 디버그용
-	GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
-	test->SetTexture("None.png");
-	test->ScaleToTexture();
+	//GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
+	//test->SetTexture("None.png");
+	//test->ScaleToTexture();
 
 	// 콜리전
 	Collision_Character = CreateComponent<GameEngineCollision>();
@@ -80,7 +79,7 @@ void PlayerZero::Update(float _DeltaTime)
 		return;
 	}
 
-	CharacterPosition = GetTransform().GetWorldPosition();
+	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
 	WallCheck();
 	InputCheck();	
 	PlayerStateManager.Update(_DeltaTime);

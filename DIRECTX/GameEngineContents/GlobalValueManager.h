@@ -1,5 +1,21 @@
 #pragma once
 
+class GlobalValueManager
+{
+public:
+	// 콜리전 맵 정보
+	static GameEngineTextureRenderer* ColMap;
+
+	static float4 PlayerPos;
+	
+
+
+private:
+	// constrcuter destructer
+	GlobalValueManager() {}
+	~GlobalValueManager() {}
+};
+
 enum class ACTORGROUP
 {
 	CAMERA,
@@ -58,33 +74,6 @@ namespace Depth
 };
 
 
-class GlobalValueManager
-{
-public:
-	// 콜리전 맵 정보
-	static GameEngineTextureRenderer* ColMap;
-
-	class Actors
-	{
-	public:
-		//static Obstacle* testObstacle;
-
-	private:
-
-		Actors() {}
-		~Actors() {}
-	};
-
-
-private:
-	// constrcuter destructer
-	GlobalValueManager() {}
-	~GlobalValueManager() {}
-};
-
-
-
-
 enum class TITLE_DEPTH
 {
 	BUTTONS = 0,
@@ -94,3 +83,6 @@ enum class TITLE_DEPTH
 	FENCE = 400,
 	PLATE = 500,
 };
+
+static PixelColor GREEN(0, 255, 0, 255);
+static PixelColor BLUE(0, 0, 255, 255);

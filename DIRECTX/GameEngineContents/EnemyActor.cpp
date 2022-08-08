@@ -2,7 +2,7 @@
 #include "EnemyActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-#include "CharacterActor.h"
+// 순환 참조
 
 bool TurnEnd;
 static float ChaseSensorPaddingX = 25.0f;
@@ -163,29 +163,29 @@ void EnemyActor::WallCheck()
 {
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
-	Down = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 36))
-		.CompareInt3D(float4::GREEN);
-	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 37))
-		.CompareInt3D(float4::GREEN);
-	DownBlue = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 36))
-		.CompareInt3D(float4::RED);
-	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix(), -(CharacterPos.iy() - 37))
-		.CompareInt3D(float4::RED);
+	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
+		== GREEN;
+	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
+		== GREEN;
+	DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
+		== BLUE;
+	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
+		== BLUE;
 
-	Left = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
-		.CompareInt3D(float4::GREEN);
-	Right = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
-		.CompareInt3D(float4::GREEN);
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
-		.CompareInt3D(float4::GREEN);
-	Left_Up = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() + 37))
-		.CompareInt3D(float4::GREEN);
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
-		.CompareInt3D(float4::GREEN);
-	Right_Down = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() + 34, -(CharacterPos.iy() - 37))
-		.CompareInt3D(float4::GREEN);
-	Left_Down = CurCollisionMap->GetCurTexture()->GetPixel(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
-		.CompareInt3D(float4::GREEN);
+	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
+		== GREEN;
+	Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
+		== GREEN;
+	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
+		== GREEN;
+	Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 37))
+		== GREEN;
+	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
+		== GREEN;
+	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 37))
+		== GREEN;
+	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
+		== GREEN;
 
 
 	// 벽 체크
@@ -307,7 +307,7 @@ void EnemyActor::PlayerLeftRightCheck()
 	}
 
 	EnemyPos = GetTransform().GetWorldPosition();
-	PlayerPos = CharacterActor::CharacterPosition;
+	PlayerPos = GlobalValueManager::PlayerPos;
 	
 
 	// 같은층 다른층 판단
@@ -404,7 +404,7 @@ void EnemyActor::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 void EnemyActor::WalkStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("walk");
-	MoveVec.x = PrevLookDir;
+	MoveVec.x = static_cast<float>(PrevLookDir);
 }
 
 void EnemyActor::WalkUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -474,7 +474,7 @@ void EnemyActor::AlertUpdate(float _DeltaTime, const StateInfo& _Info)
 void EnemyActor::RunStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("run");
-	MoveVec.x = PrevLookDir;
+	MoveVec.x = static_cast<float>(PrevLookDir);
 }
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
