@@ -68,9 +68,8 @@ void EnemyActor::CreateRendererAndCollision()
 	Renderer_Alert->GetTransform().SetLocalPosition({ 0, 30, 0 });
 	Renderer_Alert->Off();
 
-	float4 RendererScale = Renderer_Character->GetTransform().GetLocalScale();
 	Collision_Character = CreateComponent<GameEngineCollision>();
-	Collision_Character->GetTransform().SetLocalScale({ RendererScale.x, RendererScale.y, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_Character->GetTransform().SetLocalScale({ 30, 36, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_Character->ChangeOrder(COLLISIONGROUP::ENEMY);
 
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
@@ -284,9 +283,29 @@ void EnemyActor::PlayerAlertCheck()
 		return;
 	}
 
+	GameEngineDebug::DrawBox(Collision_Character->GetTransform(), { 1, 1, 0, 0.4f });
+
+	// 문에 막히면
+	IsDoor = Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+		std::bind(&EnemyActor::DoorCheck, this, std::placeholders::_1, std::placeholders::_2));
+
+	// 문이 플레이어 앞에 있으면
+	IsDoorFront = Collision_ChaseSensor->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+		std::bind(&EnemyActor::DoorCheck, this, std::placeholders::_1, std::placeholders::_2));
+
+	if (IsDoorFront)
+	{
+		return;
+	}
+
 	// 범위안에 들어오면
 	Collision_ChaseSensor->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::PLAYER, CollisionType::CT_AABB2D,
 		std::bind(&EnemyActor::SeePlayer, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+bool EnemyActor::DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Other)
+{
+	return true;
 }
 
 bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other)
@@ -364,9 +383,6 @@ void EnemyActor::Move(float _DeltaTime)
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
 	GetTransform().SetWorldMove(Velocity);
 
-	//LookDirCheck();
-
-
 }
 
 
@@ -385,6 +401,9 @@ void EnemyActor::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 		FindPlayer = false;
 		Hp = 1;
 		Renderer_Alert->Off();
+		PrevLookDir = 1;
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+		AttackAniEnd = false;
 		return;
 	}
 
@@ -414,7 +433,8 @@ void EnemyActor::WalkStart(const StateInfo& _Info)
 
 void EnemyActor::WalkUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (MoveVec.x > 0 && WallState == STATE_WALL::RIGHT || MoveVec.x < 0 && WallState == STATE_WALL::LEFT)
+	if (MoveVec.x > 0 && WallState == STATE_WALL::RIGHT || MoveVec.x < 0 && WallState == STATE_WALL::LEFT
+		|| IsDoor)
 	{
 		MoveVec.x = 0;
 		StateManager.ChangeState("PatrolTurn");
@@ -494,12 +514,21 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 추격 알고리즘(보류)
 	// 사거리 밖이면 따라감
 	// 따라갈 때 LeftSlope RightSlope 나오면 플레이어 위층 아래층 체크
-	// 따라갈 때 벽에 부딪히는거 
+	
 	// 사거리 안에 들어오면 Attack
-
 	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
 	{
 		StateManager.ChangeState("Attack");
+		return;
+	}
+
+	// 벽이나 문에 막히면
+	if (MoveVec.x > 0 && WallState == STATE_WALL::RIGHT || MoveVec.x < 0 && WallState == STATE_WALL::LEFT
+		|| IsDoor)
+	{
+		MoveVec.x = 0;
+		StateManager.ChangeState("ChaseTurn");
+		return;
 	}
 }
 

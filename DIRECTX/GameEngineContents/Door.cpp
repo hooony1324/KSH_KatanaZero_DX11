@@ -12,15 +12,14 @@ Door::~Door()
 
 void Door::Close()
 {
+	Collision->On();
 	Renderer->ChangeFrameAnimation("idle");
 }
 
 bool Door::Open(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
+	Collision->Off();
 	Renderer->ChangeFrameAnimation("open");
-
-	// 적 있으면 때림
-
 
 	return true;
 }

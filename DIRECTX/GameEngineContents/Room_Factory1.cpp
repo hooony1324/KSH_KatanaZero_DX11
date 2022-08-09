@@ -83,10 +83,7 @@ void Room_Factory1::Clear()
 	// Àû °ü·Ã
 	for (EnemyActor* Enemy : Enemies)
 	{
-		if (false == Enemy->IsUpdate())
-		{
-			Enemy->Off();
-		}
+		Enemy->Off();
 	}
 }
 

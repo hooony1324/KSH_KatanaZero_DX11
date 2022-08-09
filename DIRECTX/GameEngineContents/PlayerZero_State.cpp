@@ -435,21 +435,6 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.y = 0;
 		MoveVec.x = GameEngineMath::LerpLimit(FlyVector.x, 0, DT);
 	}
-	/*if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE
-		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
-	{
-		if (true == IsGround)
-		{
-			IsGround = false;
-			Renderer_Character->ChangeFrameAnimation("hurtground");
-		}
-		MoveVec.y = 0;
-		MoveVec.x = GameEngineMath::LerpLimit(FlyVector.x, 0, DT);
-	}
-	else
-	{
-		MoveVec.y = FlyVector.y * sinf(FlyAngle) - (9.8f * DT) / 6.0f;
-	}*/
 
 	// 벽과 충돌 체크
 	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)

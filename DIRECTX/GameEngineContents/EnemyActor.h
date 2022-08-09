@@ -85,6 +85,12 @@ protected:
 	// 순찰, 추격
 	void PlayerAttackCheck();
 	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
+
+	// 순찰 *방향에 문과 플레이어가 있다면 플레이어 무시
+	bool DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Other);
+	bool IsDoor;		// 순찰 중 문이 앞에 있음
+	bool IsDoorFront;	// 순찰 중 문이 플레이어 앞에 있음
+
 	void PlayerAlertCheck();
 	bool SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other);
 	void PlayerLeftRightCheck();
