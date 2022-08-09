@@ -400,8 +400,8 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	MoveSpeed = 150.0f;
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 
-	FlyVector.x *= 0.6f;
-	FlyVector.y *= 20.0f;
+	FlyVector.x *= 0.5f;
+	FlyVector.y *= 1.2f;
 	MoveVec = FlyVector;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, FlyVector);
 	MoveSpeed *= 3.0f;

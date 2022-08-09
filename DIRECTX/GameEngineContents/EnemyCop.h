@@ -21,6 +21,7 @@ protected:
 	void End() override;
 
 protected:
-
+	void AttackStart(const StateInfo& _Info) override {};
+	void AttackUpdate(float _DeltaTime, const StateInfo& _Info) override {};
 };
 

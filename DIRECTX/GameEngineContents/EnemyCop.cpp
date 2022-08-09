@@ -32,12 +32,19 @@ void EnemyCop::Update(float _DeltaTime)
 	WallCheck();
 
 	// 액션 체크
+	PlayerAlertCheck();
 
+	PlayerLeftRightCheck();
 	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);
 
 	// 움직임 상태 최종 MoveVec
 	Move(_DeltaTime);
+
+
+	EnemyActorDebug();
+
+	
 }
 
 void EnemyCop::End()

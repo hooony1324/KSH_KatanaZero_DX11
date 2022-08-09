@@ -37,13 +37,12 @@ void Room_Factory1::Start()
 
 	// 적 소환 리스트 1400, -310
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	//Grunt->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
-	Grunt->SetSpawnPos({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Enemies.push_back(Grunt);
 
-	//Cop = GetLevel()->CreateActor<EnemyCop>();
-	//Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
-	//Enemies.push_back(Cop);
+	Cop = GetLevel()->CreateActor<EnemyCop>();
+	Cop->SetSpawnPos({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies.push_back(Cop);
 }
 
 void Room_Factory1::Setting()

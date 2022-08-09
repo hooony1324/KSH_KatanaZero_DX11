@@ -131,6 +131,11 @@ void CharacterActor::FloatTimeCheck(float _DeltaTime)
 
 void CharacterActor::LookCheck(float _InputOrVelocityDir)
 {
+	if (true == IsDead)
+	{
+		return;
+	}
+
 	// 왼쪽 오른쪽 바라보기
 	if (_InputOrVelocityDir > 0)
 	{

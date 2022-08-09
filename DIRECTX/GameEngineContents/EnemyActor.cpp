@@ -54,27 +54,36 @@ void EnemyActor::EnemyActorDebug()
 	}
 
 	GameEngineDebug::DrawBox(Collision_ChaseSensor->GetTransform(), { 0, 0, 1, 0.25f });
+	GameEngineDebug::DrawBox(Collision_Character->GetTransform(), { 1, 1, 0, 0.4f });
 }
 
 void EnemyActor::CreateRendererAndCollision()
 {
-	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
 
+	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Character->SetPivotToVector({ 0, 18 });
 
 	Renderer_Alert = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Alert->SetTexture("spr_enemy_follow_0.png");
+	Renderer_Alert->SetPivot(PIVOTMODE::BOT);
 	Renderer_Alert->ScaleToTexture();
 	Renderer_Alert->SetSamplingModePoint();
-	Renderer_Alert->GetTransform().SetLocalPosition({ 0, 30, 0 });
+	Renderer_Alert->GetTransform().SetLocalPosition({ 0, 45, 0 });
 	Renderer_Alert->Off();
+
+	// 중심 디버그용
+	GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
+	test->SetTexture("None.png");
+	test->ScaleToTexture();
 
 	Collision_Character = CreateComponent<GameEngineCollision>();
 	Collision_Character->GetTransform().SetLocalScale({ 30, 36, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_Character->GetTransform().SetLocalPosition({ 0, 18, 0 });
 	Collision_Character->ChangeOrder(COLLISIONGROUP::ENEMY);
 
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
 	Collision_ChaseSensor->GetTransform().SetLocalScale({ 120, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
-	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 0 , 0 });
+	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 
 	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
 }
@@ -162,28 +171,52 @@ void EnemyActor::WallCheck()
 {
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
-	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
+	//Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
+	//	== GREEN;
+	//DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
+	//	== GREEN;
+	//DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
+	//	== BLUE;
+	//DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
+	//	== BLUE;
+
+	//Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
+	//	== GREEN;
+	//Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
+	//	== GREEN;
+	//Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
+	//	== GREEN;
+	//Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 37))
+	//	== GREEN;
+	//Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
+	//	== GREEN;
+	//Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 37))
+	//	== GREEN;
+	//Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
+	//	== GREEN;
+
+	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 0))
 		== GREEN;
-	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
+	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
 		== GREEN;
-	DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
+	DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 0))
 		== BLUE;
-	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
+	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
 		== BLUE;
 
-	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
+	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 2))
 		== GREEN;
-	Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
+	Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 2))
 		== GREEN;
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
+	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 37))
+	Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
+	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 37))
+	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 1))
 		== GREEN;
-	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
+	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 1))
 		== GREEN;
 
 
@@ -283,7 +316,7 @@ void EnemyActor::PlayerAlertCheck()
 		return;
 	}
 
-	GameEngineDebug::DrawBox(Collision_Character->GetTransform(), { 1, 1, 0, 0.4f });
+	
 
 	// 문에 막히면
 	IsDoor = Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
@@ -447,14 +480,14 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 	// 왼쪽으로 돔
 	if (PrevLookDir > 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 0 , 0 });
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
 	}
 	// 오른쪽으로 돔
 	else if (PrevLookDir < 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 0 , 0 });
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		PrevLookDir = 1;
 	}
@@ -539,14 +572,14 @@ void EnemyActor::ChaseTurnStart(const StateInfo& _Info)
 	// 왼쪽으로 돔
 	if (PrevLookDir > 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 0 , 0 });
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
 	}
 	// 오른쪽으로 돔
 	else if (PrevLookDir < 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 0 , 0 });
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		PrevLookDir = 1;
 	}

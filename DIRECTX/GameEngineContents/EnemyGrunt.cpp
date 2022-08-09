@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "EnemyGrunt.h"
 
-const float SlashRendererPaddingX = 8.0f;
+const float SlashRendererPaddingX = 10.0f;
 const float SlashColPaddingX = 20.0f;
 
 EnemyGrunt::EnemyGrunt() 
@@ -81,7 +81,6 @@ void EnemyGrunt::Update(float _DeltaTime)
 
 
 	EnemyActorDebug();
-
 	if (Collision_Slash->IsUpdate())
 	{
 		GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 1, 1, 0.3f });
@@ -99,8 +98,8 @@ void EnemyGrunt::AttackStart(const StateInfo& _Info)
 	MoveVec.x = 0;
 
 	// 슬래쉬 충돌체 위치 조정 PrevLookDir or MoveVec
-	Renderer_Slash->GetTransform().SetLocalPosition({ SlashRendererPaddingX * PrevLookDir, 10, 0 });
-	Collision_Slash->GetTransform().SetLocalPosition({ SlashColPaddingX * PrevLookDir, 10, 0 });
+	Renderer_Slash->GetTransform().SetLocalPosition({ SlashRendererPaddingX * PrevLookDir, 20, 0 });
+	Collision_Slash->GetTransform().SetLocalPosition({ SlashColPaddingX * PrevLookDir, 20, 0 });
 
 	if (PrevLookDir > 0)
 	{
