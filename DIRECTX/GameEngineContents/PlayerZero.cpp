@@ -46,8 +46,9 @@ void PlayerZero::Start()
 	Collision_Character->GetTransform().SetLocalScale(Renderer_Character->GetTransform().GetLocalScale());
 	Collision_Character->ChangeOrder(COLLISIONGROUP::PLAYER);
 
+	float4 SlashScale = Renderer_Slash->GetTransform().GetLocalScale();
 	Collision_Slash = CreateComponent<GameEngineCollision>();
-	Collision_Slash->GetTransform().SetLocalScale(Renderer_Slash->GetTransform().GetLocalScale());
+	Collision_Slash->GetTransform().SetLocalScale({ SlashScale.x, SlashScale.y, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 	Collision_Slash->Off();
 
@@ -74,10 +75,17 @@ void PlayerZero::Update(float _DeltaTime)
 		return;
 	}
 
+	if (true == IsDead)
+	{
+		return;
+	}
+
+
 	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
 	EnemyAttackCheck();
 	WallCheck();
 	InputCheck();
+
 	PlayerStateManager.Update(_DeltaTime);
 	FloatTimeCheck(_DeltaTime);
 
@@ -161,7 +169,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	}
 	case CharacterActor::STATE_WALL::UNDERGROUND:
-		Velocity.y = 2.0f;
+		Velocity.y = 1.0f;
 		break;
 	case CharacterActor::STATE_WALL::RIGHTSLOPE:
 	{
@@ -342,6 +350,11 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Slash->AnimationBindEnd("slash", [=](const FrameAnimation_DESC& _Info)
 		{
 			Collision_Slash->Off();
+		});
+
+	Renderer_Character->AnimationBindEnd("hurtground", [=](const FrameAnimation_DESC& _Info)
+		{
+			IsDead = true;
 		});
 }
 

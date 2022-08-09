@@ -19,7 +19,19 @@ public:
 
 	inline bool IsRoomChangeAvailable()
 	{
-		return Right_UpBlue && Right_DownBlue;
+		return Right_UpBlue && Right_DownBlue && !IsDead;
+	}
+
+	inline bool IsPlayerDead()
+	{
+		return IsDead;
+	}
+
+	void Respawn()
+	{
+		IsDead = false;
+		Hp = 1;
+		PlayerStateManager.ChangeState("Idle");
 	}
 
 protected:
@@ -82,9 +94,11 @@ protected:
 	bool WallGrab;
 	float FloatDeltaTime; // 총 공중에 있는 시간만큼 중력 세게 적용
 
+	// 죽음
 protected:
 	int Hp;
 	float FlyAngle;
 	float4 FlyVector;
+	bool IsDead;
 };
 

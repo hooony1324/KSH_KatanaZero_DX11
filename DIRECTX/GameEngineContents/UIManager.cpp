@@ -29,6 +29,13 @@ void UIManager::Start()
 	Timer->GetTransform().SetLocalScale(Timer->GetCurTexture()->GetScale() * 2);
 	Timer->SetPivot(PIVOTMODE::LEFTTOP);
 	Timer->GetTransform().SetLocalPosition({ 16, 341, -2 });
+
+	RestartClickUI = CreateComponent<GameEngineUIRenderer>();
+	RestartClickUI->SetTexture("spr_itwontwork.png");
+	RestartClickUI->GetTransform().SetLocalScale(RestartClickUI->GetCurTexture()->GetScale());
+	RestartClickUI->GetTransform().SetLocalPosition({ 0, 0, 0 });
+	RestartClickUI->Off();
+
 }
 
 void UIManager::Update(float _DeltaTime)

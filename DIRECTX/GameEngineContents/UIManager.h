@@ -2,8 +2,19 @@
 #include <GameEngineCore/GameEngineActor.h>
 
 // Ό³Έν :
+class GameEngineTextureRenderer;
 class UIManager : public GameEngineActor
 {
+public:
+	inline void RestartUIOn()
+	{
+		RestartClickUI->On();
+	}
+	inline void RestartUIOff()
+	{
+		RestartClickUI->Off();
+	}
+
 public:
 	// constrcuter destructer
 	UIManager();
@@ -21,6 +32,6 @@ protected:
 	void End() override;
 
 private:
-
+	GameEngineTextureRenderer* RestartClickUI;
 };
 

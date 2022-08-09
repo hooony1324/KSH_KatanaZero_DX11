@@ -28,10 +28,6 @@ void EnemyGrunt::Start()
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{"grunt_slash", 0.1125f, false});
 	Renderer_Slash->SetScaleModeImage();
 
-	Renderer_Slash->AnimationBindStart("slash", [=](const FrameAnimation_DESC& _Info)
-		{
-			Collision_Slash->On();
-		});
 	Renderer_Slash->AnimationBindEnd("slash", [=](const FrameAnimation_DESC& _Info) 
 		{
 			Renderer_Slash->Off();
@@ -49,6 +45,7 @@ void EnemyGrunt::Start()
 			if (_Info.CurFrame == 3)
 			{
 				Renderer_Slash->On();
+				Collision_Slash->On();
 				Renderer_Slash->ChangeFrameAnimation("slash");
 				Renderer_Slash->CurAnimationReset();
 			}

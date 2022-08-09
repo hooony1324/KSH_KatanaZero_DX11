@@ -380,6 +380,11 @@ void EnemyActor::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (WallState == STATE_WALL::DOWN || WallState == STATE_WALL::UNDERGROUND)
 	{
 		StateManager.ChangeState("Idle");
+		// 모든 설정 초기화
+		MoveSpeed = 150.0f;
+		FindPlayer = false;
+		Hp = 1;
+		Renderer_Alert->Off();
 		return;
 	}
 

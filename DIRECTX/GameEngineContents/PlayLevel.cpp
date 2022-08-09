@@ -2,6 +2,7 @@
 #include "PlayLevel.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include <GameEngineCore/GEngine.h>
 #include "PlayerZero.h"
 #include "Room_Factory1.h"
 #include "Room_Factory2.h"
@@ -9,7 +10,6 @@
 #include "Cursor.h"
 #include "UIManager.h"
 #include "Transition.h"
-#include <GameEngineCore/GEngine.h>
 
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
@@ -41,14 +41,13 @@ void PlayLevel::Start()
 	Mouse->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::CURSOR) });
 
 	// UI
-	UIManager* UI = CreateActor<UIManager>();
+	UI = CreateActor<UIManager>();
 	UI->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::UI) });
 
 	// Transition
 	//Effect_Transition = CreateActor<Transition>();
 	//Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 	//Effect_Transition->Off();
-
 
 
 	RoomStateManager.CreateStateMember("RoomChange"
@@ -64,6 +63,14 @@ void PlayLevel::Start()
 	RoomStateManager.CreateStateMember("RoomExit"
 		, std::bind(&PlayLevel::RoomExitUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomExitStart, this, std::placeholders::_1));
+
+	RoomStateManager.CreateStateMember("RoomReverse"
+		, std::bind(&PlayLevel::RoomReverseUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomReverseStart, this, std::placeholders::_1));
+
+	RoomStateManager.CreateStateMember("RoomRestart"
+		, std::bind(&PlayLevel::RoomRestartUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomRestartStart, this, std::placeholders::_1));
 
 }
 
@@ -208,6 +215,10 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (true == Player->IsPlayerDead())
+	{
+		RoomStateManager.ChangeState("RoomRestart");
+	}
 
 	// 몬스터를 다 죽였고, 파란 영역에 도달했다면
 	if (Player->IsRoomChangeAvailable())
@@ -215,6 +226,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		// 방 변경
 		RoomStateManager.ChangeState("RoomExit");
 	}
+
 }
 
 void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
@@ -231,8 +243,9 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true)//Effect_Transition->IsTransitionEnd())
 	{
-		Player->Off();			// 콜리전 맵을 계속 인식해서 잠깐 꺼주어야 함
+		Player->Off();			// 콜리전 맵을 계속 인식해서 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
 		CurRoom->Clear();
+
 		++RoomIter;
 
 		// 마지막 방이면 엔딩
@@ -250,4 +263,32 @@ void PlayLevel::RoomExitEnd(const StateInfo& _Info)
 {
 
 
+}
+
+void PlayLevel::RoomRestartStart(const StateInfo& _Info)
+{
+	UI->RestartUIOn();
+}
+
+void PlayLevel::RoomRestartUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (true == GameEngineInput::GetInst()->IsDown("MouseLeft"))
+	{
+		UI->RestartUIOff();
+		RoomStateManager.ChangeState("RoomChange");
+
+		//리버스
+	}
+}
+
+void PlayLevel::RoomReverseStart(const StateInfo& _Info)
+{
+}
+
+void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+}
+
+void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
+{
 }

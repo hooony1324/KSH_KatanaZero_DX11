@@ -34,6 +34,16 @@ void Room_Factory1::Start()
 
 
 	PlayerSpawnPos = float4{ 220, -620, GetDepth(ACTOR_DEPTH::PLAYER) };
+
+	// 利 家券 府胶飘 1400, -310
+	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
+	//Grunt->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Grunt->SetSpawnPos({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies.push_back(Grunt);
+
+	//Cop = GetLevel()->CreateActor<EnemyCop>();
+	//Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	//Enemies.push_back(Cop);
 }
 
 void Room_Factory1::Setting()
@@ -47,13 +57,17 @@ void Room_Factory1::Setting()
 	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 	PtrDoor->Close();
 
+	// 利 包访
+	for (EnemyActor* Enemy : Enemies)
+	{
+		if (false == Enemy->IsUpdate())
+		{
+			Enemy->On();
+		}
+		
+		Enemy->Respawn();
+	}
 
-	// 利 家券 困摹 : 1400, -310
-	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	Grunt->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY)});
-
-	//Cop = GetLevel()->CreateActor<EnemyCop>();
-	//Cop->GetTransform().SetWorldPosition({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
 }
 
 void Room_Factory1::Clear()
@@ -67,11 +81,13 @@ void Room_Factory1::Clear()
 	PtrDoor->Off();
 
 	// 利 包访
-	if (false == Grunt->IsDeath())
+	for (EnemyActor* Enemy : Enemies)
 	{
-		Grunt->Death();
+		if (false == Enemy->IsUpdate())
+		{
+			Enemy->Off();
+		}
 	}
-	//Cop->Death();
 }
 
 void Room_Factory1::Update(float _DeltaTime)
@@ -81,6 +97,7 @@ void Room_Factory1::Update(float _DeltaTime)
 
 void Room_Factory1::End()
 {
+
 }
 
 

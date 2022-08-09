@@ -410,14 +410,11 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
 
-	static bool IsGround = false;
 	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE
 		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
 	{
-		if (false == IsGround)
+		if (false == IsFall)
 		{
-			IsGround = true;
-			Death(3.0f);
 			Renderer_Character->ChangeFrameAnimation("hurtground");
 		}
 		MoveVec.y = 0;
@@ -434,10 +431,7 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.x *= -0.3f;
 	}
 
-	if (WallState == STATE_WALL::UP)
-	{
-		MoveVec.y = -1;
-	}
+
 }
 
 

@@ -27,8 +27,8 @@ protected:
 
 private:
 	Door* PtrDoor;
-	GameEngineActor* Grunt;
-	GameEngineActor* Cop;
+	EnemyActor* Grunt;
+	EnemyActor* Cop;
 
 };
 

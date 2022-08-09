@@ -5,6 +5,7 @@
 class Room;
 class PlayerZero;
 class Transition;
+class UIManager;
 class PlayLevel : public GameEngineLevel
 {
 public:
@@ -31,6 +32,7 @@ private:
 	void CameraFollow(float _DeltaTime);
 
 private:
+	UIManager* UI;
 	Room* CurRoom;
 	Room* Room1;
 	Room* Room2;
@@ -60,5 +62,13 @@ private:
 	void RoomExitStart(const StateInfo& _Info);
 	void RoomExitUpdate(float _DeltaTime, const StateInfo& _Info);
 	void RoomExitEnd(const StateInfo& _Info);
+
+	void RoomRestartStart(const StateInfo& _Info);
+	void RoomRestartUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	// REVERSE
+	void RoomReverseStart(const StateInfo& _Info);
+	void RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info);
+	void RoomReverseEnd(const StateInfo& _Info);
 };
 

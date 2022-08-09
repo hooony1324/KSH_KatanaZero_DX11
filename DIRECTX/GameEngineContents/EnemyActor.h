@@ -8,6 +8,21 @@ class GameEngineCollision;
 class EnemyActor : public GameEngineActor
 {
 public:
+	void Respawn()
+	{
+		GetTransform().SetWorldPosition(SpawnPos);
+		StateManager.ChangeState("Spawn");
+	}
+
+	void SetSpawnPos(float4 _Pos)
+	{
+		SpawnPos = _Pos;
+	}
+
+protected:
+	float4 SpawnPos;
+
+public:
 	// constrcuter destructer
 	EnemyActor();
 	virtual ~EnemyActor();

@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "Room.h"
+#include "CharacterActor.h"
 
 Room::Room() 
 {
@@ -31,7 +32,8 @@ void Room::SetCameraClampArea(float4& _LeftTop, float4& _RightBottom)
 	_RightBottom = CamClamp_RightBottom;
 }
 
-void Room::PlayerSpawn(GameEngineActor* _Player)
+void Room::PlayerSpawn(CharacterActor* _Player)
 {
+	_Player->Respawn(); // 소환시 처음 상태로
 	_Player->GetTransform().SetWorldPosition(PlayerSpawnPos);
 }
