@@ -42,7 +42,7 @@ void EnemyCop::Update(float _DeltaTime)
 	Move(_DeltaTime);
 
 
-	EnemyActorDebug();
+	//EnemyActorDebug();
 
 	
 }

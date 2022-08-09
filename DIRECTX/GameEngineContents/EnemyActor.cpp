@@ -6,6 +6,7 @@
 
 bool TurnEnd;
 static float ChaseSensorPaddingX = 25.0f;
+bool GroundAniEnd = false;
 
 EnemyActor::EnemyActor() 
 	: EnemyName(std::string())
@@ -70,11 +71,6 @@ void EnemyActor::CreateRendererAndCollision()
 	Renderer_Alert->SetSamplingModePoint();
 	Renderer_Alert->GetTransform().SetLocalPosition({ 0, 45, 0 });
 	Renderer_Alert->Off();
-
-	// 중심 디버그용
-	GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
-	test->SetTexture("None.png");
-	test->ScaleToTexture();
 
 	Collision_Character = CreateComponent<GameEngineCollision>();
 	Collision_Character->GetTransform().SetLocalScale({ 30, 36, GetDepth(ACTOR_DEPTH::COLLISION) });
@@ -195,13 +191,13 @@ void EnemyActor::WallCheck()
 	//Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
 	//	== GREEN;
 
-	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 0))
+	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
 		== GREEN;
-	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
+	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 2))
 		== GREEN;
-	DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 0))
+	DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
 		== BLUE;
-	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
+	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 2))
 		== BLUE;
 
 	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 2))
@@ -214,9 +210,9 @@ void EnemyActor::WallCheck()
 		== GREEN;
 	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 1))
+	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 2))
 		== GREEN;
-	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 1))
+	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 2))
 		== GREEN;
 
 
@@ -609,20 +605,19 @@ void EnemyActor::DeadStart(const StateInfo& _Info)
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
 	MoveSpeed *= 3.0f;
 
+	GroundAniEnd = false;
 }
 
 void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
 
-	static bool IsGround = false;
 	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE 
 		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
 	{
-		if (false == IsGround)
+		if (false == GroundAniEnd)
 		{
-			IsGround = true;
-			Death(3.0f);
+			GroundAniEnd = true;
 			Renderer_Character->ChangeFrameAnimation("hurtground");
 		}
 		MoveVec.y = 0;
@@ -642,6 +637,11 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (WallState == STATE_WALL::UP)
 	{
 		MoveVec.y = -1;
+	}
+
+	if (DT > 5.5f)
+	{
+		Off();
 	}
 
 }

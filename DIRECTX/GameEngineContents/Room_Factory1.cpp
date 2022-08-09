@@ -35,10 +35,13 @@ void Room_Factory1::Start()
 
 	PlayerSpawnPos = float4{ 220, -620, GetDepth(ACTOR_DEPTH::PLAYER) };
 
+	PtrDoor = GetLevel()->CreateActor<Door>();
+	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
+
 	// 적 소환 리스트 1400, -310
-	Grunt = GetLevel()->CreateActor<EnemyGrunt>();
-	Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
-	Enemies.push_back(Grunt);
+	//Grunt = GetLevel()->CreateActor<EnemyGrunt>();
+	//Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
+	//Enemies.push_back(Grunt);
 
 	Cop = GetLevel()->CreateActor<EnemyCop>();
 	Cop->SetSpawnPos({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
@@ -52,8 +55,6 @@ void Room_Factory1::Setting()
 	GlobalValueManager::ColMap = Background_Collision;
 
 	// 지형 소환
-	PtrDoor = GetLevel()->CreateActor<Door>();
-	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 	PtrDoor->Close();
 
 	// 적 관련
