@@ -8,6 +8,7 @@
 const float AntiGravity = 5.2f;
 
 bool Flipable = false;
+bool GroundAniStart = true;
 
 void PlayerZero::IdleStart(const StateInfo& _Info)
 {
@@ -399,22 +400,47 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	MoveSpeed = 150.0f;
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 
-	FlyVector.x *= 1;
-	FlyVector.y *= 1;
+	FlyVector.x *= 0.6f;
+	FlyVector.y *= 20.0f;
 	MoveVec = FlyVector;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, FlyVector);
 	MoveSpeed *= 3.0f;
+
+	if (MoveVec.x > 0)
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+
+	GroundAniStart = false;
 }
 
 void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
 
-	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE
+	
+	MoveVec.y = FlyVector.y * sinf(FlyAngle) - (9.8f * DT) / 6.0f;
+
+	if (MoveVec.y < 0 && false == IsFall)
+	{
+		if (false == GroundAniStart)
+		{
+			GroundAniStart = true;
+			Renderer_Character->ChangeFrameAnimation("hurtground");
+		}
+		MoveVec.y = 0;
+		MoveVec.x = GameEngineMath::LerpLimit(FlyVector.x, 0, DT);
+	}
+	/*if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE
 		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
 	{
-		if (false == IsFall)
+		if (true == IsGround)
 		{
+			IsGround = false;
 			Renderer_Character->ChangeFrameAnimation("hurtground");
 		}
 		MoveVec.y = 0;
@@ -423,7 +449,7 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	else
 	{
 		MoveVec.y = FlyVector.y * sinf(FlyAngle) - (9.8f * DT) / 6.0f;
-	}
+	}*/
 
 	// 벽과 충돌 체크
 	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)

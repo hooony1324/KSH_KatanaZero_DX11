@@ -44,7 +44,7 @@ public:
 		, CollisionType _OtherType
 		, std::function<bool(GameEngineCollision* _This, GameEngineCollision* _Other)> _Function = nullptr);
 
-	bool SetDebugSetting(CollisionType _DebugType, float4 _Color) 
+	void SetDebugSetting(CollisionType _DebugType, float4 _Color) 
 	{
 		DebugType = _DebugType;
 		Color = _Color;

@@ -63,8 +63,8 @@ private:
 	void RoomExitUpdate(float _DeltaTime, const StateInfo& _Info);
 	void RoomExitEnd(const StateInfo& _Info);
 
-	void RoomRestartStart(const StateInfo& _Info);
-	void RoomRestartUpdate(float _DeltaTime, const StateInfo& _Info);
+	void RoomClickToRestartStart(const StateInfo& _Info);
+	void RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	// REVERSE
 	void RoomReverseStart(const StateInfo& _Info);

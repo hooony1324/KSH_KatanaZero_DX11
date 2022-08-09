@@ -69,8 +69,8 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomReverseStart, this, std::placeholders::_1));
 
 	RoomStateManager.CreateStateMember("RoomRestart"
-		, std::bind(&PlayLevel::RoomRestartUpdate, this, std::placeholders::_1, std::placeholders::_2)
-		, std::bind(&PlayLevel::RoomRestartStart, this, std::placeholders::_1));
+		, std::bind(&PlayLevel::RoomClickToRestartUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomClickToRestartStart, this, std::placeholders::_1));
 
 }
 
@@ -265,12 +265,12 @@ void PlayLevel::RoomExitEnd(const StateInfo& _Info)
 
 }
 
-void PlayLevel::RoomRestartStart(const StateInfo& _Info)
+void PlayLevel::RoomClickToRestartStart(const StateInfo& _Info)
 {
 	UI->RestartUIOn();
 }
 
-void PlayLevel::RoomRestartUpdate(float _DeltaTime, const StateInfo& _Info)
+void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == GameEngineInput::GetInst()->IsDown("MouseLeft"))
 	{

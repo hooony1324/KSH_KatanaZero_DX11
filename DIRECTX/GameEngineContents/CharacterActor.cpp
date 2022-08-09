@@ -35,6 +35,8 @@ void CharacterActor::WallCheck()
 
 	Down = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 34))
 		 == GREEN;
+	DownBlue = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 34))
+		 == BLUE;
 	Up = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() + 34))
 		== GREEN;
 	Left_Up = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))
@@ -59,7 +61,7 @@ void CharacterActor::WallCheck()
 		== BLUE;
 
 	// ¶¥¿¡ ¹ÚÈû
-	if (Down)
+	if (Down || DownBlue)
 	{
 		WallState = STATE_WALL::UNDERGROUND;
 		IsFall = false;
@@ -82,7 +84,7 @@ void CharacterActor::WallCheck()
 	}
 
 	// ¹Ù´Ú 
-	if (!Down && DoubleDown || !Down && DoubleDownBlue)
+	if (!Down && DoubleDown || !DownBlue && DoubleDownBlue)
 	{
 		WallState = STATE_WALL::DOWN;
 		IsFall = false;
@@ -103,13 +105,13 @@ void CharacterActor::WallCheck()
 	// ½½·ÎÇÁ Ã¼Å©
 	if (!IsFall && Left && Left_Down)
 	{
-		//IsFall = false;
+		IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
 	if (!IsFall && Right && Right_Down)
 	{
-		//IsFall = false;
+		IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
 	}
 
@@ -170,8 +172,11 @@ bool CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _O
 	Hp--;
 	if (Hp <= 0)
 	{
-		FlyVector = _This->GetTransform().GetWorldPosition() - _Other->GetTransform().GetWorldPosition();
-		FlyVector.z = 0;
+		float4 This = _This->GetTransform().GetWorldPosition();
+		This.z = 0;
+		float4 Other = _Other->GetActor()->GetTransform().GetWorldPosition();
+		Other.z = 0;
+		FlyVector = This - Other;
 		FlyVector.Normalize();
 		PlayerStateManager.ChangeState("Dead");
 	}

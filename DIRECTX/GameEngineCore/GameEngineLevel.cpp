@@ -371,6 +371,32 @@ void GameEngineLevel::OverChildMove(GameEngineLevel* _NextLevel)
 			_NextLevel->AllCollisions[OverActor->GetOrder()].push_back(OverActor);
 		}
 	}
+}
 
+void GameEngineLevel::AllClear() 
+{
+	{
+		std::map<int, std::list<GameEngineActor*>>::iterator StartGroupIter = AllActors.begin();
+		std::map<int, std::list<GameEngineActor*>>::iterator EndGroupIter = AllActors.end();
+
+		std::list<GameEngineActor*> OverList;
+
+		for (; StartGroupIter != EndGroupIter; ++StartGroupIter)
+		{
+			std::list<GameEngineActor*>& Group = StartGroupIter->second;
+			std::list<GameEngineActor*>::iterator GroupStart = Group.begin();
+			std::list<GameEngineActor*>::iterator GroupEnd = Group.end();
+			for (; GroupStart != GroupEnd; ++GroupStart)
+			{
+				delete *GroupStart;
+			}
+		}
+	}
+
+	AllActors.clear();
+
+	Cameras.clear();
+
+	AllCollisions.clear();
 }
 

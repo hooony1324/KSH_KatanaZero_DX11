@@ -78,6 +78,7 @@ protected:
 	bool Up;
 	bool MiddleDown;
 	bool Down;
+	bool DownBlue;
 	bool DoubleDown;
 	bool DoubleDownBlue;
 	bool Left_Up;
