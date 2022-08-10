@@ -45,12 +45,14 @@ void PlayerZero::Start()
 	Collision_Character = CreateComponent<GameEngineCollision>();
 	Collision_Character->GetTransform().SetLocalScale(Renderer_Character->GetTransform().GetLocalScale());
 	Collision_Character->ChangeOrder(COLLISIONGROUP::PLAYER);
+	Collision_Character->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 0, 1, 0.25f });
 
 	float4 SlashScale = Renderer_Slash->GetTransform().GetLocalScale();
 	Collision_Slash = CreateComponent<GameEngineCollision>();
 	Collision_Slash->GetTransform().SetLocalScale({ SlashScale.x, SlashScale.y, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 	Collision_Slash->Off();
+	Collision_Slash->SetDebugSetting(CollisionType::CT_OBB2D, { 1, 1, 1, 0.25f });
 
 	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
@@ -106,7 +108,8 @@ void PlayerZero::InputCheck()
 {
 	InputDir = float4::ZERO;
 	// CLICK
-	if (GameEngineInput::GetInst()->IsDown("MouseLeft") && AttackAble)
+	bool ClickAble = Cursor::IsClickAble();
+	if (true == ClickAble && GameEngineInput::GetInst()->IsDown("MouseLeft") && AttackAble)
 	{
 		PlayerStateManager.ChangeState("Attack");
 	}

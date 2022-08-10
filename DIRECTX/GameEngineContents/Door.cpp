@@ -40,6 +40,7 @@ void Door::Start()
 	Collision->GetTransform().SetLocalScale(float4{ 15, Scale.y });
 	Collision->GetTransform().SetLocalPosition({ 20, 0 , 0 });
 	Collision->ChangeOrder(COLLISIONGROUP::DOOR);
+	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 0, 0, 0.25f });
 
 	// -330, 72
 	GetTransform().SetLocalScale({ 2.0f, 2.0f, 1 });
@@ -49,7 +50,6 @@ void Door::Start()
 
 void Door::Update(float _DeltaTime)
 {
-	GameEngineDebug::DrawBox(Collision->GetTransform(), { 1, 0, 0, 0.25f });
 	
 	Collision->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_AABB2D
 		, std::bind(&Door::Open, this, std::placeholders::_1, std::placeholders::_2));

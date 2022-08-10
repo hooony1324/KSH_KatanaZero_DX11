@@ -39,6 +39,7 @@ void EnemyGrunt::Start()
 	Collision_Slash->GetTransform().SetLocalScale({ 25, 35 , GetDepth(ACTOR_DEPTH::COLLISION)});
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::ENEMY_ATTACK);
 	Collision_Slash->Off();
+	Collision_Slash->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 1, 0.25f });
 
 	Renderer_Character->AnimationBindFrame("attack", [=](const FrameAnimation_DESC& _Info)
 		{
@@ -81,10 +82,7 @@ void EnemyGrunt::Update(float _DeltaTime)
 
 
 	EnemyActorDebug();
-	if (Collision_Slash->IsUpdate())
-	{
-		GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 1, 1, 0.3f });
-	}
+
 }
 
 void EnemyGrunt::End()

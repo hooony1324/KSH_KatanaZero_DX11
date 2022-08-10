@@ -492,14 +492,6 @@ void PlayerZero::WallGrabCheck()
 
 void PlayerZero::PrintPlayerDebug()
 {
-	if (Collision_Slash->IsUpdate())
-	{
-		GameEngineDebug::DrawBox(Collision_Slash->GetTransform(), { 1, 1, 1, 0.25f });
-	}
-	if (Collision_Character->IsUpdate())
-	{
-		GameEngineDebug::DrawBox(Collision_Character->GetTransform(), { 1, 0, 0, 0.25f });
-	}
 
 	//switch (WallState)
 	//{

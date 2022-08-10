@@ -17,6 +17,11 @@ public:
 		return PositionToActor;
 	}
 
+	static bool IsClickAble()
+	{
+		return CursorValid;
+	}
+
 public:
 	// constrcuter destructer
 	Cursor();
@@ -42,5 +47,6 @@ private:
 	static float4 PositionToActor;
 
 	float4 Boundary;
+	static bool CursorValid;
 };
 

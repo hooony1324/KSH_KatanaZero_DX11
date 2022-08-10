@@ -54,8 +54,6 @@ void EnemyActor::EnemyActorDebug()
 		break;
 	}
 
-	GameEngineDebug::DrawBox(Collision_ChaseSensor->GetTransform(), { 0, 0, 1, 0.25f });
-	GameEngineDebug::DrawBox(Collision_Character->GetTransform(), { 1, 1, 0, 0.4f });
 }
 
 void EnemyActor::CreateRendererAndCollision()
@@ -76,12 +74,13 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_Character->GetTransform().SetLocalScale({ 30, 36, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_Character->GetTransform().SetLocalPosition({ 0, 18, 0 });
 	Collision_Character->ChangeOrder(COLLISIONGROUP::ENEMY);
+	Collision_Character->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 0, 0, 0.25f });
 
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
 	Collision_ChaseSensor->GetTransform().SetLocalScale({ 120, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
-
 	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
+	Collision_ChaseSensor->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 0, 0.25f });
 }
 
 void EnemyActor::CreateAllFolderAnimation()
