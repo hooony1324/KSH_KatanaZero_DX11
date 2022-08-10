@@ -10,6 +10,7 @@
 #include "Cursor.h"
 #include "UIManager.h"
 #include "Transition.h"
+#include "PlayLevelGUI.h"
 
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
@@ -72,11 +73,13 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomClickToRestartUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomClickToRestartStart, this, std::placeholders::_1));
 
+	GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
 }
 
 void PlayLevel::OnEvent()
 {
 	RoomStateManager.ChangeState("RoomChange");
+	// GUI
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -113,6 +116,8 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
+
+
 
 }
 

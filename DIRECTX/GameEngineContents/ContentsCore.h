@@ -17,15 +17,23 @@ public:
 	ContentsCore& operator=(ContentsCore&& _Other) noexcept = delete;
 
 	std::string GetWindowTitle() override { return "Katana ZERO"; }
-	float4 StartWindowSize() override { return { 1280.0f, 720.0f }; }
+	float4 StartWindowSize() override 
+	{ 
+		ContentsWindowSize = { 1280.0f, 720.0f };
+		return ContentsWindowSize;
+	}
 	float4 StartWindowPosition() override { return { 0 , 0 }; }
 
+	static float4 GetContentsWindowSize()
+	{
+		return ContentsWindowSize;
+	}
 protected:
 	virtual void Start() override;
 	virtual void Update(float _DeltaTime) override;
 	virtual void End() override;
 private:
-
+	static float4 ContentsWindowSize;
 	void TextureLoad();
 	void SoundLoad();
 };

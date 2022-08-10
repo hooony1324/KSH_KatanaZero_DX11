@@ -6,6 +6,8 @@
 #include "PlayLevel.h"
 #include "EndingLevel.h"
 
+float4 ContentsCore::ContentsWindowSize;
+
 ContentsCore::ContentsCore() 
 {
 }
@@ -48,7 +50,7 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("C", 'C');	// �浹ü On/Off
 
 
-	GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
+	//GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
 }
 
 void ContentsCore::Update(float _DeltaTime)

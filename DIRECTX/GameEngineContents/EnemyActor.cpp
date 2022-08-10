@@ -597,6 +597,7 @@ void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 void EnemyActor::DeadStart(const StateInfo& _Info)
 {
 	MoveSpeed = 150.0f;
+	Renderer_Alert->Off();
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 
 	FlyVec.x *= 1.3f;
@@ -639,7 +640,7 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.y = -1;
 	}
 
-	if (DT > 5.5f)
+	if (DT > 4.5f)
 	{
 		Off();
 	}

@@ -34,8 +34,13 @@ protected:
 	void End() override;
 
 private:
+	void CursorVisibleOutScreen();
+
+private:
 	GameEngineUIRenderer* Renderer;
 	static float4 Position;
 	static float4 PositionToActor;
+
+	float4 Boundary;
 };
 

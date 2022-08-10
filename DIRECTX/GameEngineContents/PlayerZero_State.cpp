@@ -455,7 +455,7 @@ void PlayerZero::CreateSlash()
 	// 마우스 좌표 얻어오기
 	float4 PlayerPos = GetTransform().GetWorldPosition();
 	PlayerPos.z = 0;
-	MousePos = Cursor::GetCursorPosition();
+	MousePos = Cursor::GetCursorPositionToActor();
 	MousePos.z = 0;
 	MouseDir = MousePos - PlayerPos;
 	MouseDir.z = 0;

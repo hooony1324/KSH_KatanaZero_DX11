@@ -10,44 +10,47 @@
     <Filter Include="Levels">
       <UniqueIdentifier>{16df310c-9485-40a0-b980-2a3ccffc4534}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\00TitleLevel">
-      <UniqueIdentifier>{1be4c993-8195-40d8-9539-d3a2f050b3d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01PlayLevel">
-      <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\00TitleLevel\Actor">
-      <UniqueIdentifier>{cd620d5a-4fd5-426f-b37a-f7e28a3ffc84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor">
-      <UniqueIdentifier>{39ba30d1-0ded-465c-91d7-fd13a2421a5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\Rooms">
-      <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\02EndingLevel">
+    <Filter Include="Levels\02.EndingLevel">
       <UniqueIdentifier>{18a56f11-af60-46df-a902-7d8622a00a26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\02EndingLevel\Actor">
+    <Filter Include="Levels\02.EndingLevel\Actor">
       <UniqueIdentifier>{ef078ca4-b0db-4a7c-8374-c43498ffd780}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\UI">
+    <Filter Include="Levels\01.PlayLevel">
+      <UniqueIdentifier>{ab9e0f8a-79a1-4b5f-a3b2-d7609e75f8f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor">
+      <UniqueIdentifier>{39ba30d1-0ded-465c-91d7-fd13a2421a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\Rooms">
+      <UniqueIdentifier>{71e72076-911c-43a1-ba41-99dd639b7c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\UI">
       <UniqueIdentifier>{ebf15720-a07a-4c7f-b537-d8b38fad3c84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\FX">
-      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\EnemyActor">
+    <Filter Include="Levels\01.PlayLevel\Actor\EnemyActor">
       <UniqueIdentifier>{5d9bd21d-4cd9-44ee-a132-5238976c547c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\EnemyActor\Enemy">
+    <Filter Include="Levels\01.PlayLevel\Actor\EnemyActor\Enemy">
       <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\CharacterActor">
+    <Filter Include="Levels\01.PlayLevel\Actor\CharacterActor">
       <UniqueIdentifier>{2f5e0251-55a6-44a1-b50c-4615791a8354}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01PlayLevel\Actor\CharacterActor\Player">
+    <Filter Include="Levels\01.PlayLevel\Actor\CharacterActor\Player">
       <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\GUI">
+      <UniqueIdentifier>{2fab5824-796b-42fe-8123-d8552939fdb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\00.TitleLevel">
+      <UniqueIdentifier>{1be4c993-8195-40d8-9539-d3a2f050b3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\00.TitleLevel\Actor">
+      <UniqueIdentifier>{cd620d5a-4fd5-426f-b37a-f7e28a3ffc84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\Effect">
+      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,91 +59,94 @@
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="PlayerZero.h">
-      <Filter>Levels\01PlayLevel\Actor\CharacterActor\Player</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\CharacterActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayLevel.h">
-      <Filter>Levels\01PlayLevel</Filter>
+      <Filter>Levels\01.PlayLevel</Filter>
     </ClInclude>
     <ClInclude Include="TitleLevel.h">
-      <Filter>Levels\00TitleLevel</Filter>
+      <Filter>Levels\00.TitleLevel</Filter>
     </ClInclude>
     <ClInclude Include="InputHandler.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="TitlePlate.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="TitleFence.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="TitleGrass.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="TitlePlants.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="TitleGraphic.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="EndingLevel.h">
-      <Filter>Levels\02EndingLevel</Filter>
+      <Filter>Levels\02.EndingLevel</Filter>
     </ClInclude>
     <ClInclude Include="Ending_Background.h">
-      <Filter>Levels\02EndingLevel\Actor</Filter>
+      <Filter>Levels\02.EndingLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="Ending_Logo.h">
-      <Filter>Levels\02EndingLevel\Actor</Filter>
+      <Filter>Levels\02.EndingLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="Room_Factory1.h">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="Room_Factory2.h">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="Room_Boss.h">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="TitleButtons.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="TitleUI.h">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClInclude>
     <ClInclude Include="Cursor.h">
-      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClInclude>
     <ClInclude Include="EnemyGrunt.h">
-      <Filter>Levels\01PlayLevel\Actor\EnemyActor\Enemy</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="CharacterActor.h">
-      <Filter>Levels\01PlayLevel\Actor\CharacterActor</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
     </ClInclude>
     <ClInclude Include="Door.h">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
-      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClInclude>
     <ClInclude Include="Transition.h">
-      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClInclude>
     <ClInclude Include="EnemyCop.h">
-      <Filter>Levels\01PlayLevel\Actor\EnemyActor\Enemy</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemyActor.h">
-      <Filter>Levels\01PlayLevel\Actor\EnemyActor</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor</Filter>
     </ClInclude>
     <ClInclude Include="Fan.h">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="Ending_Transition.h">
-      <Filter>Levels\02EndingLevel\Actor</Filter>
+      <Filter>Levels\02.EndingLevel\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayLevelGUI.h">
+      <Filter>Levels\01.PlayLevel\GUI</Filter>
     </ClInclude>
     <ClInclude Include="PreCompile.h">
       <Filter>PreCompile</Filter>
@@ -152,94 +158,97 @@
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="PlayerZero.cpp">
-      <Filter>Levels\01PlayLevel\Actor\CharacterActor\Player</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\CharacterActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="PlayLevel.cpp">
-      <Filter>Levels\01PlayLevel</Filter>
+      <Filter>Levels\01.PlayLevel</Filter>
     </ClCompile>
     <ClCompile Include="TitleLevel.cpp">
-      <Filter>Levels\00TitleLevel</Filter>
+      <Filter>Levels\00.TitleLevel</Filter>
     </ClCompile>
     <ClCompile Include="InputHandler.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="TitlePlate.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="TitleFence.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="TitleGrass.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="TitlePlants.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="TitleGraphic.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="PlayerZero_State.cpp">
-      <Filter>Levels\01PlayLevel\Actor\CharacterActor\Player</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\CharacterActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="EndingLevel.cpp">
-      <Filter>Levels\02EndingLevel</Filter>
+      <Filter>Levels\02.EndingLevel</Filter>
     </ClCompile>
     <ClCompile Include="Ending_Background.cpp">
-      <Filter>Levels\02EndingLevel\Actor</Filter>
+      <Filter>Levels\02.EndingLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="Ending_Logo.cpp">
-      <Filter>Levels\02EndingLevel\Actor</Filter>
+      <Filter>Levels\02.EndingLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="Room_Factory1.cpp">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="Room_Factory2.cpp">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="Room_Boss.cpp">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="TitleButtons.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="TitleUI.cpp">
-      <Filter>Levels\00TitleLevel\Actor</Filter>
+      <Filter>Levels\00.TitleLevel\Actor</Filter>
     </ClCompile>
     <ClCompile Include="Cursor.cpp">
-      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClCompile>
     <ClCompile Include="EnemyGrunt.cpp">
-      <Filter>Levels\01PlayLevel\Actor\EnemyActor\Enemy</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="CharacterActor.cpp">
-      <Filter>Levels\01PlayLevel\Actor\CharacterActor</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
     </ClCompile>
     <ClCompile Include="Door.cpp">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
-      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClCompile>
     <ClCompile Include="Transition.cpp">
-      <Filter>Levels\01PlayLevel\Actor\UI</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClCompile>
     <ClCompile Include="EnemyCop.cpp">
-      <Filter>Levels\01PlayLevel\Actor\EnemyActor\Enemy</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyActor.cpp">
-      <Filter>Levels\01PlayLevel\Actor\EnemyActor</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor</Filter>
     </ClCompile>
     <ClCompile Include="Fan.cpp">
-      <Filter>Levels\01PlayLevel\Actor\Rooms</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="Ending_Transition.cpp">
-      <Filter>Levels\02EndingLevel\Actor</Filter>
+      <Filter>Levels\02.EndingLevel\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayLevelGUI.cpp">
+      <Filter>Levels\01.PlayLevel\GUI</Filter>
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>PreCompile</Filter>
