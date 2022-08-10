@@ -160,6 +160,9 @@
     <ClInclude Include="Bullet.h">
       <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -267,6 +270,9 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

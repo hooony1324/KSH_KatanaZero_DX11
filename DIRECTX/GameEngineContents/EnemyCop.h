@@ -31,8 +31,9 @@ protected:
 	void ShootUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	GameEngineStateManager AttackStateManager;
-	float4 AimVec;
+	float4 AimDir;
 	GameEngineTextureRenderer* Renderer_GunArm;
-	GameEngineCollision* Collision_Aim;
+
+	bool PointToPlayer();
 };
 

@@ -45,6 +45,7 @@ protected:
 	int Hp;
 	float AttackRange;
 	bool AttackAniEnd;
+	bool IsChasingEnemy;
 
 // º® »óÅÂ
 protected:
@@ -140,15 +141,15 @@ protected:
 	GameEngineTextureRenderer* Renderer_Alert;
 	GameEngineCollision* Collision_Character;
 	GameEngineCollision* Collision_ChaseSensor;	
-	
+	GameEngineCollision* Collision_Aim;
+
 	float4 Velocity;
 	float4 MoveVec;
 	float MoveSpeed;
 	float4 FlyVec;
 	float FlyRadian;
 	int PrevLookDir;
-
-
+	float AimPaddingX;
 	
 };
 

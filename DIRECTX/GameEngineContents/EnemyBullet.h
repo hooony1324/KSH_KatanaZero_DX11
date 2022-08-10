@@ -4,6 +4,7 @@
 // Ό³Έν :
 class EnemyBullet : public Bullet
 {
+
 public:
 	// constrcuter destructer
 	EnemyBullet();
@@ -14,6 +15,7 @@ public:
 	EnemyBullet(EnemyBullet&& _Other) noexcept = delete;
 	EnemyBullet& operator=(const EnemyBullet& _Other) = delete;
 	EnemyBullet& operator=(EnemyBullet&& _Other) noexcept = delete;
+
 
 protected:
 	void Start() override;

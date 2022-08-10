@@ -5,9 +5,12 @@
 class Bullet : public GameEngineActor
 {
 public:
+	void Instance(float4 _Position, float4 _Dir);
+
+public:
 	// constrcuter destructer
 	Bullet();
-	~Bullet();
+	virtual ~Bullet();
 
 	// delete Function
 	Bullet(const Bullet& _Other) = delete;
@@ -16,11 +19,12 @@ public:
 	Bullet& operator=(Bullet&& _Other) noexcept = delete;
 
 protected:
-	void Start() override;
-	void Update(float _DeltaTime) override;
-	void End() override;
+	void BoundaryCheckAndDestroy();
 
-private:
-
+protected:
+	class GameEngineTextureRenderer* Renderer;
+	class GameEngineCollision* Collision;
+	float4 Dir;
+	float MoveSpeed;
 };
 

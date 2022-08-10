@@ -61,6 +61,7 @@ void EnemyGrunt::Start()
 	Hp = 1;
 	MoveSpeed = 150.0f;
 	AttackRange = 80.0f;
+	IsChasingEnemy = true;
 	StateManager.ChangeState("Spawn");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 }

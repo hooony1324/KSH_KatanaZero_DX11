@@ -80,6 +80,14 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
 	Collision_ChaseSensor->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 0, 0.25f });
+
+	Collision_Aim = CreateComponent<GameEngineCollision>();
+	Collision_Aim->GetTransform().SetLocalScale({ 300, 2, GetDepth(ACTOR_DEPTH::COLLISION) });
+	AimPaddingX = Collision_Aim->GetTransform().GetLocalScale().hx();
+	Collision_Aim->GetTransform().SetLocalPosition({ AimPaddingX, 18, 0 });
+	Collision_Aim->ChangeOrder(COLLISIONGROUP::ENEMY_AIM);
+	Collision_Aim->SetDebugSetting(CollisionType::CT_OBB2D, { 0, 1, 0, 0.5f });
+	Collision_Aim->Off();
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -165,29 +173,6 @@ void EnemyActor::WallCheck()
 {
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
-	//Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
-	//	== GREEN;
-	//DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
-	//	== GREEN;
-	//DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 36))
-	//	== BLUE;
-	//DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 37))
-	//	== BLUE;
-
-	//Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 34))
-	//	== GREEN;
-	//Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 34))
-	//	== GREEN;
-	//Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
-	//	== GREEN;
-	//Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 37))
-	//	== GREEN;
-	//Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 37))
-	//	== GREEN;
-	//Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 37))
-	//	== GREEN;
-	//Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 37))
-	//	== GREEN;
 
 	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
 		== GREEN;
@@ -310,8 +295,6 @@ void EnemyActor::PlayerAlertCheck()
 		return;
 	}
 
-	
-
 	// 문에 막히면
 	IsDoor = Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
 		std::bind(&EnemyActor::DoorCheck, this, std::placeholders::_1, std::placeholders::_2));
@@ -331,14 +314,6 @@ void EnemyActor::PlayerAlertCheck()
 
 bool EnemyActor::DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	// this(Enemy) - other(door)
-	float4 This = GetTransform().GetWorldPosition();
-	This.z = 0;
-	float4 Other = _Other->GetTransform().GetWorldPosition();
-	Other.z = 0;
-	float4 Dir = (This - Other).NormalizeReturn();
-
-	//GetTransform().SetWorldMove(Dir);
 	return true;
 }
 
@@ -360,7 +335,9 @@ void EnemyActor::PlayerLeftRightCheck()
 	}
 
 	EnemyPos = GetTransform().GetWorldPosition();
+	EnemyPos.z = 0;
 	PlayerPos = GlobalValueManager::PlayerPos;
+	PlayerPos.z = 0;
 	
 
 	// 같은층 다른층 판단
@@ -452,6 +429,11 @@ void EnemyActor::IdleStart(const StateInfo& _Info)
 
 void EnemyActor::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (false == IsChasingEnemy)
+	{
+		return;
+	}
+
 	if (1.5f < _Info.StateTime)
 	{
 		StateManager.ChangeState("Walk");

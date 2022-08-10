@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "EnemyCop.h"
+#include "EnemyBullet.h"
 
 EnemyCop::EnemyCop() 
 {
@@ -27,8 +28,9 @@ void EnemyCop::Start()
 	// 기본 정보
 	Hp = 1;
 	MoveSpeed = 150.0f;
-	AttackRange = 250.0f;
+	AttackRange = 500.0f;
 	ChaseSensorPaddingX = 100.0f;
+	IsChasingEnemy = false;
 	StateManager.ChangeState("Spawn");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 
@@ -47,11 +49,7 @@ void EnemyCop::Start()
 		, std::bind(&EnemyCop::ShootUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyCop::ShootStart, this, std::placeholders::_1));
 
-	Collision_Aim = CreateComponent<GameEngineCollision>();
-	Collision_Aim->GetTransform().SetLocalScale({ 200, 4, GetDepth(ACTOR_DEPTH::COLLISION) });
-	Collision_Aim->GetTransform().SetLocalPosition({ 0, 18, 0 });
-	Collision_Aim->ChangeOrder(COLLISIONGROUP::ENEMY_AIM);
-	Collision_Aim->SetDebugSetting(CollisionType::CT_OBB2D, { 0, 1, 0, 0.5f });
+	Collision_Aim->On();
 }
 
 void EnemyCop::Update(float _DeltaTime)
@@ -86,29 +84,74 @@ void EnemyCop::AttackStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("attack");
 	MoveVec.x = 0;
 
-	Renderer_GunArm->On();
 	AttackStateManager.ChangeState("Aim");
 }
 
 void EnemyCop::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 플레이어 사정거리 밖이라면 Run
+	if (abs((EnemyPos - PlayerPos).Length()) > AttackRange)
+	{
+		Renderer_GunArm->Off();
+		StateManager.ChangeState("Run");
+		return;
+	}
+
+	// Aim -> Shoot
 	AttackStateManager.Update(_DeltaTime);
 }
 
 void EnemyCop::AimStart(const StateInfo& _Info)
 {
+	Renderer_GunArm->On();
+	if (PrevLookDir > 0)
+	{
+		Renderer_GunArm->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_GunArm->GetTransform().PixLocalNegativeX();
+	}
 
 }
 
 void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 조준하고 
+	AimDir = (PlayerPos - EnemyPos).NormalizeReturn();
+
+	// 중간에 플레이어가 반대로 넘어가면 렌더러방향 바꿈
+
+	// 중간에 장애물 있으면 Run으로
+
+	// 일정 시간 뒤 발사
+	if (_Info.StateTime > 0.8f)
+	{
+		AttackStateManager.ChangeState("Shoot");
+		return;
+	}
+
 }
 
+
+Bullet* Blt;
 void EnemyCop::ShootStart(const StateInfo& _Info)
 {
+	Blt = GetLevel()->CreateActor<EnemyBullet>();
+	
+	Blt->Instance(EnemyPos + float4{ 0, 30, GetDepth(ACTOR_DEPTH::FX)}, AimDir);
 }
 
 void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	auto val = Blt->GetTransform().GetWorldPosition();
+}
+
+// RAY??
+bool EnemyCop::PointToPlayer()
+{
+
+
+	return false;
 }
 
