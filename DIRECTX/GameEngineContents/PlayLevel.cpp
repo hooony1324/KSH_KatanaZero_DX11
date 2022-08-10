@@ -90,7 +90,9 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
 		{
-			RoomChange(Room1);
+			//RoomChange(Room1);
+			RoomIter = Rooms.begin();
+			RoomStateManager.ChangeState("RoomChange");
 		}
 
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad5"))

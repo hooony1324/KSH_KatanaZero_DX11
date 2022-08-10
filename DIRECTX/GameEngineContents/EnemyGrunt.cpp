@@ -19,6 +19,8 @@ void EnemyGrunt::Start()
 	CreateRendererAndCollision();
 	CreateAllFolderAnimation();
 	CreateAllState();
+
+	// Attack 관련 오버라이드
 	StateManager.CreateStateMember("Attack"
 		, std::bind(&EnemyGrunt::AttackUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyGrunt::AttackStart, this, std::placeholders::_1));
@@ -28,11 +30,6 @@ void EnemyGrunt::Start()
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{"grunt_slash", 0.1125f, false});
 	Renderer_Slash->SetScaleModeImage();
 
-	Renderer_Slash->AnimationBindEnd("slash", [=](const FrameAnimation_DESC& _Info) 
-		{
-			Renderer_Slash->Off();
-			Collision_Slash->Off();
-		});
 
 	Renderer_Slash->Off();
 	Collision_Slash = CreateComponent<GameEngineCollision>();
@@ -41,6 +38,12 @@ void EnemyGrunt::Start()
 	Collision_Slash->Off();
 	Collision_Slash->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 1, 0.25f });
 
+
+	Renderer_Slash->AnimationBindEnd("slash", [=](const FrameAnimation_DESC& _Info)
+		{
+			Renderer_Slash->Off();
+			Collision_Slash->Off();
+		});
 	Renderer_Character->AnimationBindFrame("attack", [=](const FrameAnimation_DESC& _Info)
 		{
 			if (_Info.CurFrame == 3)

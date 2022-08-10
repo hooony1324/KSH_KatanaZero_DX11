@@ -1,6 +1,5 @@
 #include "PreCompile.h"
 #include "UIManager.h"
-#include <GameEngineCore/CoreMinimal.h>
 
 UIManager::UIManager() 
 {

@@ -1,11 +1,9 @@
 #include "PreCompile.h"
 #include "EnemyActor.h"
-#include <GameEngineCore/CoreMinimal.h>
 
 // 순환 참조
 
 bool TurnEnd;
-static float ChaseSensorPaddingX = 25.0f;
 bool GroundAniEnd = false;
 
 EnemyActor::EnemyActor() 
@@ -14,6 +12,7 @@ EnemyActor::EnemyActor()
 	, PrevLookDir(1)
 	, WallState(STATE_WALL::NONE)
 	, AttackAniEnd(false)
+	, ChaseSensorPaddingX(25.0f)
 {
 }
 
@@ -319,8 +318,7 @@ void EnemyActor::PlayerAlertCheck()
 
 	// 문이 플레이어 앞에 있으면
 	IsDoorFront = Collision_ChaseSensor->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-		std::bind(&EnemyActor::DoorCheck, this, std::placeholders::_1, std::placeholders::_2));
-
+		nullptr);
 	if (IsDoorFront)
 	{
 		return;
@@ -333,6 +331,14 @@ void EnemyActor::PlayerAlertCheck()
 
 bool EnemyActor::DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
+	// this(Enemy) - other(door)
+	float4 This = GetTransform().GetWorldPosition();
+	This.z = 0;
+	float4 Other = _Other->GetTransform().GetWorldPosition();
+	Other.z = 0;
+	float4 Dir = (This - Other).NormalizeReturn();
+
+	//GetTransform().SetWorldMove(Dir);
 	return true;
 }
 
@@ -588,7 +594,6 @@ void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	// 턴 or 런 정해줘야됨
 	TurnEnd = false;
 	StateManager.ChangeState("Run");
 }

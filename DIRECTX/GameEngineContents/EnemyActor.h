@@ -98,7 +98,7 @@ protected:
 	float4 PlayerPos;
 	float4 EnemyPos;
 	int PlayerDir;
-
+	float ChaseSensorPaddingX;
 
 	// PATROL : WALK / IDLE / TURN
 	// CHASE : RUN / TURN / ATTACK

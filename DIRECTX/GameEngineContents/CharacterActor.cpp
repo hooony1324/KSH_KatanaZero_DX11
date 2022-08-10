@@ -1,6 +1,5 @@
 #include "PreCompile.h"
 #include "CharacterActor.h"
-#include <GameEngineCore/CoreMinimal.h>
 
 
 const float FORCE_REACTION = 1.0f; // 반작용 강도

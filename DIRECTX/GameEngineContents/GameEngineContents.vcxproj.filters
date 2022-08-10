@@ -52,6 +52,9 @@
     <Filter Include="Levels\01.PlayLevel\Actor\Effect">
       <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\EnemyActor\Bullet">
+      <UniqueIdentifier>{b441eb2b-4ba6-470a-938f-6b9575bae578}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalValueManager.h">
@@ -150,6 +153,12 @@
     </ClInclude>
     <ClInclude Include="PreCompile.h">
       <Filter>PreCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +261,12 @@
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

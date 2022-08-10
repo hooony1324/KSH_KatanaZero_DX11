@@ -1,6 +1,5 @@
 #include "PreCompile.h"
 #include "Transition.h"
-#include <GameEngineCore/CoreMinimal.h>
 
 const float FadeInterTime = 0.25f;
 const float ParticleSize = 16.0f * 2.f;

@@ -1,6 +1,5 @@
 #include "PreCompile.h"
 #include "Cursor.h"
-#include <GameEngineCore/CoreMinimal.h>
 #include <GameEngineContents/ContentsCore.h>
 
 float4 Cursor::Position = 0.0f;

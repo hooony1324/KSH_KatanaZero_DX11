@@ -21,7 +21,18 @@ protected:
 	void End() override;
 
 protected:
-	void AttackStart(const StateInfo& _Info) override {};
-	void AttackUpdate(float _DeltaTime, const StateInfo& _Info) override {};
+	void AttackStart(const StateInfo& _Info) override;
+	void AttackUpdate(float _DeltaTime, const StateInfo& _Info) override;
+
+	// Aim -> Shot
+	void AimStart(const StateInfo& _Info);
+	void AimUpdate(float _DeltaTime, const StateInfo& _Info);
+	void ShootStart(const StateInfo& _Info);
+	void ShootUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	GameEngineStateManager AttackStateManager;
+	float4 AimVec;
+	GameEngineTextureRenderer* Renderer_GunArm;
+	GameEngineCollision* Collision_Aim;
 };
 
