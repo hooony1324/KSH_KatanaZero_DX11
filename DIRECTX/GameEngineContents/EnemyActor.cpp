@@ -338,7 +338,7 @@ void EnemyActor::PlayerLeftRightCheck()
 		return;
 	}
 
-	EnemyPos = GetTransform().GetWorldPosition();
+	EnemyPos = GetTransform().GetWorldPosition() + float4{ 0, 30 , 0}; // PivotÀÌ BotÀÓ
 	EnemyPos.z = 0;
 	PlayerPos = GlobalValueManager::PlayerPos;
 	PlayerPos.z = 0;
@@ -590,6 +590,7 @@ void EnemyActor::DeadStart(const StateInfo& _Info)
 	MoveSpeed = 150.0f;
 	Renderer_Alert->Off();
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
+	Renderer_GunArm->Off();
 
 	FlyVec.x *= 1.3f;
 	FlyVec.y *= 1.5f;

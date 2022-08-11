@@ -146,7 +146,7 @@ void EnemyCop::ShootStart(const StateInfo& _Info)
 {
 	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>();
 	
-	Blt->Instance(EnemyPos + float4{ 0, 30, GetDepth(ACTOR_DEPTH::FX)}, AimDir);
+	Blt->Instance(EnemyPos + float4{ 0, 0, GetDepth(ACTOR_DEPTH::FX)}, AimDir);
 
 	Renderer_GunArm->Off();
 	Renderer_Character->ChangeFrameAnimation("idle");

@@ -37,9 +37,9 @@ void PlayerZero::Start()
 	Renderer_Slash->ChangeFrameAnimation("slash");
 	
 	// 중심 디버그용
-	//GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
-	//test->SetTexture("None.png");
-	//test->ScaleToTexture();
+	GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
+	test->SetTexture("None.png");
+	test->ScaleToTexture();
 
 	// 콜리전
 	Collision_Character = CreateComponent<GameEngineCollision>();
@@ -109,6 +109,8 @@ void PlayerZero::InputCheck()
 	InputDir = float4::ZERO;
 	// CLICK
 	bool ClickAble = Cursor::IsClickAble();
+
+
 	if (true == ClickAble && GameEngineInput::GetInst()->IsDown("MouseLeft") && AttackAble)
 	{
 		PlayerStateManager.ChangeState("Attack");

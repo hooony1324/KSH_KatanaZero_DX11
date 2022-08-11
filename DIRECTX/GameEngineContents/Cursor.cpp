@@ -2,8 +2,9 @@
 #include "Cursor.h"
 #include <GameEngineContents/ContentsCore.h>
 
-float4 Cursor::Position = 0.0f;
-float4 Cursor::PositionToActor = 0.0f;
+float4 Cursor::ScreenPosition = float4::ZERO;
+float4 Cursor::WorldPosition = float4::ZERO;
+float4 Cursor::WorldPositionToActor = float4::ZERO;
 bool Cursor::CursorValid;
 
 Cursor::Cursor() 
@@ -28,10 +29,10 @@ void Cursor::Start()
 
 void Cursor::Update(float _DeltaTime)
 {
-
-	Position = GetLevel()->GetMainCamera()->GetMouseWorldPosition();
-	PositionToActor = GetLevel()->GetMainCamera()->GetMouseWorldPositionToActor();
-	GetTransform().SetWorldPosition({ Position.x, Position.y, GetDepth(ACTOR_DEPTH::CURSOR) });
+	ScreenPosition = GetLevel()->GetMainCamera()->GetScreenPosition();
+	WorldPosition = GetLevel()->GetMainCamera()->GetMouseWorldPosition();
+	WorldPositionToActor = GetLevel()->GetMainCamera()->GetMouseWorldPositionToActor();
+	GetTransform().SetWorldPosition({ WorldPosition.x, WorldPosition.y, GetDepth(ACTOR_DEPTH::CURSOR) });
 
 	//float4 Pos = GetTransform().GetWorldPosition();
 	//std::string Output = std::to_string(Pos.x) + " / " + std::to_string(Pos.y) + " / " + std::to_string(Pos.z);
@@ -47,8 +48,9 @@ void Cursor::End()
 
 void Cursor::CursorVisibleOutScreen()
 {
-	if (PositionToActor.x > 0 && PositionToActor.x <= 1280.0f
-		&& PositionToActor.y <= -64.0f && PositionToActor.y >= -784.0f)
+
+	if (ScreenPosition.x >= 0 && ScreenPosition.x <= 1280.0f
+		&& ScreenPosition.y >= 0 && ScreenPosition.y <= 720.0f)
 	{
 		CursorValid = true;
 		ShowCursor(false);

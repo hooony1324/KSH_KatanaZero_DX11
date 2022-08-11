@@ -7,14 +7,19 @@ class GameEngineUIRenderer;
 class Cursor : public GameEngineActor
 {
 public:
-	static const float4 GetCursorPosition()
+	static const float4 GetCursorScreenPosition()
 	{
-		return Position;
+		return ScreenPosition;
+	}
+
+	static const float4 GetCursorWorldPosition()
+	{
+		return WorldPosition;
 	}
 
 	static const float4 GetCursorPositionToActor()
 	{
-		return PositionToActor;
+		return WorldPositionToActor;
 	}
 
 	static bool IsClickAble()
@@ -43,8 +48,9 @@ private:
 
 private:
 	GameEngineUIRenderer* Renderer;
-	static float4 Position;
-	static float4 PositionToActor;
+	static float4 ScreenPosition;
+	static float4 WorldPosition;
+	static float4 WorldPositionToActor;
 
 	float4 Boundary;
 	static bool CursorValid;

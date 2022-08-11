@@ -24,8 +24,14 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	ImGui::Text(Name.c_str());
 
 	{
-		float4 Pos = Cursor::GetCursorPosition();
-		std::string Name = "MousePosition : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y);
+		float4 Pos = Cursor::GetCursorScreenPosition();
+		std::string Name = "MouseScreenPosition : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y);
+		ImGui::Text(Name.c_str());
+	}
+
+	{
+		float4 Pos = Cursor::GetCursorWorldPosition();
+		std::string Name = "MouseWorldPosition : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y);
 		ImGui::Text(Name.c_str());
 	}
 
