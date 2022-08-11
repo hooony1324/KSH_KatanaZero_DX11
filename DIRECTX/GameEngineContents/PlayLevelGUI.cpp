@@ -42,13 +42,12 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		GEngine::CollisionDebugSwitch();
 
 	}
-	ImGui::SameLine();
 
+	ImGui::SameLine();
 	if (true == ImGui::Button("CheatMode"))
 	{
 		CharacterActor::CheatModeSwitch();
 	}
-	ImGui::SameLine();
 
 
 

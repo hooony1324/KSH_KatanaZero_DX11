@@ -35,7 +35,7 @@ void EnemyCop::Start()
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 
 	// Aim -> Shoot
-	Renderer_GunArm->SetTexture("spr_cop_aim_rightarm.png");
+	Renderer_GunArm->SetTexture("spr_cop_aim_arms.png");
 	Renderer_GunArm->ScaleToTexture();
 	Renderer_GunArm->GetTransform().SetLocalPosition({ 0, 20, 0 });
 	Renderer_GunArm->Off();
@@ -110,22 +110,23 @@ void EnemyCop::AimStart(const StateInfo& _Info)
 
 void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	// 조준 & Renderer
+	// 조준 
 	AimDir = (PlayerPos - EnemyPos).NormalizeReturn();
-
-	// 시선
-	float Rot = 0.0f;
+	float Rot = float4::VectorXYtoDegree(EnemyPos, PlayerPos);
 	if (AimDir.x > 0)
 	{
-		Rot = float4::VectorXYtoDegree({ 0, 0 }, AimDir);
+		Renderer_Character->GetTransform().PixLocalPositiveX();
 		Renderer_GunArm->GetTransform().PixLocalPositiveX();
+
 	}
 	else if (AimDir.x < 0)
 	{
-		Rot = float4::VectorXYtoDegree({ 0, 0 }, AimDir);
+		Renderer_Character->GetTransform().PixLocalNegativeX();
 		Renderer_GunArm->GetTransform().PixLocalNegativeX();
+
+		Rot -= 178.9f;
 	}
-	//Renderer_GunArm->GetTransform().SetWorldRotation({ 0, 0, Rot });
+	Renderer_GunArm->GetTransform().SetWorldRotation({ 0, 0, Rot });
 	
 
 
