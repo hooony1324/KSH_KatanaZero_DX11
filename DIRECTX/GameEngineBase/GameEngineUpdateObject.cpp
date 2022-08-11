@@ -100,7 +100,7 @@ void GameEngineUpdateObject::ReleaseObject(std::list<GameEngineUpdateObject*>& _
 {
 	if (true == IsDeath())
 	{
-		DetachObject();
+		GameEngineUpdateObject::DetachObject();
 		_RelaseList.push_back(this);
 		return;
 	}

@@ -29,7 +29,7 @@ void Cursor::Start()
 
 void Cursor::Update(float _DeltaTime)
 {
-	ScreenPosition = GetLevel()->GetMainCamera()->GetScreenPosition();
+	ScreenPosition = GetLevel()->GetMainCamera()->GetMouseScreenPosition();
 	WorldPosition = GetLevel()->GetMainCamera()->GetMouseWorldPosition();
 	WorldPositionToActor = GetLevel()->GetMainCamera()->GetMouseWorldPositionToActor();
 	GetTransform().SetWorldPosition({ WorldPosition.x, WorldPosition.y, GetDepth(ACTOR_DEPTH::CURSOR) });

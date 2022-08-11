@@ -37,9 +37,9 @@ void PlayerZero::Start()
 	Renderer_Slash->ChangeFrameAnimation("slash");
 	
 	// 중심 디버그용
-	GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
-	test->SetTexture("None.png");
-	test->ScaleToTexture();
+	//GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
+	//test->SetTexture("None.png");
+	//test->ScaleToTexture();
 
 	// 콜리전
 	Collision_Character = CreateComponent<GameEngineCollision>();
@@ -62,7 +62,6 @@ void PlayerZero::Start()
 
 	// PlayerStateManager
 	StateManagerInit();
-
 
 	// 최초 상태
 	PlayerStateManager.ChangeState("Idle");
@@ -309,11 +308,9 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("hurtfly", FrameAnimation_DESC{ "hurtfly", 0.1125f, false });
 	Renderer_Character->CreateFrameAnimationFolder("hurtground", FrameAnimation_DESC{ "hurtground", 0.1125f, false });
 
-
 	// Slash
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.07f, false });
 	Renderer_Slash->Off();
-
 
 	// 애니메이션 바인딩
 	Renderer_Character->AnimationBindStart("idle_to_run", [=](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });

@@ -32,7 +32,7 @@ void Bullet::ScreenOutCheckToDestroy()
 	float4 BulletPos = GetTransform().GetWorldPosition();
 	if (BulletPos.x < -400 || BulletPos.x > 2000 || BulletPos.y > 400 || BulletPos.y < -2000)
 	{
-		Death();
+		Death(1.0f);
 	}
 
 }
