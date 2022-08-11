@@ -35,7 +35,6 @@ void EnemyCop::Start()
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 
 	// Aim -> Shoot
-	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_GunArm->SetTexture("spr_cop_aim_rightarm.png");
 	Renderer_GunArm->ScaleToTexture();
 	Renderer_GunArm->GetTransform().SetLocalPosition({ 0, 20, 0 });
@@ -144,7 +143,11 @@ void EnemyCop::ShootStart(const StateInfo& _Info)
 
 void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	auto val = Blt->GetTransform().GetWorldPosition();
+	// ÇÑ¹ø ½î°í ÄðÅ¸ÀÓ
+	if (_Info.StateTime > 1.0f)
+	{
+		AttackStateManager.ChangeState("Aim");
+	}
 }
 
 // RAY??

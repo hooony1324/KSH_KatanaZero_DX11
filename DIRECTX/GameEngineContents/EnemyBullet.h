@@ -23,6 +23,7 @@ protected:
 	void End() override;
 
 private:
-
+	void PixelWallCheck();
+	bool IsGreen;
 };
 

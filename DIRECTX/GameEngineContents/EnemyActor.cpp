@@ -88,6 +88,8 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_Aim->ChangeOrder(COLLISIONGROUP::ENEMY_AIM);
 	Collision_Aim->SetDebugSetting(CollisionType::CT_OBB2D, { 0, 1, 0, 0.5f });
 	Collision_Aim->Off();
+
+	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -415,6 +417,7 @@ void EnemyActor::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 		PrevLookDir = 1;
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		AttackAniEnd = false;
+		Renderer_GunArm->Off();
 		return;
 	}
 

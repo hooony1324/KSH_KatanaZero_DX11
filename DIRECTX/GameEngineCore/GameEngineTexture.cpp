@@ -439,9 +439,9 @@ PixelColor GameEngineTexture::GetPixelToPixelColor(int _x, int _y)
 		int Index = _y * static_cast<int>(Image.GetMetadata().width) + _x;
 		Color = Color + (Index * 4);
 
-		ReturnColor.b = Color[0];
-		ReturnColor.g = Color[1];
 		ReturnColor.r = Color[2];
+		ReturnColor.g = Color[1];
+		ReturnColor.b = Color[0];
 		ReturnColor.a = Color[3];
 		break;
 	}

@@ -139,6 +139,7 @@ protected:
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineTextureRenderer* Renderer_Alert;
+	GameEngineTextureRenderer* Renderer_GunArm;
 	GameEngineCollision* Collision_Character;
 	GameEngineCollision* Collision_ChaseSensor;	
 	GameEngineCollision* Collision_Aim;

@@ -42,9 +42,10 @@ void Room_Factory1::Start()
 	//Grunt = GetLevel()->CreateActor<EnemyGrunt>();
 	//Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
 	//Enemies.push_back(Grunt);
-
+	
+	// 400, -330
 	Cop = GetLevel()->CreateActor<EnemyCop>();
-	Cop->SetSpawnPos({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Cop->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Enemies.push_back(Cop);
 }
 

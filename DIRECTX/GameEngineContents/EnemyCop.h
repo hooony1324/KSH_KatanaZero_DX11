@@ -32,7 +32,7 @@ protected:
 
 	GameEngineStateManager AttackStateManager;
 	float4 AimDir;
-	GameEngineTextureRenderer* Renderer_GunArm;
+
 
 	bool PointToPlayer();
 };

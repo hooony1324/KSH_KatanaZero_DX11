@@ -19,7 +19,7 @@ public:
 	Bullet& operator=(Bullet&& _Other) noexcept = delete;
 
 protected:
-	void BoundaryCheckAndDestroy();
+	void ScreenOutCheckToDestroy();
 
 protected:
 	class GameEngineTextureRenderer* Renderer;

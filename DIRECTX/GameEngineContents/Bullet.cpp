@@ -9,8 +9,9 @@ void Bullet::Instance(float4 _Position, float4 _Dir)
 
 	// 회전
 	float4 Rot = float4::VectorXYtoDegree(float4::ZERO, _Dir);
-	Renderer->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
-	Collision->GetTransform().SetWorldRotation({ 0, 0, Rot.z });
+	GetTransform().SetWorldRotation({ 0, 0, Rot.z });
+
+
 }
 
 Bullet::Bullet()
@@ -25,11 +26,13 @@ Bullet::~Bullet()
 }
 
 
-void Bullet::BoundaryCheckAndDestroy()
+void Bullet::ScreenOutCheckToDestroy()
 {
-	float4 CurPos = GetTransform().GetWorldPosition();
-	if (CurPos.x < -400 || CurPos.x > 2000 || CurPos.y > 400 || CurPos.y < -2000)
+	// 화면 밖 나가면 파괴
+	float4 BulletPos = GetTransform().GetWorldPosition();
+	if (BulletPos.x < -400 || BulletPos.x > 2000 || BulletPos.y > 400 || BulletPos.y < -2000)
 	{
 		Death();
 	}
+
 }
