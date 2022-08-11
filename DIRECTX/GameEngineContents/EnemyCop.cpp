@@ -83,26 +83,8 @@ void EnemyCop::AttackStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("attack");
 	MoveVec.x = 0;
 
-	AttackStateManager.ChangeState("Aim");
-}
+	Collision_Aim->GetTransform().SetLocalPosition({ AimPaddingX * PrevLookDir, 20, 0 });
 
-void EnemyCop::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
-{
-	// 플레이어 사정거리 밖이라면 Run
-	if (abs((EnemyPos - PlayerPos).Length()) > AttackRange)
-	{
-		Renderer_GunArm->Off();
-		StateManager.ChangeState("Run");
-		return;
-	}
-
-	// Aim -> Shoot
-	AttackStateManager.Update(_DeltaTime);
-}
-
-void EnemyCop::AimStart(const StateInfo& _Info)
-{
-	Renderer_GunArm->On();
 	if (PrevLookDir > 0)
 	{
 		Renderer_GunArm->GetTransform().PixLocalPositiveX();
@@ -111,15 +93,41 @@ void EnemyCop::AimStart(const StateInfo& _Info)
 	{
 		Renderer_GunArm->GetTransform().PixLocalNegativeX();
 	}
+	AttackStateManager.ChangeState("Aim");
+}
+
+void EnemyCop::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	// Aim -> Shoot
+	AttackStateManager.Update(_DeltaTime);
+}
+
+void EnemyCop::AimStart(const StateInfo& _Info)
+{
+	Renderer_GunArm->On();
 
 }
 
 void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	// 조준하고 
+	// 조준 & Renderer
 	AimDir = (PlayerPos - EnemyPos).NormalizeReturn();
 
-	// 중간에 플레이어가 반대로 넘어가면 렌더러방향 바꿈
+	// 시선
+	float Rot = 0.0f;
+	if (AimDir.x > 0)
+	{
+		Rot = float4::VectorXYtoDegree({ 0, 0 }, AimDir);
+		Renderer_GunArm->GetTransform().PixLocalPositiveX();
+	}
+	else if (AimDir.x < 0)
+	{
+		Rot = float4::VectorXYtoDegree({ 0, 0 }, AimDir);
+		Renderer_GunArm->GetTransform().PixLocalNegativeX();
+	}
+	//Renderer_GunArm->GetTransform().SetWorldRotation({ 0, 0, Rot });
+	
+
 
 	// 중간에 장애물 있으면 Run으로
 
@@ -133,12 +141,14 @@ void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 
-Bullet* Blt;
 void EnemyCop::ShootStart(const StateInfo& _Info)
 {
-	Blt = GetLevel()->CreateActor<EnemyBullet>();
+	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>();
 	
 	Blt->Instance(EnemyPos + float4{ 0, 30, GetDepth(ACTOR_DEPTH::FX)}, AimDir);
+
+	Renderer_GunArm->Off();
+	Renderer_Character->ChangeFrameAnimation("idle");
 }
 
 void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -146,15 +156,9 @@ void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 한번 쏘고 쿨타임
 	if (_Info.StateTime > 1.0f)
 	{
-		AttackStateManager.ChangeState("Aim");
+		StateManager.ChangeState("Run");
 	}
 }
 
-// RAY??
-bool EnemyCop::PointToPlayer()
-{
 
-
-	return false;
-}
 

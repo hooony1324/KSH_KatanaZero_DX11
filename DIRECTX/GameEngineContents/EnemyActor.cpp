@@ -23,35 +23,37 @@ EnemyActor::~EnemyActor()
 
 void EnemyActor::EnemyActorDebug()
 {
-	switch (WallState)
-	{
-	case EnemyActor::STATE_WALL::NONE:
-		GameEngineDebug::OutPutString("NONE");
-		break;
-	case EnemyActor::STATE_WALL::RIGHT:
-		GameEngineDebug::OutPutString("RIGHT");
-		break;
-	case EnemyActor::STATE_WALL::LEFT:
-		GameEngineDebug::OutPutString("LEFT");
-		break;
-	case EnemyActor::STATE_WALL::UP:
-		GameEngineDebug::OutPutString("UP");
-		break;
-	case EnemyActor::STATE_WALL::DOWN:
-		GameEngineDebug::OutPutString("DOWN");
-		break;
-	case EnemyActor::STATE_WALL::RIGHTSLOPE:
-		GameEngineDebug::OutPutString("RIGHTSLOPE");
-		break;
-	case EnemyActor::STATE_WALL::LEFTSLOPE:
-		GameEngineDebug::OutPutString("LEFTSLOPE");
-		break;
-	case EnemyActor::STATE_WALL::UNDERGROUND:
-		GameEngineDebug::OutPutString("UNDERGROUND");
-		break;
-	default:
-		break;
-	}
+
+
+	//switch (WallState)
+	//{
+	//case EnemyActor::STATE_WALL::NONE:
+	//	GameEngineDebug::OutPutString("NONE");
+	//	break;
+	//case EnemyActor::STATE_WALL::RIGHT:
+	//	GameEngineDebug::OutPutString("RIGHT");
+	//	break;
+	//case EnemyActor::STATE_WALL::LEFT:
+	//	GameEngineDebug::OutPutString("LEFT");
+	//	break;
+	//case EnemyActor::STATE_WALL::UP:
+	//	GameEngineDebug::OutPutString("UP");
+	//	break;
+	//case EnemyActor::STATE_WALL::DOWN:
+	//	GameEngineDebug::OutPutString("DOWN");
+	//	break;
+	//case EnemyActor::STATE_WALL::RIGHTSLOPE:
+	//	GameEngineDebug::OutPutString("RIGHTSLOPE");
+	//	break;
+	//case EnemyActor::STATE_WALL::LEFTSLOPE:
+	//	GameEngineDebug::OutPutString("LEFTSLOPE");
+	//	break;
+	//case EnemyActor::STATE_WALL::UNDERGROUND:
+	//	GameEngineDebug::OutPutString("UNDERGROUND");
+	//	break;
+	//default:
+	//	break;
+	//}
 
 }
 

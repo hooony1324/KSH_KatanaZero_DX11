@@ -7,6 +7,12 @@ class GameEngineCollision;
 class CharacterActor : public GameEngineActor
 {
 public:
+	static void CheatModeSwitch()
+	{
+		CheatMode = !CheatMode;
+	}
+
+public:
 	// constrcuter destructer
 	CharacterActor();
 	virtual ~CharacterActor();
@@ -101,5 +107,6 @@ protected:
 	float FlyAngle;
 	float4 FlyVector;
 	bool IsDead;
+	static bool CheatMode;
 };
 

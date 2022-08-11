@@ -34,6 +34,5 @@ protected:
 	float4 AimDir;
 
 
-	bool PointToPlayer();
 };
 

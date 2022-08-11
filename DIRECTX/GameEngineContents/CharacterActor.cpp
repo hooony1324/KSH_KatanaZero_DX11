@@ -2,6 +2,7 @@
 #include "CharacterActor.h"
 
 
+bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
 
 CharacterActor::CharacterActor()
@@ -160,7 +161,7 @@ void CharacterActor::LookCheck(float _InputOrVelocityDir)
 void CharacterActor::EnemyAttackCheck()
 {
 	// 죽은 후에는 체크 안함
-	if (Hp <= 0)
+	if (Hp <= 0 || true == CheatMode)
 	{
 		return;
 	}

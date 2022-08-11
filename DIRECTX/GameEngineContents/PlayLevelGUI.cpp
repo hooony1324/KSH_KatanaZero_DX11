@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "PlayLevelGUI.h"
 #include "Cursor.h"
+#include "CharacterActor.h"
 
 PlayLevelGUI::PlayLevelGUI() 
 {
@@ -39,7 +40,15 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	if (true == ImGui::Button("CollisionDebugSwtich"))
 	{
 		GEngine::CollisionDebugSwitch();
+
 	}
+	ImGui::SameLine();
+
+	if (true == ImGui::Button("CheatMode"))
+	{
+		CharacterActor::CheatModeSwitch();
+	}
+	ImGui::SameLine();
 
 
 
