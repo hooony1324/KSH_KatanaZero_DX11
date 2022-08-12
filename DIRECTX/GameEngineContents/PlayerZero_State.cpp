@@ -149,9 +149,8 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 {
 	RollTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("roll");
-	MoveSpeed = SPEED_PLAYER * 1.3f;
 	
-	MoveVec.x = InputDir.x;
+	MoveVec.x = InputDir.x * 1.5f;
 	CheatModeSwitch();
 }
 

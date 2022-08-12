@@ -29,5 +29,6 @@ private:
 	float4* Color;
 	bool Slow; // true : In, false : out
 	float TimeRatio;
+	float TimeRatio_Fan;
 };
 

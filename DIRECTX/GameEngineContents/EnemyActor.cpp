@@ -62,6 +62,7 @@ void EnemyActor::CreateRendererAndCollision()
 
 	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Character->SetPivotToVector({ 0, 18 });
+	Renderer_Character->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 
 	Renderer_Alert = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Alert->SetTexture("spr_enemy_follow_0.png");

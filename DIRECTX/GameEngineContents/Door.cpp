@@ -27,6 +27,8 @@ bool Door::Open(GameEngineCollision* _This, GameEngineCollision* _Other)
 void Door::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
+
 	Renderer->SetTexture("spr_door_animation_0.png");
 	Renderer->SetSamplingModePoint();
 	Renderer->ScaleToTexture();

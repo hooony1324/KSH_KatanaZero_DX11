@@ -55,7 +55,7 @@ void Room_Factory2::Setting()
 	FanGuard->On();
 
 	// 지형지물
-	PtrFan = GetLevel()->CreateActor<Fan>();
+	PtrFan = GetLevel()->CreateActor<Fan>(ACTORGROUP::TIMEGROUP_FAN);
 	PtrFan->GetTransform().SetWorldPosition({ 1430, -375, GetDepth(ACTOR_DEPTH::BACKGROUND_1) });
 }
 

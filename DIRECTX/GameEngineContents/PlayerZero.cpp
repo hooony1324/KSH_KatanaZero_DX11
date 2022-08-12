@@ -24,7 +24,9 @@ void PlayerZero::Start()
 {
 	// ·»´õ·¯
 	Renderer_Character = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Character->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 	Renderer_Slash = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_Slash->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 	Renderer_Slash->GetTransform().SetLocalPosition({ 0, 0, -5 });
 	CreateAllAnimation();
 

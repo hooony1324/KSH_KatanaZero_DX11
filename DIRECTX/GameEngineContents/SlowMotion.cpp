@@ -32,6 +32,7 @@ void SlowMotion::Start()
 	Color->a = 0;
 	
 	TimeRatio = 1;
+	TimeRatio_Fan = 1;
 }
 
 void SlowMotion::Update(float _DeltaTime)
@@ -42,6 +43,7 @@ void SlowMotion::Update(float _DeltaTime)
 	{
 		// 시간 원상복구
 		TimeRatio = GameEngineMath::Lerp(1, 0.5f, _DeltaTime);
+		TimeRatio_Fan = GameEngineMath::Lerp(1, 0.25f, _DeltaTime);
 
 		// 배경 밝게
 		if (Color->a <= 0.0f)
@@ -60,6 +62,7 @@ void SlowMotion::Update(float _DeltaTime)
 	{
 		// 시간 느리게
 		TimeRatio = GameEngineMath::Lerp(0.5f, 1, _DeltaTime);
+		TimeRatio_Fan = GameEngineMath::Lerp(0.25f, 1, _DeltaTime);
 
 		// 배경 어둡게
 		if (Color->a >= 0.5f)
@@ -74,6 +77,7 @@ void SlowMotion::Update(float _DeltaTime)
 	
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), TimeRatio);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), TimeRatio);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_FAN), TimeRatio_Fan);
 }
 
 void SlowMotion::End()

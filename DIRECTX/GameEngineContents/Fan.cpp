@@ -13,6 +13,8 @@ Fan::~Fan()
 void Fan::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP_FAN));
+
 	Renderer->GetTransform().SetLocalScale(float4{ 36, 95, 1 } * 2.0f);
 	Renderer->CreateFrameAnimationFolder("spin", FrameAnimation_DESC{ "fanblade_spin", 0.004f });
 	Renderer->ChangeFrameAnimation("spin");
