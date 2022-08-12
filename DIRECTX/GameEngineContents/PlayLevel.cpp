@@ -11,6 +11,7 @@
 #include "UIManager.h"
 #include "Transition.h"
 #include "PlayLevelGUI.h"
+#include "SlowBackground.h"
 
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
@@ -50,6 +51,9 @@ void PlayLevel::Start()
 	//Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 	//Effect_Transition->Off();
 
+	Transition_Slow = CreateActor<SlowBackground>();
+	Transition_Slow->GetTransform().SetWorldPosition({0, 0, GetDepth(ACTOR_DEPTH::SLOWTRANSITON)});
+
 
 	RoomStateManager.CreateStateMember("RoomChange"
 		, std::bind(&PlayLevel::RoomChangeUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -72,6 +76,10 @@ void PlayLevel::Start()
 	RoomStateManager.CreateStateMember("RoomRestart"
 		, std::bind(&PlayLevel::RoomClickToRestartUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomClickToRestartStart, this, std::placeholders::_1));
+
+	RoomStateManager.CreateStateMember("RoomSlow"
+		, std::bind(&PlayLevel::RoomSlowUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomSlowStart, this, std::placeholders::_1));
 
 	GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
 }
@@ -222,9 +230,16 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (true == GameEngineInput::GetInst()->IsPress("Shift"))
+	{
+		RoomStateManager.ChangeState("RoomSlow");
+		return;
+	}
+
 	if (true == Player->IsPlayerDead())
 	{
 		RoomStateManager.ChangeState("RoomRestart");
+		return;
 	}
 
 	// 몬스터를 다 죽였고, 파란 영역에 도달했다면
@@ -232,6 +247,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		// 방 변경
 		RoomStateManager.ChangeState("RoomExit");
+		return;
 	}
 
 }
@@ -285,6 +301,24 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 		RoomStateManager.ChangeState("RoomChange");
 
 		//리버스
+	}
+}
+
+void PlayLevel::RoomSlowStart(const StateInfo& _Info)
+{
+	// 배경 어둡게(총알, 플레이어보단 뒤에 있음)
+	// 시간 느리게
+	// 플레이어 파란 렌더링
+	Transition_Slow->FadeIn();
+}
+
+void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (true == GameEngineInput::GetInst()->IsUp("Shift"))
+	{
+		Transition_Slow->FadeOut();
+		RoomStateManager.ChangeState("RoomPlay");
+		return;
 	}
 }
 

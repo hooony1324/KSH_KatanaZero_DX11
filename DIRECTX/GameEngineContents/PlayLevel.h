@@ -45,7 +45,9 @@ private:
 	float4 CamClamp_RightBottom;
 
 	PlayerZero* Player;
-	Transition* Effect_Transition;
+	Transition* Transition_DiamondChange;
+
+	class SlowBackground* Transition_Slow;
 
 // FSM : RoomPlay, RoomReplay, RoomChange
 private:
@@ -65,6 +67,11 @@ private:
 
 	void RoomClickToRestartStart(const StateInfo& _Info);
 	void RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	// SLOW
+	void RoomSlowStart(const StateInfo& _Info);
+	void RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info);
+	//void RoomSlowEnd(const StateInfo& _Info);
 
 	// REVERSE
 	void RoomReverseStart(const StateInfo& _Info);

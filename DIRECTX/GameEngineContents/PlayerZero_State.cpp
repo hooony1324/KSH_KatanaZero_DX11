@@ -152,6 +152,7 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 	MoveSpeed = SPEED_PLAYER * 1.3f;
 	
 	MoveVec.x = InputDir.x;
+	CheatModeSwitch();
 }
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -160,6 +161,7 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		Roll_AniEnd = false;
 		MoveSpeed = SPEED_PLAYER;
+		CheatModeSwitch();
 
 		if (abs(MoveVec.x) > 0)
 		{
@@ -174,6 +176,7 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (IsFall)
 	{
+		CheatModeSwitch();
 		PlayerStateManager.ChangeState("Fall");
 	}
 }
