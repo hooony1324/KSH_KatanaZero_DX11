@@ -263,7 +263,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="SlowBackground.h">
+    <ClInclude Include="SlowMotion.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -414,7 +414,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="SlowBackground.cpp">
+    <ClCompile Include="SlowMotion.cpp">
       <SubType>
       </SubType>
     </ClCompile>

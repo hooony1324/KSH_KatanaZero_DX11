@@ -11,7 +11,8 @@
 #include "UIManager.h"
 #include "Transition.h"
 #include "PlayLevelGUI.h"
-#include "SlowBackground.h"
+#include "SlowMotion.h"
+#include "Bullet.h"
 
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
@@ -35,7 +36,7 @@ void PlayLevel::Start()
 	RoomIter = Rooms.begin();
 
 	// Player
-	Player = CreateActor<PlayerZero>();
+	Player = CreateActor<PlayerZero>(ACTORGROUP::TIMEGROUP);
 	Player->Off();
 
 	// Cursor
@@ -51,8 +52,8 @@ void PlayLevel::Start()
 	//Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 	//Effect_Transition->Off();
 
-	Transition_Slow = CreateActor<SlowBackground>();
-	Transition_Slow->GetTransform().SetWorldPosition({0, 0, GetDepth(ACTOR_DEPTH::SLOWTRANSITON)});
+	SlowEffect = CreateActor<SlowMotion>();
+	SlowEffect->GetTransform().SetWorldPosition({0, 0, GetDepth(ACTOR_DEPTH::SLOWTRANSITON)});
 
 
 	RoomStateManager.CreateStateMember("RoomChange"
@@ -79,7 +80,8 @@ void PlayLevel::Start()
 
 	RoomStateManager.CreateStateMember("RoomSlow"
 		, std::bind(&PlayLevel::RoomSlowUpdate, this, std::placeholders::_1, std::placeholders::_2)
-		, std::bind(&PlayLevel::RoomSlowStart, this, std::placeholders::_1));
+		, std::bind(&PlayLevel::RoomSlowStart, this, std::placeholders::_1)
+		, std::bind(&PlayLevel::RoomSlowEnd, this, std::placeholders::_1));
 
 	GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
 }
@@ -87,7 +89,7 @@ void PlayLevel::Start()
 void PlayLevel::OnEvent()
 {
 	RoomStateManager.ChangeState("RoomChange");
-	// GUI
+
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -300,6 +302,13 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 		UI->RestartUIOff();
 		RoomStateManager.ChangeState("RoomChange");
 
+		// 총알은 없앰
+		std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
+		for (auto Bullet : Bullets)
+		{
+			Bullet->Death();
+		}
+
 		//리버스
 	}
 }
@@ -309,17 +318,30 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 	// 배경 어둡게(총알, 플레이어보단 뒤에 있음)
 	// 시간 느리게
 	// 플레이어 파란 렌더링
-	Transition_Slow->FadeIn();
+	
+	SlowEffect->SlowIn();
+	SlowInSound = GameEngineSound::SoundPlayControl("sound_slomo_engage.ogg");
+	SlowInSound.Volume(0.5f);
 }
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == GameEngineInput::GetInst()->IsUp("Shift"))
 	{
-		Transition_Slow->FadeOut();
+		SlowEffect->SlowOut();
 		RoomStateManager.ChangeState("RoomPlay");
+
+		SlowInSound.Stop();
+		SlowOutSound = GameEngineSound::SoundPlayControl("sound_slomo_disengage.wav");
+		SlowOutSound.Volume(0.5f);
+
 		return;
 	}
+}
+
+void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
+{
+	//GameEngineSound
 }
 
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)

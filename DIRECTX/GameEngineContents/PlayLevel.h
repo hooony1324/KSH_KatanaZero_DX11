@@ -47,7 +47,9 @@ private:
 	PlayerZero* Player;
 	Transition* Transition_DiamondChange;
 
-	class SlowBackground* Transition_Slow;
+	class SlowMotion* SlowEffect;
+	class GameEngineSoundPlayer SlowInSound;
+	class GameEngineSoundPlayer SlowOutSound;
 
 // FSM : RoomPlay, RoomReplay, RoomChange
 private:
@@ -71,7 +73,7 @@ private:
 	// SLOW
 	void RoomSlowStart(const StateInfo& _Info);
 	void RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info);
-	//void RoomSlowEnd(const StateInfo& _Info);
+	void RoomSlowEnd(const StateInfo& _Info);
 
 	// REVERSE
 	void RoomReverseStart(const StateInfo& _Info);

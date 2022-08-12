@@ -16,13 +16,12 @@ private:
 	~GlobalValueManager() {}
 };
 
+// TimeScale을 구분함
 enum class ACTORGROUP
 {
 	CAMERA,
-	MAP,
-	PLAYER,
-	ENEMY,
-	PROJECTILE,
+	TIMEGROUP,
+	TIMEGROUP_BULLET,
 	NONE,
 };
 

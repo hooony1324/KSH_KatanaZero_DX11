@@ -89,7 +89,6 @@ public:
 	{
 		GameEngineActor* NewActor = new ActorType();
 		NewActor->SetLevel(this);
-		//NewActor->SetParent(this);
 		NewActor->SetOrder(_ObjectGroupIndex);
 		NewActor->Start();
 

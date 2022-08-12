@@ -26,6 +26,12 @@ public:
 		}
 	}
 
+	//ม๖ฟ๖พ฿ตส
+	void TimeMap()
+	{
+		TimeScale_;
+	}
+
 public:
 	void Reset();
 	void Update();

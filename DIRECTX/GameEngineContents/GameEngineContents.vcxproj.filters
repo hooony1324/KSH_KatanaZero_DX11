@@ -163,8 +163,8 @@
     <ClInclude Include="Ray.h">
       <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="SlowBackground.h">
-      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
+    <ClInclude Include="SlowMotion.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -277,8 +277,8 @@
     <ClCompile Include="Ray.cpp">
       <Filter>Levels\01.PlayLevel\Actor\EnemyActor\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="SlowBackground.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
+    <ClCompile Include="SlowMotion.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

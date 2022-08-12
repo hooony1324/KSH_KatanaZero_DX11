@@ -144,7 +144,7 @@ void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void EnemyCop::ShootStart(const StateInfo& _Info)
 {
-	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>();
+	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>(ACTORGROUP::TIMEGROUP_BULLET);
 	Blt->Instance(EnemyPos + float4{ 0, 0, GetDepth(ACTOR_DEPTH::FX)}, AimDir);
 
 	Renderer_GunArm->Off();
