@@ -24,6 +24,7 @@ protected:
 
 private:
 	void PixelWallCheck();
+	void PlayerSlashCheck();
 	bool IsGreen;
 };
 

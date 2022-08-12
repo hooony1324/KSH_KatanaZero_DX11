@@ -64,6 +64,7 @@ protected:
 	// ÇÇ°Ý
 	void EnemyAttackCheck();
 	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
+	bool HitBullet(GameEngineCollision* _This, GameEngineCollision* _Other);
 
 	GameEngineStateManager PlayerStateManager;
 

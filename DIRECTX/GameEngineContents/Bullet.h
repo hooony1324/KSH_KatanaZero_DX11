@@ -6,6 +6,10 @@ class Bullet : public GameEngineActor
 {
 public:
 	void Instance(float4 _Position, float4 _Dir);
+	bool IsTargetPlayer()
+	{
+		return TargetPlayer;
+	}
 
 public:
 	// constrcuter destructer
@@ -26,5 +30,6 @@ protected:
 	class GameEngineCollision* Collision;
 	float4 Dir;
 	float MoveSpeed;
+	bool TargetPlayer;
 };
 

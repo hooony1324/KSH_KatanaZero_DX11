@@ -39,12 +39,12 @@ void Room_Factory1::Start()
 	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 
 	// 적 소환 리스트 1400, -310
-	//Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP);
+	//Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
 	//Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
 	//Enemies.push_back(Grunt);
 	
 	// 400, -330
-	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP);
+	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
 	Cop->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Enemies.push_back(Cop);
 }

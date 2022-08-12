@@ -18,6 +18,7 @@ Bullet::Bullet()
 	: Renderer(nullptr)
 	, Collision(nullptr)
 	, Dir(float4::ZERO)
+	, TargetPlayer(true)
 {
 }
 

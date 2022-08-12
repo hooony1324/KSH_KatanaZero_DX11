@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "EnemyActor.h"
+#include "EnemyBullet.h"
 
-// 순환 참조
 
 bool TurnEnd;
 bool GroundAniEnd = false;
@@ -84,13 +84,13 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
 	Collision_ChaseSensor->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 0, 0.25f });
 
-	Collision_Aim = CreateComponent<GameEngineCollision>();
-	Collision_Aim->GetTransform().SetLocalScale({ 300, 2, GetDepth(ACTOR_DEPTH::COLLISION) });
-	AimPaddingX = Collision_Aim->GetTransform().GetLocalScale().hx();
-	Collision_Aim->GetTransform().SetLocalPosition({ AimPaddingX, 18, 0 });
-	Collision_Aim->ChangeOrder(COLLISIONGROUP::ENEMY_AIM);
-	Collision_Aim->SetDebugSetting(CollisionType::CT_OBB2D, { 0, 1, 0, 0.5f });
-	Collision_Aim->Off();
+	//Collision_Aim = CreateComponent<GameEngineCollision>();
+	//Collision_Aim->GetTransform().SetLocalScale({ 300, 2, GetDepth(ACTOR_DEPTH::COLLISION) });
+	//AimPaddingX = Collision_Aim->GetTransform().GetLocalScale().hx();
+	//Collision_Aim->GetTransform().SetLocalPosition({ AimPaddingX, 18, 0 });
+	//Collision_Aim->ChangeOrder(COLLISIONGROUP::ENEMY_AIM);
+	//Collision_Aim->SetDebugSetting(CollisionType::CT_OBB2D, { 0, 1, 0, 0.5f });
+	//Collision_Aim->Off();
 
 	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
 }
@@ -287,6 +287,12 @@ bool EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other
 		FlyVec.z = 0;
 		FlyVec.Normalize();
 		StateManager.ChangeState("Dead");
+	}
+
+	// 플레이어가 반사한 총알공격이면 총알 없앰
+	if (nullptr != dynamic_cast<EnemyBullet*>(_Other->GetActor()))
+	{
+		_Other->GetActor()->Death();
 	}
 
 	return true;

@@ -1,6 +1,6 @@
 #include "PreCompile.h"
 #include "CharacterActor.h"
-
+#include "Bullet.h"
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -169,9 +169,31 @@ void CharacterActor::EnemyAttackCheck()
 	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_AABB2D,
 		std::bind(&CharacterActor::Damaged, this, std::placeholders::_1, std::placeholders::_2)
 	);
+
+	//Collision_Character->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_BULLET, CollisionType::CT_OBB2D,
+	//	std::bind(&CharacterActor::HitBullet, this, std::placeholders::_1, std::placeholders::_2)
+	//);
 }
 
 bool CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
+{
+	// 공격 위치를 받아서 반대로 날려짐
+	Hp--;
+	if (Hp <= 0)
+	{
+		float4 This = _This->GetTransform().GetWorldPosition();
+		This.z = 0;
+		float4 Other = _Other->GetActor()->GetTransform().GetWorldPosition();
+		Other.z = 0;
+		FlyVector = This - Other;
+		FlyVector.Normalize();
+		PlayerStateManager.ChangeState("Dead");
+	}
+
+	return true;
+}
+
+bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 공격 위치를 받아서 반대로 날려짐
 	Hp--;

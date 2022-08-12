@@ -48,7 +48,6 @@ void EnemyCop::Start()
 		, std::bind(&EnemyCop::ShootUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyCop::ShootStart, this, std::placeholders::_1));
 
-	Collision_Aim->On();
 }
 
 void EnemyCop::Update(float _DeltaTime)
@@ -82,8 +81,6 @@ void EnemyCop::AttackStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("attack");
 	MoveVec.x = 0;
-
-	Collision_Aim->GetTransform().SetLocalPosition({ AimPaddingX * PrevLookDir, 20, 0 });
 
 	if (PrevLookDir > 0)
 	{

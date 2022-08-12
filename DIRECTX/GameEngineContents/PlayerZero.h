@@ -11,6 +11,9 @@ class GameEngineCollision;
 class PlayerZero : public CharacterActor
 {
 public:
+	//bool IsPlayerAttack(); // Ä«¸Ş¶ó Èçµé¸² + Àá±ñ ´À·ÁÁü
+
+public:
 	// constrcuter destructer
 	PlayerZero();
 	~PlayerZero();
