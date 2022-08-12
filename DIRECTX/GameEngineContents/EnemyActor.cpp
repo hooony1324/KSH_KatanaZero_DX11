@@ -639,7 +639,7 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.y = -1;
 	}
 
-	if (DT > 4.5f)
+	if (DT > 4.0f)
 	{
 		Off();
 	}

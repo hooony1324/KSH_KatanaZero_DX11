@@ -50,7 +50,7 @@ void EnemyBullet::PixelWallCheck()
 	// 오른쪽 왼쪽
 	float4 BulletColPos = Collision->GetTransform().GetWorldPosition();
 
-	IsGreen = CollisionMap->GetCurTexture()->GetPixelToPixelColor(BulletColPos.x, -BulletColPos.y) == GREEN;
+	IsGreen = CollisionMap->GetCurTexture()->GetPixelToPixelColor(BulletColPos.ix(), -BulletColPos.iy()) == GREEN;
 	if (true == IsGreen)
 	{
 		Death();
@@ -72,24 +72,40 @@ void EnemyBullet::PlayerSlashCheck()
 			Collision->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 
 			std::list<GameEngineActor*> Enemies = GetLevel()->GetGroup(ACTORGROUP::TIMEGROUP_ENEMY);
-			
-			if (Enemies.size() > 0)
+			GameEngineActor* Enemy = nullptr;
+			float4 BulletVec = GetTransform().GetWorldPosition();
+			BulletVec.z = 0;
+
+			// On Enemy선택
+			for (GameEngineActor* Ptr : Enemies)
+			{
+				if (true == Ptr->IsUpdate())
+				{
+					Enemy = Ptr;
+					break;
+				}
+			}
+
+			if (nullptr != Enemy)
 			{
 				// 진행방향 적으로
-				GameEngineActor* Enemy = *Enemies.begin();
 				float4 EnemyVec = Enemy->GetTransform().GetWorldPosition() + float4{0, 30, 0};
 				EnemyVec.z = 0;
-				float4 BulletVec = GetTransform().GetWorldPosition();
+
 				Dir = (EnemyVec - BulletVec).NormalizeReturn();
-				float Rot = float4::VectorXYtoDegree(float4::ZERO, Dir);
-				GetTransform().SetWorldRotation({ 0, 0, Rot });
 			}
 			else
 			{
 				// 적 없으면
-				Dir.x *= -1;
+				float4 SlashVec = _Other->GetTransform().GetWorldPosition();
+				SlashVec.z = 0;
+
+				Dir = (BulletVec - SlashVec).NormalizeReturn();
 			}
+			// 회전
 			
+			float Rot = float4::VectorXYtoDegree(float4::ZERO, Dir);
+			GetTransform().SetWorldRotation({ 0, 0, Rot });
 			return true; 
 		});
 }

@@ -46,7 +46,7 @@ void PlayerZero::Start()
 	// ÄÝ¸®Àü
 	float4 	CharacterScale = Renderer_Character->GetTransform().GetLocalScale();
 	Collision_Character = CreateComponent<GameEngineCollision>();
-	Collision_Character->GetTransform().SetLocalScale({ CharacterScale.x, CharacterScale.y, GetDepth(ACTOR_DEPTH::COLLISION)});
+	Collision_Character->GetTransform().SetLocalScale({ CharacterScale.x * 0.5f, CharacterScale.y * 0.8f, GetDepth(ACTOR_DEPTH::COLLISION)});
 	Collision_Character->ChangeOrder(COLLISIONGROUP::PLAYER);
 	Collision_Character->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 0, 1, 0.25f });
 
