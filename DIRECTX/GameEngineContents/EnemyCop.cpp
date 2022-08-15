@@ -60,7 +60,7 @@ void EnemyCop::Update(float _DeltaTime)
 	// 액션 체크
 	PlayerAlertCheck();
 
-	PlayerLeftRightCheck();
+	PlayerOnFloorCheck();
 	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);
 
@@ -68,7 +68,7 @@ void EnemyCop::Update(float _DeltaTime)
 	Move(_DeltaTime);
 
 
-	//EnemyActorDebug();
+	EnemyActorDebug();
 
 	
 }
@@ -81,6 +81,7 @@ void EnemyCop::AttackStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("attack");
 	MoveVec.x = 0;
+	MoveVec.y = 0;
 
 	if (PrevLookDir > 0)
 	{

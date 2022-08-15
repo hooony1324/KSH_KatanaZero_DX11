@@ -23,6 +23,8 @@ protected:
 	void Setting() override;
 	void Clear() override;
 
+	void StairSetting() override {}
+
 private:
 
 };

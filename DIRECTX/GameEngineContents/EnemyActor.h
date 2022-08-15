@@ -94,12 +94,13 @@ protected:
 
 	void PlayerAlertCheck();
 	bool SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other);
-	void PlayerLeftRightCheck();
+	void PlayerOnFloorCheck();
 	bool FindPlayer;
 	float4 PlayerPos;
 	float4 EnemyPos;
-	int PlayerDir;
+	float4 PlayerDir;
 	float ChaseSensorPaddingX;
+	bool PlayerSameFloor;
 
 	// PATROL : WALK / IDLE / TURN
 	// CHASE : RUN / TURN / ATTACK
@@ -130,6 +131,14 @@ protected:
 
 	virtual void DeadStart(const StateInfo& _Info);
 	virtual void DeadUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	// 위층 아래측 추격
+	virtual void GoUpstairStart(const StateInfo& _Info);
+	virtual void GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	virtual void GoDownstairStart(const StateInfo& _Info);
+	virtual void GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info);
+
 
 	GameEngineStateManager StateManager;
 

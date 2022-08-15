@@ -6,6 +6,9 @@
 bool TurnEnd;
 bool GroundAniEnd = false;
 
+bool StairArrived;
+float4 DownStairDest;
+
 EnemyActor::EnemyActor() 
 	: EnemyName(std::string())
 	, MoveVec(float4::DOWN)
@@ -25,35 +28,35 @@ void EnemyActor::EnemyActorDebug()
 {
 
 
-	//switch (WallState)
-	//{
-	//case EnemyActor::STATE_WALL::NONE:
-	//	GameEngineDebug::OutPutString("NONE");
-	//	break;
-	//case EnemyActor::STATE_WALL::RIGHT:
-	//	GameEngineDebug::OutPutString("RIGHT");
-	//	break;
-	//case EnemyActor::STATE_WALL::LEFT:
-	//	GameEngineDebug::OutPutString("LEFT");
-	//	break;
-	//case EnemyActor::STATE_WALL::UP:
-	//	GameEngineDebug::OutPutString("UP");
-	//	break;
-	//case EnemyActor::STATE_WALL::DOWN:
-	//	GameEngineDebug::OutPutString("DOWN");
-	//	break;
-	//case EnemyActor::STATE_WALL::RIGHTSLOPE:
-	//	GameEngineDebug::OutPutString("RIGHTSLOPE");
-	//	break;
-	//case EnemyActor::STATE_WALL::LEFTSLOPE:
-	//	GameEngineDebug::OutPutString("LEFTSLOPE");
-	//	break;
-	//case EnemyActor::STATE_WALL::UNDERGROUND:
-	//	GameEngineDebug::OutPutString("UNDERGROUND");
-	//	break;
-	//default:
-	//	break;
-	//}
+	switch (WallState)
+	{
+	case EnemyActor::STATE_WALL::NONE:
+		GameEngineDebug::OutPutString("NONE");
+		break;
+	case EnemyActor::STATE_WALL::RIGHT:
+		GameEngineDebug::OutPutString("RIGHT");
+		break;
+	case EnemyActor::STATE_WALL::LEFT:
+		GameEngineDebug::OutPutString("LEFT");
+		break;
+	case EnemyActor::STATE_WALL::UP:
+		GameEngineDebug::OutPutString("UP");
+		break;
+	case EnemyActor::STATE_WALL::DOWN:
+		GameEngineDebug::OutPutString("DOWN");
+		break;
+	case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		GameEngineDebug::OutPutString("RIGHTSLOPE");
+		break;
+	case EnemyActor::STATE_WALL::LEFTSLOPE:
+		GameEngineDebug::OutPutString("LEFTSLOPE");
+		break;
+	case EnemyActor::STATE_WALL::UNDERGROUND:
+		GameEngineDebug::OutPutString("UNDERGROUND");
+		break;
+	default:
+		break;
+	}
 
 }
 
@@ -146,6 +149,12 @@ void EnemyActor::CreateAllState()
 		, std::bind(&EnemyActor::ChaseTurnUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyActor::ChaseTurnStart, this, std::placeholders::_1));
 
+	StateManager.CreateStateMember("GoUpstair"
+		, std::bind(&EnemyActor::GoUpstairUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::GoUpstairStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("GoDownstair"
+		, std::bind(&EnemyActor::GoDownstairUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::GoDownstairStart, this, std::placeholders::_1));
 
 }
 
@@ -188,25 +197,25 @@ void EnemyActor::WallCheck()
 	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 2))
 		== BLUE;
 
-	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 2))
+	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 45, -(CharacterPos.iy() + 2))
 		== GREEN;
-	Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 2))
+	Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 45, -(CharacterPos.iy() + 2))
 		== GREEN;
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 72))
+	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 45, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 72))
+	Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 45, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 72))
+	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 45, -(CharacterPos.iy() + 72))
 		== GREEN;
-	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 2))
+	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 45, -(CharacterPos.iy() - 2))
 		== GREEN;
-	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 2))
+	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 45, -(CharacterPos.iy() - 2))
 		== GREEN;
 
 
 	// 벽 체크
 	// 땅에 박힘
-	if (Down || DownBlue)
+	if (Down || DownBlue && Left_Down && Right_Down)
 	{
 		WallState = STATE_WALL::UNDERGROUND;
 		IsFall = false;
@@ -232,11 +241,13 @@ void EnemyActor::WallCheck()
 	if (Left_Up && Left_Down)
 	{
 		WallState = STATE_WALL::LEFT;
+		GetTransform().SetWorldMove({ 1, 0, 0 });
 		return;
 	}
 	if (Right_Up && Right_Down)
 	{
 		WallState = STATE_WALL::RIGHT;
+		GetTransform().SetWorldMove({ -1, 0, 0 });
 		return;
 	}
 
@@ -249,13 +260,13 @@ void EnemyActor::WallCheck()
 	}
 
 	// 슬로프
-	if (Left_Down && !Right_Down)
+	if (Left_Down && DoubleDown && !Right_Down)
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (Right_Down && !Left_Down)
+	if (Right_Down && DoubleDown && !Left_Down)
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
@@ -338,7 +349,7 @@ bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Oth
 	return true;
 }
 
-void EnemyActor::PlayerLeftRightCheck()
+void EnemyActor::PlayerOnFloorCheck()
 {
 	if (false == FindPlayer)
 	{
@@ -350,28 +361,39 @@ void EnemyActor::PlayerLeftRightCheck()
 	PlayerPos = GlobalValueManager::PlayerPos;
 	PlayerPos.z = 0;
 	
-
-	// 같은층 다른층 판단
-	float HeightSub = PlayerPos.y - EnemyPos.y;
-	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y)
-	{
-
-	}
-	
-	// Ex) 적 2층, 플레이어 1층
-	// 1. 플레이어 위/아래 확인(아래에 있음) >>> 2. 아래로 가는 포인트중 가장 가까운 포인트 확인(그곳이 플레이어 방향)
-	// 3. 포인트까지 도달 후 슬로프 방향대로 대각선 하향 움직임 다음 추격
-	
-	// 같은층
-	if (EnemyPos.x - PlayerPos.x< 0)
+	// 왼쪽 오른쪽
+	if (EnemyPos.x - PlayerPos.x < 0)
 	{
 		// Ememy(800) Player(900) 플레이어 오른쪽
-		PlayerDir = 1;
+		PlayerDir.x = 1;
 	}
 	else
 	{
-		PlayerDir = -1;
+		PlayerDir.x = -1;
 	}
+
+
+	// 같은층 다른층 판단
+	float HeightSub = PlayerPos.y - EnemyPos.y;
+	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y * 3.0f)
+	{
+		PlayerSameFloor = false;
+		if (HeightSub > 0)
+		{
+			PlayerDir.y = 1;
+		}
+		else
+		{
+			PlayerDir.y = -1;
+		}
+	}
+	else
+	{
+		PlayerSameFloor = true;
+	}
+	
+	
+
 }
 
 void EnemyActor::LookDirCheck()
@@ -512,7 +534,7 @@ void EnemyActor::AlertUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Alert->SetTexture("spr_enemy_follow_1.png");
 		
 		// 턴 할지 뛸 지 결정
-		if (PrevLookDir == PlayerDir)
+		if (PrevLookDir == PlayerDir.ix())
 		{
 			StateManager.ChangeState("Run");
 		}
@@ -532,17 +554,29 @@ void EnemyActor::RunStart(const StateInfo& _Info)
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 Turn
-	if (PrevLookDir != PlayerDir)
+	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 ChaseTurn
+	if (PrevLookDir != PlayerDir.ix() && true == PlayerSameFloor)
 	{
 		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
-	
-	// 추격 알고리즘(보류)
+
 	// 사거리 밖이면 따라감
-	// 따라갈 때 LeftSlope RightSlope 나오면 플레이어 위층 아래층 체크
 	
+	// 같은 층에 없으면 계단으로
+	if (false == PlayerSameFloor)
+	{
+		if (PlayerDir.y > 0)
+		{
+			StateManager.ChangeState("GoUpstair");
+		}
+		else
+		{
+			StateManager.ChangeState("GoDownstair");
+		}
+		return;
+	}
+
 	// 사거리 안에 들어오면 Attack
 	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
 	{
@@ -558,6 +592,20 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
+
+	if (WallState == STATE_WALL::NONE)
+	{
+		MoveVec.y = -1;
+		return;
+	}
+
+	if (WallState == STATE_WALL::DOWN)
+	{
+		MoveVec.y = 0;
+		return;
+	}
+
+
 }
 
 void EnemyActor::ChaseTurnStart(const StateInfo& _Info)
@@ -611,9 +659,12 @@ void EnemyActor::DeadStart(const StateInfo& _Info)
 void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
+	if (DT > 4.0f)
+	{
+		Off();
+	}
 
-	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::LEFTSLOPE 
-		|| WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::UNDERGROUND)
+	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN || WallState == STATE_WALL::UNDERGROUND)
 	{
 		if (false == GroundAniEnd)
 		{
@@ -622,6 +673,7 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 		MoveVec.y = 0;
 		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
+
 	}
 	else
 	{
@@ -629,6 +681,14 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 벽과 충돌 체크
+
+	if (WallState == STATE_WALL::LEFTSLOPE || WallState == STATE_WALL::RIGHTSLOPE)
+	{
+		MoveVec.x = 0;
+		return;
+	}
+
+
 	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
 	{
 		MoveVec.x *= -0.3f;
@@ -639,15 +699,111 @@ void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.y = -1;
 	}
 
-	if (DT > 4.0f)
-	{
-		Off();
-	}
+
 
 }
 
+// 플레이어와의 거리가 짧은 순
+bool ShortDistanceSort(GameEngineCollision* _Left, GameEngineCollision* _Right)
+{
+	float Left = (_Left->GetTransform().GetWorldPosition() - GlobalValueManager::PlayerPos ).Length();
+	float Right = (_Right->GetTransform().GetWorldPosition() - GlobalValueManager::PlayerPos).Length();
+
+	return Left < Right;
+}
+
+void EnemyActor::GoUpstairStart(const StateInfo& _Info)
+{
+	
+}
+
+void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+}
+
+
+void EnemyActor::GoDownstairStart(const StateInfo& _Info)
+{
+	StairArrived = false;
+
+	// 크기 0이면 Run
+	if (GlobalValueManager::Collision_DownStairs.size() <= 0)
+	{
+		StateManager.ChangeState("Run");
+		return;
+	}
+	// DownStair중 플레이어와 가장 가까운곳으로 감 -> Sort [0]
+	GlobalValueManager::Collision_DownStairs.sort(ShortDistanceSort);
+	DownStairDest = GlobalValueManager::Collision_DownStairs.front()->GetTransform().GetWorldPosition();
+
+	MoveVec.x = (DownStairDest.x - EnemyPos.x < 0) ? -1 : 1;
+}
+
+void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	// 계단 입구까지 감
+	if (true == Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+		{
+			if (EnemyPos.x >= DownStairDest.x - 4 && EnemyPos.x <= DownStairDest.x + 4)
+			{
+				return true;
+			}
+
+			return false;
+		}))
+	{
+		StairArrived = true;
+		PrevLookDir = (PlayerPos.x - EnemyPos.x < 0) ? -1 : 1;
+		MoveVec.x = PrevLookDir;
+		// 왼쪽으로 돔
+		if (PrevLookDir > 0)
+		{
+			Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
+			Renderer_Character->GetTransform().PixLocalPositiveX();
+		}
+		// 오른쪽으로 돔
+		else if (PrevLookDir < 0)
+		{
+			Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
+			Renderer_Character->GetTransform().PixLocalNegativeX();
+		}
+	}
+
+	// 계단 내려감
+	if (true == StairArrived)
+	{
+		switch (WallState)
+		{
+		case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		{
+			MoveVec = float4{ -1, -1 }.NormalizeReturn();
+			break;
+		}
+		case EnemyActor::STATE_WALL::LEFTSLOPE:
+		{
+			MoveVec = float4{ 1, -1 }.NormalizeReturn();
+			break;
+		}
+		case EnemyActor::STATE_WALL::UNDERGROUND:
+		{
+			MoveVec.y = 0;
+			break;
+		}
+		case EnemyActor::STATE_WALL::DOWN:
+			MoveVec.y = 0;
+			break;
+		default:
+			break;
+		}
+
+		if (true == PlayerSameFloor)
+		{
+			MoveVec.y = 0;
+			StateManager.ChangeState("Run");
+		}
+	}
 
 
 
-
-
+}

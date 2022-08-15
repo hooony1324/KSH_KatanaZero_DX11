@@ -20,6 +20,7 @@ public:
 
 	virtual void Setting() {}
 	virtual void Clear() {}
+	virtual void StairSetting() = 0;
 
 	// 해당하는 레벨의 클램프정보에 세팅해줌
 	void SetCameraClampArea(float4& _LeftTop, float4& _RightBottom);
@@ -38,8 +39,6 @@ protected:
 	float4 CamClamp_RightBottom;
 
 	float4 PlayerSpawnPos; // 룸 마다 꼭 설정해주어야 함
-	std::vector<float4> UpStairPoints;
-	std::vector<float4> DownStairPoints;
 	std::vector<EnemyActor*> Enemies;
 
 private:

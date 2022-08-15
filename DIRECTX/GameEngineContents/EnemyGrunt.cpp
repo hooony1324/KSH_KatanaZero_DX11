@@ -77,7 +77,7 @@ void EnemyGrunt::Update(float _DeltaTime)
 	// 액션 체크
 	PlayerAlertCheck();
 
-	PlayerLeftRightCheck();
+	PlayerOnFloorCheck();
 	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);
 
@@ -98,6 +98,7 @@ void EnemyGrunt::AttackStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("attack");
 
 	MoveVec.x = 0;
+	MoveVec.y = 0;
 
 	// 슬래쉬 충돌체 위치 조정 PrevLookDir or MoveVec
 	Renderer_Slash->GetTransform().SetLocalPosition({ SlashRendererPaddingX * PrevLookDir, 20, 0 });
@@ -127,7 +128,7 @@ void EnemyGrunt::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 턴 할지 뛸 지 결정
-	if (PrevLookDir == PlayerDir)
+	if (PrevLookDir == PlayerDir.ix())
 	{
 		AttackAniEnd = true;
 		StateManager.ChangeState("Run");

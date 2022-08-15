@@ -45,8 +45,11 @@ void Room_Factory1::Start()
 	
 	// 400, -330
 	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
-	Cop->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Cop->SetSpawnPos({ 400, -330, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Enemies.push_back(Cop);
+
+
+
 }
 
 void Room_Factory1::Setting()
@@ -54,6 +57,9 @@ void Room_Factory1::Setting()
 	// 맵 관련
 	Background->On();
 	GlobalValueManager::ColMap = Background_Collision;
+
+	// 아래층 계단
+	StairSetting();
 
 	// 지형 소환
 	PtrDoor->Close();
@@ -86,6 +92,30 @@ void Room_Factory1::Clear()
 	{
 		Enemy->Off();
 	}
+}
+
+void Room_Factory1::StairSetting()
+{
+	GlobalValueManager::Collision_DownStairs.clear();
+
+	{
+		GameEngineCollision* DownStair = CreateComponent<GameEngineCollision>();
+		DownStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
+		DownStair->GetTransform().SetWorldPosition({ 1130, -355, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+		DownStair->ChangeOrder(COLLISIONGROUP::STAIR);
+		DownStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 1, 0, 0.25f });
+		GlobalValueManager::Collision_DownStairs.push_back(DownStair);
+	}
+
+	{
+		GameEngineCollision* DownStair = CreateComponent<GameEngineCollision>();
+		DownStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
+		DownStair->GetTransform().SetWorldPosition({ 1330, -355, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+		DownStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 1, 0, 0.25f });
+		DownStair->ChangeOrder(COLLISIONGROUP::STAIR);
+		GlobalValueManager::Collision_DownStairs.push_back(DownStair);
+	}
+
 }
 
 void Room_Factory1::Update(float _DeltaTime)

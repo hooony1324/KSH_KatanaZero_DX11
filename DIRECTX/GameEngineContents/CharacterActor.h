@@ -12,6 +12,17 @@ public:
 		CheatMode = !CheatMode;
 	}
 
+	static void CheatModeOn()
+	{
+		CheatMode = true;
+	}
+
+	static void CheatModeOff()
+	{
+		CheatMode = false;
+	}
+
+
 public:
 	// constrcuter destructer
 	CharacterActor();
@@ -108,6 +119,7 @@ protected:
 	float FlyAngle;
 	float4 FlyVector;
 	bool IsDead;
+	bool Invincible; // 구르는 동안 무적
 	static bool CheatMode;
 };
 

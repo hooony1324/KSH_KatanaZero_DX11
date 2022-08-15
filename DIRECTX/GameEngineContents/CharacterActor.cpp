@@ -11,6 +11,7 @@ CharacterActor::CharacterActor()
 	, PrevLookDir(1)
 	, CurLookDir(1)
 	, Hp(1)
+	, Invincible(false)
 {
 
 }
@@ -161,7 +162,7 @@ void CharacterActor::LookCheck(float _InputOrVelocityDir)
 void CharacterActor::EnemyAttackCheck()
 {
 	// 죽은 후에는 체크 안함
-	if (Hp <= 0 || true == CheatMode)
+	if (Hp <= 0 || true == CheatMode || true == Invincible)
 	{
 		return;
 	}

@@ -151,7 +151,7 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("roll");
 	
 	MoveVec.x = InputDir.x * 1.5f;
-	CheatModeSwitch();
+	Invincible = true;
 }
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -160,7 +160,7 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		Roll_AniEnd = false;
 		MoveSpeed = SPEED_PLAYER;
-		CheatModeSwitch();
+		Invincible = false;
 
 		if (abs(MoveVec.x) > 0)
 		{
@@ -217,6 +217,19 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		PlayerStateManager.ChangeState("Fall");
 	}
 
+	// ¹®
+	if (Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+		nullptr))
+	{
+		if (MoveVec.x > 0)
+		{
+			GetTransform().SetWorldMove({ -1, 0, 0 });
+		}
+		else
+		{
+			GetTransform().SetWorldMove({ 1, 0, 0 });
+		}
+	}
 }
 
 void PlayerZero::WallGrabStart(const StateInfo& _Info)

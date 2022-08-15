@@ -8,6 +8,9 @@ public:
 
 	static float4 PlayerPos;
 	
+	// 현재 맵의 계단 정보
+	static std::list<GameEngineCollision*> Collision_UpStairs;
+	static std::list<GameEngineCollision*> Collision_DownStairs;
 
 
 private:
@@ -34,6 +37,7 @@ enum class COLLISIONGROUP
 	ENEMY,
 	ENEMY_ATTACK,
 	DOOR,
+	STAIR,
 };
 
 enum class ACTOR_DEPTH
