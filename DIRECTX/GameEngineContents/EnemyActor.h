@@ -139,6 +139,9 @@ protected:
 	virtual void GoDownstairStart(const StateInfo& _Info);
 	virtual void GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info);
 
+	virtual void SlopeRunStart(const StateInfo& _Info);
+	virtual void SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info);
+
 
 	GameEngineStateManager StateManager;
 

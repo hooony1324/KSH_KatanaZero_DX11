@@ -2,7 +2,7 @@
 #include <GameEngineCore/GameEngineCollision.h>
 
 // Ό³Έν :
-class Ray : public GameEngineCollision
+class Ray : public GameEngineActor
 {
 public:
 	// constrcuter destructer

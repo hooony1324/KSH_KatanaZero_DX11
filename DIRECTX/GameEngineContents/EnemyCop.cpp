@@ -37,6 +37,7 @@ void EnemyCop::Start()
 	// Aim -> Shoot
 	Renderer_GunArm->SetTexture("spr_cop_aim_arms.png");
 	Renderer_GunArm->ScaleToTexture();
+	Renderer_GunArm->SetSamplingModePoint();
 	Renderer_GunArm->GetTransform().SetLocalPosition({ 0, 20, 0 });
 	Renderer_GunArm->Off();
 
@@ -154,7 +155,16 @@ void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 한번 쏘고 쿨타임
 	if (_Info.StateTime > 1.0f)
 	{
-		StateManager.ChangeState("Run");
+		// 땅이면 Run 슬로프면 슬로프 Run
+		if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+		{
+			StateManager.ChangeState("SlopeRun");
+			return;
+		}
+		else
+		{
+			StateManager.ChangeState("Run");
+		}
 	}
 }
 

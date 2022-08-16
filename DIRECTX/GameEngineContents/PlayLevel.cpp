@@ -226,7 +226,8 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
-	
+	// 화면 녹화 시작 지점
+
 }
 
 // @@@ 게임 플레이 @@@
@@ -300,7 +301,7 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 	if (true == GameEngineInput::GetInst()->IsDown("MouseLeft"))
 	{
 		UI->RestartUIOff();
-		RoomStateManager.ChangeState("RoomChange");
+		RoomStateManager.ChangeState("RoomReverse");
 
 		// 총알은 없앰
 		std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
@@ -344,8 +345,10 @@ void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 	//GameEngineSound
 }
 
+// 역재생 화면
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
+	int a = 0;
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)

@@ -94,6 +94,7 @@ void Room_Factory1::Clear()
 	}
 }
 
+// 계단이 있는 방이면 세팅해주어야 함
 void Room_Factory1::StairSetting()
 {
 	GlobalValueManager::Collision_DownStairs.clear();
@@ -108,12 +109,12 @@ void Room_Factory1::StairSetting()
 	}
 
 	{
-		GameEngineCollision* DownStair = CreateComponent<GameEngineCollision>();
-		DownStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
-		DownStair->GetTransform().SetWorldPosition({ 1330, -355, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
-		DownStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 1, 0, 0.25f });
-		DownStair->ChangeOrder(COLLISIONGROUP::STAIR);
-		GlobalValueManager::Collision_DownStairs.push_back(DownStair);
+		GameEngineCollision* UpStair = CreateComponent<GameEngineCollision>();
+		UpStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
+		UpStair->GetTransform().SetWorldPosition({ 780, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+		UpStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 0, 1, 0.25f });
+		UpStair->ChangeOrder(COLLISIONGROUP::STAIR);
+		GlobalValueManager::Collision_UpStairs.push_back(UpStair);
 	}
 
 }
