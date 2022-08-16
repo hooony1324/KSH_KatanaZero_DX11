@@ -12,6 +12,7 @@ public:
 	static std::list<GameEngineCollision*> Collision_UpStairs;
 	static std::list<GameEngineCollision*> Collision_DownStairs;
 
+	static void ClearStairs();
 
 private:
 	// constrcuter destructer

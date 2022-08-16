@@ -36,7 +36,7 @@ public:
 
 	inline bool IsRoomChangeAvailable()
 	{
-		return Right_UpBlue && Right_DownBlue && !IsDead;
+		return (Right_Red || Left_Red ) && !IsDead;
 	}
 
 	inline bool IsPlayerDead()
@@ -101,10 +101,10 @@ protected:
 	bool DoubleDownBlue;
 	bool Left_Up;
 	bool Left_Down;
-	bool Right_UpBlue;
+	bool Right_Red;
 	bool Right_Up;
 	bool Right_Down;
-	bool Right_DownBlue;
+	bool Left_Red;
 	bool Left;
 	bool Right;
 

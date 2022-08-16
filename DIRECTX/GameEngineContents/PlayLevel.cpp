@@ -246,7 +246,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 몬스터를 다 죽였고, 파란 영역에 도달했다면
-	if (Player->IsRoomChangeAvailable())
+	if (Player->IsRoomChangeAvailable() && CurRoom->IsEnemyAllDead())
 	{
 		// 방 변경
 		RoomStateManager.ChangeState("RoomExit");

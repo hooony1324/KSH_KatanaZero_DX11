@@ -156,12 +156,12 @@ void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (_Info.StateTime > 1.0f)
 	{
 		// 땅이면 Run 슬로프면 슬로프 Run
-		if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
-		{
-			StateManager.ChangeState("SlopeRun");
-			return;
-		}
-		else
+		//if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+		//{
+		//	StateManager.ChangeState("SlopeRun");
+		//	return;
+		//}
+		//else
 		{
 			StateManager.ChangeState("Run");
 		}

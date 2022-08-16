@@ -39,9 +39,9 @@ void Room_Factory1::Start()
 	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
 
 	// 적 소환 리스트 1400, -310
-	//Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
-	//Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
-	//Enemies.push_back(Grunt);
+	Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
+	Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies.push_back(Grunt);
 	
 	// 400, -330
 	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
@@ -87,6 +87,9 @@ void Room_Factory1::Clear()
 	// 지형 관련
 	PtrDoor->Off();
 
+	// 계단
+	GlobalValueManager::ClearStairs();
+
 	// 적 관련
 	for (EnemyActor* Enemy : Enemies)
 	{
@@ -97,8 +100,7 @@ void Room_Factory1::Clear()
 // 계단이 있는 방이면 세팅해주어야 함
 void Room_Factory1::StairSetting()
 {
-	GlobalValueManager::Collision_DownStairs.clear();
-	GlobalValueManager::Collision_UpStairs.clear();
+	GlobalValueManager::ClearStairs();
 
 	{
 		GameEngineCollision* DownStair = CreateComponent<GameEngineCollision>();

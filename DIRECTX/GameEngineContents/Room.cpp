@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "Room.h"
 #include "CharacterActor.h"
+#include "EnemyActor.h"
 
 Room::Room() 
 {
@@ -8,6 +9,26 @@ Room::Room()
 
 Room::~Room() 
 {
+}
+
+bool Room::IsEnemyAllDead()
+{
+	// 적이 하나도 없는 방
+	if (Enemies.size() == 0)
+	{
+		return true;
+	}
+
+
+	for (EnemyActor* Enemy : Enemies)
+	{
+		if (true == Enemy->IsUpdate())
+		{
+			return false;
+		}
+
+		return true;
+	}
 }
 
 void Room::EmptyRoomInit()

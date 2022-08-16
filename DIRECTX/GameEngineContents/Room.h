@@ -27,6 +27,8 @@ public:
 	void PlayerSpawn(CharacterActor* _Player);
 
 	float4 CamClamp_Center;
+
+	bool IsEnemyAllDead();
 protected:
 	void EmptyRoomInit();
 	void InitCameraClampArea();

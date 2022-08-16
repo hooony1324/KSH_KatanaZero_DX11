@@ -96,6 +96,7 @@ void EnemyActor::CreateRendererAndCollision()
 	//Collision_Aim->Off();
 
 	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
+	Renderer_GunArm->Off();
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -762,6 +763,18 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 	StairEntrance = Stairs.front()->GetTransform().GetWorldPosition();
 
 	MoveVec.x = (StairEntrance.x - EnemyPos.x < 0) ? -1.0f : 1.0f;
+	// 哭率栏肺 导
+	if (MoveVec.x > 0)
+	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	// 坷弗率栏肺 导
+	else if (MoveVec.x < 0)
+	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
 }
 
 void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -814,9 +827,6 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		StateManager.ChangeState("SlopeRun");
 	}
 
-	
-	
-
 
 }
 
@@ -854,6 +864,18 @@ void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 	StairEntrance = Stairs.front()->GetTransform().GetWorldPosition();
 
 	MoveVec.x = (StairEntrance.x - EnemyPos.x < 0) ? -1.0f : 1.0f;
+	// 哭率栏肺 导
+	if (MoveVec.x > 0)
+	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	// 坷弗率栏肺 导
+	else if (MoveVec.x < 0)
+	{
+		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
 }
 
 void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
