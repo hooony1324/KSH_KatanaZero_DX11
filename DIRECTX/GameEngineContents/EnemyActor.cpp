@@ -189,31 +189,32 @@ void EnemyActor::OnEvent()
 void EnemyActor::WallCheck()
 {
 	// y값 반전 주의
-	float4 CharacterPos = GetTransform().GetWorldPosition();
+	EnemyPos = GetTransform().GetWorldPosition();
 
-	Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
-		== GREEN;
-	DoubleDown = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 2))
-		== GREEN;
-	DownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 1))
-		== BLUE;
-	DoubleDownBlue = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 2))
-		== BLUE;
+	Down = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix(), -(EnemyPos.iy() - 1))).CompareInt3D(float4::GREEN);
+	DoubleDown = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix(), -(EnemyPos.iy() - 2))).CompareInt3D(float4::GREEN);
+	DownBlue = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix(), -(EnemyPos.iy() - 1))).CompareInt3D(float4::BLUE);
+	DoubleDownBlue = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix(), -(EnemyPos.iy() - 2))).CompareInt3D(float4::BLUE);
 
-	Left = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 20, -(CharacterPos.iy() + 2))
-		== GREEN;
-	Right = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 20, -(CharacterPos.iy() + 2))
-		== GREEN;
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 20, -(CharacterPos.iy() + 72))
-		== GREEN;
-	Left_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 20, -(CharacterPos.iy() + 72))
-		== GREEN;
-	Right_Up = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 20, -(CharacterPos.iy() + 72))
-		== GREEN;
-	Right_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 20, -(CharacterPos.iy() - 2))
-		== GREEN;
-	Left_Down = CurCollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 20, -(CharacterPos.iy() - 2))
-		== GREEN;
+	Left = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() - 20, -(EnemyPos.iy() - 1))).CompareInt3D(float4::GREEN);
+	Right = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() - 1))).CompareInt3D(float4::GREEN);
+	Right_Up = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() + 72))).CompareInt3D(float4::GREEN);
+	Left_Up = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() - 20, -(EnemyPos.iy() + 72))).CompareInt3D(float4::GREEN);
+	Right_Up = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() + 72))).CompareInt3D(float4::GREEN);
+	Right_Down = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() - 2))).CompareInt3D(float4::GREEN);
+	Left_Down = (CurCollisionMap->GetCurTexture()
+		->GetPixelToFloat4(EnemyPos.ix() - 20, -(EnemyPos.iy() - 2))).CompareInt3D(float4::GREEN);
+
 
 
 	// 벽 체크
@@ -221,6 +222,7 @@ void EnemyActor::WallCheck()
 	if (Down || DownBlue && Left_Down && Right_Down)
 	{
 		WallState = STATE_WALL::UNDERGROUND;
+		GetTransform().SetWorldMove({ 0, 1, 0 });
 		IsFall = false;
 		return;
 	}
@@ -570,11 +572,6 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 
-	//if (Right || Left || WallState == STATE_WALL::UNDERGROUND)
-	//{
-	//	GetTransform().SetWorldMove({ 0, 1, 0 });
-	//}
-
 	// 같은 층에 없으면 계단으로
 	if (false == PlayerSameFloor)
 	{
@@ -733,14 +730,6 @@ bool FindPlayerNearestStair(GameEngineCollision* _Left, GameEngineCollision* _Ri
 	return Left < Right;
 }
 
-bool FindEnemyNearestStair(float4 _EnemyPos, GameEngineCollision* _Right)
-{
-	float Left = (_Right->GetTransform().GetWorldPosition() - _EnemyPos).Length();
-	float Right = (_Right->GetTransform().GetWorldPosition() - _EnemyPos).Length();
-	
-	return Left < Right;
-}
-
 void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 {
 	StairArrived = false;
@@ -768,7 +757,7 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 		return;
 	}
 
-	// 같은 층 DownStair중 플레이어와 가장 가까운곳으로 감 -> Sort [0]
+	// 같은 층 UpStair중 플레이어와 가장 가까운곳으로 감 -> Sort [0]
 	Stairs.sort(FindPlayerNearestStair);
 	StairEntrance = Stairs.front()->GetTransform().GetWorldPosition();
 
@@ -796,6 +785,7 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 
 		MoveVec.x = NearestDownStairDest.x > 0 ? 1 : -1;
+		PrevLookDir = MoveVec.x;
 		// 왼쪽으로 돔
 		if (PrevLookDir > 0)
 		{
@@ -819,18 +809,13 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (Right || Left)
+	if (WallState == STATE_WALL::UNDERGROUND)
 	{
-		GetTransform().SetWorldMove({ 0, 1, 0 });
+		StateManager.ChangeState("SlopeRun");
 	}
 
-
-	// 사거리 안에 들어오면 Attack
-	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
-	{
-		StateManager.ChangeState("Attack");
-		return;
-	}
+	
+	
 
 
 }
@@ -903,19 +888,17 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (!Right_Down || !Left_Down && DoubleDownBlue)
+
+	if (!DoubleDown)
 	{
 		GetTransform().SetWorldMove({ 0, -1, 0 });
 	}
 
 
-	// 사거리 안에 들어오면 Attack
-	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
+	if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
 	{
-		StateManager.ChangeState("Attack");
-		return;
+		StateManager.ChangeState("SlopeRun");
 	}
-
 
 
 
@@ -947,22 +930,10 @@ void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (!Right_Down || !Left_Down && DoubleDownBlue)
+
+	if (true == Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
+		nullptr))
 	{
-		GetTransform().SetWorldMove({ 0, -1, 0 });
+		StateManager.ChangeState("Run");
 	}
-
-	if (Right || Left)
-	{
-		GetTransform().SetWorldMove({ 0, 1, 0 });
-	}
-
-
-	// 사거리 안에 들어오면 Attack
-	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
-	{
-		StateManager.ChangeState("Attack");
-		return;
-	}
-
 }

@@ -31,35 +31,20 @@ void CharacterActor::WallCheck()
 	// y값 반전 주의
 	float4 CharacterPos = GetTransform().GetWorldPosition();
 
-	PixelColor val = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 34));
-	val == GREEN;
 
-	Down = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 34))
-		 == GREEN;
-	DownBlue = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 34))
-		 == BLUE;
-	Up = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() + 34))
-		== GREEN;
-	Left_Up = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))
-		== GREEN;
-	Right_Up = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 34))
-		== GREEN;
-	Right_Down = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 35))
-		== GREEN;
-	Left_Down = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 35))
-		== GREEN;
-	DoubleDownBlue = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 35))
-		== BLUE;
-	Left = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() - 34, -(CharacterPos.iy() - 25))
-		== GREEN;
-	Right = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 25))
-		== GREEN;
-	DoubleDown = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix(), -(CharacterPos.iy() - 35))
-		== GREEN;
-	Right_UpBlue = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() + 20))
-		== BLUE;
-	Right_DownBlue = CollisionMap->GetCurTexture()->GetPixelToPixelColor(CharacterPos.ix() + 34, -(CharacterPos.iy() - 20))
-		== BLUE;
+	Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::GREEN);
+	DownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::BLUE);
+	Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
+	Left_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
+	Right_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
+	Right_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	Left_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	DoubleDownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::BLUE);
+	Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy() - 25))).CompareInt3D(float4::GREEN);
+	Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() - 25))).CompareInt3D(float4::GREEN);
+	DoubleDown = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	Right_UpBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() + 20))).CompareInt3D(float4::BLUE);
+	Right_DownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() - 20))).CompareInt3D(float4::BLUE);
 
 	// 땅에 박힘
 	if (Down || DownBlue)

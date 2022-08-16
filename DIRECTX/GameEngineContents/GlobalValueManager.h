@@ -89,6 +89,3 @@ enum class TITLE_DEPTH
 	FENCE = 400,
 	PLATE = 500,
 };
-
-static PixelColor GREEN(0, 255, 0, 255);
-static PixelColor BLUE(0, 0, 255, 255);

@@ -28,18 +28,6 @@ public:
 	{
 
 	}
-
-	PixelColor(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a)
-		: r(_r), g(_g), b(_b), a(_a)
-	{
-
-	}
-
-	bool operator==(const PixelColor& _Other)
-	{
-
-		return _Other.r == r && _Other.g == g && _Other.b == b;
-	}
 };
 
 // Ό³Έν :

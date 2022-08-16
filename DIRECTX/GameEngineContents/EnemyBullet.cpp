@@ -50,7 +50,7 @@ void EnemyBullet::PixelWallCheck()
 	// ¿À¸¥ÂÊ ¿ÞÂÊ
 	float4 BulletColPos = Collision->GetTransform().GetWorldPosition();
 
-	IsGreen = CollisionMap->GetCurTexture()->GetPixelToPixelColor(BulletColPos.ix(), -BulletColPos.iy()) == GREEN;
+	IsGreen = (CollisionMap->GetCurTexture()->GetPixelToFloat4(BulletColPos.ix(), -BulletColPos.iy())).CompareInt3D(float4::GREEN);
 	if (true == IsGreen)
 	{
 		Death();
