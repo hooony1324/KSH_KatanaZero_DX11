@@ -18,7 +18,7 @@ void EnemyCop::Start()
 	CreateAllState();
 
 	// Attack관련 오버라이드
-	Collision_ChaseSensor->GetTransform().SetLocalScale({ 300, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_ChaseSensor->GetTransform().SetLocalScale({ 250, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
 
 	StateManager.CreateStateMember("Attack"
 		, std::bind(&EnemyCop::AttackUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -29,7 +29,8 @@ void EnemyCop::Start()
 	Hp = 1;
 	MoveSpeed = 150.0f;
 	AttackRange = 500.0f;
-	ChaseSensorPaddingX = 100.0f;
+	ChaseSensorPaddingX = 60.0f;
+	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 	IsChasingEnemy = false;
 	StateManager.ChangeState("Spawn");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
@@ -155,16 +156,7 @@ void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 한번 쏘고 쿨타임
 	if (_Info.StateTime > 1.0f)
 	{
-		// 땅이면 Run 슬로프면 슬로프 Run
-		//if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
-		//{
-		//	StateManager.ChangeState("SlopeRun");
-		//	return;
-		//}
-		//else
-		{
-			StateManager.ChangeState("Run");
-		}
+		StateManager.ChangeState("Run");
 	}
 }
 

@@ -180,6 +180,7 @@ void EnemyActor::OnEvent()
 	{
 		GetTransform().PixLocalNegativeX();
 	}
+
 }
 
 void EnemyActor::WallCheck()
@@ -450,6 +451,7 @@ void EnemyActor::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		AttackAniEnd = false;
 		Renderer_GunArm->Off();
+		Collision_ChaseSensor->On();
 		return;
 	}
 
@@ -526,6 +528,7 @@ void EnemyActor::AlertStart(const StateInfo& _Info)
 {
 	MoveSpeed *= 2.0f;
 	Renderer_Alert->On();
+	Collision_ChaseSensor->Off();
 }
 
 void EnemyActor::AlertUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -621,14 +624,12 @@ void EnemyActor::ChaseTurnStart(const StateInfo& _Info)
 	// 왼쪽으로 돔
 	if (PrevLookDir > 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
 	}
 	// 오른쪽으로 돔
 	else if (PrevLookDir < 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		PrevLookDir = 1;
 	}
@@ -669,7 +670,7 @@ void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 	MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
 
 	// 벽과 충돌 체크
-	if (Left || Right || Left_Up || Right_Up)
+	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
 	{
 		MoveVec.x *= -0.3f;
 	}
@@ -681,7 +682,7 @@ void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 	// 땅에 닿으면
-	if (MoveVec.y < 0 && Down)
+	if (MoveVec.y < 0 && (WallState == STATE_WALL::DOWN || WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE))
 	{
 		StateManager.ChangeState("Hurtground");
 	}
@@ -703,11 +704,18 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 		Off();
 	}
 
-	MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
+	if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+	{
+		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT * 1.3f);
+	}
+	else
+	{
+		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
+	}
 
 }
 
-// 플레이어와의 거리가 짧은 순 정렬
+// 플레이어와의 거리가 짧은 순 정렬(내려가는 계단)
 bool FindPlayerNearestStair(GameEngineCollision* _Left, GameEngineCollision* _Right)
 {
 	float Left = (_Left->GetTransform().GetWorldPosition() - GlobalValueManager::PlayerPos ).Length();
@@ -752,13 +760,11 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 	// 왼쪽으로 돔
 	if (MoveVec.x > 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 	}
 	// 오른쪽으로 돔
 	else if (MoveVec.x < 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
 }
@@ -769,7 +775,8 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (true == Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
 		nullptr))
 	{
-		// 입구 도착하면 위층 계단 방향 확인
+		// 입구 도착하면 위층 계단 방향(좌우) 확인
+		// UpStair는 반드시 DownStair 한개와 연결되어 있음
 		float4 NearestDownStairDest;
 		float MinDownStairDist = 10000;
 		for (GameEngineCollision* Stair : GlobalValueManager::Collision_DownStairs)
@@ -788,13 +795,11 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		// 왼쪽으로 돔
 		if (PrevLookDir > 0)
 		{
-			Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 			Renderer_Character->GetTransform().PixLocalPositiveX();
 		}
 		// 오른쪽으로 돔
 		else if (PrevLookDir < 0)
 		{
-			Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 			Renderer_Character->GetTransform().PixLocalNegativeX();
 		}
 
@@ -853,13 +858,11 @@ void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 	// 왼쪽으로 돔
 	if (MoveVec.x > 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 	}
 	// 오른쪽으로 돔
 	else if (MoveVec.x < 0)
 	{
-		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 	}
 }
@@ -876,13 +879,11 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		// 왼쪽으로 돔
 		if (PrevLookDir > 0)
 		{
-			Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 			Renderer_Character->GetTransform().PixLocalPositiveX();
 		}
 		// 오른쪽으로 돔
 		else if (PrevLookDir < 0)
 		{
-			Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 			Renderer_Character->GetTransform().PixLocalNegativeX();
 		}
 		StairArrived = true;
