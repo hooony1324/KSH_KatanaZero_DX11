@@ -55,7 +55,7 @@ void PlayerZero::Start()
 
 	float4 SlashScale = Renderer_Slash->GetTransform().GetLocalScale();
 	Collision_Slash = CreateComponent<GameEngineCollision>();
-	Collision_Slash->GetTransform().SetLocalScale({ SlashScale.x, SlashScale.y, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_Slash->GetTransform().SetLocalScale({ SlashScale.x * 0.7f, SlashScale.y * 0.7f, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 	Collision_Slash->Off();
 	Collision_Slash->SetDebugSetting(CollisionType::CT_OBB2D, { 1, 1, 1, 0.25f });
@@ -82,7 +82,7 @@ void PlayerZero::Update(float _DeltaTime)
 		return;
 	}
 
-	if (true == IsDead)
+	if (true == IsPlayerDeadEnd())
 	{
 		return;
 	}
@@ -362,7 +362,7 @@ void PlayerZero::CreateAllAnimation()
 
 	Renderer_Character->AnimationBindEnd("hurtground", [=](const FrameAnimation_DESC& _Info)
 		{
-			IsDead = true;
+			DeadAniend = true;
 		});
 }
 

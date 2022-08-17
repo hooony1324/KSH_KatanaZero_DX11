@@ -56,7 +56,7 @@ private:
 	bool IsAttack;
 
 	// FSM
-public:
+private:
 	void AttackStart(const StateInfo& _Info);
 	void AttackUpdate(float _DeltaTime, const StateInfo& _Info);
 

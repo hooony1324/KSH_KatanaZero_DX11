@@ -431,6 +431,7 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	}
 
 	GroundAniStart = false;
+	DeadAniend = false;
 }
 
 void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)

@@ -8,6 +8,23 @@ class EnemyActor;
 class Room : public GameEngineActor
 {
 public:
+	bool IsTimeLimit()
+	{
+		return TimeLimit;
+	}
+
+	const float GetTimeLimit()
+	{
+		return TimeLimitSeconds;
+	}
+
+protected:
+	void SetCurTimeLimitSeconds(float _Seconds)
+	{
+		TimeLimitSeconds = _Seconds;
+	}
+
+public:
 	// constrcuter destructer
 	Room();
 	virtual ~Room();
@@ -34,14 +51,17 @@ protected:
 	void InitCameraClampArea();
 
 protected:
+	// 룸 마다 꼭 설정해주어야 함
 	GameEngineTextureRenderer* Background;
 	GameEngineTextureRenderer* Background_ColMap;
 
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 
-	float4 PlayerSpawnPos; // 룸 마다 꼭 설정해주어야 함
+	float4 PlayerSpawnPos; 
 	std::vector<EnemyActor*> Enemies;
+	bool TimeLimit;
+	float TimeLimitSeconds;
 
 private:
 

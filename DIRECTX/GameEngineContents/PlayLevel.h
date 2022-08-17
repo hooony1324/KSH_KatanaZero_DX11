@@ -3,7 +3,7 @@
 
 // Ό³Έν :
 class Room;
-class PlayerZero;
+class CharacterActor;
 class Transition;
 class UIManager;
 class PlayLevel : public GameEngineLevel
@@ -43,7 +43,7 @@ private:
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 
-	PlayerZero* Player;
+	CharacterActor* Player;
 	Transition* Transition_DiamondChange;
 
 	class SlowMotion* SlowEffect;

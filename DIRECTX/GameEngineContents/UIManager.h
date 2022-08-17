@@ -15,6 +15,14 @@ public:
 		RestartClickUI->Off();
 	}
 
+	void SetTimeBarLength(float _Ratio)
+	{
+		//TimerBar->SetPivot(PIVOTMODE::LEFTTOP);
+		float NewX = ScaleTimerBar.x * _Ratio;
+		TimerBar->GetTransform().SetWorldScale({ NewX, ScaleTimerBar.y , ScaleTimerBar.z });
+		TimerBar->GetTransform().SetLocalPosition({ PosTimerBar.x - (ScaleTimerBar.x - NewX) * 0.5f, PosTimerBar.y, PosTimerBar.z});
+	}
+
 public:
 	// constrcuter destructer
 	UIManager();
@@ -34,6 +42,10 @@ protected:
 private:
 	GameEngineTextureRenderer* RestartClickUI;
 	GameEngineUIRenderer* TimerBar;
+	
+	// 최초 크기, 위치
+	float4 ScaleTimerBar;
+	float4 PosTimerBar;
 	
 	std::vector< GameEngineUIRenderer*> SlowBatteries;
 	int CurSlowBatteryIndex;

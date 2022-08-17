@@ -38,6 +38,10 @@ void Room_Factory2::Start()
 	FanGuard->GetTransform().SetLocalScale(float4{ 79, 112, 1 } * 2.0f);
 	FanGuard->GetTransform().SetWorldPosition({ 1423.5f, -368, GetDepth(ACTOR_DEPTH::FOREGROUND) });
 	FanGuard->Off();
+
+	// 세팅 시간
+	TimeLimit = true;
+	SetCurTimeLimitSeconds(30.0f);
 }
 
 void Room_Factory2::Update(float _DeltaTime)
@@ -57,6 +61,7 @@ void Room_Factory2::Setting()
 	// 지형지물
 	PtrFan = GetLevel()->CreateActor<Fan>(ACTORGROUP::TIMEGROUP_FAN);
 	PtrFan->GetTransform().SetWorldPosition({ 1430, -375, GetDepth(ACTOR_DEPTH::BACKGROUND_1) });
+
 }
 
 void Room_Factory2::Clear()

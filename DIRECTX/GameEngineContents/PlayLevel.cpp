@@ -3,6 +3,7 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 #include <GameEngineCore/GEngine.h>
+#include "CharacterActor.h"
 #include "PlayerZero.h"
 #include "Room_Factory1.h"
 #include "Room_Factory2.h"
@@ -179,6 +180,7 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 	GetMainCameraActor()->GetTransform().SetWorldPosition({ NextCamPos.x, NextCamPos.y });
 }
 
+float RoomPlayTotalTime; // 방 1개 단위, 제한시간 비교용도
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
 	//Effect_Transition->FadeOut();
@@ -194,6 +196,7 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
 
 	Player->On();
+	RoomPlayTotalTime = 0.0f;
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -222,6 +225,8 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	RoomPlayTotalTime += _DeltaTime;
+
 	if (GlobalValueManager::SlowEnergy < 11)
 	{
 		SlowRecoverTime += _DeltaTime;
@@ -234,7 +239,6 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 
-
 	// 슬로우 모드
 	if (true == GameEngineInput::GetInst()->IsPress("Shift") && GlobalValueManager::SlowEnergy > 0)
 	{
@@ -243,7 +247,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 
-	if (true == Player->IsPlayerDead())
+	if (true == Player->IsPlayerDeadEnd())
 	{
 		RoomStateManager.ChangeState("RoomRestart");
 		return;
@@ -259,6 +263,25 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	// 방 사이즈 별로 월드 밖 이동 제한(보스 방)
 
+
+	// 시간제한 있는 방
+	if (true == CurRoom->IsTimeLimit())
+	{
+		float LimitTime = CurRoom->GetTimeLimit();
+
+		if (RoomPlayTotalTime >= LimitTime && false == Player->IsPlayerDead())
+		{
+			Player->SetDead();
+			return;
+		}
+
+		// UI
+		float Ratio = 1 - RoomPlayTotalTime / LimitTime;
+		if (Ratio >= 0.0f)
+		{
+			UI->SetTimeBarLength(Ratio);
+		}
+	}
 }
 
 void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
@@ -335,6 +358,7 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	RoomPlayTotalTime += _DeltaTime * 0.5f;
 	SlowDeltaTime += _DeltaTime;
 
 	if (SlowDeltaTime >= 1.0f)

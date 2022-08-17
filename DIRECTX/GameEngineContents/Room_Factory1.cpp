@@ -49,7 +49,9 @@ void Room_Factory1::Start()
 	Enemies.push_back(Cop);
 
 
-
+	// 세팅 시간
+	TimeLimit = true;
+	SetCurTimeLimitSeconds(2.0f);
 }
 
 void Room_Factory1::Setting()
@@ -74,6 +76,7 @@ void Room_Factory1::Setting()
 		
 		Enemy->Respawn();
 	}
+
 
 }
 

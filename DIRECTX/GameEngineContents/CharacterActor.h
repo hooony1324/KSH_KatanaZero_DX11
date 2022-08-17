@@ -7,7 +7,37 @@ class GameEngineCollision;
 class CharacterActor : public GameEngineActor
 {
 public:
-	
+	void SetDead()
+	{
+		IsDead = true;
+		Hp = 0;
+		FlyVector = float4{ 0.1f, 1.0f };
+		FlyVector.Normalize();
+		PlayerStateManager.ChangeState("Dead");
+	}
+
+	inline bool IsRoomChangeAvailable()
+	{
+		return (Right_Red || Left_Red) && !IsDead;
+	}
+
+	inline bool IsPlayerDead()
+	{
+		return IsDead;
+	}
+
+	bool IsPlayerDeadEnd()
+	{
+		return IsDead && DeadAniend;
+	}
+
+	void Respawn()
+	{
+		IsDead = false;
+		Hp = 1;
+		PlayerStateManager.ChangeState("Idle");
+	}
+
 	static void CheatModeSwitch()
 	{
 		CheatMode = !CheatMode;
@@ -23,6 +53,7 @@ public:
 		CheatMode = false;
 	}
 
+
 private:
 	static bool CheatMode;
 
@@ -37,22 +68,6 @@ public:
 	CharacterActor& operator=(const CharacterActor& _Other) = delete;
 	CharacterActor& operator=(CharacterActor&& _Other) noexcept = delete;
 
-	inline bool IsRoomChangeAvailable()
-	{
-		return (Right_Red || Left_Red ) && !IsDead;
-	}
-
-	inline bool IsPlayerDead()
-	{
-		return IsDead;
-	}
-
-	void Respawn()
-	{
-		IsDead = false;
-		Hp = 1;
-		PlayerStateManager.ChangeState("Idle");
-	}
 
 protected:
 	enum class STATE_WALL
@@ -122,7 +137,8 @@ protected:
 	int Hp;
 	float FlyAngle;
 	float4 FlyVector;
-	bool IsDead;
+	bool IsDead;		// hurtground ani 끝에 true로 설정해줌
+	bool DeadAniend;
 	bool Invincible; // 구르는 동안 무적
 	
 };

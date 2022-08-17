@@ -30,7 +30,10 @@ void Room_Boss::Start()
 	InitCameraClampArea();
 
 	// 스폰위치, 지형지물 등
-	PlayerSpawnPos = float4{ 220, -620, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 631, -670, GetDepth(ACTOR_DEPTH::PLAYER) };
+
+	// 세팅 시간
+	TimeLimit = false;
 }
 
 void Room_Boss::Update(float _DeltaTime)
@@ -46,6 +49,7 @@ void Room_Boss::Setting()
 	// 맵 관련
 	Background->On();
 	GlobalValueManager::ColMap = Background_ColMap;
+
 
 }
 
