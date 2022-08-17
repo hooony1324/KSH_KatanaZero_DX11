@@ -219,11 +219,14 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
+	// 슬로우 모드
 	if (true == GameEngineInput::GetInst()->IsPress("Shift"))
 	{
 		RoomStateManager.ChangeState("RoomSlow");
 		return;
 	}
+
 
 	if (true == Player->IsPlayerDead())
 	{
@@ -315,6 +318,8 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	float Dt = _Info.StateTime;
+
 	if (true == GameEngineInput::GetInst()->IsUp("Shift"))
 	{
 		SlowEffect->SlowOut();

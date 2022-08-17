@@ -34,5 +34,7 @@ protected:
 private:
 	GameEngineTextureRenderer* RestartClickUI;
 	GameEngineUIRenderer* TimerBar;
+	
+	std::vector< GameEngineUIRenderer*> TimeBattery;
 };
 
