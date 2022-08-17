@@ -199,7 +199,10 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
 
 	Player->On();
+
+	// UI
 	RoomPlayTotalTime = 0.0f;
+	UI->SetTimeBarLength(1);
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)

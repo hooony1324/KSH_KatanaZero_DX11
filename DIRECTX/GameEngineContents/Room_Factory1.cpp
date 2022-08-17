@@ -51,7 +51,7 @@ void Room_Factory1::Start()
 
 	// 세팅 시간
 	TimeLimit = true;
-	SetCurTimeLimitSeconds(2.0f);
+	SetCurTimeLimitSeconds(30.0f);
 }
 
 void Room_Factory1::Setting()
