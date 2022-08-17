@@ -21,6 +21,8 @@ void EnemyGrunt::Start()
 	CreateAllState();
 
 	// Attack 관련 오버라이드
+	Collision_ChaseSensor->GetTransform().SetLocalScale({ 300, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
+
 	StateManager.CreateStateMember("Attack"
 		, std::bind(&EnemyGrunt::AttackUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyGrunt::AttackStart, this, std::placeholders::_1));

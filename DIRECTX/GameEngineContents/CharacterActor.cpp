@@ -29,8 +29,8 @@ void CharacterActor::WallCheck()
 	}
 
 	// y값 반전 주의
-	float4 CharacterPos = GetTransform().GetWorldPosition();
-
+	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
+	CharacterPos = GlobalValueManager::PlayerPos;
 
 	Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::GREEN);
 	DownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::BLUE);

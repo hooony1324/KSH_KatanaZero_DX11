@@ -35,7 +35,7 @@ protected:
 
 protected:
 	GameEngineTextureRenderer* Background;
-	GameEngineTextureRenderer* Background_Collision;
+	GameEngineTextureRenderer* Background_ColMap;
 
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;

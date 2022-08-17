@@ -30,9 +30,10 @@ void PlayLevel::Start()
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>();
 	Room2 = CreateActor<Room_Factory2>();
-	//Room3 = CreateActor<Room_Boss>();
+	Room3 = CreateActor<Room_Boss>();
 	Rooms.push_back(Room1);
 	Rooms.push_back(Room2);
+	Rooms.push_back(Room3);
 	RoomIter = Rooms.begin();
 
 	// Player
@@ -88,6 +89,7 @@ void PlayLevel::Start()
 
 void PlayLevel::OnEvent()
 {
+	CurRoom = *RoomIter;
 	RoomStateManager.ChangeState("RoomChange");
 
 }
@@ -101,18 +103,23 @@ void PlayLevel::Update(float _DeltaTime)
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
 		{
 			//RoomChange(Room1);
-			RoomIter = Rooms.begin();
+			CurRoom->Clear();
+			*RoomIter = Room1;
 			RoomStateManager.ChangeState("RoomChange");
 		}
 
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad5"))
 		{
-			RoomChange(Room2);
+			CurRoom->Clear();
+			*RoomIter = Room2;
+			RoomStateManager.ChangeState("RoomChange");
 		}
 
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad6"))
 		{
-			RoomChange(Room3);
+			CurRoom->Clear();
+			*RoomIter = Room3;
+			RoomStateManager.ChangeState("RoomChange");
 		}	
 	}
 
@@ -135,28 +142,6 @@ void PlayLevel::Update(float _DeltaTime)
 
 void PlayLevel::End()
 {
-}
-
-// 디버그용 방 변경
-void PlayLevel::RoomChange(Room* _Room)
-{
-	// 최초의 방
-	if (nullptr == CurRoom)
-	{
-		CurRoom = Rooms.front();
-		CurRoom->PlayerSpawn(Player);
-	}
-	else
-	{
-		// 방 교환
-		CurRoom->Clear();
-		CurRoom = _Room;
-	}
-
-	CurRoom->PlayerSpawn(Player);
-	CurRoom->Setting();
-	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
-	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
 }
 
 void PlayLevel::CameraFollow(float _DeltaTime)
@@ -197,6 +182,7 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
 	//Effect_Transition->FadeOut();
+	//CurRoom->Clear();
 
 	CurRoom = *RoomIter;
 
@@ -245,7 +231,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	// 몬스터를 다 죽였고, 파란 영역에 도달했다면
+	// 몬스터를 다 죽였고, 포탈 영역에 도달했다면
 	if (Player->IsRoomChangeAvailable() && CurRoom->IsEnemyAllDead())
 	{
 		// 방 변경
@@ -253,11 +239,15 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
+	// 방 사이즈 별로 월드 밖 이동 제한
+
 }
 
 void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
 {
-	
+	// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
+	Player->Off();
+
 }
 
 void PlayLevel::RoomExitStart(const StateInfo& _Info)
@@ -269,9 +259,7 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true)//Effect_Transition->IsTransitionEnd())
 	{
-		Player->Off();			// 콜리전 맵을 계속 인식해서 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
 		CurRoom->Clear();
-
 		++RoomIter;
 
 		// 마지막 방이면 엔딩

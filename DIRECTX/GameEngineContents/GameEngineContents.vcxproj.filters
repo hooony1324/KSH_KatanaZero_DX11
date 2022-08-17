@@ -49,11 +49,17 @@
     <Filter Include="Levels\00.TitleLevel\Actor">
       <UniqueIdentifier>{cd620d5a-4fd5-426f-b37a-f7e28a3ffc84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01.PlayLevel\Actor\Effect">
-      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\01.PlayLevel\Actor\EnemyActor\Bullet">
       <UniqueIdentifier>{b441eb2b-4ba6-470a-938f-6b9575bae578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\CharacterActor\Boss">
+      <UniqueIdentifier>{2858a637-3a1f-43d8-a691-11a3826a6cb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\UI\Effect">
+      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsShader">
+      <UniqueIdentifier>{eec8f8f7-7c21-4171-b661-782fc881d6fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -87,14 +87,6 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
 	Collision_ChaseSensor->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 0, 0.25f });
 
-	//Collision_Aim = CreateComponent<GameEngineCollision>();
-	//Collision_Aim->GetTransform().SetLocalScale({ 300, 2, GetDepth(ACTOR_DEPTH::COLLISION) });
-	//AimPaddingX = Collision_Aim->GetTransform().GetLocalScale().hx();
-	//Collision_Aim->GetTransform().SetLocalPosition({ AimPaddingX, 18, 0 });
-	//Collision_Aim->ChangeOrder(COLLISIONGROUP::ENEMY_AIM);
-	//Collision_Aim->SetDebugSetting(CollisionType::CT_OBB2D, { 0, 1, 0, 0.5f });
-	//Collision_Aim->Off();
-
 	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_GunArm->Off();
 }
@@ -130,9 +122,12 @@ void EnemyActor::CreateAllState()
 	StateManager.CreateStateMember("Idle"
 		, std::bind(&EnemyActor::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyActor::IdleStart, this, std::placeholders::_1));
-	StateManager.CreateStateMember("Dead"
-		, std::bind(&EnemyActor::DeadUpdate, this, std::placeholders::_1, std::placeholders::_2)
-		, std::bind(&EnemyActor::DeadStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("Hurtfly"
+		, std::bind(&EnemyActor::HurtflyUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::HurtflyStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("Hurtground"
+		, std::bind(&EnemyActor::HurtgroundUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&EnemyActor::HurtgroundStart, this, std::placeholders::_1));
 	StateManager.CreateStateMember("Walk"
 		, std::bind(&EnemyActor::WalkUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyActor::WalkStart, this, std::placeholders::_1));
@@ -303,7 +298,7 @@ bool EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other
 		FlyVec = _This->GetTransform().GetWorldPosition() - _Other->GetTransform().GetWorldPosition();
 		FlyVec.z = 0;
 		FlyVec.Normalize();
-		StateManager.ChangeState("Dead");
+		StateManager.ChangeState("Hurtfly");
 	}
 
 	// ÇÃ·¹ÀÌ¾î°¡ ¹Ý»çÇÑ ÃÑ¾Ë°ø°ÝÀÌ¸é ÃÑ¾Ë ¾ø¾Ú
@@ -651,74 +646,64 @@ void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 	StateManager.ChangeState("Run");
 }
 
-void EnemyActor::DeadStart(const StateInfo& _Info)
+
+void EnemyActor::HurtflyStart(const StateInfo& _Info)
 {
 	MoveSpeed = 150.0f;
 	Renderer_Alert->Off();
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 	Renderer_GunArm->Off();
 
-	FlyVec.x *= 1.3f;
-	FlyVec.y *= 1.5f;
+	FlyVec.x *= 0.8f;
+	FlyVec.y *= 1.1f;
 	MoveVec = FlyVec;
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
 	MoveSpeed *= 3.0f;
-
-	GroundAniEnd = false;
 }
 
-void EnemyActor::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
+void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
-	if (DT > 4.0f)
-	{
-		Off();
-	}
 
-	if (MoveVec.y < 0 && WallState == STATE_WALL::DOWN)
-	{
-		if (false == GroundAniEnd)
-		{
-			GroundAniEnd = true;
-			Renderer_Character->ChangeFrameAnimation("hurtground");
-		}
-		MoveVec.y = 0;
-		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
-
-		if (WallState == STATE_WALL::UNDERGROUND)
-		{
-			GetTransform().SetWorldMove({ 0, 1, 0 });
-		}
-
-		if (WallState == STATE_WALL::LEFTSLOPE || WallState == STATE_WALL::RIGHTSLOPE)
-		{
-			MoveVec.y = MoveVec.x;
-			return;
-		}
-
-	}
-	else
-	{
-		MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
-	
-	}
+	// ³¯¶ó°¨
+	MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
 
 	// º®°ú Ãæµ¹ Ã¼Å©
-
-
-
-
-	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
+	if (Left || Right || Left_Up || Right_Up)
 	{
 		MoveVec.x *= -0.3f;
 	}
-	
+
 	if (WallState == STATE_WALL::UP)
 	{
 		MoveVec.y = -1;
 	}
 
 
+	// ¶¥¿¡ ´êÀ¸¸é
+	if (MoveVec.y < 0 && Down)
+	{
+		StateManager.ChangeState("Hurtground");
+	}
+}
+
+void EnemyActor::HurtgroundStart(const StateInfo& _Info)
+{
+	MoveVec.y = 0;
+	Renderer_Character->ChangeFrameAnimation("hurtground");
+}
+
+void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	// MoveVec.x -> 0À¸·Î
+	float DT = _Info.StateTime;
+
+	if (DT > 3.0f)
+	{
+		Off();
+	}
+
+	MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
 
 }
 
@@ -730,6 +715,7 @@ bool FindPlayerNearestStair(GameEngineCollision* _Left, GameEngineCollision* _Ri
 
 	return Left < Right;
 }
+
 
 void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 {
@@ -797,8 +783,8 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 			}
 		}
 
-		MoveVec.x = NearestDownStairDest.x > 0 ? 1 : -1;
-		PrevLookDir = MoveVec.x;
+		MoveVec.x = NearestDownStairDest.x > 0 ? 1.0f : -1.0f;
+		PrevLookDir = MoveVec.ix();
 		// ¿ÞÂÊÀ¸·Î µ¼
 		if (PrevLookDir > 0)
 		{
@@ -885,8 +871,8 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		nullptr))
 	{
 		// ÀÔ±¸ µµÂøÇÏ¸é
-		PrevLookDir = (PlayerPos.x - EnemyPos.x < 0) ? -1.0f : 1.0f;
-		MoveVec.x = PrevLookDir;
+		MoveVec.x = (PlayerPos.x - EnemyPos.x < 0) ? -1.0f : 1.0f;
+		PrevLookDir = MoveVec.ix();
 		// ¿ÞÂÊÀ¸·Î µ¼
 		if (PrevLookDir > 0)
 		{

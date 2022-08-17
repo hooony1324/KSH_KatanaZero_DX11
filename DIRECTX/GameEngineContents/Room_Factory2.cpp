@@ -22,11 +22,11 @@ void Room_Factory2::Start()
 	Background->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) });
 	Background->Off();
 
-	Background_Collision->SetTexture("room_factory_3_colmap.png");
-	Background_Collision->ScaleToTexture();
-	Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
-	Background_Collision->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
-	Background_Collision->Off();
+	Background_ColMap->SetTexture("room_factory_3_colmap.png");
+	Background_ColMap->ScaleToTexture();
+	Background_ColMap->SetPivot(PIVOTMODE::LEFTTOP);
+	Background_ColMap->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+	Background_ColMap->Off();
 
 	InitCameraClampArea();
 
@@ -50,7 +50,7 @@ void Room_Factory2::End()
 
 void Room_Factory2::Setting()
 {
-	GlobalValueManager::ColMap = Background_Collision;
+	GlobalValueManager::ColMap = Background_ColMap;
 	Background->On();
 	FanGuard->On();
 
@@ -62,9 +62,13 @@ void Room_Factory2::Setting()
 void Room_Factory2::Clear()
 {
 	Background->Off();
-	Background_Collision->Off();
-	GlobalValueManager::ColMap->Off();
-	GlobalValueManager::ColMap = nullptr;
+	Background_ColMap->Off();
+
+	if (nullptr != GlobalValueManager::ColMap)
+	{
+		GlobalValueManager::ColMap->Off();
+	}
+	
 
 	// 지형지물
 	PtrFan->Death();

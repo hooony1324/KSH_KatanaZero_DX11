@@ -26,15 +26,15 @@ bool Room::IsEnemyAllDead()
 		{
 			return false;
 		}
-
-		return true;
 	}
+
+	return true;
 }
 
 void Room::EmptyRoomInit()
 {
 	Background = CreateComponent<GameEngineTextureRenderer>();
-	Background_Collision = CreateComponent<GameEngineTextureRenderer>();
+	Background_ColMap = CreateComponent<GameEngineTextureRenderer>();
 
 }
 

@@ -7,6 +7,7 @@ class GameEngineCollision;
 class CharacterActor : public GameEngineActor
 {
 public:
+	
 	static void CheatModeSwitch()
 	{
 		CheatMode = !CheatMode;
@@ -22,6 +23,8 @@ public:
 		CheatMode = false;
 	}
 
+private:
+	static bool CheatMode;
 
 public:
 	// constrcuter destructer
@@ -83,6 +86,7 @@ protected:
 protected:
 	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineCollision* Collision_Character;
+	float4 CharacterPos;
 	float InitSpeed;
 	float MoveSpeed; // 속력
 	float4 MoveVec;	// 방향
@@ -120,6 +124,6 @@ protected:
 	float4 FlyVector;
 	bool IsDead;
 	bool Invincible; // 구르는 동안 무적
-	static bool CheatMode;
+	
 };
 

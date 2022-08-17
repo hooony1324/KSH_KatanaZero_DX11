@@ -33,5 +33,6 @@ protected:
 
 private:
 	GameEngineTextureRenderer* RestartClickUI;
+	GameEngineUIRenderer* TimerBar;
 };
 

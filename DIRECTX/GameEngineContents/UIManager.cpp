@@ -23,11 +23,11 @@ void UIManager::Start()
 	TimerHud->GetTransform().SetLocalScale(TimerHud->GetCurTexture()->GetScale() * 2);
 	TimerHud->GetTransform().SetLocalPosition({ 0, 339, -1 });
 
-	GameEngineUIRenderer* Timer = CreateComponent<GameEngineUIRenderer>();
-	Timer->SetTexture("spr_timer_0.png");
-	Timer->GetTransform().SetLocalScale(Timer->GetCurTexture()->GetScale() * 2);
-	Timer->SetPivot(PIVOTMODE::LEFTTOP);
-	Timer->GetTransform().SetLocalPosition({ 16, 341, -2 });
+	TimerBar = CreateComponent<GameEngineUIRenderer>();
+	TimerBar->SetTexture("spr_timer_0.png");
+	TimerBar->GetTransform().SetLocalScale(TimerBar->GetCurTexture()->GetScale() * 2);
+	TimerBar->SetPivot(PIVOTMODE::LEFTTOP);
+	TimerBar->GetTransform().SetLocalPosition({ 16, 341, -2 });
 
 	RestartClickUI = CreateComponent<GameEngineUIRenderer>();
 	RestartClickUI->SetTexture("spr_itwontwork.png");

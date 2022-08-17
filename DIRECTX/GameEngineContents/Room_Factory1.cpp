@@ -23,12 +23,12 @@ void Room_Factory1::Start()
 	Background->GetTransform().SetLocalMove({0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0)});
 	Background->Off();
 
-	Background_Collision->SetTexture("room_factory_2_colmap.png");
-	Background_Collision->ScaleToTexture();
-	Background_Collision->SetPivot(PIVOTMODE::LEFTTOP);
-	Background_Collision->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
-	Background_Collision->Off();
-	
+	Background_ColMap->SetTexture("room_factory_2_colmap.png");
+	Background_ColMap->ScaleToTexture();
+	Background_ColMap->SetPivot(PIVOTMODE::LEFTTOP);
+	Background_ColMap->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+	Background_ColMap->Off();
+
 	// 배경 설정되고 카메라 클램프 영역 세팅
 	InitCameraClampArea();
 
@@ -56,7 +56,7 @@ void Room_Factory1::Setting()
 {
 	// 맵 관련
 	Background->On();
-	GlobalValueManager::ColMap = Background_Collision;
+	GlobalValueManager::ColMap = Background_ColMap;
 
 	// 아래층 계단
 	StairSetting();
@@ -81,8 +81,10 @@ void Room_Factory1::Clear()
 {
 	// 맵 관련
 	Background->Off();
-	GlobalValueManager::ColMap->Off();
-	GlobalValueManager::ColMap = nullptr;
+	if (nullptr != GlobalValueManager::ColMap)
+	{
+		GlobalValueManager::ColMap->Off();
+	}
 	
 	// 지형 관련
 	PtrDoor->Off();

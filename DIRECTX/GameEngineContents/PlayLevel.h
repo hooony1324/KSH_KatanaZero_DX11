@@ -28,7 +28,6 @@ protected:
 
 // ·ë
 private:
-	void RoomChange(Room* _Room);
 	void CameraFollow(float _DeltaTime);
 
 private:

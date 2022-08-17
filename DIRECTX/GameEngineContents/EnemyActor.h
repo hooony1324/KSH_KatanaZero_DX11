@@ -129,8 +129,12 @@ protected:
 	virtual void AttackStart(const StateInfo& _Info) = 0;
 	virtual void AttackUpdate(float _DeltaTime, const StateInfo& _Info) = 0;
 
-	virtual void DeadStart(const StateInfo& _Info);
-	virtual void DeadUpdate(float _DeltaTime, const StateInfo& _Info);
+	// Á×À½
+	virtual void HurtflyStart(const StateInfo& _Info);
+	virtual void HurtflyUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	virtual void HurtgroundStart(const StateInfo& _Info);
+	virtual void HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	// À§Ãþ ¾Æ·¡Ãø Ãß°Ý
 	virtual void GoUpstairStart(const StateInfo& _Info);
