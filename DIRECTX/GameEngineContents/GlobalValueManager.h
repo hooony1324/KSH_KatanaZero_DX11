@@ -14,6 +14,9 @@ public:
 
 	static void ClearStairs();
 
+	// ½½·Î¿ì
+	static int SlowEnergy;
+
 private:
 	// constrcuter destructer
 	GlobalValueManager() {}

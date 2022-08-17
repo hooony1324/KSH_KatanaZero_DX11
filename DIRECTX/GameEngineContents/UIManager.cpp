@@ -83,14 +83,40 @@ void UIManager::Start()
 		float4 Scale = Battery->GetCurTexture()->GetScale() * 2;
 		Battery->GetTransform().SetLocalScale(Scale);
 		Battery->GetTransform().SetLocalPosition({ -611 + i * Scale.x + i * PaddingX, 340, -1 });
-		TimeBattery.push_back(Battery);
+		SlowBatteries.push_back(Battery);
 	}
 
-
+	CurSlowBatteryIndex = 10;
 }
 
 void UIManager::Update(float _DeltaTime)
 {
+	int NewTimeBatteryIndex = GlobalValueManager::SlowEnergy - 1;
+	
+	if (CurSlowBatteryIndex == NewTimeBatteryIndex)
+	{
+		return;
+	}
+
+	CurSlowBatteryIndex = NewTimeBatteryIndex;
+
+	for (int i = 0; i < 11; i++)
+	{
+		// 0 ~ i번까지 푸른색
+		if (i <= CurSlowBatteryIndex)
+		{
+			SlowBatteries[i]->GetColorData().MulColor.r = 1.0f;
+			SlowBatteries[i]->GetColorData().MulColor.g = 1.0f;
+			SlowBatteries[i]->GetColorData().MulColor.b = 1.0f;
+		}
+		// 나머지 붉은색
+		else
+		{
+			SlowBatteries[i]->GetColorData().MulColor.r = 1.0f;
+			SlowBatteries[i]->GetColorData().MulColor.g = 0.0f;
+			SlowBatteries[i]->GetColorData().MulColor.b = 0.0f;
+		}
+	}
 }
 
 void UIManager::End()

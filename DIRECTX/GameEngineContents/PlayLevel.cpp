@@ -210,8 +210,11 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 }
 
+float SlowRecoverTime;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
+	SlowRecoverTime = 0.0f;
+
 	// 화면 녹화 시작 지점
 
 }
@@ -219,9 +222,21 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (GlobalValueManager::SlowEnergy < 11)
+	{
+		SlowRecoverTime += _DeltaTime;
+
+		if (SlowRecoverTime >= 1.0f)
+		{
+			GlobalValueManager::SlowEnergy++;
+			SlowRecoverTime = 0;
+		}
+	}
+
+
 
 	// 슬로우 모드
-	if (true == GameEngineInput::GetInst()->IsPress("Shift"))
+	if (true == GameEngineInput::GetInst()->IsPress("Shift") && GlobalValueManager::SlowEnergy > 0)
 	{
 		RoomStateManager.ChangeState("RoomSlow");
 		return;
@@ -242,14 +257,12 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	// 방 사이즈 별로 월드 밖 이동 제한
+	// 방 사이즈 별로 월드 밖 이동 제한(보스 방)
 
 }
 
 void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
 {
-	// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
-	Player->Off();
 
 }
 
@@ -262,6 +275,8 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true)//Effect_Transition->IsTransitionEnd())
 	{
+		// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
+		Player->Off();
 		CurRoom->Clear();
 		++RoomIter;
 
@@ -305,6 +320,7 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 	}
 }
 
+float SlowDeltaTime;
 void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 {
 	// 배경 어둡게(총알, 플레이어보단 뒤에 있음)
@@ -314,11 +330,28 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 	SlowEffect->SlowIn();
 	SlowInSound = GameEngineSound::SoundPlayControl("sound_slomo_engage.ogg");
 	SlowInSound.Volume(0.5f);
+	SlowDeltaTime = 0;
 }
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float Dt = _Info.StateTime;
+	SlowDeltaTime += _DeltaTime;
+
+	if (SlowDeltaTime >= 1.0f)
+	{
+		if (GlobalValueManager::SlowEnergy > 0)
+		{
+			GlobalValueManager::SlowEnergy--;
+		}
+		else
+		{
+			// 에너지 소진
+			RoomStateManager.ChangeState("RoomPlay");
+			return;
+		}
+
+		SlowDeltaTime = 0.0f;
+	}
 
 	if (true == GameEngineInput::GetInst()->IsUp("Shift"))
 	{

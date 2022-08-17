@@ -18,3 +18,5 @@ void GlobalValueManager::ClearStairs()
 		Collision->Death();
 	}
 }
+
+int GlobalValueManager::SlowEnergy = 11;

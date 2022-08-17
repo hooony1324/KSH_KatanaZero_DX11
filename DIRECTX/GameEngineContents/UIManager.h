@@ -35,6 +35,7 @@ private:
 	GameEngineTextureRenderer* RestartClickUI;
 	GameEngineUIRenderer* TimerBar;
 	
-	std::vector< GameEngineUIRenderer*> TimeBattery;
+	std::vector< GameEngineUIRenderer*> SlowBatteries;
+	int CurSlowBatteryIndex;
 };
 
