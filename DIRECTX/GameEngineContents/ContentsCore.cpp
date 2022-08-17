@@ -5,6 +5,7 @@
 #include "TitleLevel.h"
 #include "PlayLevel.h"
 #include "EndingLevel.h"
+#include "TestLevel.h"
 
 float4 ContentsCore::ContentsWindowSize;
 
@@ -26,6 +27,7 @@ void ContentsCore::Start()
 	CreateLevel<TitleLevel>("TitleLevel");
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
+	CreateLevel<TestLevel>("TestLevel");
 	ChangeLevel("PlayLevel");
 
 	// Input Key

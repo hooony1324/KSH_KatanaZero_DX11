@@ -31,6 +31,8 @@ private:
 	void CameraFollow(float _DeltaTime);
 
 private:
+	class PlayLevelGUI* GUIWindow;
+
 	UIManager* UI;
 	Room* CurRoom;
 	Room* Room1;

@@ -85,11 +85,14 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomSlowStart, this, std::placeholders::_1)
 		, std::bind(&PlayLevel::RoomSlowEnd, this, std::placeholders::_1));
 
-	GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
+	GUIWindow = GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
+	GUIWindow->Off();
 }
 
 void PlayLevel::OnEvent()
 {
+	GUIWindow->On();
+
 	CurRoom = *RoomIter;
 	RoomStateManager.ChangeState("RoomChange");
 

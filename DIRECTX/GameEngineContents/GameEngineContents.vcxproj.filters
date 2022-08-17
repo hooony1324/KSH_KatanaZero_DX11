@@ -61,6 +61,9 @@
     <Filter Include="ContentsShader">
       <UniqueIdentifier>{eec8f8f7-7c21-4171-b661-782fc881d6fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\99.TESTLEVEL">
+      <UniqueIdentifier>{edd5620d-6864-4f8e-8a1d-68780daa0453}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalValueManager.h">
@@ -171,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="SlowMotion.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLevel.h">
+      <Filter>Levels\99.TESTLEVEL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +291,9 @@
     </ClCompile>
     <ClCompile Include="SlowMotion.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLevel.cpp">
+      <Filter>Levels\99.TESTLEVEL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

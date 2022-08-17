@@ -11,7 +11,7 @@ public:
 	{
 		IsDead = true;
 		Hp = 0;
-		FlyVector = float4{ 0.1f, 1.0f };
+		FlyVector = float4{ -0.3f, 0.3f };
 		FlyVector.Normalize();
 		PlayerStateManager.ChangeState("Dead");
 	}
