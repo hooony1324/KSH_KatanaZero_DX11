@@ -53,58 +53,7 @@ public:
 		CheatMode = false;
 	}
 
-	// 같은 콜리전 계속 부딛힌거면 false
-	GameEngineCollision* SlashedCol;
-	bool CollisionSlashCheck()
-	{
-		
-		if (Collision_Slash->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-			[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
-			{ 
-				if (SlashedCol == _Right)
-				{
-					return false;
-				}
-				SlashedCol = _Right;
-				return true;
-			}))
-		{
-			return true;
-		}
-
-		if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_OBB2D,
-			[=](GameEngineCollision* _Left, GameEngineCollision* _Right) 
-			{ 
-				if (SlashedCol == _Right)
-				{
-					return false;
-				}
-
-				SlashedCol = _Right;
-				return true;
-			}))
-		{
-			return true;
-		}
-
-		if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_OBB2D,
-			[=](GameEngineCollision* _Left, GameEngineCollision* _Right) 
-			{
-				if (SlashedCol == _Right)
-				{
-					return false;
-				}
-
-				SlashedCol = _Right;
-				return true;
-			}))
-		{
-			return true;
-		}
-
-		return false;
-	}
-
+	bool CollisionSlashCheck();
 
 private:
 	static bool CheatMode;

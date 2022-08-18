@@ -5,6 +5,8 @@
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
 
+
+
 CharacterActor::CharacterActor()
 	: Renderer_Character(nullptr)
 	, MoveVec(float4::ZERO)
@@ -12,7 +14,6 @@ CharacterActor::CharacterActor()
 	, CurLookDir(1)
 	, Hp(1)
 	, Invincible(false)
-	, SlashedCol(nullptr)
 {
 
 }
@@ -198,4 +199,54 @@ bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* 
 	return true;
 }
 
+// 같은 콜리전 계속 부딛힌거면 false
+GameEngineCollision* SlashedCol;
+bool CharacterActor::CollisionSlashCheck()
+{
 
+	if (Collision_Slash->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
+		{
+			if (SlashedCol == _Right)
+			{
+				return false;
+			}
+			SlashedCol = _Right;
+			return true;
+		}))
+	{
+		return true;
+	}
+
+	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
+		{
+			if (SlashedCol == _Right)
+			{
+				return false;
+			}
+
+			SlashedCol = _Right;
+			return true;
+		}))
+	{
+		return true;
+	}
+
+	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
+		{
+			if (SlashedCol == _Right)
+			{
+				return false;
+			}
+
+			SlashedCol = _Right;
+			return true;
+		}))
+	{
+		return true;
+	}
+
+	return false;
+}
