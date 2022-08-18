@@ -85,6 +85,10 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomSlowStart, this, std::placeholders::_1)
 		, std::bind(&PlayLevel::RoomSlowEnd, this, std::placeholders::_1));
 
+	RoomStateManager.CreateStateMember("RoomShake"
+		, std::bind(&PlayLevel::RoomShakeUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomShakeStart, this, std::placeholders::_1));
+
 	GUIWindow = GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
 	GUIWindow->Off();
 }
@@ -132,7 +136,7 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		GetMainCameraActor()->FreeCameraModeOnOff();
 	}
-	CameraFollow(_DeltaTime);
+	
 
 	// 충돌 맵 OnOff
 	if (true == GameEngineInput::GetInst()->IsDown("M"))
@@ -231,6 +235,9 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 카메라 플레이어 따라다니기
+	CameraFollow(_DeltaTime);
+
 	RoomPlayTotalTime += _DeltaTime;
 
 	if (GlobalValueManager::SlowEnergy < 11)
@@ -244,6 +251,12 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 	}
 
+	// 공격 성공시 화면 흔들림 효과
+	if (true == Player->CollisionSlashCheck())
+	{
+		RoomStateManager.ChangeState("RoomShake");
+		return;
+	}
 
 	// 슬로우 모드
 	if (true == GameEngineInput::GetInst()->IsPress("Shift") && GlobalValueManager::SlowEnergy > 0)
@@ -399,6 +412,29 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 {
 	//GameEngineSound
+}
+
+void PlayLevel::RoomShakeStart(const StateInfo& _Info)
+{
+	GameEngineTime::GetInst()->SetGlobalScale(0.1f);
+	_Info.StateTime;
+}
+
+void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	float DT = _Info.StateTime * 80;
+	
+	// 카메라 흔들림
+	float ShakeX = sinf(DT * 10.0f) * powf(0.5f, DT);
+	float ShakeY = sinf(DT * 10.0f) * powf(0.5f, DT);
+	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX, -ShakeY, 0 });
+
+	if (_Info.StateTime >= 0.025f)
+	{
+		GameEngineTime::GetInst()->SetGlobalScale(1.0f);
+		RoomStateManager.ChangeState("RoomPlay");
+		return;
+	}
 }
 
 // 역재생 화면

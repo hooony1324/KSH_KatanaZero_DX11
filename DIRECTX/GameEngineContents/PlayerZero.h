@@ -34,8 +34,7 @@ private:
 	void CreateAllAnimation();
 
 private:
-	GameEngineTextureRenderer* Renderer_Slash;
-	GameEngineCollision* Collision_Slash;
+
 
 // 플레이어 정보
 private:

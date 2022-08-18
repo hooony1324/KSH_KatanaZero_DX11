@@ -12,6 +12,7 @@ CharacterActor::CharacterActor()
 	, CurLookDir(1)
 	, Hp(1)
 	, Invincible(false)
+	, SlashedCol(nullptr)
 {
 
 }

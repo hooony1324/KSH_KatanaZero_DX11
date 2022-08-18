@@ -19,6 +19,14 @@ ContentsCore::~ContentsCore()
 
 void ContentsCore::Start()
 {
+	// 렌더링파이프라인 추가 테스트
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("UserCustom");
+		NewPipe->SetVertexShader("UserCustom.hlsl");
+		NewPipe->SetPixelShader("UserCustom.hlsl");
+	}
+
+
 	// < Resource Load >
 	TextureLoad();
 	SoundLoad();
@@ -53,6 +61,7 @@ void ContentsCore::Start()
 
 
 	//GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
+
 }
 
 void ContentsCore::Update(float _DeltaTime)

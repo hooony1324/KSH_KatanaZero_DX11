@@ -14,7 +14,8 @@ struct Output
 {
     float4 Pos : SV_POSITION;
     float4 PosLocal : POSITION;
-    float4 Tex : TEXCOORD;
+    float4 Tex0 : TEXCOORD0; // 애니메이션
+    float4 Tex1 : TEXCOORD1; // 마스크
 };
 
 
@@ -26,7 +27,7 @@ cbuffer AtlasData : register(b1)
 };
 
 
-Output TextureAtlas_VS(Input _Input)
+Output UserCustom_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
     NewOutPut.Pos = mul(_Input.Pos, WorldViewProjection);
@@ -43,8 +44,11 @@ Output TextureAtlas_VS(Input _Input)
     //TextureFramePos.x -= 0.5f;
     //TextureFramePos.y -= 0.5f;
     
-    NewOutPut.Tex.x = (_Input.Tex.x * TextureFrameSize.x) + TextureFramePos.x;
-    NewOutPut.Tex.y = (_Input.Tex.y * TextureFrameSize.y) + TextureFramePos.y;
+    NewOutPut.Tex0.x = (_Input.Tex.x * TextureFrameSize.x) + TextureFramePos.x;
+    NewOutPut.Tex0.y = (_Input.Tex.y * TextureFrameSize.y) + TextureFramePos.y;
+    
+    NewOutPut.Tex1 = _Input.Tex;
+
     
     return NewOutPut;
 }
@@ -56,8 +60,20 @@ cbuffer ColorData : register(b0)
 }
 
 Texture2D Tex : register(t0);
+Texture2D Mask : register(t1);
 SamplerState Smp : register(s0);
-float4 TextureAtlas_PS(Output _Input) : SV_Target0
+float4 UserCustom_PS(Output _Input) : SV_Target0
 {
-    return (Tex.Sample(Smp, _Input.Tex.xy) * MulColor) + PlusColor;
+    float4 MaskColor = Mask.Sample(Smp, _Input.Tex1.xy);
+    
+    if (/*1 == MaskColor.r && */1 == IsMask)
+    {
+        clip(-1);
+
+    }
+    
+    float4 RenderColor = (Tex.Sample(Smp, _Input.Tex0.xy) * MulColor) + PlusColor;
+    
+    return RenderColor;
+
 }

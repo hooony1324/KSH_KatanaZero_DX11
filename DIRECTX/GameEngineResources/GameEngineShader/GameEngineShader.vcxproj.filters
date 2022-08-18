@@ -12,7 +12,7 @@
       <Filter>Debug</Filter>
     </FxCompile>
     <FxCompile Include="RenderOption.fx" />
-    <FxCompile Include="..\..\GameEngineContents\UserCustom.hlsl" />
+    <FxCompile Include="UserCustom.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Debug">

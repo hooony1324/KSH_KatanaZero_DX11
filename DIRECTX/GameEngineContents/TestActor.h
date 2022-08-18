@@ -22,7 +22,9 @@ protected:
 
 
 private:
-	
+	class GameEngineTextureRenderer* TRenderer;
+	class GameEngineDefaultRenderer* DRenderer;
+
 
 };
 

@@ -76,6 +76,10 @@ private:
 	void RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info);
 	void RoomSlowEnd(const StateInfo& _Info);
 
+	// Áøµ¿
+	void RoomShakeStart(const StateInfo& _Info);
+	void RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info);
+
 	// REVERSE
 	void RoomReverseStart(const StateInfo& _Info);
 	void RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info);
