@@ -5,11 +5,11 @@
 class SlashFX : public GameEngineActor
 {
 public:
-	// float4{1, 1} -> 
+
 	void SetSlashLightDir(float4 _Vector)
 	{
 		SlashDir = _Vector.NormalizeReturn();
-		SlashLightStartPos = SlashDir * -100; // z == 0?
+		SlashLightStartPos = SlashDir * -500; 
 		SlashLightStartPos.z = GetDepth(ACTOR_DEPTH::FX);
 
 		float Degree = float4::VectorXYtoDegree(float4::ZERO, SlashDir);

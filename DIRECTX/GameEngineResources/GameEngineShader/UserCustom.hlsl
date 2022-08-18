@@ -26,23 +26,12 @@ cbuffer AtlasData : register(b1)
     float2 TextureFrameSize;
 };
 
-
 Output UserCustom_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
     NewOutPut.Pos = mul(_Input.Pos, WorldViewProjection);
     NewOutPut.PosLocal = _Input.Pos;
     
-    // 버텍스가 몇번째 버텍스 인지 알수가 없다.
-    // NewOutPut.Tex
-    // 00    10
-    
-    //// 10    11
-    
-    //TextureFrameSize.x -= 0.5f;
-    //TextureFrameSize.y -= 0.5f;
-    //TextureFramePos.x -= 0.5f;
-    //TextureFramePos.y -= 0.5f;
     
     NewOutPut.Tex0.x = (_Input.Tex.x * TextureFrameSize.x) + TextureFramePos.x;
     NewOutPut.Tex0.y = (_Input.Tex.y * TextureFrameSize.y) + TextureFramePos.y;
@@ -66,10 +55,9 @@ float4 UserCustom_PS(Output _Input) : SV_Target0
 {
     float4 MaskColor = Mask.Sample(Smp, _Input.Tex1.xy);
     
-    if (/*1 == MaskColor.r && */1 == IsMask)
+    if ( 0 == MaskColor.r && 1 == IsMask)
     {
         clip(-1);
-
     }
     
     float4 RenderColor = (Tex.Sample(Smp, _Input.Tex0.xy) * MulColor) + PlusColor;

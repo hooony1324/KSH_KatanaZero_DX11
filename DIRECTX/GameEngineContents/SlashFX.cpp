@@ -24,7 +24,7 @@ void SlashFX::Start()
 	// 화면을 가로지름
 	Renderer_SlashLight = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_SlashLight->SetTexture("spr_cursor_slash.png");
-	Renderer_SlashLight->GetTransform().SetLocalScale({ 3014, 8, 1 });
+	Renderer_SlashLight->GetTransform().SetLocalScale({ 3014, 7, 1 });
 	Renderer_SlashLight->GetTransform().SetLocalPosition({ 0, 0, 0 });
 }
 
@@ -35,7 +35,7 @@ void SlashFX::Update(float _DeltaTime)
 		return;
 	}
 
-	Renderer_SlashLight->GetTransform().SetWorldMove(SlashDir * _DeltaTime * 7000.0f);
+	Renderer_SlashLight->GetTransform().SetWorldMove(SlashDir * _DeltaTime * 8000.0f);
 
 	if (GetAccTime() > 1.5f)
 	{

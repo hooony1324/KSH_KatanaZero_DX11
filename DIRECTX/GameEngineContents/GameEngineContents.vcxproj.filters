@@ -184,6 +184,9 @@
     <ClInclude Include="SlashFX.h">
       <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="GameContentsCustomRenderer.h">
+      <Filter>Levels\99.TESTLEVEL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -306,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="SlashFX.cpp">
       <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="GameContentsCustomRenderer.cpp">
+      <Filter>Levels\99.TESTLEVEL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

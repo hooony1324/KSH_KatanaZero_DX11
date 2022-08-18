@@ -2,6 +2,7 @@
 #include "CharacterActor.h"
 #include "Bullet.h"
 #include "SlashFX.h"
+#include "Door.h"
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -213,13 +214,17 @@ bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngin
 	// 충돌 발생
 	SlashedCol = _Other;
 
-	float4 OtherPos = _Other->GetTransform().GetWorldPosition();
-	float4 ThisPos = _This->GetTransform().GetWorldPosition();
-	OtherPos.z = 0;
-	ThisPos.z = 0;
-	SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
-	Fx->GetTransform().SetWorldPosition(OtherPos);
-	Fx->SetSlashLightDir(OtherPos - ThisPos);
+	if (nullptr == dynamic_cast<Door*>(_Other->GetActor()))
+	{
+		float4 OtherPos = _Other->GetTransform().GetWorldPosition();
+		float4 ThisPos = _This->GetTransform().GetWorldPosition();
+		OtherPos.z = 0;
+		ThisPos.z = 0;
+		SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
+		Fx->GetTransform().SetWorldPosition(OtherPos);
+		Fx->SetSlashLightDir(OtherPos - ThisPos);
+	}
+
 
 	return true;
 }
