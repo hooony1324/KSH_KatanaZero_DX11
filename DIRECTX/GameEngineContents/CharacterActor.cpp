@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "CharacterActor.h"
 #include "Bullet.h"
+#include "SlashFX.h"
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -199,51 +200,49 @@ bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* 
 	return true;
 }
 
+
 // 같은 콜리전 계속 부딛힌거면 false
 GameEngineCollision* SlashedCol;
+bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
+{
+	if (SlashedCol == _Other)
+	{
+		return false;
+	}
+
+	// 충돌 발생
+	SlashedCol = _Other;
+
+	float4 OtherPos = _Other->GetTransform().GetWorldPosition();
+	float4 ThisPos = _This->GetTransform().GetWorldPosition();
+	OtherPos.z = 0;
+	ThisPos.z = 0;
+	SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
+	Fx->GetTransform().SetWorldPosition(OtherPos);
+	Fx->SetSlashLightDir(OtherPos - ThisPos);
+
+	return true;
+}
+
+
 bool CharacterActor::CollisionSlashCheck()
 {
+	float4 SlashLightDir;
 
 	if (Collision_Slash->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-		[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
-		{
-			if (SlashedCol == _Right)
-			{
-				return false;
-			}
-			SlashedCol = _Right;
-			return true;
-		}))
+		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
 		return true;
 	}
 
 	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_OBB2D,
-		[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
-		{
-			if (SlashedCol == _Right)
-			{
-				return false;
-			}
-
-			SlashedCol = _Right;
-			return true;
-		}))
+		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
 		return true;
 	}
 
 	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_OBB2D,
-		[=](GameEngineCollision* _Left, GameEngineCollision* _Right)
-		{
-			if (SlashedCol == _Right)
-			{
-				return false;
-			}
-
-			SlashedCol = _Right;
-			return true;
-		}))
+		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
 		return true;
 	}

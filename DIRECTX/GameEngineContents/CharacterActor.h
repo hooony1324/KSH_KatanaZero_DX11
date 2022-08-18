@@ -105,6 +105,10 @@ protected:
 	GameEngineTextureRenderer* Renderer_Slash;
 	GameEngineCollision* Collision_Slash;
 
+	// 효과
+	bool IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
+	GameEngineTextureRenderer* Renderer_SlashLight;
+
 	float4 CharacterPos;
 	float InitSpeed;
 	float MoveSpeed; // 속력

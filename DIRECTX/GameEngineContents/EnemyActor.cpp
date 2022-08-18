@@ -84,7 +84,7 @@ void EnemyActor::CreateRendererAndCollision()
 	Collision_ChaseSensor = CreateComponent<GameEngineCollision>();
 	Collision_ChaseSensor->GetTransform().SetLocalScale({ 120, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
-	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY);
+	Collision_ChaseSensor->ChangeOrder(COLLISIONGROUP::ENEMY_CAHSESENSOR);
 	Collision_ChaseSensor->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 0, 0.25f });
 
 	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();

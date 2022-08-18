@@ -181,6 +181,9 @@
     <ClInclude Include="TestActor.h">
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClInclude>
+    <ClInclude Include="SlashFX.h">
+      <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -300,6 +303,9 @@
     </ClCompile>
     <ClCompile Include="TestActor.cpp">
       <Filter>Levels\99.TESTLEVEL</Filter>
+    </ClCompile>
+    <ClCompile Include="SlashFX.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

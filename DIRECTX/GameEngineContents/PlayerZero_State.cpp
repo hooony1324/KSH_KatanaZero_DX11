@@ -431,6 +431,7 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	}
 
 	GroundAniStart = false;
+	IsDead = true;
 	DeadAniend = false;
 }
 

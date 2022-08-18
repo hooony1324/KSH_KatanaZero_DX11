@@ -40,7 +40,7 @@ protected:
 	void End() override;
 
 private:
-	GameEngineTextureRenderer* RestartClickUI;
+	GameEngineUIRenderer* RestartClickUI;
 	GameEngineUIRenderer* TimerBar;
 	
 	// 최초 크기, 위치
