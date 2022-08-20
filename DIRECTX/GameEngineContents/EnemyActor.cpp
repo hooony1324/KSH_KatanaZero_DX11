@@ -344,6 +344,7 @@ bool EnemyActor::DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Oth
 bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 느낌표 + 추적 시작
+	PlayerCollision = _Other;
 	MoveVec.x = 0;
 	Renderer_Character->ChangeFrameAnimation("idle");
 	StateManager.ChangeState("Alert");
@@ -452,6 +453,7 @@ void EnemyActor::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 		AttackAniEnd = false;
 		Renderer_GunArm->Off();
 		Collision_ChaseSensor->On();
+		PlayerCollision = nullptr;
 		return;
 	}
 
@@ -558,6 +560,13 @@ void EnemyActor::RunStart(const StateInfo& _Info)
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 도중에 플레이어 죽었으면
+	if (false == PlayerCollision->IsUpdate())
+	{
+		StateManager.ChangeState("Idle");
+		return;
+	}
+
 	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 ChaseTurn
 	if (PrevLookDir != PlayerDir.ix() && true == PlayerSameFloor)
 	{

@@ -9,7 +9,7 @@ class CharacterActor : public GameEngineActor
 public:
 	void SetDead()
 	{
-		IsDead = true;
+		//IsDead = true;
 		Hp = 0;
 		FlyVector = float4{ -0.3f, 0.3f };
 		FlyVector.Normalize();
@@ -35,6 +35,7 @@ public:
 	{
 		IsDead = false;
 		Hp = 1;
+		Collision_Character->On();
 		PlayerStateManager.ChangeState("Idle");
 	}
 

@@ -1,10 +1,6 @@
 #pragma once
 #include <GameEngineCore/GameEngineDefaultRenderer.h>
 
-
-
-
-
 class GameEngineFolderTexture;
 class GameContentsCustomRenderer;
 class CustomFrameAnimation : public GameEngineNameObject

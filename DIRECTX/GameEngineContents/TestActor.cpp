@@ -16,7 +16,7 @@ void TestActor::Start()
 {
 	GameContentsCustomRenderer* back = CreateComponent<GameContentsCustomRenderer>();
 	back->SetTexture("room_factory_2.png");
-	back->ScaleToTexture();
+	//back->ScaleToTexture();
 
 
 	TRenderer = CreateComponent<GameContentsCustomRenderer>();
@@ -27,12 +27,7 @@ void TestActor::Start()
 	TRenderer->Option.IsMask = 1;
 	TRenderer->SetMask("spr_lightcone_0.png");
 
-
-
-
-	//DRenderer = CreateComponent<GameEngineDefaultRenderer>();
-
-
+	// 마스크와 기본 텍스쳐 크기, 위치 따로 조정하는 Set함수 필요??
 }
 
 void TestActor::Update(float _DeltaTime)

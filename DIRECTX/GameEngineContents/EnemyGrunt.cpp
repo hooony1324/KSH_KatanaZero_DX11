@@ -70,7 +70,6 @@ void EnemyGrunt::Start()
 
 void EnemyGrunt::Update(float _DeltaTime)
 {
-
 	PlayerAttackCheck();
 
 	// º®

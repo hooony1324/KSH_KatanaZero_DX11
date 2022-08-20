@@ -93,7 +93,7 @@ void PlayLevel::Start()
 	GUIWindow->Off();
 }
 
-void PlayLevel::OnEvent()
+void PlayLevel::LevelStartEvent()
 {
 	GUIWindow->On();
 

@@ -94,6 +94,7 @@ protected:
 
 	void PlayerAlertCheck();
 	bool SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other);
+	GameEngineCollision* PlayerCollision;
 	void PlayerOnFloorCheck();
 	bool FindPlayer;
 	float4 PlayerPos;

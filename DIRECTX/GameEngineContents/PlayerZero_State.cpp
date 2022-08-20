@@ -433,6 +433,7 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	GroundAniStart = false;
 	IsDead = true;
 	DeadAniend = false;
+	Collision_Character->Off();
 }
 
 void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)

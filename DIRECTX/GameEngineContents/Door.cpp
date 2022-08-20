@@ -39,7 +39,7 @@ void Door::Start()
 
 	Collision = CreateComponent<GameEngineCollision>();
 	float4 Scale = Renderer->GetTransform().GetLocalScale();
-	Collision->GetTransform().SetLocalScale(float4{ 15, Scale.y });
+	Collision->GetTransform().SetLocalScale(float4{ 15, Scale.y, GetDepth(ACTOR_DEPTH::DOOR) });
 	Collision->GetTransform().SetLocalPosition({ 20, 0 , 0 });
 	Collision->ChangeOrder(COLLISIONGROUP::DOOR);
 	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 0, 0, 0.25f });
