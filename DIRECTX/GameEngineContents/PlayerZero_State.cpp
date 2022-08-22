@@ -88,8 +88,6 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveVec.y = 0.0f;
 		Attack_AniEnd = false;
-		IsAttack = false;
-		Renderer_Slash->Off();
 		PlayerStateManager.ChangeState("Fall");
 	}
 
@@ -101,7 +99,7 @@ void PlayerZero::FallStart(const StateInfo& _Info)
 
 	if (abs(MoveVec.x) <= 0.0005f)
 	{
-		MoveVec.x = 0.02f * CurLookDir;
+		MoveVec.x = 0.05f * CurLookDir;
 	}
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, { MoveVec.x, MoveVec.y });
 }
@@ -374,7 +372,7 @@ void PlayerZero::RunToIdleUpdate(float _DeltaTime, const StateInfo& _Info)
 	// ¶¥ ¶Õ°í ³»·Á°¡±â
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
-		GetTransform().SetWorldMove({ 0, -4, 0 });
+		GetTransform().SetWorldMove({ 0, -2, 0 });
 		PlayerStateManager.ChangeState("Fall");
 	}
 }
@@ -397,7 +395,7 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
 		MoveSpeed = SPEED_PLAYER;
-		GetTransform().SetWorldMove({ 0, -4, 0 });
+		GetTransform().SetWorldMove({ 0, -2, 0 });
 		PlayerStateManager.ChangeState("Fall");
 	}
 
@@ -511,35 +509,35 @@ void PlayerZero::WallGrabCheck()
 void PlayerZero::PrintPlayerDebug()
 {
 
-	//switch (WallState)
-	//{
-	//case CharacterActor::STATE_WALL::NONE:
-	//	GameEngineDebug::OutPutString("NONE");
-	//	break;
-	//case CharacterActor::STATE_WALL::RIGHT:
-	//	GameEngineDebug::OutPutString("RIGHT");
-	//	break;
-	//case CharacterActor::STATE_WALL::LEFT:
-	//	GameEngineDebug::OutPutString("LEFT");
-	//	break;
-	//case CharacterActor::STATE_WALL::UP:
-	//	GameEngineDebug::OutPutString("UP");
-	//	break;
-	//case CharacterActor::STATE_WALL::DOWN:
-	//	GameEngineDebug::OutPutString("DOWN");
-	//	break;
-	//case CharacterActor::STATE_WALL::RIGHTSLOPE:
-	//	GameEngineDebug::OutPutString("RIGHTSLOPE");
-	//	break;
-	//case CharacterActor::STATE_WALL::LEFTSLOPE:
-	//	GameEngineDebug::OutPutString("LEFTSLOPE");
-	//	break;
-	//case CharacterActor::STATE_WALL::UNDERGROUND:
-	//	GameEngineDebug::OutPutString("UNDERGROUND");
-	//	break;
-	//default:
-	//	break;
-	//}
+	switch (WallState)
+	{
+	case CharacterActor::STATE_WALL::NONE:
+		GameEngineDebug::OutPutString("NONE");
+		break;
+	case CharacterActor::STATE_WALL::RIGHT:
+		GameEngineDebug::OutPutString("RIGHT");
+		break;
+	case CharacterActor::STATE_WALL::LEFT:
+		GameEngineDebug::OutPutString("LEFT");
+		break;
+	case CharacterActor::STATE_WALL::UP:
+		GameEngineDebug::OutPutString("UP");
+		break;
+	case CharacterActor::STATE_WALL::DOWN:
+		GameEngineDebug::OutPutString("DOWN");
+		break;
+	case CharacterActor::STATE_WALL::RIGHTSLOPE:
+		GameEngineDebug::OutPutString("RIGHTSLOPE");
+		break;
+	case CharacterActor::STATE_WALL::LEFTSLOPE:
+		GameEngineDebug::OutPutString("LEFTSLOPE");
+		break;
+	case CharacterActor::STATE_WALL::UNDERGROUND:
+		GameEngineDebug::OutPutString("UNDERGROUND");
+		break;
+	default:
+		break;
+	}
 
 	//std::string Output = "Velocity : " + std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
 	//GameEngineDebug::OutPutString(Output);

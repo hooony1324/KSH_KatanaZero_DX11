@@ -2,6 +2,7 @@
 #include "Room.h"
 
 // Ό³Έν :
+class GameEngineTextureRenderer;
 class Room_Boss : public Room
 {
 public:
@@ -20,12 +21,16 @@ protected:
 	void Update(float _DeltaTime) override;
 	void End() override;
 
+	void OnEvent() override;
+
 	void Setting() override;
 	void Clear() override;
 
 	void StairSetting() override {}
 
 private:
+	class BossPsychoGiant* BossGiant;
 
+	GameEngineTextureRenderer* Background_
 };
 

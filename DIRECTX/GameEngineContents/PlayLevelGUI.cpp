@@ -3,6 +3,8 @@
 #include "Cursor.h"
 #include "CharacterActor.h"
 
+#include "BossPsychoGiant.h"
+
 PlayLevelGUI::PlayLevelGUI() 
 {
 }
@@ -56,5 +58,41 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	}
 
 
+	
+
+	// 보스 스테이지
+	if (false == BossPsychoGiant::GetInst()->IsUpdate())
+	{
+		return;
+	}
+
+	ImGui::Text("");
+	ImGui::Text("Boss Patterns");
+
+
+	if (true == ImGui::Button("Pattern_StabAttack"))
+	{
+
+
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("Pattern_KnifeAttack1"))
+	{
+
+
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("Pattern_KnifeAttack2"))
+	{
+
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("Pattern_TurretAttack"))
+	{
+
+	}
 
 }

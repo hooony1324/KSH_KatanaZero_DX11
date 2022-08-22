@@ -55,6 +55,13 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("Numpad5", VK_NUMPAD5);
 	GameEngineInput::GetInst()->CreateKey("Numpad6", VK_NUMPAD6);
 
+	GameEngineInput::GetInst()->CreateKey("F1", VK_F1);
+	GameEngineInput::GetInst()->CreateKey("F2", VK_F2);
+	GameEngineInput::GetInst()->CreateKey("F3", VK_F3);
+	GameEngineInput::GetInst()->CreateKey("F4", VK_F4);
+	
+
+
 	GameEngineInput::GetInst()->CreateKey("M", 'M');	// 충돌맵 On/Off
 	GameEngineInput::GetInst()->CreateKey("T", 'T');	// Transition Test
 	GameEngineInput::GetInst()->CreateKey("C", 'C');	// 충돌체 On/Off
@@ -99,7 +106,7 @@ void ContentsCore::TextureLoad()
 	// 단일 텍스처
 	{
 		GameEngineDirectory TexDir{Dir};
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title", "Ending", "UI", "FX"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Room", "Title", "Ending", "UI", "FX", "Boss"};
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);
@@ -117,7 +124,7 @@ void ContentsCore::TextureLoad()
 	// 애니메이션(폴더)
 	{
 		GameEngineDirectory TexDir{ Dir };
-		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX", "Room", "UI"};
+		std::vector<std::string> ResourceDirs = { "Player", "Enemy", "Title", "Ending", "FX", "Room", "UI", "Boss" };
 		for (const std::string& Val : ResourceDirs)
 		{
 			TexDir.Move(Val);

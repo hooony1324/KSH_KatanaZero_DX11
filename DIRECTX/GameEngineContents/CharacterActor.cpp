@@ -39,16 +39,16 @@ void CharacterActor::WallCheck()
 	Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::GREEN);
 	DownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::BLUE);
 	Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
-	Left_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
-	Right_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
-	Right_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	Left_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	Left_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
+	Right_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
+	Right_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	Left_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
 	DoubleDownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::BLUE);
-	Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy() - 25))).CompareInt3D(float4::GREEN);
-	Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy() - 25))).CompareInt3D(float4::GREEN);
+	Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() - 30))).CompareInt3D(float4::GREEN);
+	Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() - 30))).CompareInt3D(float4::GREEN);
 	DoubleDown = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	Right_Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 34, -(CharacterPos.iy()))).CompareInt3D(float4::RED);
-	Left_Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 34, -(CharacterPos.iy()))).CompareInt3D(float4::RED);
+	Right_Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy()))).CompareInt3D(float4::RED);
+	Left_Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy()))).CompareInt3D(float4::RED);
 
 	// ¶¥¿¡ ¹ÚÈû
 	if (Down || DownBlue)
@@ -93,13 +93,13 @@ void CharacterActor::WallCheck()
 	}
 
 	// ½½·ÎÇÁ Ã¼Å©
-	if (!IsFall && Left && Left_Down)
+	if (Left && Left_Down)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (!IsFall && Right && Right_Down)
+	if (Right && Right_Down)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
@@ -160,9 +160,6 @@ void CharacterActor::EnemyAttackCheck()
 		std::bind(&CharacterActor::Damaged, this, std::placeholders::_1, std::placeholders::_2)
 	);
 
-	//Collision_Character->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_BULLET, CollisionType::CT_OBB2D,
-	//	std::bind(&CharacterActor::HitBullet, this, std::placeholders::_1, std::placeholders::_2)
-	//);
 }
 
 bool CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)

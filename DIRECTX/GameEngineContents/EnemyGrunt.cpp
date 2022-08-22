@@ -54,6 +54,7 @@ void EnemyGrunt::Start()
 				Collision_Slash->On();
 				Renderer_Slash->ChangeFrameAnimation("slash");
 				Renderer_Slash->CurAnimationReset();
+				AttackAniEnd = true;
 			}
 		
 		});
@@ -129,16 +130,22 @@ void EnemyGrunt::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 턴 할지 뛸 지 결정
-	if (PrevLookDir == PlayerDir.ix())
+	if (PlayerDir.ix() != PrevLookDir)
 	{
-		AttackAniEnd = true;
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 	}
 	else
 	{
-		AttackAniEnd = true;
-		StateManager.ChangeState("ChaseTurn");
+		if (Left || Right)
+		{
+			StateManager.ChangeState("SlopeRun");
+		}
+		else
+		{
+			StateManager.ChangeState("Run");
+		}
 	}
+
 
 
 }

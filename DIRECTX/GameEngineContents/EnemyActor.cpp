@@ -89,6 +89,7 @@ void EnemyActor::CreateRendererAndCollision()
 
 	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_GunArm->Off();
+
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -154,6 +155,7 @@ void EnemyActor::CreateAllState()
 	StateManager.CreateStateMember("SlopeRun"
 		, std::bind(&EnemyActor::SlopeRunUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyActor::SlopeRunStart, this, std::placeholders::_1));
+
 
 }
 
@@ -255,20 +257,20 @@ void EnemyActor::WallCheck()
 
 
 	// 바닥 
-	if (DoubleDown || DoubleDownBlue)
+	if (!Down && DoubleDown || !DownBlue && DoubleDownBlue)
 	{
 		WallState = STATE_WALL::DOWN;
 		IsFall = false;
 	}
 
 	// 슬로프
-	if (Left && Left_Down && !Down && !Right_Down)
+	if (Left && Left_Down && DoubleDown && !Right_Down)
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (Right && Right_Down && !Down && !Left_Down)
+	if (Right && Right_Down && DoubleDown && !Left_Down)
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
@@ -378,7 +380,7 @@ void EnemyActor::PlayerOnFloorCheck()
 
 	// 같은층 다른층 판단
 	float HeightSub = PlayerPos.y - EnemyPos.y;
-	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y * 3.0f)
+	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y * 1.5f)
 	{
 		PlayerSameFloor = false;
 		if (HeightSub > 0)
@@ -425,6 +427,12 @@ void EnemyActor::LookDirCheck()
 
 void EnemyActor::Move(float _DeltaTime)
 {
+	// 도중에 플레이어 죽었으면
+	if (PlayerCollision != nullptr && false == PlayerCollision->IsUpdate())
+	{
+		Renderer_Character->ChangeFrameAnimation("idle");
+		return;
+	}
 
 	MoveVec.z = 0;
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
@@ -556,16 +564,12 @@ void EnemyActor::RunStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("run");
 	MoveVec.x = static_cast<float>(PrevLookDir);
+	MoveVec.y = 0;
 }
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	// 도중에 플레이어 죽었으면
-	if (false == PlayerCollision->IsUpdate())
-	{
-		StateManager.ChangeState("Idle");
-		return;
-	}
+
 
 	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 ChaseTurn
 	if (PrevLookDir != PlayerDir.ix() && true == PlayerSameFloor)
@@ -574,10 +578,28 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (WallState == STATE_WALL::UNDERGROUND)
+	switch (WallState)
 	{
-		GetTransform().SetWorldMove({ 0, 1, 0 });
+	case EnemyActor::STATE_WALL::NONE:
+		MoveVec.y = -1;
+		break;
+	case EnemyActor::STATE_WALL::DOWN:
+		MoveVec.y = 0;
+		break;
+	case EnemyActor::STATE_WALL::DOWNBLUE:
+		break;
+	case EnemyActor::STATE_WALL::UNDERGROUND:
+		MoveVec.y = 1;
+		break;
+	case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		break;
+	case EnemyActor::STATE_WALL::LEFTSLOPE:
+		break;
+	default:
+		break;
 	}
+
+
 
 
 	// 같은 층에 없으면 계단으로
@@ -608,18 +630,6 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveVec.x = 0;
 		StateManager.ChangeState("ChaseTurn");
-		return;
-	}
-
-	if (WallState == STATE_WALL::NONE)
-	{
-		MoveVec.y = -1;
-		return;
-	}
-
-	if (WallState == STATE_WALL::DOWN)
-	{
-		MoveVec.y = 0;
 		return;
 	}
 
@@ -691,7 +701,7 @@ void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 	// 땅에 닿으면
-	if (MoveVec.y < 0 && (WallState == STATE_WALL::DOWN || WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE))
+	if (MoveVec.y < 0 && (Down || Left || Right))
 	{
 		StateManager.ChangeState("Hurtground");
 	}
@@ -713,9 +723,9 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 		Off();
 	}
 
-	if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+	if (Left || Right)
 	{
-		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT * 1.3f);
+		MoveVec.x = 0;
 	}
 	else
 	{
@@ -754,7 +764,7 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 		}
 	}
 
-	// 같은 높이에 위치한 계단 없으면(ex. 계단 중간에 서있으면)
+	//// 같은 높이에 위치한 계단 없으면(ex. 계단 중간에 서있으면)
 	if (Stairs.size() == 0)
 	{
 		StateManager.ChangeState("SlopeRun");
@@ -822,7 +832,7 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (WallState == STATE_WALL::UNDERGROUND)
+	if (Right || Left)
 	{
 		StateManager.ChangeState("SlopeRun");
 	}
@@ -906,45 +916,91 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-
 	if (!DoubleDown)
-	{
-		GetTransform().SetWorldMove({ 0, -1, 0 });
-	}
-
-
-	if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
 	{
 		StateManager.ChangeState("SlopeRun");
 	}
 
 
-
-
 }
 
-// 슬로프 도중에 멈췄다가 달리는 상태
 void EnemyActor::SlopeRunStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("run");
-
-	switch (WallState)
+	// 이미 슬로프에 있었으면 추적 방향 정해줘야함 (위층/아래층)
+	if (Right || Left)
 	{
-	case EnemyActor::STATE_WALL::RIGHTSLOPE:
-		MoveVec = MoveVec.x < 0 ? float4{ -1, -1, 0 }.NormalizeReturn() : float4{ 1, 1, 0 }.NormalizeReturn();
-		break;
-	case EnemyActor::STATE_WALL::LEFTSLOPE:
-		MoveVec = MoveVec.x < 0 ? float4{ -1, 1, 0}.NormalizeReturn() : float4{ 1, -1, 0 }.NormalizeReturn();
-		break;
-	default:
-		break;
+		if (PlayerDir.y > 0)
+		{
+			if (Left)
+			{
+				MoveVec.x = -1;
+			}
+			else if (Right)
+			{
+				MoveVec.x = 1;
+			}
+		}
+		// 플레이어 아래층
+		else
+		{
+			if (Left)
+			{
+				MoveVec.x = 1;
+			}
+			else if (Right)
+			{
+				MoveVec.x = -1;
+			}
+		}
+		return;
 	}
+
+	// GODOWNSTAIR ->
+	// RIGHT DOWN SLOPE
+	if (!Left_Down && Right_Down)
+	{
+		GetTransform().SetWorldMove(float4::DOWN);
+	}
+
+	// LEFT DOWN SLOPE
+	if (Left_Down && !Right_Down)
+	{
+		GetTransform().SetWorldMove(float4::DOWN);
+	}
+
+	// GOUPSTAIR ->
+	// RIGHT/LEFT UP SLOPE
+	if (Right || Left)
+	{
+		GetTransform().SetWorldMove(float4::UP);
+	}
+
+
+
 }
 
 void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+	if (false == (Left || Right))
 	{
+		MoveVec.y = 0;
+		StateManager.ChangeState("Run");
+		return;
+	}
+
+	if (MoveVec.x > 0)
+	{
+		MoveVec.y = (Right == true ? 1 : -1);
+	}
+	else if (MoveVec.x < 0)
+	{
+		MoveVec.y = (Left == true ? 1 : -1);
+	}
+	
+	if (true == PlayerSameFloor && abs(PlayerPos.x - EnemyPos.x) < AttackRange)
+	{
+		StateManager.ChangeState("Attack");
 		return;
 	}
 
@@ -952,6 +1008,7 @@ void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (true == Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
 		nullptr))
 	{
+		MoveVec.y = 0;
 		StateManager.ChangeState("Run");
 	}
 }

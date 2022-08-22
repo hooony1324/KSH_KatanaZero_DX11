@@ -53,7 +53,9 @@ void Room_Factory1::Start()
 
 	// 세팅 시간
 	TimeLimit = true;
-	SetCurTimeLimitSeconds(30.0f);
+	SetCurTimeLimitSeconds(300.0f);
+
+	Off();
 }
 
 void Room_Factory1::Setting()
@@ -121,7 +123,7 @@ void Room_Factory1::StairSetting()
 	{
 		GameEngineCollision* UpStair = CreateComponent<GameEngineCollision>();
 		UpStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
-		UpStair->GetTransform().SetWorldPosition({ 747, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+		UpStair->GetTransform().SetWorldPosition({ 737, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 		UpStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 0, 1, 0.25f });
 		UpStair->ChangeOrder(COLLISIONGROUP::STAIR);
 		GlobalValueManager::Collision_UpStairs.push_back(UpStair);

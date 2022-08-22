@@ -70,7 +70,7 @@ void EnemyCop::Update(float _DeltaTime)
 	Move(_DeltaTime);
 
 
-	EnemyActorDebug();
+	//EnemyActorDebug();
 
 	
 }
@@ -156,7 +156,16 @@ void EnemyCop::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 	// ÇÑ¹ø ½î°í ÄðÅ¸ÀÓ
 	if (_Info.StateTime > 1.0f)
 	{
-		StateManager.ChangeState("Run");
+		if (PrevLookDir == PlayerDir.ix())
+		{
+			AttackAniEnd = true;
+			StateManager.ChangeState("Run");
+		}
+		else
+		{
+			AttackAniEnd = true;
+			StateManager.ChangeState("ChaseTurn");
+		}
 	}
 }
 

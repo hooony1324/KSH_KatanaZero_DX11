@@ -102,7 +102,7 @@ void PlayerZero::Update(float _DeltaTime)
 
 	CoolTimeCheck();
 
-	PrintPlayerDebug();
+	//PrintPlayerDebug();
 }
 
 void PlayerZero::End()
@@ -342,6 +342,9 @@ void PlayerZero::CreateAllAnimation()
 		});
 	Renderer_Character->AnimationBindEnd("attack", [=](const FrameAnimation_DESC&) 
 		{
+			IsAttack = false;
+			Renderer_Slash->Off();
+			Collision_Slash->Off();
 			Attack_AniEnd = true;
 		});
 

@@ -4,7 +4,7 @@
 
 EnemyBullet::EnemyBullet()
 {
-	MoveSpeed = 200;
+	MoveSpeed = 1000;
 }
 
 EnemyBullet::~EnemyBullet() 

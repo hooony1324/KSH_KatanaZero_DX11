@@ -194,7 +194,7 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	//CurRoom->Clear();
 
 	CurRoom = *RoomIter;
-
+	CurRoom->On();
 
 	// 다음 방 세팅
 	CurRoom->Setting();
@@ -320,6 +320,7 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 		// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
 		Player->Off();
 		CurRoom->Clear();
+		CurRoom->Off();
 		++RoomIter;
 
 		// 마지막 방이면 엔딩
