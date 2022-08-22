@@ -31,6 +31,8 @@ protected:
 private:
 	class BossPsychoGiant* BossGiant;
 
-	GameEngineTextureRenderer* Background_
+	GameEngineTextureRenderer* Background_Mid;
+	GameEngineTextureRenderer* Background_Front;
+	GameEngineTextureRenderer* Background_Floor;
 };
 

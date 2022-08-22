@@ -33,6 +33,25 @@ void Room_Boss::Start()
 	// 스폰위치, 지형지물 등
 	PlayerSpawnPos = float4{ 631, -670, GetDepth(ACTOR_DEPTH::PLAYER) };
 
+	// bg > floor > fg
+	Background_Mid = CreateComponent<GameEngineTextureRenderer>();
+	Background_Mid->SetTexture("spr_psychboss_bg_1_0.png");
+	Background_Mid->GetTransform().SetLocalScale({1280, 734, 1});
+	Background_Mid->GetTransform().SetLocalMove({ 633, -560, GetDepth(ACTOR_DEPTH::BOSSMIDGROUND) });
+	Background_Mid->Off();
+
+	Background_Front = CreateComponent<GameEngineTextureRenderer>();
+	Background_Front->SetTexture("spr_psychboss_fg_0.png");
+	Background_Front->GetTransform().SetLocalScale({1350, 774, 1});
+	Background_Front->GetTransform().SetLocalMove({ 633, -545, GetDepth(ACTOR_DEPTH::BOSSFOREGROUND) });
+	Background_Front->Off();
+
+	Background_Floor = CreateComponent<GameEngineTextureRenderer>();
+	Background_Floor->SetTexture("spr_psychboss_floor_0.png");
+	Background_Floor->GetTransform().SetLocalScale({1072, 140, 1});
+	Background_Floor->GetTransform().SetLocalMove({ 640, -852, GetDepth(ACTOR_DEPTH::BOSSFLOOR) });
+	Background_Floor->Off();
+
 	// 보스
 	BossGiant = GetLevel()->CreateActor<BossPsychoGiant>();
 	BossGiant->GetTransform().SetWorldPosition({ 637, -541, GetDepth(ACTOR_DEPTH::BOSS) });
@@ -66,6 +85,12 @@ void Room_Boss::Setting()
 	Background->On();
 	GlobalValueManager::ColMap = Background_ColMap;
 
+	Background_Mid->On();
+	Background_Front->On();
+	Background_Floor->On();
+
+
+	// 보스
 	BossGiant->On();
 }
 
@@ -78,6 +103,11 @@ void Room_Boss::Clear()
 		GlobalValueManager::ColMap->Off();
 	}
 
+	Background_Mid->Off();
+	Background_Front->Off();
+	Background_Floor->Off();
+
+	// 보스
 	BossGiant->Off();
 
 }
