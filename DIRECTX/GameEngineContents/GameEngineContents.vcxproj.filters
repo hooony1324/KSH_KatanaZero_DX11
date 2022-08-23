@@ -190,6 +190,9 @@
     <ClInclude Include="BossPsychoGiant.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="TentacleKnife.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -317,6 +320,9 @@
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClCompile>
     <ClCompile Include="BossPsychoGiant.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="TentacleKnife.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>

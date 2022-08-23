@@ -31,7 +31,7 @@ void Room_Boss::Start()
 	InitCameraClampArea();
 
 	// 스폰위치, 지형지물 등
-	PlayerSpawnPos = float4{ 631, -670, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 640, -780, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 	// bg > floor > fg
 	Background_Mid = CreateComponent<GameEngineTextureRenderer>();
@@ -72,6 +72,7 @@ void Room_Boss::OnEvent()
 
 void Room_Boss::Update(float _DeltaTime)
 {
+	// 붉은 트렌지션
 }
 
 void Room_Boss::End()

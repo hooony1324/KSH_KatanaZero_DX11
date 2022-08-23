@@ -60,7 +60,7 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 
 	
 
-	// 보스 스테이지
+	// @@@ 보스 스테이지 @@@ //
 	if (false == BossPsychoGiant::GetInst()->IsUpdate())
 	{
 		return;
@@ -68,31 +68,58 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 
 	ImGui::Text("");
 	ImGui::Text("Boss Patterns");
+	/*IDLE,
+	SELECT,
+	STAB,
+	SPAWN_KNIFE1,
+	SPAWN_KNIFE2,
+	SPAWN_TURRET,
+	SPAWN_PSYCHO,
+	HURT,*/
+
+	if (true == ImGui::Button("Pattern_Idle"))
+	{
+		BossPsychoGiant::GetInst()->SetSelectOff();
+		return;
+
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("Pattern_Start"))
+	{
+		BossPsychoGiant::GetInst()->SetSelectOn();
+		return;
+
+	}
 
 
 	if (true == ImGui::Button("Pattern_StabAttack"))
 	{
-
-
+		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)
+		{
+			BossPsychoGiant::GetInst()->ChangePattern(PSYCHOGIANT_PATTERN::STAB);
+		}
+		return;
 	}
 
 	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_KnifeAttack1"))
 	{
 
-
+		return;
 	}
 
 	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_KnifeAttack2"))
 	{
-
+		return;
 	}
 
 	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_TurretAttack"))
 	{
-
+		return;
 	}
+
 
 }
