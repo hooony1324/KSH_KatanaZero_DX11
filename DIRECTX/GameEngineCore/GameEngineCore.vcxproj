@@ -64,10 +64,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="GameEngineDepthStencilTexture.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="GameEngineDevice.h">
       <SubType>
       </SubType>
@@ -236,10 +232,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="GameEngineDepthStencil.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="GameEngineDepthStencilTexture.cpp">
       <SubType>
       </SubType>
     </ClCompile>

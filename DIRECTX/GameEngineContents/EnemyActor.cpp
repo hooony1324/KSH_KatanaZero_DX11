@@ -991,11 +991,11 @@ void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (MoveVec.x > 0)
 	{
-		MoveVec.y = (Right == true ? 1 : -1);
+		MoveVec.y = (Right == true ? 1.0f : -1.0f);
 	}
 	else if (MoveVec.x < 0)
 	{
-		MoveVec.y = (Left == true ? 1 : -1);
+		MoveVec.y = (Left == true ? 1.0f : -1.0f);
 	}
 	
 	if (true == PlayerSameFloor && abs(PlayerPos.x - EnemyPos.x) < AttackRange)

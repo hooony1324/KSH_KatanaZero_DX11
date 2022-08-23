@@ -50,11 +50,7 @@ void Fan::OnEvent()
 
 void Fan::Update(float _DeltaTime)
 {
-	int val = GameEngineTime::GetInst()->GetTimeScale(4);
-	if (val > 3)
-	{
-		int a = 0;
-	}
+
 }
 
 void Fan::End()
