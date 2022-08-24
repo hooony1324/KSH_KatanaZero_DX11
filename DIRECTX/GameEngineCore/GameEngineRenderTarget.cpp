@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "GameEngineRenderTarget.h"
+#include "GameEngineRenderSet.h"
 
 ID3D11RenderTargetView* GameEngineRenderTarget::PrevRenderTargetViews = nullptr;
 ID3D11DepthStencilView* GameEngineRenderTarget::PrevDepthStencilView = nullptr;
@@ -13,6 +14,12 @@ GameEngineRenderTarget::GameEngineRenderTarget()
 
 GameEngineRenderTarget::~GameEngineRenderTarget() 
 {
+	for (GameEnginePostEffect* Effect : Effects)
+	{
+		delete Effect;
+	}
+
+	Effects.clear();
 }
 
 void GameEngineRenderTarget::GetPrevRenderTarget()
@@ -60,11 +67,25 @@ GameEngineTexture* GameEngineRenderTarget::GetRenderTargetTexture(size_t _Index)
 	return RenderTargets[_Index];
 }
 
+void GameEngineRenderTarget::Copy(GameEngineRenderTarget* _Other, int _Index )
+{
+	Clear();
+
+	MergeShaderResourcesHelper.SetTexture("Tex", _Other->GetRenderTargetTexture(_Index));
+
+	Effect(GameEngineRenderingPipeLine::Find("TargetMerge"), &MergeShaderResourcesHelper);
+}
+
 void GameEngineRenderTarget::Merge(GameEngineRenderTarget* _Other, int _Index)
 {
 	MergeShaderResourcesHelper.SetTexture("Tex", _Other->GetRenderTargetTexture(_Index));
 
 	Effect(GameEngineRenderingPipeLine::Find("TargetMerge"), &MergeShaderResourcesHelper);
+}
+
+void GameEngineRenderTarget::Effect(GameEngineRenderSet& _RenderSet)
+{
+	Effect(_RenderSet.PipeLine, &_RenderSet.ShaderResources);
 }
 
 void GameEngineRenderTarget::Effect(GameEngineRenderingPipeLine* _Other, GameEngineShaderResourcesHelper* _ShaderResourcesHelper)
@@ -171,3 +192,13 @@ void GameEngineRenderTarget::Setting()
 	GameEngineDevice::GetContext()->OMSetRenderTargets(static_cast<UINT>(RenderTargetViews.size()), &RenderTargetViews[0], DepthStencilView);
 }
 
+
+void GameEngineRenderTarget::EffectProcess()
+{
+	// Setting();
+
+	for (GameEnginePostEffect* Effect : Effects)
+	{
+		Effect->Effect(this);
+	}
+}

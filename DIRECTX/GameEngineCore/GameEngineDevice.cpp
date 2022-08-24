@@ -29,7 +29,7 @@ void GameEngineDevice::Destroy()
 	}
 }
 
-IDXGIAdapter* GameEngineDevice::GetHighPerformanceAdapter()
+IDXGIAdapter* GameEngineDevice::GetHighPerformanceAdapter() 
 {
 	/*
 * typedef struct DXGI_ADAPTER_DESC
@@ -144,7 +144,7 @@ void GameEngineDevice::CreateSwapChain()
 	// 다이렉트의 그래픽카드에 생성 방식은 보통 생성하기 위한 정보를 넘기는것
 	// 이게 그래픽카드에 이 메모리를 만들거냐
 	// 램에 만들면 느려.
-	DXGI_SWAP_CHAIN_DESC ScInfo = { 0, };
+	DXGI_SWAP_CHAIN_DESC ScInfo = {0,};
 
 	ScInfo.BufferCount = 2;
 	ScInfo.BufferDesc.Width = ScreenSize.uix();
@@ -220,7 +220,7 @@ void GameEngineDevice::CreateSwapChain()
 	BackBufferTarget->CreateDepthTexture(0);
 }
 
-void GameEngineDevice::Initialize()
+void GameEngineDevice::Initialize() 
 {
 	DeviceCreate();
 	// CreateSwapChain();

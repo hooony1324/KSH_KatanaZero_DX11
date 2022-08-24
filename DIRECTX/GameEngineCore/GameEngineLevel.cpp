@@ -181,14 +181,26 @@ void GameEngineLevel::Render(float _DelataTime)
 			continue;
 		}
 
+		Cameras[i]->GetCameraRenderTarget()->EffectProcess();
+	}
+
+	for (size_t i = 0; i < Cameras.size(); i++)
+	{
+		if (nullptr == Cameras[i])
+		{
+			continue;
+		}
+
 		GameEngineDevice::GetBackBuffer()->Merge(Cameras[i]->CameraRenderTarget, 0);
 	}
+
+	GameEngineDevice::GetBackBuffer()->EffectProcess();
+
 
 	// 여기서 그려져야 합니다.
 	GameEngineDebug::Debug3DRender();
 
 	GameEngineGUI::GUIRender(this, _DelataTime);
-
 
 	GameEngineDevice::RenderEnd();
 }

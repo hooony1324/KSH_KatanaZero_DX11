@@ -223,6 +223,7 @@ void EngineRenderingPipeLine()
 		NewPipe->SetInputAssembler2IndexBuffer("Box");
 		NewPipe->SetVertexShader("Debug3D.hlsl");
 		NewPipe->SetPixelShader("Debug3D.hlsl");
+		NewPipe->SetOutputMergerDepthStencil("AlwaysDepth");
 	}
 
 	{

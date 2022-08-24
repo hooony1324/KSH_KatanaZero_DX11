@@ -2,6 +2,7 @@
 #include "GameEngineTexture.h"
 #include <vector>
 #include "GameEngineShaderResourcesHelper.h"
+#include "GameEngineRenderer.h"
 
 // Setting 이제부터 여기그려라.
 
@@ -31,6 +32,17 @@
 
 // 디바이스에 있는 백버퍼 랜더타겟
 
+class GameEnginePostEffect
+{
+public:
+	virtual void EffectInit() = 0;
+	virtual void Effect(class GameEngineRenderTarget* _Render) = 0;
+
+	virtual ~GameEnginePostEffect() 
+	{
+
+	}
+};
 
 // 설명 :
 class GameEngineStatusWindow;
@@ -87,17 +99,15 @@ public:
 
 	GameEngineTexture* GetRenderTargetTexture(size_t _Index);
 
-	//void Copy(GameEngineRenderTarget* _Other);
+	void Copy(GameEngineRenderTarget* _Other, int _Index = 0);
 
-	void Merge(GameEngineRenderTarget* _Other, int _Index);
+	void Merge(GameEngineRenderTarget* _Other, int _Index = 0);
 	
-	// class RenderSet 
-	// {
-	//    GameEngineRenderingPipeLine* Pipe;
-	//    GameEngineShaderResourcesHelper Helper;
-	// }
-
 	void Effect(GameEngineRenderingPipeLine* _Other, GameEngineShaderResourcesHelper* _ShaderResourcesHelper);
+
+	void Effect(class GameEngineRenderSet& _RenderSet);
+
+	void EffectProcess();
 
 
 protected:
@@ -115,6 +125,17 @@ protected:
 
 	GameEngineTexture* DepthTexture;
 
+	// Post이펙트 부분
 private:
+	std::list<GameEnginePostEffect*> Effects;
+
+public:
+	template<typename EffectType>
+	void AddEffect() 
+	{
+		EffectType* NewEffect = new EffectType();
+		NewEffect->EffectInit();
+		Effects.push_back(NewEffect);
+	}
 };
 
