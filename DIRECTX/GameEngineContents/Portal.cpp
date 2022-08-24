@@ -33,16 +33,14 @@ void Portal::Start()
 	AllAnimationBind();
 
 	GetTransform().SetLocalScale({ 2, 2, 1 });
-	Renderer_Base->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Renderer_OutLine->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::FX) });
+	GetTransform().SetLocalRotate({ 0, 0, 180 });
+	Renderer_OutLine->GetTransform().SetWorldMove({ 0, 0, -200});
 }
 
 
 void Portal::OnEvent()
 {
 	Renderer_Base->On();
-
-
 	Renderer_Base->ChangeFrameAnimation("open");
 }
 

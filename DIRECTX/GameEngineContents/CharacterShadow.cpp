@@ -51,6 +51,9 @@ void CharacterShadow::SetShadow(GameEngineTexture* _Texture, float _DeathTime, i
 		ColorIndex = 0;
 	}
 
+	// ¿ùµå -> ºä -> ºäÆ÷Æ®
+	GameEngineTransform* t;
+	
 	GetTransform().SetWorldPosition(_InstancePos);
 }
 

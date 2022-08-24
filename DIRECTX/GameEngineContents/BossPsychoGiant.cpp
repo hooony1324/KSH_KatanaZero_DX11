@@ -3,6 +3,7 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 #include "TentacleKnife.h"
+#include "Portal.h"
 
 BossPsychoGiant* BossPsychoGiant::GlobalInst = nullptr;
 
@@ -130,6 +131,22 @@ void BossPsychoGiant::AllStateCreate()
 		, std::bind(&BossPsychoGiant::StabAttackUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&BossPsychoGiant::StabAttackStart, this, std::placeholders::_1));
 
+	BossStateManager.CreateStateMember("SpawnKnife1"
+		, std::bind(&BossPsychoGiant::SpawnKnife1Update, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&BossPsychoGiant::SpawnKnife1Start, this, std::placeholders::_1));
+
+	BossStateManager.CreateStateMember("SpawnKnife2"
+		, std::bind(&BossPsychoGiant::SpawnKnife2Update, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&BossPsychoGiant::SpawnKnife2Start, this, std::placeholders::_1));
+
+	BossStateManager.CreateStateMember("SpawnTurret"
+		, std::bind(&BossPsychoGiant::SpawnTurretUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&BossPsychoGiant::SpawnTurretStart, this, std::placeholders::_1));
+
+	BossStateManager.CreateStateMember("Hurt"
+		, std::bind(&BossPsychoGiant::HurtUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&BossPsychoGiant::HurtStart, this, std::placeholders::_1));
+
 }
 
 void BossPsychoGiant::AllAnimationBind()
@@ -199,6 +216,84 @@ void BossPsychoGiant::StabAttackUpdate(float _DeltaTime, const StateInfo& _Info)
 		BossStateManager.ChangeState("Idle");
 	}
 
+}
+
+void BossPsychoGiant::SpawnKnife1Start(const StateInfo& _Info)
+{
+	Portal* PortalAttack = GetLevel()->CreateActor<Portal>();
+	PortalAttack->GetTransform().SetWorldPosition({ 647, -550, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	PortalAttack->On();
+	PortalAttack->Death(2.0f);
+
+	// 포탈이 생성되면 포탈이 자동 공격하는 방향으로..
+}
+
+void BossPsychoGiant::SpawnKnife1Update(float _DeltaTime, const StateInfo& _Info)
+{
+
+}
+
+void BossPsychoGiant::SpawnKnife2Start(const StateInfo& _Info)
+{
+}
+
+void BossPsychoGiant::SpawnKnife2Update(float _DeltaTime, const StateInfo& _Info)
+{
+}
+
+void BossPsychoGiant::SpawnTurretStart(const StateInfo& _Info)
+{
+}
+
+void BossPsychoGiant::SpawnTurretUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+}
+
+// 붉게되면서 화면 흔들기 ~초
+float RecoverTime;
+const float CamShakeSpeed = 10.0f;
+void BossPsychoGiant::HurtStart(const StateInfo& _Info)
+{
+	// 색
+	RecoverTime = 0;
+	Renderer_Body->GetColorData().MulColor = float4::RED;
+	Renderer_Face->GetColorData().MulColor = float4::RED;
+
+	Renderer_Face->ChangeFrameAnimation("face_hurt");
+}
+
+void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	float DT = _Info.StateTime;
+
+	// 카메라 흔들림
+	if (DT <= 2.0f)
+	{
+		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);
+		float ShakeY = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);
+		GetLevel()->GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 20, 0 });
+	}
+
+	if (DT > 1.5f)
+	{
+		// 색 점점 원상복구
+		float4 Color = float4::Lerp(float4::RED, float4::ONE, RecoverTime);
+		Renderer_Body->GetColorData().MulColor = Color;
+		Renderer_Face->GetColorData().MulColor = Color;
+		if (Color.g <= 1.0f)
+		{
+			RecoverTime += _DeltaTime;
+		}
+		
+	}
+
+	if (DT > 3.0f)
+	{ 
+		Renderer_Body->GetColorData().MulColor = float4::ONE;
+		Renderer_Face->GetColorData().MulColor = float4::ONE;
+		BossStateManager.ChangeState("Idle");
+		return;
+	}
 }
 
 

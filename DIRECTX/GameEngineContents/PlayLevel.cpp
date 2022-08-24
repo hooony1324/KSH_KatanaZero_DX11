@@ -430,7 +430,7 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 카메라 흔들림
 	float ShakeX = sinf(DT * 10.0f) * powf(0.5f, DT);
 	float ShakeY = sinf(DT * 10.0f) * powf(0.5f, DT);
-	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX, -ShakeY, 0 });
+	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 10, 0 });
 
 	if (_Info.StateTime >= 0.025f)
 	{

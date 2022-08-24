@@ -106,19 +106,39 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_KnifeAttack1"))
 	{
-
+		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)
+		{
+			BossPsychoGiant::GetInst()->ChangePattern(PSYCHOGIANT_PATTERN::SPAWN_KNIFE1);
+		}
 		return;
 	}
 
 	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_KnifeAttack2"))
 	{
+		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)
+		{
+			BossPsychoGiant::GetInst()->ChangePattern(PSYCHOGIANT_PATTERN::SPAWN_KNIFE2);
+		}
 		return;
 	}
 
 	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_TurretAttack"))
 	{
+		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)
+		{
+			BossPsychoGiant::GetInst()->ChangePattern(PSYCHOGIANT_PATTERN::SPAWN_TURRET);
+		}
+		return;
+	}
+
+	if (true == ImGui::Button("Pattern_Hurt"))
+	{
+		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)
+		{
+			BossPsychoGiant::GetInst()->ChangePattern(PSYCHOGIANT_PATTERN::HURT);
+		}
 		return;
 	}
 

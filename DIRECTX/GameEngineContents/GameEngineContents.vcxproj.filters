@@ -202,6 +202,9 @@
     <ClInclude Include="Portal.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="RoomCutscene.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -342,6 +345,9 @@
     </ClCompile>
     <ClCompile Include="Portal.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomCutscene.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

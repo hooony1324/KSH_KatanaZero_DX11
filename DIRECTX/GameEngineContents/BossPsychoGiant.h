@@ -39,14 +39,18 @@ public:
 			BossStateManager.ChangeState("Stab");
 			break;
 		case PSYCHOGIANT_PATTERN::SPAWN_KNIFE1:
+			BossStateManager.ChangeState("SpawnKnife1");
 			break;
 		case PSYCHOGIANT_PATTERN::SPAWN_KNIFE2:
+			BossStateManager.ChangeState("SpawnKnife2");
 			break;
 		case PSYCHOGIANT_PATTERN::SPAWN_TURRET:
+			BossStateManager.ChangeState("SpawnTurret");
 			break;
 		case PSYCHOGIANT_PATTERN::SPAWN_PSYCHO:
 			break;
 		case PSYCHOGIANT_PATTERN::HURT:
+			BossStateManager.ChangeState("Hurt");
 			break;
 		default:
 			break;
@@ -93,6 +97,19 @@ private:
 
 	void StabAttackStart(const StateInfo& _Info);
 	void StabAttackUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void SpawnKnife1Start(const StateInfo& _Info);
+	void SpawnKnife1Update(float _DeltaTime, const StateInfo& _Info);
+
+	void SpawnKnife2Start(const StateInfo& _Info);
+	void SpawnKnife2Update(float _DeltaTime, const StateInfo& _Info);
+
+	void SpawnTurretStart(const StateInfo& _Info);
+	void SpawnTurretUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	// 피격
+	void HurtStart(const StateInfo& _Info);
+	void HurtUpdate(float _DeltaTime, const StateInfo& _Info);
 	
 	// 무기
 	class TentacleKnife* Stabber;

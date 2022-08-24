@@ -442,6 +442,8 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	IsDead = true;
 	DeadAniend = false;
 	Collision_Character->Off();
+
+	Renderer_Slash->Off();
 }
 
 void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
