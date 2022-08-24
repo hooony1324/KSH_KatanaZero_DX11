@@ -1,13 +1,84 @@
 #pragma once
 #include <GameEngineCore/GameEngineDefaultRenderer.h>
 
+struct MaskData
+{
+	float4 Pivot;
+	float4 Scale;
+};
+
+class CustomFrameAnimation_DESC
+{
+public:
+	std::string TextureName;
+
+	unsigned int CurFrame;
+
+	std::vector<unsigned int> Frames;
+
+	float FrameTime;
+
+	float Inter; // 0.1f
+
+	bool Loop;
+	// 아틀라스 애니메이션
+
+	class GameContentsCustomRenderer* Renderer;
+
+public:
+	CustomFrameAnimation_DESC()
+		: Loop(false)
+		, Inter(0.1f)
+		, CurFrame(-1)
+		, FrameTime(0.0f)
+	{
+
+	}
+
+	CustomFrameAnimation_DESC(const std::string _TextureName, unsigned int _Start, unsigned int _End, float _Inter, bool _Loop = true)
+		: TextureName(_TextureName)
+		, Loop(_Loop)
+		, Inter(_Inter)
+		, CurFrame(0)
+		, FrameTime(0.0f)
+	{
+		for (unsigned int i = _Start; i <= _End; i++)
+		{
+			Frames.push_back(i);
+		}
+	}
+
+	CustomFrameAnimation_DESC(const std::string _TextureName, const std::vector<unsigned int>& _Frames, float _Inter, bool _Loop = true)
+		: TextureName(_TextureName)
+		, Loop(_Loop)
+		, Inter(_Inter)
+		, Frames(_Frames)
+		, FrameTime(0.0f)
+	{
+
+	}
+
+
+	CustomFrameAnimation_DESC(const std::string _TextureName, float _Inter, bool _Loop = true)
+		: TextureName(_TextureName)
+		, Loop(_Loop)
+		, Inter(_Inter)
+		, CurFrame(0)
+		, FrameTime(0.0f)
+	{
+
+	}
+};
+
+
 class GameEngineFolderTexture;
 class GameContentsCustomRenderer;
 class CustomFrameAnimation : public GameEngineNameObject
 {
+private:
 	friend GameContentsCustomRenderer;
 
-	FrameAnimation_DESC Info;
+	CustomFrameAnimation_DESC Info;
 
 	GameContentsCustomRenderer* ParentRenderer;
 	GameEngineTexture* Texture;
@@ -17,14 +88,15 @@ class CustomFrameAnimation : public GameEngineNameObject
 
 	bool bOnceStart;
 	bool bOnceEnd;
-	std::function<void(const FrameAnimation_DESC&)> Frame;
-	std::function<void(const FrameAnimation_DESC&)> End;
-	std::function<void(const FrameAnimation_DESC&)> Start;
-	std::function<void(const FrameAnimation_DESC&, float)> Time;
+	std::function<void(const CustomFrameAnimation_DESC&)> Frame;
+	std::function<void(const CustomFrameAnimation_DESC&)> End;
+	std::function<void(const CustomFrameAnimation_DESC&)> Start;
+	std::function<void(const CustomFrameAnimation_DESC&, float)> Time;
 
 	void Reset();
 
 	void Update(float _DeltaTime);
+	void MaskUpdate(float _DeltaTime);
 
 public:
 	CustomFrameAnimation()
@@ -70,6 +142,15 @@ public:
 	}
 
 	void SetMask(const std::string& _Name);
+	void SetMask(GameEngineTexture* _Texture);
+	void SetMask(GameEngineTexture* _Texture, UINT _Index);
+	void CreateMaskAnimationFolder(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc);
+	void ChangeMaskAnimation(const std::string& _AnimationName);
+	MaskData& GetMaskData()
+	{
+		return MaskData;
+	}
+
 
 	void SetTexture(GameEngineTexture* _Texture);
 
@@ -89,9 +170,9 @@ public:
 
 	void SetTexture(GameEngineTexture* _Texture, UINT _Index);
 
-	void CreateFrameAnimationFolder(const std::string& _AnimationName, const FrameAnimation_DESC& _Desc);
+	void CreateFrameAnimationFolder(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc);
 
-	void CreateFrameAnimationCutTexture(const std::string& _AnimationName, const FrameAnimation_DESC& _Desc);
+	void CreateFrameAnimationCutTexture(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc);
 	void ChangeFrameAnimation(const std::string& _AnimationName);
 
 	void ScaleToTexture();
@@ -110,7 +191,7 @@ public:
 
 	// 애니메이션 바인드
 	// 시작 프레임에 들어온다.
-	void AnimationBindStart(const std::string& _AnimationName, std::function<void(const FrameAnimation_DESC&)> _Function)
+	void AnimationBindStart(const std::string& _AnimationName, std::function<void(const CustomFrameAnimation_DESC&)> _Function)
 	{
 		std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
@@ -123,7 +204,7 @@ public:
 		FrameAni[Name].Start = _Function;
 	}
 	// 끝나는 프레임에 들어온다
-	void AnimationBindEnd(const std::string& _AnimationName, std::function<void(const FrameAnimation_DESC&)> _Function)
+	void AnimationBindEnd(const std::string& _AnimationName, std::function<void(const CustomFrameAnimation_DESC&)> _Function)
 	{
 		std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
@@ -136,7 +217,7 @@ public:
 		FrameAni[Name].End = _Function;
 	}
 	// 프레임이 바뀔때마다 들어온다
-	void AnimationBindFrame(const std::string& _AnimationName, std::function<void(const FrameAnimation_DESC&)> _Function)
+	void AnimationBindFrame(const std::string& _AnimationName, std::function<void(const CustomFrameAnimation_DESC&)> _Function)
 	{
 		std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
@@ -149,7 +230,7 @@ public:
 		FrameAni[Name].Frame = _Function;
 	}
 	// Update
-	void AnimationBindTime(const std::string& _AnimationName, std::function<void(const FrameAnimation_DESC&, float)> _Function)
+	void AnimationBindTime(const std::string& _AnimationName, std::function<void(const CustomFrameAnimation_DESC&, float)> _Function)
 	{
 		std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
@@ -178,9 +259,12 @@ private:
 
 	ColorData ColorData;
 	AtlasData AtlasDataInst;
+	MaskData MaskData;
 
 	std::map<std::string, CustomFrameAnimation> FrameAni;
+	std::map<std::string, CustomFrameAnimation> MaskAni;
 	CustomFrameAnimation* CurAni;
+	CustomFrameAnimation* CurMask;
 
 	void FrameDataReset();
 };

@@ -101,6 +101,82 @@ void CustomFrameAnimation::Update(float _Delta)
 		MsgBoxAssert("텍스처가 세팅되지 않은 애니메이션 입니다.");
 	}
 
+
+
+
+
+
+}
+
+void CustomFrameAnimation::MaskUpdate(float _DeltaTime)
+{
+	Info.FrameTime += _DeltaTime;
+
+	if (nullptr != Time)
+	{
+		Time(Info, _DeltaTime);
+	}
+
+	if (false == bOnceStart
+		&& Info.CurFrame == 0)
+	{
+		if (nullptr != Start)
+		{
+			Start(Info);
+		}
+		bOnceStart = true;
+		bOnceEnd = false;
+	}
+
+	if (Info.Inter <= Info.FrameTime)
+	{
+		if (Info.CurFrame == (Info.Frames.size() - 1)
+			&& false == bOnceEnd
+			&& nullptr != End)
+		{
+			End(Info);
+			bOnceEnd = true;
+			bOnceStart = false;
+		}
+
+		++Info.CurFrame;
+		if (nullptr != Frame)
+		{
+			Frame(Info);
+		}
+
+		if (Info.CurFrame >= Info.Frames.size())
+		{
+
+			if (true == Info.Loop)
+			{
+				Info.CurFrame = 0;
+			}
+			else
+			{
+				Info.CurFrame = static_cast<unsigned int>(Info.Frames.size()) - 1;
+			}
+		}
+		Info.FrameTime -= Info.Inter;
+	}
+
+
+	if (nullptr != FolderTexture)
+	{
+		ParentRenderer->FrameDataReset();
+		ParentRenderer->CurTex = FolderTexture->GetTexture(Info.Frames[Info.CurFrame]);
+		ParentRenderer->SetMask(FolderTexture->GetTexture(Info.Frames[Info.CurFrame]));
+		ParentRenderer->SetPivot();
+
+		if (ParentRenderer->ScaleMode == SCALEMODE::IMAGE)
+		{
+			ParentRenderer->ScaleToTexture();
+		}
+	}
+	else
+	{
+		MsgBoxAssert("텍스처가 세팅되지 않은 애니메이션 입니다.");
+	}
 }
 
 GameContentsCustomRenderer::GameContentsCustomRenderer()
@@ -118,8 +194,6 @@ GameContentsCustomRenderer::~GameContentsCustomRenderer()
 
 void GameContentsCustomRenderer::SetTextureRendererSetting()
 {
-
-	//SetPipeLine("TextureAtlas");
 	SetPipeLine("UserCustom");
 
 	AtlasDataInst.FrameData.PosX = 0.0f;
@@ -130,6 +204,8 @@ void GameContentsCustomRenderer::SetTextureRendererSetting()
 
 	ShaderResources.SetConstantBufferLink("AtlasData", AtlasDataInst);
 	ShaderResources.SetConstantBufferLink("ColorData", ColorData);
+
+	//ShaderResources.SetConstantBufferLink("MaskData", MaskData);
 
 }
 
@@ -202,9 +278,87 @@ void GameContentsCustomRenderer::SetPivotToVector(const float4& _Value)
 	GetTransform().SetLocalPosition(_Value);
 }
 
+// 1개 만
 void GameContentsCustomRenderer::SetMask(const std::string& _Name)
 {
 	MaskTex = ShaderResources.SetTexture("Mask", _Name);
+}
+
+// 마스크가 애니메이션
+void GameContentsCustomRenderer::SetMask(GameEngineTexture* _Texture)
+{
+	MaskTex = ShaderResources.SetTexture("Mask", _Texture);
+}
+
+// 실험중
+void GameContentsCustomRenderer::CreateMaskAnimationFolder(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc)
+{
+	std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
+
+	if (FrameAni.end() != FrameAni.find(Name))
+	{
+		MsgBoxAssert("이미 존재하는 애니메이션을 또 만들려고 했습니다.");
+		return;
+	}
+
+	CustomFrameAnimation& NewAni = MaskAni[Name];
+	NewAni.Info = _Desc;
+	NewAni.ParentRenderer = this;
+	NewAni.Texture = nullptr;
+	NewAni.FolderTexture = GameEngineFolderTexture::Find(_Desc.TextureName);
+
+	if (NewAni.Info.Frames.size() == 0)
+	{
+		for (unsigned int i = 0; i < NewAni.FolderTexture->GetTextureCount(); i++)
+		{
+			NewAni.Info.Frames.push_back(i);
+		}
+	}
+}
+
+void GameContentsCustomRenderer::SetMask(GameEngineTexture* _Texture, UINT _Index)
+{
+	if (nullptr == _Texture)
+	{
+		MsgBoxAssert("존재하지 않는 텍스처를 사용하려고 했습니다.");
+		return;
+	}
+
+	SetMask(_Texture);
+	SetFrame(_Index);
+}
+
+void GameContentsCustomRenderer::ChangeMaskAnimation(const std::string& _AnimationName)
+{
+	std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
+
+	if (MaskAni.end() == MaskAni.find(Name))
+	{
+		MsgBoxAssert("존재하지 않는 애니메이션으로 체인지 하려고 했습니다.");
+		return;
+	}
+
+	if (CurMask != &MaskAni[Name])
+	{
+		CurMask = &MaskAni[Name];
+		CurMask->Reset();
+		if (nullptr != CurMask->Texture)
+		{
+			SetMask(CurMask->Texture, CurMask->Info.Frames[CurMask->Info.CurFrame]);
+			if (ScaleMode == SCALEMODE::IMAGE)
+			{
+				ScaleToCutTexture(CurMask->Info.CurFrame);
+			}
+		}
+		else if (nullptr != CurMask->FolderTexture)
+		{
+			SetMask(CurMask->FolderTexture->GetTexture(CurMask->Info.Frames[CurMask->Info.CurFrame]));
+			if (ScaleMode == SCALEMODE::IMAGE)
+			{
+				ScaleToTexture();
+			}
+		}
+	}
 }
 
 void GameContentsCustomRenderer::SetTexture(GameEngineTexture* _Texture)
@@ -246,7 +400,7 @@ void GameContentsCustomRenderer::SetTexture(GameEngineTexture* _Texture, UINT _I
 	SetFrame(_Index);
 }
 
-void GameContentsCustomRenderer::CreateFrameAnimationFolder(const std::string& _AnimationName, const FrameAnimation_DESC& _Desc)
+void GameContentsCustomRenderer::CreateFrameAnimationFolder(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc)
 {
 	std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
@@ -271,7 +425,7 @@ void GameContentsCustomRenderer::CreateFrameAnimationFolder(const std::string& _
 	}
 }
 
-void GameContentsCustomRenderer::CreateFrameAnimationCutTexture(const std::string& _AnimationName, const FrameAnimation_DESC& _Desc)
+void GameContentsCustomRenderer::CreateFrameAnimationCutTexture(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc)
 {
 	std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
@@ -332,6 +486,11 @@ void GameContentsCustomRenderer::Update(float _Delta)
 	if (nullptr != CurAni)
 	{
 		CurAni->Update(_Delta);
+	}
+
+	if (Option.IsMask == 1)
+	{
+		CurMask->MaskUpdate(_Delta);
 	}
 }
 

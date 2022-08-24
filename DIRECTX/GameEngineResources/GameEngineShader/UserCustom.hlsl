@@ -27,6 +27,13 @@ cbuffer AtlasData : register(b1)
     float4 PivotPos;
 };
 
+
+cbuffer MaskData : register(b2)
+{
+    float4 Pivot;
+    float4 Scale;
+}
+
 Output UserCustom_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
@@ -48,6 +55,7 @@ cbuffer ColorData : register(b0)
     float4 MulColor;
     float4 PlusColor;
 }
+
 
 Texture2D Tex : register(t0);
 Texture2D Mask : register(t1);
