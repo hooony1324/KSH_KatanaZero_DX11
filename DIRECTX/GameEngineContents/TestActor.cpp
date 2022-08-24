@@ -21,7 +21,7 @@ void TestActor::Start()
 	TRenderer->ScaleToTexture();
 	//TRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.05f, true });
 	//TRenderer->ChangeMaskAnimation("portal");
-	TRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout2", 0.7f, true });
+	TRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.7f, true });
 	TRenderer->ChangeMaskAnimation("portal");
 	TRenderer->SetPivot(PIVOTMODE::CENTER);
 

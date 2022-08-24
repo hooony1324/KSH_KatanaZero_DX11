@@ -38,6 +38,7 @@ private:
 	GameEngineTextureRenderer* Renderer;
 	float SetDeathTime;
 	static int ColorIndex;
+	static int ShadowCount;
 
 };
 

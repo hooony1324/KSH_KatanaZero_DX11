@@ -62,7 +62,7 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("R", 'R');	// ¿ªÀç»ý
 
 
-	GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
+	//GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
 
 }
 

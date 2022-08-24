@@ -163,8 +163,8 @@ void CustomFrameAnimation::MaskUpdate(float _DeltaTime)
 
 	if (nullptr != FolderTexture)
 	{
-		MaskRenderer->FrameDataReset();
-		MaskRenderer->CurTex = FolderTexture->GetTexture(Info.Frames[Info.CurFrame]);
+		//MaskRenderer->FrameDataReset();
+		//MaskRenderer->CurTex = FolderTexture->GetTexture(Info.Frames[Info.CurFrame]);
 		MaskRenderer->SetMask(FolderTexture->GetTexture(Info.Frames[Info.CurFrame]));
 		MaskRenderer->SetPivot();
 

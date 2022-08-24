@@ -196,6 +196,12 @@
     <ClInclude Include="CharacterShadow.h">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
     </ClInclude>
+    <ClInclude Include="PortalKnife.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -330,6 +336,12 @@
     </ClCompile>
     <ClCompile Include="CharacterShadow.cpp">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
+    </ClCompile>
+    <ClCompile Include="PortalKnife.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

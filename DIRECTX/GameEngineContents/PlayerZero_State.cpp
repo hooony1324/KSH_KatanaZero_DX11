@@ -5,6 +5,8 @@
 #include <algorithm>
 
 
+
+
 const float AntiGravity = 5.2f;
 
 bool Flipable = false;
@@ -70,6 +72,8 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 
 void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	CreateBrightShadow();
+
 	// 슬래쉬 애니메이션 끝나면 콜리전 끄기
 
 
@@ -132,6 +136,8 @@ void PlayerZero::JumpStart(const StateInfo& _Info)
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	CreateBrightShadow();
+
 	float DT = _Info.StateTime;
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
@@ -154,6 +160,8 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	CreateBrightShadow();
+
 	if (true == Roll_AniEnd)
 	{
 		Roll_AniEnd = false;
@@ -336,6 +344,8 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 
 void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	CreateBrightShadow();
+
 	float DT = _Info.StateTime;
 	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
 	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;

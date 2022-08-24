@@ -249,6 +249,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Portal.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PortalKnife.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PreCompile.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -427,6 +435,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="PlayLevelGUI.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PortalKnife.cpp">
       <SubType>
       </SubType>
     </ClCompile>

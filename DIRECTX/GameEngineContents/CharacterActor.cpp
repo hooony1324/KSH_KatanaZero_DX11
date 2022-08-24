@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "SlashFX.h"
 #include "Door.h"
+#include "CharacterShadow.h"
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -250,4 +251,17 @@ bool CharacterActor::CollisionSlashCheck()
 	}
 
 	return false;
+}
+
+void CharacterActor::CreateBrightShadow()
+{
+	// 그림자
+	if (IsDead == false && abs(MoveVec.x) > 0 || abs(MoveVec.y) > 0)
+	{
+		// 현재 애니메이션의 텍스쳐 1장 복사
+		CharacterShadow* Shadow = GetLevel()->CreateActor<CharacterShadow>();
+		Shadow->DetachObject();
+		Shadow->SetShadow(Renderer_Character->GetCurTexture(), 0.12f, PrevLookDir, GetTransform().GetWorldPosition() + float4{ 0, 0, 10 });
+		Shadow->On();
+	}
 }
