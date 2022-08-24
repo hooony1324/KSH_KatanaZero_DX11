@@ -30,7 +30,7 @@
 #include <GameEngineCore/GameEngineCollision.h>
 #include <GameEngineCore/GameEngineFont.h>
 #include <GameEngineCore/GameEngineFontRenderer.h>
-
+#include <GameEngineCore/GameEngineDevice.h>
 
 // contents
 #include <GameEngineContents/GlobalValueManager.h>

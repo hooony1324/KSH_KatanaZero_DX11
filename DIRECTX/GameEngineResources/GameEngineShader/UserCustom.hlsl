@@ -24,6 +24,7 @@ cbuffer AtlasData : register(b1)
 {
     float2 TextureFramePos;
     float2 TextureFrameSize;
+    float4 PivotPos;
 };
 
 Output UserCustom_VS(Input _Input)

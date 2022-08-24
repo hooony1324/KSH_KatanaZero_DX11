@@ -36,7 +36,7 @@ void ContentsCore::Start()
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
 	CreateLevel<TestLevel>("TestLevel");
-	ChangeLevel("PlayLevel");
+	ChangeLevel("TestLevel");
 
 	// Input Key
 	GameEngineInput::GetInst()->CreateKey("MouseLeft", VK_LBUTTON);
@@ -55,19 +55,14 @@ void ContentsCore::Start()
 	GameEngineInput::GetInst()->CreateKey("Numpad5", VK_NUMPAD5);
 	GameEngineInput::GetInst()->CreateKey("Numpad6", VK_NUMPAD6);
 
-	GameEngineInput::GetInst()->CreateKey("F1", VK_F1);
-	GameEngineInput::GetInst()->CreateKey("F2", VK_F2);
-	GameEngineInput::GetInst()->CreateKey("F3", VK_F3);
-	GameEngineInput::GetInst()->CreateKey("F4", VK_F4);
-	
-
 
 	GameEngineInput::GetInst()->CreateKey("M", 'M');	// 충돌맵 On/Off
 	GameEngineInput::GetInst()->CreateKey("T", 'T');	// Transition Test
 	GameEngineInput::GetInst()->CreateKey("C", 'C');	// 충돌체 On/Off
+	GameEngineInput::GetInst()->CreateKey("R", 'R');	// 역재생
 
 
-	//GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
+	GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
 
 }
 

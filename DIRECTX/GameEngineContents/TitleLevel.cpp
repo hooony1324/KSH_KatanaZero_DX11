@@ -46,7 +46,7 @@ void TitleLevel::Start()
 
 }
 
-void TitleLevel::OnEvent()
+void TitleLevel::LevelStartEvent()
 {
 	SoundPlayer_BGM = GameEngineSound::SoundPlayControl("song_rainonbrick.ogg");
 	SoundPlayer_BGM.Volume(0.5f);
@@ -99,7 +99,7 @@ void TitleLevel::Update(float _DeltaTime)
 	}
 }
 
-void TitleLevel::OffEvent()
+void TitleLevel::LevelEndEvent()
 {
 	SoundPlayer_BGM.Stop();
 }

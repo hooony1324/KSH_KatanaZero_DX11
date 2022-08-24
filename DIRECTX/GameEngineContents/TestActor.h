@@ -23,7 +23,7 @@ protected:
 
 private:
 	class GameContentsCustomRenderer* TRenderer;
-	class GameEngineDefaultRenderer* DRenderer;
+	class GameContentsCustomRenderer* CameraRenderer;
 
 
 };

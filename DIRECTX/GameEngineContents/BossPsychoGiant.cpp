@@ -172,9 +172,6 @@ void BossPsychoGiant::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 
-
-// aimtime stabcount
-int StabCount;
 bool StabberAttackStart;
 void BossPsychoGiant::StabAttackStart(const StateInfo& _Info)
 {
@@ -201,7 +198,6 @@ void BossPsychoGiant::StabAttackUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Tentacle->ChangeFrameAnimation("tentacle_stabend");
 		BossStateManager.ChangeState("Idle");
 	}
-
 
 }
 

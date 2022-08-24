@@ -122,12 +122,13 @@ void GameContentsCustomRenderer::SetTextureRendererSetting()
 	//SetPipeLine("TextureAtlas");
 	SetPipeLine("UserCustom");
 
-	FrameData.PosX = 0.0f;
-	FrameData.PosY = 0.0f;
-	FrameData.SizeX = 1.0f;
-	FrameData.SizeY = 1.0f;
+	AtlasDataInst.FrameData.PosX = 0.0f;
+	AtlasDataInst.FrameData.PosY = 0.0f;
+	AtlasDataInst.FrameData.SizeX = 1.0f;
+	AtlasDataInst.FrameData.SizeY = 1.0f;
+	AtlasDataInst.PivotPos = float4::ZERO;
 
-	ShaderResources.SetConstantBufferLink("AtlasData", FrameData);
+	ShaderResources.SetConstantBufferLink("AtlasData", AtlasDataInst);
 	ShaderResources.SetConstantBufferLink("ColorData", ColorData);
 
 }
@@ -161,13 +162,33 @@ void GameContentsCustomRenderer::SetPivot(PIVOTMODE _Mode)
 	switch (_Mode)
 	{
 	case PIVOTMODE::CENTER:
-		SetPivotToVector(float4::ZERO);
-		break;
-	case PIVOTMODE::LEFTTOP:
-		SetPivotToVector(float4(GetTransform().GetWorldScale().hx(), -GetTransform().GetWorldScale().hy()));
+		AtlasDataInst.PivotPos = float4::ZERO;
 		break;
 	case PIVOTMODE::BOT:
-		SetPivotToVector(float4(0.0f, GetTransform().GetWorldScale().hy()));
+		AtlasDataInst.PivotPos = float4(0.0f, 0.5f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::TOP:
+		AtlasDataInst.PivotPos = float4(0.0f, -0.5f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::LEFT:
+		AtlasDataInst.PivotPos = float4(0.5f, 0.0f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::RIGHT:
+		AtlasDataInst.PivotPos = float4(-0.5f, 0.0f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::LEFTTOP:
+		AtlasDataInst.PivotPos = float4(0.5f, -0.5f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::RIGHTTOP:
+		AtlasDataInst.PivotPos = float4(-0.5f, -0.5f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::LEFTBOT:
+		AtlasDataInst.PivotPos = float4(0.5f, 0.5f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::RIGHTBOT:
+		AtlasDataInst.PivotPos = float4(-0.5f, 0.5f, 0.0f, 0.0f);
+		break;
+	case PIVOTMODE::CUSTOM:
 		break;
 	default:
 		break;
@@ -199,7 +220,7 @@ void GameContentsCustomRenderer::SetTexture(const std::string& _Name)
 
 void GameContentsCustomRenderer::SetFrame(UINT _Index)
 {
-	FrameData = CurTex->GetFrameData(_Index);
+	AtlasDataInst.FrameData = CurTex->GetFrameData(_Index);
 }
 
 GameEngineTexture* GameContentsCustomRenderer::GetCurTexture()
@@ -302,7 +323,7 @@ void GameContentsCustomRenderer::ChangeFrameAnimation(const std::string& _Animat
 
 void GameContentsCustomRenderer::FrameDataReset()
 {
-	FrameData = { 0.0f , 0.0f, 1.0f, 1.0f };
+	AtlasDataInst.FrameData = { 0.0f , 0.0f, 1.0f, 1.0f };
 }
 
 

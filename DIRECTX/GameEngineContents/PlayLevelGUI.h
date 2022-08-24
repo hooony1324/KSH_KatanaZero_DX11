@@ -20,5 +20,6 @@ protected:
 private:
 	void OnGUI(GameEngineLevel* _Level, float _DeltaTime) override;
 	void Initialize(class GameEngineLevel* _Level) override;
+
 };
 

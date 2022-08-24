@@ -18,13 +18,15 @@ public:
 
 protected:
 	void Start() override;
-	void OnEvent() override;
 	void Update(float _DeltaTime) override;
-	void OffEvent() override;
 	void End() override;
+
+
+	void LevelStartEvent() override;
+	void LevelEndEvent() override;
+
 private:
 	void PlayLevelChangeCheck();
-	void LerpOut();
 
 private:
 	std::vector<GameEngineActor*> AllActors;

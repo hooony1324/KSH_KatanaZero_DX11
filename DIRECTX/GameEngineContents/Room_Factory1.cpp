@@ -133,7 +133,7 @@ void Room_Factory1::StairSetting()
 
 void Room_Factory1::Update(float _DeltaTime)
 {
-	
+
 }
 
 void Room_Factory1::End()

@@ -175,9 +175,9 @@ private:
 
 	GameEngineTexture* MaskTex;
 	GameEngineTexture* CurTex;
-	float4 FrameData;
 
 	ColorData ColorData;
+	AtlasData AtlasDataInst;
 
 	std::map<std::string, CustomFrameAnimation> FrameAni;
 	CustomFrameAnimation* CurAni;

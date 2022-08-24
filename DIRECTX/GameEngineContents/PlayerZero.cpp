@@ -103,6 +103,11 @@ void PlayerZero::Update(float _DeltaTime)
 	CoolTimeCheck();
 
 	//PrintPlayerDebug();
+
+
+
+
+
 }
 
 void PlayerZero::End()

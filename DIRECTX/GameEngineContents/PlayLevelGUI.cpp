@@ -5,6 +5,7 @@
 
 #include "BossPsychoGiant.h"
 
+
 PlayLevelGUI::PlayLevelGUI() 
 {
 }
@@ -14,10 +15,12 @@ PlayLevelGUI::~PlayLevelGUI()
 }
 
 
+
 void PlayLevelGUI::Initialize(GameEngineLevel* _Level)
 {
 
 }
+
 
 void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 {
@@ -56,8 +59,6 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	{
 		CharacterActor::CheatModeSwitch();
 	}
-
-
 	
 
 	// @@@ 보스 스테이지 @@@ //
@@ -120,6 +121,9 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	{
 		return;
 	}
+
+	// main camera texture
+	//GameEngineTexture* Texture = _Level->GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
 
 
 }
