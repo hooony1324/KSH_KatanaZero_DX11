@@ -163,14 +163,14 @@ void CustomFrameAnimation::MaskUpdate(float _DeltaTime)
 
 	if (nullptr != FolderTexture)
 	{
-		ParentRenderer->FrameDataReset();
-		ParentRenderer->CurTex = FolderTexture->GetTexture(Info.Frames[Info.CurFrame]);
-		ParentRenderer->SetMask(FolderTexture->GetTexture(Info.Frames[Info.CurFrame]));
-		ParentRenderer->SetPivot();
+		MaskRenderer->FrameDataReset();
+		MaskRenderer->CurTex = FolderTexture->GetTexture(Info.Frames[Info.CurFrame]);
+		MaskRenderer->SetMask(FolderTexture->GetTexture(Info.Frames[Info.CurFrame]));
+		MaskRenderer->SetPivot();
 
-		if (ParentRenderer->ScaleMode == SCALEMODE::IMAGE)
+		if (MaskRenderer->ScaleMode == SCALEMODE::IMAGE)
 		{
-			ParentRenderer->ScaleToTexture();
+			MaskRenderer->ScaleToTexture();
 		}
 	}
 	else
@@ -295,7 +295,7 @@ void GameContentsCustomRenderer::CreateMaskAnimationFolder(const std::string& _A
 {
 	std::string Name = GameEngineString::ToUpperReturn(_AnimationName);
 
-	if (FrameAni.end() != FrameAni.find(Name))
+	if (MaskAni.end() != MaskAni.find(Name))
 	{
 		MsgBoxAssert("이미 존재하는 애니메이션을 또 만들려고 했습니다.");
 		return;
@@ -303,7 +303,7 @@ void GameContentsCustomRenderer::CreateMaskAnimationFolder(const std::string& _A
 
 	CustomFrameAnimation& NewAni = MaskAni[Name];
 	NewAni.Info = _Desc;
-	NewAni.ParentRenderer = this;
+	NewAni.MaskRenderer = this;
 	NewAni.Texture = nullptr;
 	NewAni.FolderTexture = GameEngineFolderTexture::Find(_Desc.TextureName);
 

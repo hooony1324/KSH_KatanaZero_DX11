@@ -37,7 +37,7 @@ cbuffer MaskData : register(b2)
 Output UserCustom_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
-    NewOutPut.Pos = mul(_Input.Pos, WorldViewProjection);
+    NewOutPut.Pos = mul(_Input.Pos + PivotPos, WorldViewProjection);
     NewOutPut.PosLocal = _Input.Pos;
     
     
@@ -64,7 +64,7 @@ float4 UserCustom_PS(Output _Input) : SV_Target0
 {
     float4 MaskColor = Mask.Sample(Smp, _Input.Tex1.xy);
     
-    if ( 0 == MaskColor.r && 1 == IsMask)
+    if ( 1 == MaskColor.r && 1 == IsMask)
     {
         clip(-1);
     }

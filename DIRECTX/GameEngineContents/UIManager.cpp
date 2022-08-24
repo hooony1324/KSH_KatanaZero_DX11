@@ -66,10 +66,9 @@ void UIManager::Start()
 	TimerBar = CreateComponent<GameEngineUIRenderer>();
 	TimerBar->SetTexture("spr_timer_0.png");
 	TimerBar->GetTransform().SetLocalScale(TimerBar->GetCurTexture()->GetScale() * 2);
-	TimerBar->SetPivot(PIVOTMODE::LEFTTOP);
+	TimerBar->SetPivot(PIVOTMODE::LEFT);
 	ScaleTimerBar = TimerBar->GetTransform().GetLocalScale();
-	PosTimerBar = { 16, 343, -2 };
-	TimerBar->GetTransform().SetLocalPosition({ 16, 343, -2 });
+	TimerBar->GetTransform().SetLocalPosition({ -78, 343, -2 });
 
 	RestartClickUI = CreateComponent<GameEngineUIRenderer>();
 	RestartClickUI->SetTexture("spr_itwontwork.png");
