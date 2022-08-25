@@ -3,7 +3,10 @@
 
 #include "BossPsychoGiant.h"
 
-Room_Boss::Room_Boss() 
+Room_Boss::Room_Boss()
+	: Background_Mid(nullptr)
+	, Background_Floor(nullptr)
+	, Background_Front(nullptr)
 {
 }
 
@@ -65,23 +68,6 @@ void Room_Boss::Start()
 
 void Room_Boss::OnEvent()
 {
-
-
-
-}
-
-void Room_Boss::Update(float _DeltaTime)
-{
-	// 河篮 飘坊瘤记
-}
-
-void Room_Boss::End()
-{
-}
-
-
-void Room_Boss::Setting()
-{
 	// 甘 包访
 	Background->On();
 	GlobalValueManager::ColMap = Background_ColMap;
@@ -93,10 +79,13 @@ void Room_Boss::Setting()
 
 	// 焊胶
 	BossGiant->On();
+
+
 }
 
-void Room_Boss::Clear()
+void Room_Boss::OffEvent()
 {
+
 	// 甘 包访
 	Background->Off();
 	if (nullptr != GlobalValueManager::ColMap)
@@ -112,3 +101,13 @@ void Room_Boss::Clear()
 	BossGiant->Off();
 
 }
+
+void Room_Boss::Update(float _DeltaTime)
+{
+	// 河篮 飘坊瘤记
+}
+
+void Room_Boss::End()
+{
+}
+

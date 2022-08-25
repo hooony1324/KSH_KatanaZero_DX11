@@ -29,6 +29,7 @@ protected:
 private:
 	GameEngineTextureRenderer* Renderer_Base;
 	GameEngineTextureRenderer* Renderer_OutLine;
-	
+	bool IsClosing;
+	float LoopTime;
 };
 

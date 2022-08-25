@@ -245,7 +245,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="PlayLevelGUI.h">
+    <ClInclude Include="ControlGUI.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -442,7 +442,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="PlayLevelGUI.cpp">
+    <ClCompile Include="ControlGUI.cpp">
       <SubType>
       </SubType>
     </ClCompile>

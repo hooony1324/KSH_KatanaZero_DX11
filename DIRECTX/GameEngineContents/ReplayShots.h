@@ -30,8 +30,8 @@ protected:
 	void OffEvent() override;
 
 private:
-	GameEngineUIRenderer* BaseRenderer;
-	GameEngineUIRenderer* ScreenRenderer;
+	GameEngineTextureRenderer* BaseRenderer;
+	GameEngineTextureRenderer* ScreenRenderer;
 	std::vector<GameEngineTexture*> Shots;
 
 	bool ReplayStart;

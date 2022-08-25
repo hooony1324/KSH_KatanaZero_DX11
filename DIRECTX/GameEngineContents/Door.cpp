@@ -50,6 +50,19 @@ void Door::Start()
 
 }
 
+void Door::OnEvent()
+{
+	Renderer->On();
+	Collision->On();
+	Close();
+}
+
+void Door::OffEvent()
+{
+	Renderer->Off();
+	Collision->Off();
+}
+
 void Door::Update(float _DeltaTime)
 {
 	

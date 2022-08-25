@@ -35,6 +35,8 @@ void Portal::Start()
 	GetTransform().SetLocalScale({ 2, 2, 1 });
 	GetTransform().SetLocalRotate({ 0, 0, 180 });
 	Renderer_OutLine->GetTransform().SetWorldMove({ 0, 0, -200});
+
+	LoopTime = 3.0f;
 }
 
 
@@ -42,6 +44,7 @@ void Portal::OnEvent()
 {
 	Renderer_Base->On();
 	Renderer_Base->ChangeFrameAnimation("open");
+	IsClosing = false;
 }
 
 void Portal::OffEvent()
@@ -53,8 +56,9 @@ void Portal::OffEvent()
 
 void Portal::Update(float _DeltaTime)
 {
-	if (GetAccTime() >= 0.8f)
+	if (GetAccTime() >= LoopTime && false == IsClosing)
 	{
+		IsClosing = true;
 		Renderer_Base->ChangeFrameAnimation("close");
 		Renderer_OutLine->Off();
 	}
@@ -70,8 +74,10 @@ void Portal::AllAnimationBind()
 		[=](const FrameAnimation_DESC& _Info)
 		{ 
 			Renderer_Base->ChangeFrameAnimation("loop");
+			Renderer_Base->CurAnimationReset();
 			Renderer_OutLine->On();
 			Renderer_OutLine->ChangeFrameAnimation("loop");
+			Renderer_OutLine->CurAnimationReset();
 		}
 	);
 

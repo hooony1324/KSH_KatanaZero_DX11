@@ -8,6 +8,8 @@ class EnemyActor;
 class Room : public GameEngineActor
 {
 public:
+	static int CurRoomIndex;
+
 	bool IsTimeLimit()
 	{
 		return TimeLimit;

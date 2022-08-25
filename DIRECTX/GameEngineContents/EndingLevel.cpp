@@ -23,12 +23,13 @@ void EndingLevel::Start()
 	Lerp_Start = float4{ 0, -100, GetDepth(ACTOR_DEPTH::LOGO) };
 	Lerp_Dest = float4{ 0, 50, GetDepth(ACTOR_DEPTH::LOGO) };
 
-	Ending_Transition* Transition = CreateActor<Ending_Transition>();
-	Transition->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::TRANSITION) });
 }
 
-void EndingLevel::OnEvent()
+void EndingLevel::LevelStartEvent()
 {
+	Ending_Transition* Transition = CreateActor<Ending_Transition>();
+	Transition->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::TRANSITION) });
+
 	Logo->GetTransform().SetWorldPosition(Lerp_Start);
 	SumDeltaTime = 0.0f;
 
@@ -50,7 +51,7 @@ void EndingLevel::Update(float _DeltaTime)
 	SumDeltaTime += _DeltaTime;
 }
 
-void EndingLevel::OffEvent()
+void EndingLevel::LevelEndEvent()
 {
 	SoundPlayer.Stop();
 }

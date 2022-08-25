@@ -160,7 +160,7 @@
     <ClInclude Include="Ending_Transition.h">
       <Filter>Levels\02.EndingLevel\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="PlayLevelGUI.h">
+    <ClInclude Include="ControlGUI.h">
       <Filter>Levels\01.PlayLevel\GUI</Filter>
     </ClInclude>
     <ClInclude Include="PreCompile.h">
@@ -307,7 +307,7 @@
     <ClCompile Include="Ending_Transition.cpp">
       <Filter>Levels\02.EndingLevel\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="PlayLevelGUI.cpp">
+    <ClCompile Include="ControlGUI.cpp">
       <Filter>Levels\01.PlayLevel\GUI</Filter>
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">

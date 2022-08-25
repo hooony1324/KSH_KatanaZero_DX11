@@ -113,10 +113,11 @@ private:
 	
 	// ¹«±â
 	class TentacleKnife* Stabber;
+	std::vector<class Portal*> Portals;
 
-	void SpawnKnivesUp();
-	void SpawnKnivesDown();
-	void SpawnKnivesRound();
+	void SpawnPortalsUp();
+	void SpawnPortalsDown();
+	void SpawnPortalsRound();
 
 private:
 	void AllAnimationBind();

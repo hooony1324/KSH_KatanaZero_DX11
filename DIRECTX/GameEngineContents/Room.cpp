@@ -3,6 +3,8 @@
 #include "CharacterActor.h"
 #include "EnemyActor.h"
 
+int Room::CurRoomIndex = 0;
+
 Room::Room() 
 {
 }

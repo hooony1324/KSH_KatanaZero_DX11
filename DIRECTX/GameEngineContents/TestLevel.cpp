@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "TestLevel.h"
 #include <GameEngineCore/CoreMinimal.h>
+#include "ControlGUI.h"
 
 #include "TestActor.h"
 #include "Portal.h"
@@ -26,6 +27,12 @@ void TestLevel::Start()
 
 void TestLevel::LevelStartEvent()
 {
+	if (false == ControlGUI::GetInst()->IsUpdate())
+	{
+		ControlGUI::GetInst()->On();
+	}
+
+	int a = 0;
 	//portal->On();
 }
 

@@ -52,15 +52,7 @@ void Room_Factory2::Start()
 	Off();
 }
 
-void Room_Factory2::Update(float _DeltaTime)
-{
-}
-
-void Room_Factory2::End()
-{
-}
-
-void Room_Factory2::Setting()
+void Room_Factory2::OnEvent()
 {
 	GlobalValueManager::ColMap = Background_ColMap;
 	Background->On();
@@ -80,10 +72,9 @@ void Room_Factory2::Setting()
 
 		Enemy->Respawn();
 	}
-
 }
 
-void Room_Factory2::Clear()
+void Room_Factory2::OffEvent()
 {
 	Background->Off();
 	Background_ColMap->Off();
@@ -92,10 +83,13 @@ void Room_Factory2::Clear()
 	{
 		GlobalValueManager::ColMap->Off();
 	}
-	
+
 
 	// 지형지물
-	PtrFan->Death();
+	if (nullptr != PtrFan)
+	{
+		PtrFan->Death();
+	}
 	FanGuard->Off();
 
 	// 적 관련
@@ -104,3 +98,12 @@ void Room_Factory2::Clear()
 		Enemy->Off();
 	}
 }
+
+void Room_Factory2::Update(float _DeltaTime)
+{
+}
+
+void Room_Factory2::End()
+{
+}
+

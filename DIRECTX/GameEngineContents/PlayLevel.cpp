@@ -11,13 +11,41 @@
 #include "Cursor.h"
 #include "UIManager.h"
 #include "Transition.h"
-#include "PlayLevelGUI.h"
+#include "ControlGUI.h"
 #include "SlowMotion.h"
 #include "Bullet.h"
 
 #include "ReplayShots.h"
 
-PlayLevel::PlayLevel() 
+void PlayLevel::ChangeRoom(int _Index)
+{
+	if (_Index < 0)
+	{
+		return;
+	}
+
+	// 마지막 방이면 엔딩
+	if (_Index == Rooms.size())
+	{
+		GEngine::ChangeLevel("EndingLevel");
+		return;
+	}
+
+	Room::CurRoomIndex = _Index;
+
+	// 방 치우기
+	// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
+	Player->Off();
+	//CurRoom->Clear();
+	CurRoom->Off();
+	Replay->Off();
+	CurRoom = Rooms[_Index];
+
+	RoomStateManager.ChangeState("RoomChange");
+}
+
+PlayLevel* PlayLevel::PlayLevelInst = nullptr;
+PlayLevel::PlayLevel()
 	: CurRoom(nullptr)
 {
 }
@@ -28,6 +56,7 @@ PlayLevel::~PlayLevel()
 
 void PlayLevel::Start()
 {
+	PlayLevelInst = this;
 	GetMainCamera()->SetProjectionMode(CAMERAPROJECTIONMODE::Orthographic);
 
 	// Rooms
@@ -37,7 +66,6 @@ void PlayLevel::Start()
 	Rooms.push_back(Room1);
 	Rooms.push_back(Room2);
 	Rooms.push_back(Room3);
-	RoomIter = Rooms.begin();
 
 	// Player
 	Player = CreateActor<PlayerZero>(ACTORGROUP::TIMEGROUP);
@@ -91,8 +119,7 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomShakeUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomShakeStart, this, std::placeholders::_1));
 
-	GUIWindow = GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
-	GUIWindow->Off();
+	
 
 	Replay = CreateActor<ReplayShots>();
 	Replay->GetTransform().SetWorldPosition({ 640, -360, GetDepth(ACTOR_DEPTH::UI) });
@@ -101,9 +128,12 @@ void PlayLevel::Start()
 
 void PlayLevel::LevelStartEvent()
 {
-	GUIWindow->On();
+	if (false == ControlGUI::GetInst()->IsUpdate())
+	{
+		ControlGUI::GetInst()->On();
+	}
 
-	CurRoom = *RoomIter;
+	CurRoom = Rooms[Room::CurRoomIndex];
 	RoomStateManager.ChangeState("RoomChange");
 
 }
@@ -116,24 +146,17 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad4"))
 		{
-			//RoomChange(Room1);
-			CurRoom->Clear();
-			*RoomIter = Room1;
-			RoomStateManager.ChangeState("RoomChange");
+			ChangeRoom(0);
 		}
 
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad5"))
 		{
-			CurRoom->Clear();
-			*RoomIter = Room2;
-			RoomStateManager.ChangeState("RoomChange");
+			ChangeRoom(1);
 		}
 
 		if (true == GameEngineInput::GetInst()->IsDown("Numpad6"))
 		{
-			CurRoom->Clear();
-			*RoomIter = Room3;
-			RoomStateManager.ChangeState("RoomChange");
+			ChangeRoom(2);
 		}	
 	}
 
@@ -149,10 +172,6 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
-
-	//GameEngineStatusWindow::AddDebugRenderTarget("BackBuffer", GameEngineDevice::GetBackBuffer());
-	//GameEngineStatusWindow::AddDebugRenderTarget("MainCamera", GetMainCamera()->GetCameraRenderTarget());
-	//GameEngineStatusWindow::AddDebugRenderTarget("UICamera", GetUICamera()->GetCameraRenderTarget());
 	
 }
 
@@ -201,11 +220,10 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	//Effect_Transition->FadeOut();
 	//CurRoom->Clear();
 
-	CurRoom = *RoomIter;
 	CurRoom->On();
 
 	// 다음 방 세팅
-	CurRoom->Setting();
+	//CurRoom->Setting();
 	CurRoom->PlayerSpawn(Player);
 	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
 	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
@@ -312,7 +330,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 	}
 
-	// 녹화
+	// 녹화 : 60fps ??
 	if (ShotTime > (1 / 60.0f) )
 	{ 
 		GameEngineTexture* CamShot = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
@@ -336,20 +354,21 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true)//Effect_Transition->IsTransitionEnd())
 	{
-		// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
-		Player->Off();
-		CurRoom->Clear();
-		CurRoom->Off();
-		++RoomIter;
+		//// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
+		//Player->Off();
+		//CurRoom->Clear();
+		//CurRoom->Off();
+		//++RoomIter;
 
-		// 마지막 방이면 엔딩
-		if (RoomIter == Rooms.end())
-		{
-			GEngine::ChangeLevel("EndingLevel");
-			return;
-		}
+		//// 마지막 방이면 엔딩
+		//if (RoomIter == Rooms.end())
+		//{
+		//	GEngine::ChangeLevel("EndingLevel");
+		//	return;
+		//}
 
-		RoomStateManager.ChangeState("RoomChange");
+		//RoomStateManager.ChangeState("RoomChange");
+		ChangeRoom(++Room::CurRoomIndex);
 	}
 }
 
@@ -463,9 +482,10 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	Replay->On();
-	CurRoom->Clear();
+	CurRoom->Off();
+	//CurRoom->Clear();
 
-	Replay->PlayReverse(0.2f); // 1배속
+	Replay->PlayReverse(0.2f);
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)

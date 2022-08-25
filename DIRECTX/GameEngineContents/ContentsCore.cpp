@@ -2,6 +2,7 @@
 #include "ContentsCore.h"
 #pragma comment(lib, "GameEngineBase.lib")
 
+#include "ControlGUI.h"
 #include "TitleLevel.h"
 #include "PlayLevel.h"
 #include "EndingLevel.h"
@@ -19,10 +20,12 @@ ContentsCore::~ContentsCore()
 
 void ContentsCore::Start()
 {
+	// Debug GUI
+	ControlGUI::Inst = GameEngineGUI::CreateGUIWindow<ControlGUI>("ControlGUI", nullptr);
+	ControlGUI::Inst->Off();
 
 
-
-	// 렌더링파이프라인 추가 테스트
+	// 커스텀 렌더링파이프라인 추가
 	{
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("UserCustom");
 		NewPipe->SetVertexShader("UserCustom.hlsl");

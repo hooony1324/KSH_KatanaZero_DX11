@@ -32,26 +32,15 @@ void TestActor::Start()
 	KnifeRenderer->ScaleToTexture();
 
 
-	// 마스크(애니메이션) 주사기(점점 바깥으로 나옴)
+	// 마스크(애니메이션), 주사기가 점점 바깥으로 나옴
 	GameContentsCustomRenderer* MaskedRenderer = CreateComponent<GameContentsCustomRenderer>();
 	MaskedRenderer->SetSamplingModePoint();
 	MaskedRenderer->SetTexture("spr_psychboss_attack_knife_1.png");
 	MaskedRenderer->ScaleToTexture();
-	//MaskedRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.1f, true });
-	//MaskedRenderer->ChangeMaskAnimation("portal");
-	//MaskedRenderer->Option.IsMask = 1;
+	MaskedRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.1f, true });
+	MaskedRenderer->ChangeMaskAnimation("portal");
+	MaskedRenderer->Option.IsMask = 1;
 
-
-	// 실험실험실험실험실험실험실험실험실험실험실험
-		/*case PIVOTMODE::LEFT:
-			AtlasDataInst.PivotPos = float4(0.5f, 0.0f, 0.0f, 0.0f);
-			break;*/
-
-	float4 Scale = KnifeRenderer->GetTransform().GetLocalScale();
-	MaskedRenderer->GetAtlasData().PivotPos = float4(1.2f, 0.0, 0.0f, 0.0f);
-	//MaskedRenderer->GetTransform().SetLocalScale({ Scale.x * 0.5f, Scale.y * 1.0f, Scale.z });
-
-	// 실험실험실험실험실험실험실험실험실험실험실험
 
 
 	GetTransform().SetWorldScale({ 2, 2, 1 });
@@ -61,7 +50,6 @@ void TestActor::Start()
 
 void TestActor::Update(float _DeltaTime)
 {
-	// pos pos size size 
 }
 
 void TestActor::End()

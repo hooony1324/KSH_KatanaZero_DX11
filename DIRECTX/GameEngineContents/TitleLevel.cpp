@@ -4,6 +4,7 @@
 #include <GameEngineCore/GameEngineCameraActor.h>
 #include <GameEngineBase/GameEngineMath.h>
 #include <GameEngineCore/GEngine.h>
+#include "ControlGUI.h"
 
 #include "TitleUI.h"
 #include "TitlePlate.h"
@@ -48,6 +49,11 @@ void TitleLevel::Start()
 
 void TitleLevel::LevelStartEvent()
 {
+	if (false == ControlGUI::GetInst()->IsUpdate())
+	{
+		ControlGUI::GetInst()->On();
+	}
+
 	SoundPlayer_BGM = GameEngineSound::SoundPlayControl("song_rainonbrick.ogg");
 	SoundPlayer_BGM.Volume(0.5f);
 }

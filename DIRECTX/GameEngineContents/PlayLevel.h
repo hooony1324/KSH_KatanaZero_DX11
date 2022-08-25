@@ -9,6 +9,19 @@ class UIManager;
 class PlayLevel : public GameEngineLevel
 {
 public:
+	// ControlGUI¿ë
+	static PlayLevel* PlayLevelInst;
+
+	void ChangeRoom(int _Index);
+
+	int GetRoomsSize()
+	{
+		return static_cast<int>(Rooms.size());
+	}
+
+
+
+public:
 	// constrcuter destructer
 	PlayLevel();
 	~PlayLevel();
@@ -32,15 +45,13 @@ private:
 	void CameraFollow(float _DeltaTime);
 
 private:
-	class PlayLevelGUI* GUIWindow;
 
 	UIManager* UI;
 	Room* CurRoom;
 	Room* Room1;
 	Room* Room2;
 	Room* Room3;
-	std::list<Room*> Rooms;
-	std::list<Room*>::iterator RoomIter;
+	std::vector<Room*> Rooms;
 
 	GameEngineCameraActor* Cam;
 	float4 CamClamp_LeftTop;

@@ -71,7 +71,15 @@ void BossPsychoGiant::Start()
 	Renderer_Lilguy->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 	Renderer_Lilguy->Off();
 
-
+	// 포탈
+	for (int i = 0; i < 7; i++)
+	{
+		Portal* PortalAttack = GetLevel()->CreateActor<Portal>();
+		PortalAttack->Off();
+		// 아래를 향함
+		PortalAttack->GetTransform().SetWorldRotation({ 0,0, 90 });
+		Portals.push_back(PortalAttack);
+	}
 
 
 	AllAnimationBind();
@@ -105,6 +113,12 @@ void BossPsychoGiant::OnEvent()
 
 	IsSelectPattern = false;
 	BossStateManager.ChangeState("Idle");
+
+	for (Portal* Ptr : Portals)
+	{
+		Ptr->Off();
+	}
+
 }
 
 void BossPsychoGiant::OffEvent()
@@ -117,6 +131,11 @@ void BossPsychoGiant::OffEvent()
 	if (Stabber != nullptr)
 	{
 		Stabber->Death();
+	}
+
+	for (Portal* Ptr : Portals)
+	{
+		Ptr->Off();
 	}
 
 }
@@ -220,31 +239,44 @@ void BossPsychoGiant::StabAttackUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void BossPsychoGiant::SpawnKnife1Start(const StateInfo& _Info)
 {
-
-
+	SpawnPortalsUp();
 	// 포탈이 생성되면 포탈이 자동 공격하는 방향으로..
 }
 
 void BossPsychoGiant::SpawnKnife1Update(float _DeltaTime, const StateInfo& _Info)
 {
-	// 시간차 생성..
+	// 0 ~ 6 랜덤 시간차 생성..
 
+	if (_Info.StateTime > 4.0f)
+	{
+		BossStateManager.ChangeState("Idle");
+	}
 }
 
 void BossPsychoGiant::SpawnKnife2Start(const StateInfo& _Info)
 {
+	SpawnPortalsRound();
 }
 
 void BossPsychoGiant::SpawnKnife2Update(float _DeltaTime, const StateInfo& _Info)
 {
+	if (_Info.StateTime > 4.0f)
+	{
+		BossStateManager.ChangeState("Idle");
+	}
 }
 
 void BossPsychoGiant::SpawnTurretStart(const StateInfo& _Info)
 {
+	SpawnPortalsDown();
 }
 
 void BossPsychoGiant::SpawnTurretUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (_Info.StateTime > 4.0f)
+	{
+		BossStateManager.ChangeState("Idle");
+	}
 }
 
 // 붉게되면서 화면 흔들기 ~초
@@ -296,34 +328,42 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 // 무기 생성
-void BossPsychoGiant::SpawnKnivesUp()
+void BossPsychoGiant::SpawnPortalsUp()
 {
-	std::vector<Portal*> Portals;
 	for (int i = 0; i < 7; i++)
 	{
-		Portal* PortalAttack = GetLevel()->CreateActor<Portal>();
-		Portals.push_back(PortalAttack);
-		PortalAttack->On();
-		PortalAttack->Death(2.0f);
-		PortalAttack->GetTransform().SetWorldRotation({ 0,0, -90 });
+		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90 });
+		Portals[i]->On();
 	}
-
-	Portals[0]->GetTransform().SetWorldPosition({ 170, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Portals[1]->GetTransform().SetWorldPosition({ 170 + 154 * 1, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Portals[2]->GetTransform().SetWorldPosition({ 170 + 154 * 2, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Portals[3]->GetTransform().SetWorldPosition({ 170 + 154 * 3, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Portals[4]->GetTransform().SetWorldPosition({ 170 + 154 * 4, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Portals[5]->GetTransform().SetWorldPosition({ 170 + 154 * 5, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	Portals[6]->GetTransform().SetWorldPosition({ 170 + 154 * 6, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-
 }
 
-void BossPsychoGiant::SpawnKnivesDown()
+void BossPsychoGiant::SpawnPortalsDown()
 {
+	// 0번과 6번은 사용하지 않음
+	for (int i = 1; i < 6; i++)
+	{
+		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
+		Portals[i]->On();
+	}
 }
 
-void BossPsychoGiant::SpawnKnivesRound()
+float4 LeftDown = float4(180, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
+float4 RightDown = float4(930, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
+float4 Origin = float4(LeftDown.x + RightDown.x / 2, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
+float4 PortalVec = LeftDown - Origin;
+void BossPsychoGiant::SpawnPortalsRound()
 {
+	// 7개 -> 180 / 6 = 30도
+	for (int i = 0; i < 7; i++)
+	{
+		float RotateDegree = i * -30.0f;
+		float4 RotatePos = float4::VectorRotationToDegreeZAxis(PortalVec, RotateDegree);
+		Portals[i]->GetTransform().SetWorldPosition(RotatePos + Origin);
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, RotateDegree });
+		Portals[i]->On();
+	}
 }
 
 

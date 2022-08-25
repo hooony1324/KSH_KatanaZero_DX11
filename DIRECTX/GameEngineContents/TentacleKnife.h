@@ -14,6 +14,7 @@ public:
 		TakeOutEnd = _Value;
 	}
 
+	// 공격이 끝나면 촉수 집어넣는 애니메이션 시작하는 용도
 	void SetAttackEnd(bool _Value)
 	{
 		AttackEnd = _Value;

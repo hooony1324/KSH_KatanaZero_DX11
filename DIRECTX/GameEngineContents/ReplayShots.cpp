@@ -31,13 +31,13 @@ ReplayShots::~ReplayShots()
 
 void ReplayShots::Start()
 {
-	BaseRenderer = CreateComponent<GameEngineUIRenderer>();
+	BaseRenderer = CreateComponent<GameEngineTextureRenderer>();
 	BaseRenderer->SetTexture("None.png");
 	BaseRenderer->GetTransform().SetLocalScale({ 1280, 720, 1 });
 	BaseRenderer->GetTransform().SetLocalPosition({ -640, 360, 1 });
 	
 
-	ScreenRenderer = CreateComponent<GameEngineUIRenderer>();
+	ScreenRenderer = CreateComponent<GameEngineTextureRenderer>();
 	ScreenRenderer->GetTransform().SetLocalScale({ 1280, 720, 1 });
 	ScreenRenderer->GetTransform().SetLocalPosition({ -640, 360, 1 });
 }

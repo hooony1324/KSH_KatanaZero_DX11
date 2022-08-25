@@ -19,9 +19,9 @@ public:
 
 protected:
 	void Start() override;
-	void OnEvent() override;
+	void LevelStartEvent() override;
 	void Update(float _DeltaTime) override;
-	void OffEvent() override;
+	void LevelEndEvent() override;
 	void End() override;
 private:
 	GameEngineActor* Logo;

@@ -1,28 +1,30 @@
 #include "PreCompile.h"
-#include "PlayLevelGUI.h"
+#include "ControlGUI.h"
+
+#include "PlayLevel.h"
 #include "Cursor.h"
 #include "CharacterActor.h"
-
 #include "BossPsychoGiant.h"
 
+ControlGUI* ControlGUI::Inst = nullptr;
 
-PlayLevelGUI::PlayLevelGUI() 
+ControlGUI::ControlGUI()
 {
 }
 
-PlayLevelGUI::~PlayLevelGUI() 
-{
-}
-
-
-
-void PlayLevelGUI::Initialize(GameEngineLevel* _Level)
+ControlGUI::~ControlGUI()
 {
 
 }
 
 
-void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
+void ControlGUI::Initialize(GameEngineLevel* _Level)
+{
+
+}
+
+
+void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 {
 	int FPS = static_cast<int>(1.0f / _DeltaTime);
 	std::string Name = "FPS : " + std::to_string(FPS);
@@ -60,6 +62,55 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		CharacterActor::CheatModeSwitch();
 	}
 	
+	// 디버그용 레벨 체인지
+	ImGui::NewLine();
+	ImGui::Text("Current Level : ");
+	ImGui::SameLine();
+	ImGui::Text(_Level->GetNameCopy().c_str());
+	if (true == ImGui::Button("TestLevel"))
+	{
+		GEngine::ChangeLevel("TestLevel");
+	}
+	
+	ImGui::SameLine();
+	if (true == ImGui::Button("TitleLevel"))
+	{
+		GEngine::ChangeLevel("TitleLevel");
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("PlayLevel"))
+	{
+		GEngine::ChangeLevel("PlayLevel");
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("EndingLevel"))
+	{
+		GEngine::ChangeLevel("EndingLevel");
+	}
+
+
+	// @@@ PLAYLEVEL 디버깅 @@@ //
+	std::string LevelName = _Level->GetNameCopy();
+	if(0 != LevelName.compare("PLAYLEVEL"))
+	{
+		return;
+	}
+
+	// 방 변경
+	ImGui::NewLine();
+	for (int i = 0; i < PlayLevel::PlayLevelInst->GetRoomsSize(); i++)
+	{
+		ImGui::SameLine();
+		std::string RoomName = "Room " + std::to_string( i + 1 );
+		if (true == ImGui::Button(RoomName.c_str()))
+		{
+			PlayLevel::PlayLevelInst->ChangeRoom(i);
+		}
+	}
+
+
 
 	// @@@ 보스 스테이지 @@@ //
 	if (false == BossPsychoGiant::GetInst()->IsUpdate())
@@ -67,7 +118,7 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		return;
 	}
 
-	ImGui::Text("");
+	ImGui::NewLine();
 	ImGui::Text("Boss Patterns");
 	/*IDLE,
 	SELECT,
@@ -141,9 +192,5 @@ void PlayLevelGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		}
 		return;
 	}
-
-	// main camera texture
-	//GameEngineTexture* Texture = _Level->GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
-
 
 }

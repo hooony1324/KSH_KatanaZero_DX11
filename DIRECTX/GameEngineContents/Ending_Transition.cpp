@@ -14,12 +14,14 @@ void Ending_Transition::Start()
 {
 	Transition = CreateComponent<GameEngineTextureRenderer>();
 	Transition->SetTexture("spr_title_background_black.png");
-	Transition->GetTransform().SetLocalScale({ 1280, 1440 });
+	Transition->GetTransform().SetLocalScale({ 1280, 1440, 1 });
 }
 
 void Ending_Transition::Update(float _DeltaTime)
 {
-	Transition->GetColorData().MulColor.a -= _DeltaTime / 2;
+	float Alpha = GameEngineMath::LerpLimit(1, 0, GetAccTime() * 0.5f);
+
+	Transition->GetColorData().MulColor.a = Alpha ;
 }
 
 void Ending_Transition::End()

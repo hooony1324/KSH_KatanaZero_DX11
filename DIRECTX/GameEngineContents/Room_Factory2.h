@@ -21,8 +21,8 @@ protected:
 	void Update(float _DeltaTime) override;
 	void End() override;
 
-	void Setting() override;
-	void Clear() override;
+	void OnEvent() override;
+	void OffEvent() override;
 
 	void StairSetting() override {};
 

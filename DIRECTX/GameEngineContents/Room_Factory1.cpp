@@ -37,6 +37,7 @@ void Room_Factory1::Start()
 
 	PtrDoor = GetLevel()->CreateActor<Door>(ACTORGROUP::TIMEGROUP);
 	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
+	PtrDoor->Off();
 
 	// 적 소환 리스트 1400, -310
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
@@ -53,12 +54,12 @@ void Room_Factory1::Start()
 
 	// 세팅 시간
 	TimeLimit = true;
-	SetCurTimeLimitSeconds(300.0f);
+	SetCurTimeLimitSeconds(60.0f);
 
 	Off();
 }
 
-void Room_Factory1::Setting()
+void Room_Factory1::OnEvent()
 {
 	// 맵 관련
 	Background->On();
@@ -68,7 +69,7 @@ void Room_Factory1::Setting()
 	StairSetting();
 
 	// 지형 소환
-	PtrDoor->Close();
+	PtrDoor->On();
 
 	// 적 관련
 	for (EnemyActor* Enemy : Enemies)
@@ -77,14 +78,12 @@ void Room_Factory1::Setting()
 		{
 			Enemy->On();
 		}
-		
+
 		Enemy->Respawn();
 	}
-
-
 }
 
-void Room_Factory1::Clear()
+void Room_Factory1::OffEvent()
 {
 	// 맵 관련
 	Background->Off();
@@ -92,7 +91,7 @@ void Room_Factory1::Clear()
 	{
 		GlobalValueManager::ColMap->Off();
 	}
-	
+
 	// 지형 관련
 	PtrDoor->Off();
 
