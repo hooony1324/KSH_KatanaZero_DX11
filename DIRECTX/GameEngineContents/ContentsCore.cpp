@@ -19,6 +19,9 @@ ContentsCore::~ContentsCore()
 
 void ContentsCore::Start()
 {
+
+
+
 	// 렌더링파이프라인 추가 테스트
 	{
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("UserCustom");

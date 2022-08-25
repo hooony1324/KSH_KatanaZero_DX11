@@ -1,9 +1,19 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
+#include "GameContentsCustomRenderer.h"
 
 // Ό³Έν :
+
 class TestActor : public GameEngineActor
 {
+public:
+	void SetNewTexture(GameEngineTexture* _Texture, float4 _Pos)
+	{
+		ShotRenderer->SetTexture(_Texture);
+		ShotRenderer->GetTransform().SetWorldScale({ 100, 100, 1 });
+		ShotRenderer->GetTransform().SetWorldPosition(_Pos);
+	}
+
 public:
 	// constrcuter destructer
 	TestActor();
@@ -22,6 +32,7 @@ protected:
 
 
 private:
+	class GameEngineTextureRenderer* ShotRenderer;
 	class GameContentsCustomRenderer* TRenderer;
 	class GameContentsCustomRenderer* CameraRenderer;
 

@@ -220,16 +220,14 @@ void BossPsychoGiant::StabAttackUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void BossPsychoGiant::SpawnKnife1Start(const StateInfo& _Info)
 {
-	Portal* PortalAttack = GetLevel()->CreateActor<Portal>();
-	PortalAttack->GetTransform().SetWorldPosition({ 647, -550, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-	PortalAttack->On();
-	PortalAttack->Death(2.0f);
+
 
 	// 포탈이 생성되면 포탈이 자동 공격하는 방향으로..
 }
 
 void BossPsychoGiant::SpawnKnife1Update(float _DeltaTime, const StateInfo& _Info)
 {
+	// 시간차 생성..
 
 }
 
@@ -294,6 +292,38 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 		BossStateManager.ChangeState("Idle");
 		return;
 	}
+}
+
+
+// 무기 생성
+void BossPsychoGiant::SpawnKnivesUp()
+{
+	std::vector<Portal*> Portals;
+	for (int i = 0; i < 7; i++)
+	{
+		Portal* PortalAttack = GetLevel()->CreateActor<Portal>();
+		Portals.push_back(PortalAttack);
+		PortalAttack->On();
+		PortalAttack->Death(2.0f);
+		PortalAttack->GetTransform().SetWorldRotation({ 0,0, -90 });
+	}
+
+	Portals[0]->GetTransform().SetWorldPosition({ 170, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	Portals[1]->GetTransform().SetWorldPosition({ 170 + 154 * 1, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	Portals[2]->GetTransform().SetWorldPosition({ 170 + 154 * 2, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	Portals[3]->GetTransform().SetWorldPosition({ 170 + 154 * 3, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	Portals[4]->GetTransform().SetWorldPosition({ 170 + 154 * 4, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	Portals[5]->GetTransform().SetWorldPosition({ 170 + 154 * 5, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+	Portals[6]->GetTransform().SetWorldPosition({ 170 + 154 * 6, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+
+}
+
+void BossPsychoGiant::SpawnKnivesDown()
+{
+}
+
+void BossPsychoGiant::SpawnKnivesRound()
+{
 }
 
 

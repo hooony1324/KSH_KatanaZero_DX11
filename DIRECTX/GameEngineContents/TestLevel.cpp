@@ -26,7 +26,7 @@ void TestLevel::Start()
 
 void TestLevel::LevelStartEvent()
 {
-	portal->On();
+	//portal->On();
 }
 
 void TestLevel::Update(float _DeltaTime)

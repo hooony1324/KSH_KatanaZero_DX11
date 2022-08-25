@@ -53,6 +53,9 @@ private:
 	class GameEngineSoundPlayer SlowInSound;
 	class GameEngineSoundPlayer SlowOutSound;
 
+	class ReplayShots* Replay;
+
+
 // FSM : RoomPlay, RoomReplay, RoomChange
 private:
 	GameEngineStateManager RoomStateManager;

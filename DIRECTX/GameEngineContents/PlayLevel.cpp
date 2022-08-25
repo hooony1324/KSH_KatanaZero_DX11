@@ -15,6 +15,8 @@
 #include "SlowMotion.h"
 #include "Bullet.h"
 
+#include "ReplayShots.h"
+
 PlayLevel::PlayLevel() 
 	: CurRoom(nullptr)
 {
@@ -91,6 +93,10 @@ void PlayLevel::Start()
 
 	GUIWindow = GameEngineGUI::CreateGUIWindow<PlayLevelGUI>("PlayLevelGUI", this);
 	GUIWindow->Off();
+
+	Replay = CreateActor<ReplayShots>();
+	Replay->GetTransform().SetWorldPosition({ 640, -360, GetDepth(ACTOR_DEPTH::UI) });
+	Replay->Off();
 }
 
 void PlayLevel::LevelStartEvent()
@@ -226,12 +232,13 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 }
 
 float SlowRecoverTime;
+float ShotTime;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
 	SlowRecoverTime = 0.0f;
 
 	// 화면 녹화 시작 지점
-
+	ShotTime = 0.0f;
 }
 
 // @@@ 게임 플레이 @@@
@@ -241,6 +248,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	CameraFollow(_DeltaTime);
 
 	RoomPlayTotalTime += _DeltaTime;
+	ShotTime += _DeltaTime;
 
 	if (GlobalValueManager::SlowEnergy < 11)
 	{
@@ -303,6 +311,15 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 			UI->SetTimeBarLength(Ratio);
 		}
 	}
+
+	// 녹화
+	if (ShotTime > (1 / 60.0f) )
+	{ 
+		GameEngineTexture* CamShot = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
+		Replay->AddScreenShot(CamShot);
+		ShotTime = 0.0f;
+	}
+
 }
 
 void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
@@ -380,6 +397,8 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	CameraFollow(_DeltaTime);
+
 	RoomPlayTotalTime += _DeltaTime * 0.5f;
 	SlowDeltaTime += _DeltaTime;
 
@@ -443,11 +462,16 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 // 역재생 화면
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
-	int a = 0;
+	Replay->On();
+	CurRoom->Clear();
+
+	Replay->PlayReverse(0.2f); // 1배속
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
+
 }
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)

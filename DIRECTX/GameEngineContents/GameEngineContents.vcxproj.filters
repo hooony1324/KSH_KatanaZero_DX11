@@ -64,6 +64,9 @@
     <Filter Include="Levels\01.PlayLevel\Actor\Enemy\Boss">
       <UniqueIdentifier>{2858a637-3a1f-43d8-a691-11a3826a6cb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\Rooms\Etc">
+      <UniqueIdentifier>{36e13c3b-e228-495e-bca0-b4acc64eaf6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalValueManager.h">
@@ -172,9 +175,6 @@
     <ClInclude Include="Ray.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\EnemyActor</Filter>
     </ClInclude>
-    <ClInclude Include="SlowMotion.h">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
-    </ClInclude>
     <ClInclude Include="TestLevel.h">
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClInclude>
@@ -204,6 +204,12 @@
     </ClInclude>
     <ClInclude Include="RoomCutscene.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="SlowMotion.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplayShots.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -316,9 +322,6 @@
     <ClCompile Include="Ray.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\EnemyActor</Filter>
     </ClCompile>
-    <ClCompile Include="SlowMotion.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
-    </ClCompile>
     <ClCompile Include="TestLevel.cpp">
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClCompile>
@@ -348,6 +351,12 @@
     </ClCompile>
     <ClCompile Include="RoomCutscene.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="SlowMotion.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplayShots.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

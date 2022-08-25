@@ -114,6 +114,10 @@ private:
 	// ¹«±â
 	class TentacleKnife* Stabber;
 
+	void SpawnKnivesUp();
+	void SpawnKnivesDown();
+	void SpawnKnivesRound();
+
 private:
 	void AllAnimationBind();
 
