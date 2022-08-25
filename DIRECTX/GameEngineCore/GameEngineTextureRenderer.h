@@ -175,6 +175,15 @@ public:
 		return ScaleRatio;
 	}
 
+	bool IsCurAnimation()
+	{
+		if (nullptr == CurAni)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	void SetTexture(GameEngineTexture* _Texture);
 
 	void SetTexture(const std::string& _Name);
