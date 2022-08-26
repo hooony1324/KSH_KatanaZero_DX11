@@ -27,14 +27,7 @@ cbuffer AtlasData : register(b1)
     float4 PivotPos;
 };
 
-
-cbuffer MaskData : register(b2)
-{
-    float4 Pivot;
-    float4 Scale;
-}
-
-Output UserCustom_VS(Input _Input)
+Output TextureMask_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
     NewOutPut.Pos = mul(_Input.Pos + PivotPos, WorldViewProjection);
@@ -50,24 +43,32 @@ Output UserCustom_VS(Input _Input)
     return NewOutPut;
 }
 
-cbuffer ColorData : register(b0)
+cbuffer PixelData : register(b0)
 {
     float4 MulColor;
     float4 PlusColor;
+    float4 Slice;
 }
 
 
 Texture2D Tex : register(t0);
 Texture2D Mask : register(t1);
 SamplerState Smp : register(s0);
-float4 UserCustom_PS(Output _Input) : SV_Target0
+float4 TextureMask_PS(Output _Input) : SV_Target0
 {
+    // 마스킹
     float4 MaskColor = Mask.Sample(Smp, _Input.Tex1.xy);
-    
     if ( 1 == MaskColor.r && 1 == IsMask)
     {
         clip(-1);
     }
+    
+    // 슬라이스
+    if (_Input.Tex0.x < Slice.x)
+    {
+        clip(-1);
+    }
+ 
     
     float4 RenderColor = (Tex.Sample(Smp, _Input.Tex0.xy) * MulColor) + PlusColor;
     

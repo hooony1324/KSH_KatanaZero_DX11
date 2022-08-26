@@ -22,7 +22,6 @@ class GameEngineDevice;
 class GameEngineFontRenderer : public GameEngineDefaultRenderer
 {
 	friend GameEngineDevice;
-	static GameEngineRenderTarget* FontTarget;
 
 public:
 	// constrcuter destructer
@@ -34,9 +33,6 @@ public:
 	GameEngineFontRenderer(GameEngineFontRenderer&& _Other) noexcept = delete;
 	GameEngineFontRenderer& operator=(const GameEngineFontRenderer& _Other) = delete;
 	GameEngineFontRenderer& operator=(GameEngineFontRenderer&& _Other) noexcept = delete;
-
-	//LeftAndRightSort LR;
-	//TopAndBotSort TB;
 
 	void SetLeftAndRightSort(LeftAndRightSort _Value)
 	{
@@ -74,6 +70,8 @@ protected:
 	virtual void Start();
 
 	virtual void Render(float _DeltaTime);
+
+	static GameEngineRenderTarget* FontTarget;
 
 	std::string Text;
 	GameEngineFont* Font;

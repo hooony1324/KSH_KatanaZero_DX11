@@ -31,14 +31,14 @@ void Fan::Start()
 			_Info.CurFrame;
 			if (_Info.CurFrame > 6 && _Info.CurFrame < 25)
 			{
-				Renderer->GetColorData().MulColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+				Renderer->GetPixelData().MulColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 				Collision->Off();
 			}
 			else
 			{
 				if (false == GameEngineInput::GetInst()->IsFree("Shift"))
 				{
-					Renderer->GetColorData().MulColor = { 1.5f, 0.5f, 0.5f, 1.0f };
+					Renderer->GetPixelData().MulColor = { 1.5f, 0.5f, 0.5f, 1.0f };
 				}
 				Collision->On();
 			}

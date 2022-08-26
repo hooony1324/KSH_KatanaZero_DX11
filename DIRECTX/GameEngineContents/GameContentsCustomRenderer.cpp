@@ -203,9 +203,7 @@ void GameContentsCustomRenderer::SetTextureRendererSetting()
 	AtlasDataInst.PivotPos = float4::ZERO;
 
 	ShaderResources.SetConstantBufferLink("AtlasData", AtlasDataInst);
-	ShaderResources.SetConstantBufferLink("ColorData", ColorData);
-
-	//ShaderResources.SetConstantBufferLink("MaskData", MaskData);
+	ShaderResources.SetConstantBufferLink("PixelData", PixelDataInst);
 
 }
 

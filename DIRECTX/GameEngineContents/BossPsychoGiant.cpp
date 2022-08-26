@@ -4,6 +4,7 @@
 
 #include "TentacleKnife.h"
 #include "Portal.h"
+#include "PortalKnife.h"
 
 BossPsychoGiant* BossPsychoGiant::GlobalInst = nullptr;
 
@@ -71,13 +72,11 @@ void BossPsychoGiant::Start()
 	Renderer_Lilguy->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 	Renderer_Lilguy->Off();
 
-	// 포탈
-	for (int i = 0; i < 7; i++)
+	// 포탈 최대 11개
+	for (int i = 0; i < 11; i++)
 	{
 		Portal* PortalAttack = GetLevel()->CreateActor<Portal>();
 		PortalAttack->Off();
-		// 아래를 향함
-		PortalAttack->GetTransform().SetWorldRotation({ 0,0, 90 });
 		Portals.push_back(PortalAttack);
 	}
 
@@ -286,8 +285,8 @@ void BossPsychoGiant::HurtStart(const StateInfo& _Info)
 {
 	// 색
 	RecoverTime = 0;
-	Renderer_Body->GetColorData().MulColor = float4::RED;
-	Renderer_Face->GetColorData().MulColor = float4::RED;
+	Renderer_Body->GetPixelData().MulColor = float4::RED;
+	Renderer_Face->GetPixelData().MulColor = float4::RED;
 
 	Renderer_Face->ChangeFrameAnimation("face_hurt");
 }
@@ -308,8 +307,8 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		// 색 점점 원상복구
 		float4 Color = float4::Lerp(float4::RED, float4::ONE, RecoverTime);
-		Renderer_Body->GetColorData().MulColor = Color;
-		Renderer_Face->GetColorData().MulColor = Color;
+		Renderer_Body->GetPixelData().MulColor = Color;
+		Renderer_Face->GetPixelData().MulColor = Color;
 		if (Color.g <= 1.0f)
 		{
 			RecoverTime += _DeltaTime;
@@ -319,8 +318,8 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (DT > 3.0f)
 	{ 
-		Renderer_Body->GetColorData().MulColor = float4::ONE;
-		Renderer_Face->GetColorData().MulColor = float4::ONE;
+		Renderer_Body->GetPixelData().MulColor = float4::ONE;
+		Renderer_Face->GetPixelData().MulColor = float4::ONE;
 		BossStateManager.ChangeState("Idle");
 		return;
 	}
@@ -332,19 +331,23 @@ void BossPsychoGiant::SpawnPortalsUp()
 {
 	for (int i = 0; i < 7; i++)
 	{
-		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90 });
+		float4 SpawnPos = { 170 + i * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) };
+		Portals[i]->GetTransform().SetWorldPosition(SpawnPos);
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
 		Portals[i]->On();
+
+		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
+		Knife->Spawn(SpawnPos, -90);
 	}
 }
 
 void BossPsychoGiant::SpawnPortalsDown()
 {
-	// 0번과 6번은 사용하지 않음
+	// ex) 0번과 6번은 사용하지 않음
 	for (int i = 1; i < 6; i++)
 	{
 		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90 });
 		Portals[i]->On();
 	}
 }
@@ -353,16 +356,24 @@ float4 LeftDown = float4(180, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
 float4 RightDown = float4(930, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
 float4 Origin = float4(LeftDown.x + RightDown.x / 2, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
 float4 PortalVec = LeftDown - Origin;
+
 void BossPsychoGiant::SpawnPortalsRound()
 {
 	// 7개 -> 180 / 6 = 30도
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 11; i++)
 	{
-		float RotateDegree = i * -30.0f;
-		float4 RotatePos = float4::VectorRotationToDegreeZAxis(PortalVec, RotateDegree);
-		Portals[i]->GetTransform().SetWorldPosition(RotatePos + Origin);
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, RotateDegree });
+		// 소환 각도
+		float RotateDegree = i * (180 / 10.0f);
+		float4 PortalPos = float4::VectorRotationToDegreeZAxis(PortalVec, -RotateDegree) + Origin;
+		Portals[i]->GetTransform().SetWorldPosition(PortalPos);
+
+		// 회전 각도
+		float Rotate = float4::VectorXYtoDegree(PortalPos, Origin);
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, Rotate });
 		Portals[i]->On();
+
+		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
+		Knife->Spawn(PortalPos, Rotate);
 	}
 }
 

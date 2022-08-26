@@ -182,9 +182,9 @@ public:
 
 	void CurAnimationSetStartPivotFrame(int SetFrame);
 
-	ColorData& GetColorData()
+	PixelData& GetPixelData()
 	{
-		return ColorData;
+		return PixelDataInst;
 	}
 
 
@@ -256,8 +256,8 @@ private:
 	GameEngineTexture* MaskTex;
 	GameEngineTexture* CurTex;
 
-	ColorData ColorData;
 	AtlasData AtlasDataInst;
+	PixelData PixelDataInst;
 
 	std::map<std::string, CustomFrameAnimation> FrameAni;
 	std::map<std::string, CustomFrameAnimation> MaskAni;

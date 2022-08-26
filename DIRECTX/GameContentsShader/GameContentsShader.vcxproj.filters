@@ -1,15 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Mask">
+    <Filter Include="Sahder">
       <UniqueIdentifier>{8e8c320f-0233-46ec-a64e-31bc17e41d71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderFx">
+      <UniqueIdentifier>{be68d4a3-192f-4c1e-aeb5-db6ea9441f3f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Resources\Shader\TextureMask.hlsl">
-      <Filter>Mask</Filter>
+      <Filter>Sahder</Filter>
     </FxCompile>
-    <FxCompile Include="..\Resources\Shader\TransformHeader.fx" />
-    <FxCompile Include="..\Resources\Shader\RenderOption.fx" />
+    <FxCompile Include="..\Resources\Shader\RenderOption.fx">
+      <Filter>ShaderFx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\TransformHeader.fx">
+      <Filter>ShaderFx</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

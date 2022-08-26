@@ -21,7 +21,7 @@ void Ending_Transition::Update(float _DeltaTime)
 {
 	float Alpha = GameEngineMath::LerpLimit(1, 0, GetAccTime() * 0.5f);
 
-	Transition->GetColorData().MulColor.a = Alpha ;
+	Transition->GetPixelData().MulColor.a = Alpha ;
 }
 
 void Ending_Transition::End()

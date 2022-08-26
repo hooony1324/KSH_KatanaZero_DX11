@@ -25,17 +25,19 @@ void TestActor::Start()
 	TestRenderer->CreateFrameAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.05f, true });
 	TestRenderer->ChangeFrameAnimation("portal");
 	TestRenderer->SetPivot(PIVOTMODE::CENTER);
-	TestRenderer->GetTransform().PixLocalNegativeX();
 
 	// 주사기
-	GameContentsCustomRenderer* KnifeRenderer = CreateComponent<GameContentsCustomRenderer>();
+	KnifeRenderer = CreateComponent<GameContentsCustomRenderer>();
 	KnifeRenderer->SetTexture("spr_psychboss_attack_knife_1.png");
 	KnifeRenderer->ScaleToTexture();
 
 
+
+
+
 	// 주사기 + 마스크
 	// 주사기가 점점 바깥으로 나옴
-	GameContentsCustomRenderer* MaskedRenderer = CreateComponent<GameContentsCustomRenderer>();
+	MaskedRenderer = CreateComponent<GameContentsCustomRenderer>();
 	MaskedRenderer->SetSamplingModePoint();
 	MaskedRenderer->SetTexture("spr_psychboss_attack_knife_1.png");
 	MaskedRenderer->ScaleToTexture();
@@ -45,13 +47,17 @@ void TestActor::Start()
 
 
 	GetTransform().SetWorldScale({ 2, 2, 1 });
-	TestRenderer->GetTransform().SetWorldPosition({ -300, 250 });
-	KnifeRenderer->GetTransform().SetWorldPosition({ 300, 250 });
 
+
+	TestRenderer->GetTransform().SetWorldPosition({ 300, 250 });
+	KnifeRenderer->GetTransform().SetWorldPosition({ -300, 250 });
+	KnifeRenderer->GetPixelData().Slice.x = 0;
+	TestRenderer->GetPixelData().Slice.x = 0;
 }
 
 void TestActor::Update(float _DeltaTime)
 {
+	
 }
 
 void TestActor::End()

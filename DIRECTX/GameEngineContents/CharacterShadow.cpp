@@ -28,7 +28,7 @@ void CharacterShadow::SetShadow(GameEngineTexture* _Texture, float _DeathTime, i
 	{
 		return;
 	}
-
+	
 	Renderer->SetTexture(_Texture);
 	Renderer->ScaleToTexture();
 	GetTransform().SetLocalScale({ 1.5f, 1.5f, 1 });
@@ -43,7 +43,7 @@ void CharacterShadow::SetShadow(GameEngineTexture* _Texture, float _DeathTime, i
 		Renderer->GetTransform().PixLocalNegativeX();
 	}
 
-	Renderer->GetColorData().MulColor = LightColors::Colors[ColorIndex++];
+	Renderer->GetPixelData().MulColor = LightColors::Colors[ColorIndex++];
 
 
 	if (ColorIndex >= 3)

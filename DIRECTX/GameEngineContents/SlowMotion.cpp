@@ -28,7 +28,7 @@ void SlowMotion::Start()
 	Renderer->GetTransform().SetLocalScale({ 1280, 720, 1 });
 
 	// 처음 배경 투명색
-	Color = &Renderer->GetColorData().MulColor;
+	Color = &Renderer->GetPixelData().MulColor;
 	Color->a = 0;
 	
 	TimeRatio = 1;

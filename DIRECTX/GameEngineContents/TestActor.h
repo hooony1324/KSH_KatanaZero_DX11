@@ -35,6 +35,8 @@ private:
 	class GameEngineTextureRenderer* ShotRenderer;
 	class GameContentsCustomRenderer* TestRenderer;
 	class GameContentsCustomRenderer* CameraRenderer;
+	class GameContentsCustomRenderer* KnifeRenderer;
+	class GameContentsCustomRenderer* MaskedRenderer;
 
 
 };

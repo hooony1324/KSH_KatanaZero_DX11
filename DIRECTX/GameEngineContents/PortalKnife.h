@@ -5,6 +5,18 @@
 class PortalKnife : public GameEngineActor
 {
 public:
+	void Spawn(float4 _Pos, float _Rot)
+	{
+		GetTransform().SetWorldPosition(_Pos);
+
+		GetTransform().SetWorldRotation({ 0,0, _Rot });
+
+		
+
+		Dir = float4::DegreeToDirection2D(_Rot).NormalizeReturn();
+	}
+
+public:
 	// constrcuter destructer
 	PortalKnife();
 	~PortalKnife();
@@ -21,6 +33,20 @@ protected:
 	void End() override;
 
 private:
+	GameEngineStateManager StateManager;
 
+	void SpawnStart(const StateInfo& _Info);
+	void SpawnUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void DrawStart(const StateInfo& _Info);
+	void DrawUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void ShootStart(const StateInfo& _Info);
+	void ShootUpdate(float _DeltaTime, const StateInfo& _Info);
+
+private:
+	class GameEngineTextureRenderer* Renderer;
+	float4 Dir;
+	float MoveSpeed;
 };
 

@@ -106,16 +106,16 @@ void UIManager::Update(float _DeltaTime)
 		// 0 ~ i번까지 푸른색
 		if (i <= CurSlowBatteryIndex)
 		{
-			SlowBatteries[i]->GetColorData().MulColor.r = 1.0f;
-			SlowBatteries[i]->GetColorData().MulColor.g = 1.0f;
-			SlowBatteries[i]->GetColorData().MulColor.b = 1.0f;
+			SlowBatteries[i]->GetPixelData().MulColor.r = 1.0f;
+			SlowBatteries[i]->GetPixelData().MulColor.g = 1.0f;
+			SlowBatteries[i]->GetPixelData().MulColor.b = 1.0f;
 		}
 		// 나머지 붉은색
 		else
 		{
-			SlowBatteries[i]->GetColorData().MulColor.r = 1.0f;
-			SlowBatteries[i]->GetColorData().MulColor.g = 0.0f;
-			SlowBatteries[i]->GetColorData().MulColor.b = 0.0f;
+			SlowBatteries[i]->GetPixelData().MulColor.r = 1.0f;
+			SlowBatteries[i]->GetPixelData().MulColor.g = 0.0f;
+			SlowBatteries[i]->GetPixelData().MulColor.b = 0.0f;
 		}
 	}
 }
