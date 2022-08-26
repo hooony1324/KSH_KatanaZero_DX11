@@ -24,12 +24,26 @@ void ContentsCore::Start()
 	ControlGUI::Inst = GameEngineGUI::CreateGUIWindow<ControlGUI>("ControlGUI", nullptr);
 	ControlGUI::Inst->Off();
 
+	// 커스텀 쉐이더 파일 컴파일
+	GameEngineDirectory Dir;
+
+	Dir.MoveParentToExitsChildDirectory("Resources");
+	Dir.Move("Resources");
+	Dir.Move("Shader");
+
+	std::vector<GameEngineFile> Shaders = Dir.GetAllFile("hlsl");
+
+	for (size_t i = 0; i < Shaders.size(); i++)
+	{
+		GameEngineShader::AutoCompile(Shaders[i].GetFullPath());
+	}
+
 
 	// 커스텀 렌더링파이프라인 추가
 	{
-		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("UserCustom");
-		NewPipe->SetVertexShader("UserCustom.hlsl");
-		NewPipe->SetPixelShader("UserCustom.hlsl");
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("TextureMask");
+		NewPipe->SetVertexShader("TextureMask.hlsl");
+		NewPipe->SetPixelShader("TextureMask.hlsl");
 	}
 
 

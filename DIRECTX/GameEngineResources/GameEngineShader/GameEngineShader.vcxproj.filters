@@ -24,7 +24,6 @@
     <FxCompile Include="TextureAtlas.hlsl">
       <Filter>Object</Filter>
     </FxCompile>
-    <FxCompile Include="UserCustom.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Debug">

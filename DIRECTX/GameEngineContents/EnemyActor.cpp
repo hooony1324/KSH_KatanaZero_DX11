@@ -380,7 +380,7 @@ void EnemyActor::PlayerOnFloorCheck()
 
 	// °°ÀºÃþ ´Ù¸¥Ãþ ÆÇ´Ü
 	float HeightSub = PlayerPos.y - EnemyPos.y;
-	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y * 1.5f)
+	if (abs(HeightSub) > Renderer_Character->GetCurTexture()->GetScale().y * 2.0f)
 	{
 		PlayerSameFloor = false;
 		if (HeightSub > 0)

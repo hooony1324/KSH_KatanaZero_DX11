@@ -194,7 +194,7 @@ GameContentsCustomRenderer::~GameContentsCustomRenderer()
 
 void GameContentsCustomRenderer::SetTextureRendererSetting()
 {
-	SetPipeLine("UserCustom");
+	SetPipeLine("TextureMask");
 
 	AtlasDataInst.FrameData.PosX = 0.0f;
 	AtlasDataInst.FrameData.PosY = 0.0f;

@@ -33,7 +33,7 @@ protected:
 
 private:
 	class GameEngineTextureRenderer* ShotRenderer;
-	class GameContentsCustomRenderer* TRenderer;
+	class GameContentsCustomRenderer* TestRenderer;
 	class GameContentsCustomRenderer* CameraRenderer;
 
 

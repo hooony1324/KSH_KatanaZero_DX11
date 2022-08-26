@@ -141,6 +141,10 @@ public:
 	void SetMask(GameEngineTexture* _Texture, UINT _Index);
 	void CreateMaskAnimationFolder(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc);
 	void ChangeMaskAnimation(const std::string& _AnimationName);
+	void SetMaskScale(float4 _Scale)
+	{
+		;
+	}
 	AtlasData& GetAtlasData()
 	{
 		return AtlasDataInst;
