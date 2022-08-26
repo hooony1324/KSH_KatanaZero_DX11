@@ -2,10 +2,10 @@
 #include "PortalKnife.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-const float SpawnOutDis = 170;
-const float SpawnSpeed = 6.0f;
-const float DrawInDis = 130;
-const float DrawInSpeed = 4.0f;
+const float SpawnOutDis = 150;
+const float SpawnSpeed = 8.0f;
+const float DrawInDis = 100;
+const float DrawInSpeed = 6.0f;
 
 PortalKnife::PortalKnife() 
 {
@@ -17,16 +17,19 @@ PortalKnife::~PortalKnife()
 
 void PortalKnife::OnEvent()
 {
-	StateManager.ChangeState("Spawn");
+	
 }
 
 void PortalKnife::Start()
 {
-
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_psychboss_attack_knife_1.png");
 	Renderer->SetPivot(PIVOTMODE::RIGHT);
 	Renderer->ScaleToTexture();
+	Renderer->Off();
+
+	StateManager.CreateStateMember("Idle"
+		, std::bind(&PortalKnife::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2));
 
 	StateManager.CreateStateMember("Spawn"
 		, std::bind(&PortalKnife::SpawnUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -40,20 +43,12 @@ void PortalKnife::Start()
 		, std::bind(&PortalKnife::ShootUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PortalKnife::ShootStart, this, std::placeholders::_1));
 
-
-	MoveSpeed = 700;
-	Off();
+	MoveSpeed = 1000;
+	StateManager.ChangeState("Idle");
 }
 
 void PortalKnife::Update(float _DeltaTime)
 {
-	WakeTime -= _DeltaTime;
-
-	if (WakeTime > 0.0f)
-	{
-		return;
-	}
-
 	StateManager.Update(_DeltaTime);
 }
 
@@ -62,27 +57,36 @@ void PortalKnife::End()
 
 }
 
+void PortalKnife::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (_Info.StateTime >= WakeTime)
+	{
+		StateManager.ChangeState("Spawn");
+	}
+}
+
 void PortalKnife::SpawnStart(const StateInfo& _Info)
 {
+	Renderer->On();
 	StartPos = GetTransform().GetWorldPosition();
-	if (Dir.x < 0.02f && Dir.x > 0)
-	{
-		Dir.x = 0.02f;
-	}
+	//if (Dir.x < 0.02f && Dir.x > 0)
+	//{
+	//	Dir.x = 0.02f;
+	//}
 	DestPos = StartPos + Dir * SpawnOutDis;
 
 }
 
 void PortalKnife::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float4 CurPos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * SpawnSpeed);
+	float4 CurPos = float4::Lerp(GetTransform().GetWorldPosition(), DestPos, _DeltaTime * 4.2f);
 	
 	if (abs(CurPos.x - DestPos.x) > 0.5f)
 	{
-		GetTransform().SetWorldPosition(CurPos);
 	}
+	GetTransform().SetWorldPosition(CurPos);
 
-	if (_Info.StateTime > 1.0f)
+	if (_Info.StateTime > 2.0f)
 	{
 		StateManager.ChangeState("Draw");
 	}

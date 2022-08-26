@@ -334,10 +334,11 @@ void BossPsychoGiant::SpawnPortalsUp()
 		float4 SpawnPos = { 170 + i * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) };
 		Portals[i]->GetTransform().SetWorldPosition(SpawnPos);
 		Portals[i]->On();
+		Portals[i]->OnTimer(i * 0.15f);
 		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
-		Knife->Spawn(SpawnPos, -90);
+		Knife->Spawn(SpawnPos, -90.05f, i * 0.15f);
 	}
 }
 
@@ -348,13 +349,14 @@ void BossPsychoGiant::SpawnPortalsDown()
 	{
 		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
 		Portals[i]->On();
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90 });
+		Portals[i]->OnTimer(i * 0.15f);
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90.05f });
 	}
 }
 
-float4 LeftDown = float4(180, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
-float4 RightDown = float4(930, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
-float4 Origin = float4(LeftDown.x + RightDown.x / 2, -730, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
+float4 LeftDown = float4(180, -750, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
+float4 RightDown = float4(930, -750, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
+float4 Origin = float4(LeftDown.x + RightDown.x / 2, -750, GetDepth(ACTOR_DEPTH::BOSSPORTAL));
 float4 PortalVec = LeftDown - Origin;
 
 void BossPsychoGiant::SpawnPortalsRound()

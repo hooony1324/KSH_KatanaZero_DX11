@@ -13,6 +13,7 @@ public:
 		
 		WakeTime = _WakeTime;
 		Dir = float4::DegreeToDirection2D(_Rot).NormalizeReturn();
+		Renderer->Off();
 		On();
 	}
 
@@ -36,6 +37,8 @@ protected:
 
 private:
 	GameEngineStateManager StateManager;
+
+	void IdleUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	void SpawnStart(const StateInfo& _Info);
 	void SpawnUpdate(float _DeltaTime, const StateInfo& _Info);
