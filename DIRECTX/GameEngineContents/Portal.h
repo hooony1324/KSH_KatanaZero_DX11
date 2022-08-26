@@ -6,6 +6,9 @@ class GameEngineTextureRenderer;
 class Portal : public GameEngineActor
 {
 public:
+	void OnTimer(float _WakeTime = 0.0f);
+
+public:
 	// constrcuter destructer
 	Portal();
 	~Portal();
@@ -27,9 +30,11 @@ protected:
 	void AllAnimationBind();
 
 private:
+	float WakeTime;
+
 	GameEngineTextureRenderer* Renderer_Base;
 	GameEngineTextureRenderer* Renderer_OutLine;
-	bool IsClosing;
+	bool IsOpend;
 	float LoopTime;
 };
 

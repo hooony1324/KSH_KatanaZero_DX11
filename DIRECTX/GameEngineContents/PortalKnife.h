@@ -5,15 +5,15 @@
 class PortalKnife : public GameEngineActor
 {
 public:
-	void Spawn(float4 _Pos, float _Rot)
+	void Spawn(float4 _Pos, float _Rot, float _WakeTime = 0.0f)
 	{
-		GetTransform().SetWorldPosition(_Pos);
-
+		float4 KnifePos = _Pos - float4{0, 0, 10};
+		GetTransform().SetWorldPosition(KnifePos);
 		GetTransform().SetWorldRotation({ 0,0, _Rot });
-
 		
-
+		WakeTime = _WakeTime;
 		Dir = float4::DegreeToDirection2D(_Rot).NormalizeReturn();
+		On();
 	}
 
 public:
@@ -28,6 +28,8 @@ public:
 	PortalKnife& operator=(PortalKnife&& _Other) noexcept = delete;
 
 protected:
+	void OnEvent() override;
+
 	void Start() override;
 	void Update(float _DeltaTime) override;
 	void End() override;
@@ -46,7 +48,11 @@ private:
 
 private:
 	class GameEngineTextureRenderer* Renderer;
+
+	float4 StartPos;
+	float4 DestPos;
 	float4 Dir;
 	float MoveSpeed;
+	float WakeTime;
 };
 

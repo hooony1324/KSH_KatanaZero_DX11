@@ -333,8 +333,8 @@ void BossPsychoGiant::SpawnPortalsUp()
 	{
 		float4 SpawnPos = { 170 + i * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) };
 		Portals[i]->GetTransform().SetWorldPosition(SpawnPos);
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
 		Portals[i]->On();
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
 		Knife->Spawn(SpawnPos, -90);
@@ -347,8 +347,8 @@ void BossPsychoGiant::SpawnPortalsDown()
 	for (int i = 1; i < 6; i++)
 	{
 		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90 });
 		Portals[i]->On();
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90 });
 	}
 }
 
@@ -369,11 +369,12 @@ void BossPsychoGiant::SpawnPortalsRound()
 
 		// 회전 각도
 		float Rotate = float4::VectorXYtoDegree(PortalPos, Origin);
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, Rotate });
 		Portals[i]->On();
+		Portals[i]->OnTimer(i * 0.15f);
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, Rotate });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
-		Knife->Spawn(PortalPos, Rotate);
+		Knife->Spawn(PortalPos, Rotate, i * 0.15f);
 	}
 }
 

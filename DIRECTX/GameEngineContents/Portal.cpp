@@ -2,7 +2,12 @@
 #include "Portal.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-Portal::Portal() 
+void Portal::OnTimer(float _WakeTime)
+{
+	WakeTime = _WakeTime;
+}
+
+Portal::Portal()
 {
 }
 
@@ -43,27 +48,43 @@ void Portal::Start()
 
 void Portal::OnEvent()
 {
-	Renderer_Base->On();
-	Renderer_Base->ChangeFrameAnimation("open");
-	IsClosing = false;
+	Renderer_Base->Off();
+	Renderer_Base->ReSetAccTime();
+	Renderer_OutLine->Off();
+	GetTransform().SetWorldRotation({ 0, 0, 0 });
+
+	IsOpend = false;
+	WakeTime = 0;
 }
 
 void Portal::OffEvent()
 {
 	Renderer_Base->Off();
+	Renderer_Base->ReSetAccTime();
 	Renderer_OutLine->Off();
 	GetTransform().SetWorldRotation({ 0, 0, 0 });
-	ReSetAccTime();
+
+	IsOpend = false;
+	WakeTime = 0;
 }
 
 void Portal::Update(float _DeltaTime)
 {
-	if (GetAccTime() >= LoopTime && false == IsClosing)
+	WakeTime -= _DeltaTime;
+
+	if (WakeTime > 0.0f)
 	{
-		IsClosing = true;
-		Renderer_Base->ChangeFrameAnimation("close");
-		Renderer_OutLine->Off();
+		return;
 	}
+
+	if (false == IsOpend)
+	{
+		Renderer_Base->On();
+		Renderer_Base->ChangeFrameAnimation("open");
+		IsOpend = true;
+	}
+
+	
 }
 
 void Portal::End()
@@ -83,14 +104,21 @@ void Portal::AllAnimationBind()
 		}
 	);
 
-	// close() {}
-	//	Renderer_Base->ChangeFrameAnimation("close");
-	//	Renderer_OutLine->Off();
+	Renderer_Base->AnimationBindFrame("loop",
+		[=](const FrameAnimation_DESC& _Info)
+		{
+			if (Renderer_Base->GetAccTime() > LoopTime)
+			{
+				Renderer_Base->ChangeFrameAnimation("close");
+				Renderer_OutLine->Off();
+			}
+		}
+	);
+
 
 	Renderer_Base->AnimationBindEnd("close",
 		[=](const FrameAnimation_DESC& _Info)
 		{
-			Renderer_Base->Off();
 			Off();
 		}
 	);
