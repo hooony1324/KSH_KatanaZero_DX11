@@ -48,6 +48,7 @@ public:
 			BossStateManager.ChangeState("SpawnTurret");
 			break;
 		case PSYCHOGIANT_PATTERN::SPAWN_PSYCHO:
+			BossStateManager.ChangeState("SpawnPsycho");
 			break;
 		case PSYCHOGIANT_PATTERN::HURT:
 			BossStateManager.ChangeState("Hurt");
@@ -108,11 +109,15 @@ private:
 	void SpawnTurretUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	// 피격
+	void SpawnPsychoStart(const StateInfo& _Info);
+	void SpawnPsychoUpdate(float _DeltaTime, const StateInfo& _Info);
+
 	void HurtStart(const StateInfo& _Info);
 	void HurtUpdate(float _DeltaTime, const StateInfo& _Info);
 	
-	// 무기
+	// 스폰 오브젝트
 	class TentacleKnife* Stabber;
+	class TentacleBoss* SmallBoss;
 	std::vector<class Portal*> Portals;
 
 	void SpawnPortalsUp();

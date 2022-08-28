@@ -184,6 +184,15 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		return;
 	}
 
+	if (true == ImGui::Button("Pattern_SpawnPsycho"))
+	{
+		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)
+		{
+			BossPsychoGiant::GetInst()->ChangePattern(PSYCHOGIANT_PATTERN::SPAWN_PSYCHO);
+		}
+		return;
+	}
+	ImGui::SameLine();
 	if (true == ImGui::Button("Pattern_Hurt"))
 	{
 		if (BossPsychoGiant::GetInst()->Pattern == PSYCHOGIANT_PATTERN::IDLE)

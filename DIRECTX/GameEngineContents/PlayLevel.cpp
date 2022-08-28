@@ -457,7 +457,15 @@ void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 
 void PlayLevel::RoomShakeStart(const StateInfo& _Info)
 {
-	GameEngineTime::GetInst()->SetGlobalScale(0.1f);
+	//GameEngineTime::GetInst()->SetGlobalScale(0.1f);
+	//TIMEGROUP, 
+	//TIMEGROUP_ENEMY, 
+	//TIMEGROUP_BULLET,
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 0.1f);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 0.1f);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), 0.1f);
+
+
 	_Info.StateTime;
 }
 
@@ -470,9 +478,11 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 	float ShakeY = sinf(DT * 10.0f) * powf(0.5f, DT);
 	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 10, 0 });
 
-	if (_Info.StateTime >= 0.025f)
+	if (_Info.StateTime >= 0.4f)
 	{
-		GameEngineTime::GetInst()->SetGlobalScale(1.0f);
+		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1);
+		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1);
+		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), 1);
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
 	}

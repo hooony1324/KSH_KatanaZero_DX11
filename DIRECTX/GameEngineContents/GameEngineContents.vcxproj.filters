@@ -211,6 +211,9 @@
     <ClInclude Include="ReplayShots.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClInclude>
+    <ClInclude Include="TentacleBoss.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -357,6 +360,9 @@
     </ClCompile>
     <ClCompile Include="ReplayShots.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="TentacleBoss.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

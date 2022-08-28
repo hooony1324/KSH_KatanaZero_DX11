@@ -3,6 +3,7 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 #include "TentacleKnife.h"
+#include "TentacleBoss.h"
 #include "Portal.h"
 #include "PortalKnife.h"
 
@@ -79,6 +80,9 @@ void BossPsychoGiant::Start()
 		PortalAttack->Off();
 		Portals.push_back(PortalAttack);
 	}
+
+	// 작은녀석
+	SmallBoss = GetLevel()->CreateActor<TentacleBoss>();
 
 
 	AllAnimationBind();
@@ -160,6 +164,10 @@ void BossPsychoGiant::AllStateCreate()
 	BossStateManager.CreateStateMember("SpawnTurret"
 		, std::bind(&BossPsychoGiant::SpawnTurretUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&BossPsychoGiant::SpawnTurretStart, this, std::placeholders::_1));
+
+	BossStateManager.CreateStateMember("SpawnPsycho"
+		, std::bind(&BossPsychoGiant::SpawnPsychoUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&BossPsychoGiant::SpawnPsychoStart, this, std::placeholders::_1));
 
 	BossStateManager.CreateStateMember("Hurt"
 		, std::bind(&BossPsychoGiant::HurtUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -278,12 +286,43 @@ void BossPsychoGiant::SpawnTurretUpdate(float _DeltaTime, const StateInfo& _Info
 	}
 }
 
-// 붉게되면서 화면 흔들기 ~초
+void BossPsychoGiant::SpawnPsychoStart(const StateInfo& _Info)
+{
+	// 1번과 5번중 랜덤 하나
+	for (int i = 1; i < 6; i++)
+	{
+		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
+		Portals[i]->On();
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90.05f });
+	}
+
+
+	SmallBoss->GetTransform().SetWorldPosition(Portals[3]->GetTransform().GetWorldPosition());
+	SmallBoss->Spawn();
+
+}
+
+void BossPsychoGiant::SpawnPsychoUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	
+	if (true == SmallBoss->IsHurt())
+	{
+		BossStateManager.ChangeState("Hurt");
+		return;
+	}
+
+
+	if (false == SmallBoss->IsUpdate())
+	{
+		BossStateManager.ChangeState("Idle");
+		return;
+	}
+}
+
 float RecoverTime;
 const float CamShakeSpeed = 10.0f;
 void BossPsychoGiant::HurtStart(const StateInfo& _Info)
 {
-	// 색
 	RecoverTime = 0;
 	Renderer_Body->GetPixelData().MulColor = float4::RED;
 	Renderer_Face->GetPixelData().MulColor = float4::RED;
@@ -299,7 +338,8 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (DT <= 2.0f)
 	{
 		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);
-		float ShakeY = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);
+		float ShakeY = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.6f, DT * CamShakeSpeed);
+
 		GetLevel()->GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 20, 0 });
 	}
 
