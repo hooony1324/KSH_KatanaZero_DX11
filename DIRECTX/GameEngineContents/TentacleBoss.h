@@ -42,8 +42,8 @@ private:
 	void HurtStart(const StateInfo& _Info);
 	void HurtUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void HurtRunStart(const StateInfo& _Info);
-	void HurtRunUpdate(float _DeltaTime, const StateInfo& _Info);
+	void PortalInStart(const StateInfo& _Info);
+	void PortalInUpdate(float _DeltaTime, const StateInfo& _Info);
 
 
 private:

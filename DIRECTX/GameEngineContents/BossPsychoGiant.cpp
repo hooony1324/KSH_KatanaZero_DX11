@@ -6,10 +6,13 @@
 #include "TentacleBoss.h"
 #include "Portal.h"
 #include "PortalKnife.h"
+#include "PortalTurret.h"
+#include <GameEngineBase/GameEngineRandom.h>
 
 BossPsychoGiant* BossPsychoGiant::GlobalInst = nullptr;
 
 BossPsychoGiant::BossPsychoGiant() 
+	: Hp(3)
 {
 	GlobalInst = this;
 	IsSelectPattern = false;
@@ -84,7 +87,6 @@ void BossPsychoGiant::Start()
 	// 작은녀석
 	SmallBoss = GetLevel()->CreateActor<TentacleBoss>();
 
-
 	AllAnimationBind();
 	AllStateCreate();
 
@@ -121,6 +123,8 @@ void BossPsychoGiant::OnEvent()
 	{
 		Ptr->Off();
 	}
+
+	Hp = 3;
 
 }
 
@@ -328,6 +332,7 @@ void BossPsychoGiant::HurtStart(const StateInfo& _Info)
 	Renderer_Face->GetPixelData().MulColor = float4::RED;
 
 	Renderer_Face->ChangeFrameAnimation("face_hurt");
+	Hp--;
 }
 
 void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -358,6 +363,12 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (DT > 3.0f)
 	{ 
+		if (Hp <= 0)
+		{
+			// 보스 죽고 다음 스테이지
+			return;
+		}
+
 		Renderer_Body->GetPixelData().MulColor = float4::ONE;
 		Renderer_Face->GetPixelData().MulColor = float4::ONE;
 		BossStateManager.ChangeState("Idle");
@@ -385,13 +396,24 @@ void BossPsychoGiant::SpawnPortalsUp()
 void BossPsychoGiant::SpawnPortalsDown()
 {
 	// ex) 0번과 6번은 사용하지 않음
+	int NotUseIndex = GameEngineRandom::MainRandom.RandomInt(1, 5);
+
 	for (int i = 1; i < 6; i++)
 	{
+		if (i == NotUseIndex)
+		{
+			continue;
+		}
 		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
 		Portals[i]->On();
 		Portals[i]->OnTimer(i * 0.15f);
 		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90.05f });
+
+		float FloatDis = GameEngineRandom::MainRandom.RandomFloat(0.5f, 2.3f);
+		PortalTurret* Turret = GetLevel()->CreateActor<PortalTurret>();
+		Turret->Spawn({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) }, 100 * FloatDis, i * 0.15f);
 	}
+
 }
 
 float4 LeftDown = float4(180, -750, GetDepth(ACTOR_DEPTH::BOSSPORTAL));

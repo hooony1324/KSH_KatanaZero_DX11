@@ -62,9 +62,9 @@ void TentacleBoss::Start()
 		, std::bind(&TentacleBoss::HurtUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&TentacleBoss::HurtStart, this, std::placeholders::_1));
 
-	StateManager.CreateStateMember("HurtRun"
-		, std::bind(&TentacleBoss::HurtRunUpdate, this, std::placeholders::_1, std::placeholders::_2)
-		, std::bind(&TentacleBoss::HurtRunStart, this, std::placeholders::_1));
+	StateManager.CreateStateMember("PortalIn"
+		, std::bind(&TentacleBoss::PortalInUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&TentacleBoss::PortalInStart, this, std::placeholders::_1));
 
 	GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
 	StateManager.ChangeState("Idle");
@@ -113,7 +113,7 @@ void TentacleBoss::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (_Info.StateTime > 3.0f)
 	{
-		StateManager.ChangeState("HurtRun");
+		StateManager.ChangeState("PortalIn");
 		return;
 	}
 }
@@ -130,11 +130,11 @@ void TentacleBoss::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (_Info.StateTime > 1.1f)
 	{
-		StateManager.ChangeState("HurtRun");
+		StateManager.ChangeState("PortalIn");
 	}
 }
 
-void TentacleBoss::HurtRunStart(const StateInfo& _Info)
+void TentacleBoss::PortalInStart(const StateInfo& _Info)
 {
 	float4 Temp = DestPos;
 	DestPos = StartPos;
@@ -144,7 +144,7 @@ void TentacleBoss::HurtRunStart(const StateInfo& _Info)
 	Renderer->GetPixelData().MulColor = float4::ONE;
 }
 
-void TentacleBoss::HurtRunUpdate(float _DeltaTime, const StateInfo& _Info)
+void TentacleBoss::PortalInUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float4 CurPos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * 2.0f);
 	GetTransform().SetWorldPosition(CurPos);

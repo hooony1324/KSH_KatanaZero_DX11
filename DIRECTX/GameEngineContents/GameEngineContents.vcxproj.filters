@@ -214,6 +214,9 @@
     <ClInclude Include="TentacleBoss.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="PortalTurret.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -362,6 +365,9 @@
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClCompile>
     <ClCompile Include="TentacleBoss.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="PortalTurret.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>
