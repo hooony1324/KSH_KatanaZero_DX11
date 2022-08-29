@@ -2,6 +2,8 @@
 #include "PortalTurret.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include "BossProjectile.h"
+
 void PortalTurret::Spawn(float4 _SpawnPos, float _FloatDis, float _WakeTime)
 {
 	StartPos = _SpawnPos;
@@ -130,12 +132,16 @@ void PortalTurret::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 void PortalTurret::AttackStart(const StateInfo& _Info)
 {
 	Renderer->ChangeFrameAnimation("attack");
+
+	BossProjectile* Projectile = GetLevel()->CreateActor<BossProjectile>();
+
+	Projectile->Spawn(GetTransform().GetWorldPosition(), GlobalValueManager::PlayerPos);
 }
 
 void PortalTurret::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	// ÃÑ¾Ë ¹ß»ç
-	//dfdfasdfasdf
+	
 
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
 	{

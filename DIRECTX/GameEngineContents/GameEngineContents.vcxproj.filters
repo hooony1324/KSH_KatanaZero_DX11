@@ -217,6 +217,9 @@
     <ClInclude Include="PortalTurret.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="BossProjectile.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -368,6 +371,9 @@
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="PortalTurret.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossProjectile.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>
