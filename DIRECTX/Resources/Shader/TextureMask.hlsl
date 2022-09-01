@@ -27,6 +27,13 @@ cbuffer AtlasData : register(b1)
     float4 PivotPos;
 };
 
+cbuffer MaskData : register(b2)
+{
+    float2 MaskTextureFramePos;
+    float2 MaskTextureFrameSize;
+    float4 MaskPivotPos;
+}
+
 Output TextureMask_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
@@ -37,7 +44,8 @@ Output TextureMask_VS(Input _Input)
     NewOutPut.Tex0.x = (_Input.Tex.x * TextureFrameSize.x) + TextureFramePos.x;
     NewOutPut.Tex0.y = (_Input.Tex.y * TextureFrameSize.y) + TextureFramePos.y;
     
-    NewOutPut.Tex1 = _Input.Tex;
+    NewOutPut.Tex1.x = (_Input.Tex.x * MaskTextureFrameSize.x) + MaskTextureFramePos.x;
+    NewOutPut.Tex1.y = (_Input.Tex.y * MaskTextureFrameSize.y) + MaskTextureFramePos.y;
 
     
     return NewOutPut;

@@ -75,10 +75,8 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	CreateBrightShadow();
 
 	// 슬래쉬 애니메이션 끝나면 콜리전 끄기
-
-
 	float DT = _Info.StateTime;
-	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - FloatDeltaTime / 2;
 
 	if (WallState == STATE_WALL::RIGHT || WallState == STATE_WALL::RIGHTSLOPE
@@ -131,6 +129,7 @@ void PlayerZero::JumpStart(const StateInfo& _Info)
 	MoveSpeed = SPEED_PLAYER;
 	Renderer_Character->ChangeFrameAnimation("jump");
 	MoveVec = InputDir.NormalizeReturn();
+	MoveVec.y = 1.5f;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
 }
 

@@ -47,9 +47,10 @@ private:
 
 
 private:
-	class GameEngineTextureRenderer* Renderer;
+	class GameContentsCustomRenderer* Renderer;
 	class GameEngineCollision* Collision;
 
+	float RendererScaleY;
 	float4 StartPos;
 	float4 DestPos;
 

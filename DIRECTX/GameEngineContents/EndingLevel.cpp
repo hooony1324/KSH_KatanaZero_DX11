@@ -34,7 +34,7 @@ void EndingLevel::LevelStartEvent()
 	SumDeltaTime = 0.0f;
 
 	SoundPlayer = GameEngineSound::SoundPlayControl("song_fullconfession_cut.wav", 1);
-	SoundPlayer.Volume(0.2f);
+	SoundPlayer.Volume(0.05f);
 }
 
 void EndingLevel::Update(float _DeltaTime)

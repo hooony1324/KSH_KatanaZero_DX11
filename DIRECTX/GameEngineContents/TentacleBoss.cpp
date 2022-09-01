@@ -35,13 +35,18 @@ void TentacleBoss::OffEvent()
 
 void TentacleBoss::Start()
 {
-	Renderer = CreateComponent<GameEngineTextureRenderer>();
+	Renderer = CreateComponent<GameContentsCustomRenderer>();
 	Renderer->GetTransform().SetLocalScale({ 60, 160, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Renderer->SetPivot(PIVOTMODE::TOP);
-	Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "tentacleboss_idle", 0.12f });
-	Renderer->CreateFrameAnimationFolder("hurt", FrameAnimation_DESC{ "tentacleboss_hurt", 0.5f, false });
-	Renderer->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "tentacleboss_attack", 0.12f, false });
+	Renderer->CreateFrameAnimationFolder("idle", CustomFrameAnimation_DESC{ "tentacleboss_idle", 0.12f });
+	Renderer->CreateFrameAnimationFolder("hurt", CustomFrameAnimation_DESC{ "tentacleboss_hurt", 0.5f, false });
+	Renderer->CreateFrameAnimationFolder("attack", CustomFrameAnimation_DESC{ "tentacleboss_attack", 0.12f, false });
+	Renderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutoutY", 0.065f, true });
+	Renderer->ChangeMaskAnimation("portal");
+	Renderer->Option.IsMask = 1;
+	RendererScaleY = Renderer->GetTransform().GetLocalScale().y;
 	Renderer->ChangeFrameAnimation("idle");
+	Renderer->GetTransform().SetLocalPosition({ 10, 0, 0 });
 	Renderer->Off();
 
 	Collision = CreateComponent<GameEngineCollision>();
@@ -66,7 +71,6 @@ void TentacleBoss::Start()
 		, std::bind(&TentacleBoss::PortalInUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&TentacleBoss::PortalInStart, this, std::placeholders::_1));
 
-	GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
 	StateManager.ChangeState("Idle");
 	Off();
 }
@@ -95,8 +99,20 @@ void TentacleBoss::SpawnStart(const StateInfo& _Info)
 
 void TentacleBoss::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float4 CurPos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * 2.0f);
-	GetTransform().SetWorldPosition(CurPos);
+	float4 CurPos = GetTransform().GetWorldPosition();
+	float4 MovePos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * 2.0f);
+
+	// 마스크렌더러 위치조정
+	if (Renderer->GetMaskData().MaskFrameData.y <= -1.0f)
+	{
+		Renderer->GetMaskData().MaskFrameData.y = -1.0f;
+	}
+	else
+	{
+		float Move = (MovePos - CurPos).Length();
+		Renderer->GetMaskData().MaskFrameData.y -= Move / RendererScaleY;
+	}
+	GetTransform().SetWorldPosition(MovePos);
 
 	// Hurt
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
@@ -146,9 +162,21 @@ void TentacleBoss::PortalInStart(const StateInfo& _Info)
 
 void TentacleBoss::PortalInUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float4 CurPos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * 2.0f);
-	GetTransform().SetWorldPosition(CurPos);
+	float4 CurPos = GetTransform().GetWorldPosition();
+	float4 MovePos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * 2.0f);
 
+	// 마스크렌더러 위치조정
+	if (Renderer->GetMaskData().MaskFrameData.y >= 0.0f)
+	{
+		Renderer->GetMaskData().MaskFrameData.y = 0.0f;
+	}
+	else
+	{
+		float Move = (MovePos - CurPos).Length();
+		Renderer->GetMaskData().MaskFrameData.y += Move / RendererScaleY;
+	}
+
+	GetTransform().SetWorldPosition(MovePos);
 	
 	if (_Info.StateTime > 0.6f)
 	{

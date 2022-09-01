@@ -5,6 +5,11 @@
 class ReplayShots : public GameEngineActor
 {
 public:
+	void SetScreenTexture(GameEngineTexture* _Texture)
+	{
+		ScreenRenderer->SetTexture(_Texture);
+	}
+
 	void AddScreenShot(GameEngineTexture* _Texture);
 	void SetScreenIndex(int _Index);
 
@@ -31,7 +36,7 @@ protected:
 
 private:
 	GameEngineTextureRenderer* BaseRenderer;
-	GameEngineTextureRenderer* ScreenRenderer;
+	GameEngineUIRenderer* ScreenRenderer;
 	std::vector<GameEngineTexture*> Shots;
 
 	bool ReplayStart;

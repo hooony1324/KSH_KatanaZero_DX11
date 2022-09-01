@@ -46,9 +46,6 @@
     <Filter Include="Levels\01.PlayLevel\Actor\UI\Effect">
       <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsShader">
-      <UniqueIdentifier>{eec8f8f7-7c21-4171-b661-782fc881d6fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\99.TESTLEVEL">
       <UniqueIdentifier>{edd5620d-6864-4f8e-8a1d-68780daa0453}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,12 @@
     </Filter>
     <Filter Include="Levels\01.PlayLevel\Actor\Rooms\Etc">
       <UniqueIdentifier>{36e13c3b-e228-495e-bca0-b4acc64eaf6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack">
+      <UniqueIdentifier>{253e790d-bce5-4b3a-ab55-edf3c20f0314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsRenderer">
+      <UniqueIdentifier>{eec8f8f7-7c21-4171-b661-782fc881d6fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -184,23 +187,11 @@
     <ClInclude Include="SlashFX.h">
       <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="GameContentsCustomRenderer.h">
-      <Filter>Levels\99.TESTLEVEL</Filter>
-    </ClInclude>
     <ClInclude Include="BossPsychoGiant.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="TentacleKnife.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="CharacterShadow.h">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
-    </ClInclude>
-    <ClInclude Include="PortalKnife.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Portal.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="RoomCutscene.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
@@ -211,14 +202,26 @@
     <ClInclude Include="ReplayShots.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClInclude>
-    <ClInclude Include="TentacleBoss.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    <ClInclude Include="BossProjectile.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="PortalKnife.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClInclude>
     <ClInclude Include="PortalTurret.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClInclude>
-    <ClInclude Include="BossProjectile.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    <ClInclude Include="TentacleBoss.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="TentacleKnife.h">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="GameContentsCustomRenderer.h">
+      <Filter>ContentsRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -340,23 +343,11 @@
     <ClCompile Include="SlashFX.cpp">
       <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="GameContentsCustomRenderer.cpp">
-      <Filter>Levels\99.TESTLEVEL</Filter>
-    </ClCompile>
     <ClCompile Include="BossPsychoGiant.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="TentacleKnife.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="CharacterShadow.cpp">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
-    </ClCompile>
-    <ClCompile Include="PortalKnife.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Portal.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="RoomCutscene.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
@@ -367,14 +358,26 @@
     <ClCompile Include="ReplayShots.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClCompile>
-    <ClCompile Include="TentacleBoss.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    <ClCompile Include="BossProjectile.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="PortalKnife.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClCompile>
     <ClCompile Include="PortalTurret.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClCompile>
-    <ClCompile Include="BossProjectile.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
+    <ClCompile Include="TentacleBoss.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="TentacleKnife.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="GameContentsCustomRenderer.cpp">
+      <Filter>ContentsRenderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

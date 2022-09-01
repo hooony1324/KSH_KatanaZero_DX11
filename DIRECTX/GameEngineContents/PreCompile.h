@@ -34,4 +34,5 @@
 
 // contents
 #include <GameEngineContents/GlobalValueManager.h>
+#include "GameContentsCustomRenderer.h"
 using namespace Depth;

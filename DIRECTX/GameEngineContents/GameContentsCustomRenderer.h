@@ -1,6 +1,14 @@
 #pragma once
 #include <GameEngineCore/GameEngineDefaultRenderer.h>
 
+
+struct MaskData
+{
+public:
+	float4 MaskFrameData;
+	float4 MaskPivotPos;
+};
+
 class CustomFrameAnimation_DESC
 {
 public:
@@ -141,15 +149,15 @@ public:
 	void SetMask(GameEngineTexture* _Texture, UINT _Index);
 	void CreateMaskAnimationFolder(const std::string& _AnimationName, const CustomFrameAnimation_DESC& _Desc);
 	void ChangeMaskAnimation(const std::string& _AnimationName);
-	void SetMaskScale(float4 _Scale)
-	{
-		;
-	}
 	AtlasData& GetAtlasData()
 	{
 		return AtlasDataInst;
 	}
 
+	MaskData& GetMaskData()
+	{
+		return MaskDataInst;
+	}
 
 	void SetTexture(GameEngineTexture* _Texture);
 
@@ -258,6 +266,8 @@ private:
 
 	AtlasData AtlasDataInst;
 	PixelData PixelDataInst;
+	MaskData MaskDataInst;
+
 
 	std::map<std::string, CustomFrameAnimation> FrameAni;
 	std::map<std::string, CustomFrameAnimation> MaskAni;

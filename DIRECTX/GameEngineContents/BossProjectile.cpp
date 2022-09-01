@@ -3,6 +3,9 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 BossProjectile::BossProjectile() 
+	: Reflected(false)
+	, Renderer(nullptr)
+	, Collision(nullptr)
 {
 }
 
@@ -89,7 +92,7 @@ void BossProjectile::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (true == CollisionCheck())
 	{
-
+		Dir *= -1;
 	}
 
 
@@ -112,7 +115,7 @@ bool BossProjectile::WallCheck()
 
 	if (Color.CompareInt3D(float4::GREEN) ||
 		CurPos.x > 1280 || CurPos.x < 0 ||
-		CurPos.y > 0 || CurPos.y < -720)
+		CurPos.y > 0 || CurPos.y < -880)
 	{
 		return true;
 	}
@@ -124,9 +127,18 @@ bool BossProjectile::WallCheck()
 
 bool BossProjectile::CollisionCheck()
 {
+	if (true == Reflected)
+	{
+		return false;
+	}
+
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
 	{
-		Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::PLAYER_ATTACK));
+		Reflected = true;
+		Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::PLAYER_BULLET));
+		return true;
 	}
+
+	return false;
 
 }

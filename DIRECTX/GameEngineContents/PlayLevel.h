@@ -53,7 +53,7 @@ private:
 	Room* Room3;
 	std::vector<Room*> Rooms;
 
-	GameEngineCameraActor* Cam;
+	//GameEngineCameraActor* Cam;
 	float4 CamClamp_LeftTop;
 	float4 CamClamp_RightBottom;
 

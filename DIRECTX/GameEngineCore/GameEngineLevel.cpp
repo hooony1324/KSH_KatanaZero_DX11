@@ -197,10 +197,12 @@ void GameEngineLevel::Render(float _DelataTime)
 		}
 
 		GameEngineDevice::GetBackBuffer()->Merge(Cameras[i]->CameraRenderTarget, 0);
+
 	}
 
 	GameEngineDevice::GetBackBuffer()->EffectProcess();
 
+	ScreenShots.push_back(GameEngineDevice::GetBackBuffer()->GetRenderTargetTexture(0));
 
 	// 여기서 그려져야 합니다.
 	GameEngineDebug::Debug3DRender();

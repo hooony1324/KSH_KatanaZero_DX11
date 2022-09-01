@@ -220,6 +220,7 @@ void BossPsychoGiant::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 bool StabberAttackStart;
+int StabCount;
 void BossPsychoGiant::StabAttackStart(const StateInfo& _Info)
 {
 	Pattern = PSYCHOGIANT_PATTERN::STAB;
@@ -228,6 +229,8 @@ void BossPsychoGiant::StabAttackStart(const StateInfo& _Info)
 
 	Stabber->SetAttackEnd(false);
 	StabberAttackStart = false;
+
+	StabCount = GameEngineRandom::MainRandom.RandomInt(3, 4);
 }
 
 void BossPsychoGiant::StabAttackUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -236,7 +239,7 @@ void BossPsychoGiant::StabAttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (true == Stabber->IsTakeOutEnd() && false == StabberAttackStart)
 	{
 		StabberAttackStart = true;
-		Stabber->StabAttackStart(3);
+		Stabber->StabAttackStart(StabCount);
 	}
 
 	if (true == Stabber->IsStabAttackEnd())
@@ -296,12 +299,15 @@ void BossPsychoGiant::SpawnPsychoStart(const StateInfo& _Info)
 	for (int i = 1; i < 6; i++)
 	{
 		Portals[i]->GetTransform().SetWorldPosition({ 170 + i * 154.0f, -820, GetDepth(ACTOR_DEPTH::BOSSPORTAL) });
-		Portals[i]->On();
-		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, 90.05f });
+		Portals[i]->Off();
+		
 	}
 
+	int Index = GameEngineRandom::MainRandom.RandomInt(1, 5);
 
-	SmallBoss->GetTransform().SetWorldPosition(Portals[3]->GetTransform().GetWorldPosition());
+	Portals[Index]->On();
+	Portals[Index]->GetTransform().SetWorldRotation({ 0, 0, 90.05f });
+	SmallBoss->GetTransform().SetWorldPosition(Portals[Index]->GetTransform().GetWorldPosition() + float4{-10,-10,-10,0});
 	SmallBoss->Spawn();
 
 }
@@ -389,7 +395,7 @@ void BossPsychoGiant::SpawnPortalsUp()
 		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
-		Knife->Spawn(SpawnPos, -90.05f, i * 0.15f);
+		Knife->Spawn(SpawnPos + float4{0, 10, 0}, -90.05f, i * 0.15f);
 	}
 }
 
@@ -438,7 +444,8 @@ void BossPsychoGiant::SpawnPortalsRound()
 		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, Rotate });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
-		Knife->Spawn(PortalPos, Rotate, i * 0.15f);
+		float4 SpawnPos = float4::VectorRotationToDegreeZAxis(PortalVec + float4{-10, 0, 0, 0}, -RotateDegree) + Origin;
+		Knife->Spawn(SpawnPos, Rotate, i * 0.15f);
 	}
 }
 

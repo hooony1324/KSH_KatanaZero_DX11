@@ -42,7 +42,7 @@ void Portal::Start()
 	Renderer_OutLine->GetTransform().SetLocalRotate({ 0, 0, 180 });
 	Renderer_OutLine->GetTransform().SetWorldMove({ 0, 0, -200});
 
-	LoopTime = 3.0f;
+	LoopTime = 3.5f;
 }
 
 

@@ -50,7 +50,8 @@ private:
 	void ShootUpdate(float _DeltaTime, const StateInfo& _Info);
 
 private:
-	class GameEngineTextureRenderer* Renderer;
+	class GameContentsCustomRenderer* Renderer;
+	float RendererScaleX;
 
 	float4 StartPos;
 	float4 DestPos;

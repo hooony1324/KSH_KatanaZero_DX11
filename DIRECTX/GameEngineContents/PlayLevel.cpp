@@ -122,8 +122,10 @@ void PlayLevel::Start()
 	
 
 	Replay = CreateActor<ReplayShots>();
-	Replay->GetTransform().SetWorldPosition({ 640, -360, GetDepth(ACTOR_DEPTH::UI) });
+	Replay->GetTransform().SetWorldPosition({ 640, -420, GetDepth(ACTOR_DEPTH::UI) });
 	Replay->Off();
+	
+
 }
 
 void PlayLevel::LevelStartEvent()
@@ -331,12 +333,12 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// ³ìÈ­ : 60fps ??
-	if (ShotTime > (1 / 60.0f) )
-	{ 
-		GameEngineTexture* CamShot = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
-		Replay->AddScreenShot(CamShot);
-		ShotTime = 0.0f;
-	}
+	//if (ShotTime > (1 / 60.0f) )
+	//{ 
+	//	GameEngineTexture* CamShot = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
+	//	Replay->AddScreenShot(CamShot);
+	//	ShotTime = 0.0f;
+	//}
 
 }
 
@@ -390,14 +392,12 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 		UI->RestartUIOff();
 		RoomStateManager.ChangeState("RoomReverse");
 
-		// ÃÑ¾ËÀº ¾ø¾Ú
+		// ¾ÆÁ÷ »ì¾ÆÀÖ´Â ÃÑ¾Ë ¾ø¾Ú
 		std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
 		for (auto Bullet : Bullets)
 		{
 			Bullet->Death();
 		}
-
-		//¸®¹ö½º
 	}
 }
 
@@ -494,13 +494,15 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	Replay->On();
 	CurRoom->Off();
 	//CurRoom->Clear();
-
-	Replay->PlayReverse(0.2f);
+	
+	Replay->SetScreenTexture(GameEngineTexture::Find("spr_portal_loop_back_0.png"));
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	
 
+	
 
 }
 

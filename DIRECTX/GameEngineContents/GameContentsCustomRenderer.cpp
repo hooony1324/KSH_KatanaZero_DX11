@@ -202,8 +202,16 @@ void GameContentsCustomRenderer::SetTextureRendererSetting()
 	AtlasDataInst.FrameData.SizeY = 1.0f;
 	AtlasDataInst.PivotPos = float4::ZERO;
 
+	MaskDataInst.MaskFrameData.PosX = 0.0f;
+	MaskDataInst.MaskFrameData.PosY = 0.0f;
+	MaskDataInst.MaskFrameData.SizeX = 1.0f;
+	MaskDataInst.MaskFrameData.SizeY = 1.0f;
+	MaskDataInst.MaskPivotPos = float4::ZERO;
+
+
 	ShaderResources.SetConstantBufferLink("AtlasData", AtlasDataInst);
 	ShaderResources.SetConstantBufferLink("PixelData", PixelDataInst);
+	ShaderResources.SetConstantBufferLink("MaskData", MaskDataInst);
 
 }
 

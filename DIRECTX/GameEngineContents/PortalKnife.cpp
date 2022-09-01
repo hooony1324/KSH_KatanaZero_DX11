@@ -3,11 +3,12 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 const float SpawnOutDis = 150;
-const float SpawnSpeed = 8.0f;
+const float SpawnSpeed = 4.2f;
 const float DrawInDis = 100;
 const float DrawInSpeed = 6.0f;
 
 PortalKnife::PortalKnife() 
+	: Renderer(nullptr)
 {
 }
 
@@ -22,10 +23,14 @@ void PortalKnife::OnEvent()
 
 void PortalKnife::Start()
 {
-	Renderer = CreateComponent<GameEngineTextureRenderer>();
+	Renderer = CreateComponent<GameContentsCustomRenderer>();
 	Renderer->SetTexture("spr_psychboss_attack_knife_1.png");
 	Renderer->SetPivot(PIVOTMODE::RIGHT);
 	Renderer->ScaleToTexture();
+	Renderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.065f, true });
+	Renderer->ChangeMaskAnimation("portal");
+	Renderer->Option.IsMask = 1;
+	RendererScaleX = Renderer->GetTransform().GetLocalScale().x;
 	Renderer->Off();
 
 	StateManager.CreateStateMember("Idle"
@@ -77,14 +82,25 @@ void PortalKnife::SpawnStart(const StateInfo& _Info)
 
 }
 
+// 	MaskedRenderer->GetMaskData().MaskFrameData.x -= MoveX/2 / ScaleX;
+
 void PortalKnife::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float4 CurPos = float4::Lerp(GetTransform().GetWorldPosition(), DestPos, _DeltaTime * 4.2f);
-	
-	if (abs(CurPos.x - DestPos.x) > 0.5f)
+	float4 CurPos = GetTransform().GetWorldPosition();
+	float4 MovePos = float4::Lerp(CurPos, DestPos, _DeltaTime * 4.2f);
+
+	// 마스크렌더러 위치조정
+	if (Renderer->GetMaskData().MaskFrameData.x >= 1.0f)
 	{
+		Renderer->GetMaskData().MaskFrameData.x = 1.0f;
 	}
-	GetTransform().SetWorldPosition(CurPos);
+	else
+	{
+		float Move = (MovePos - CurPos).Length();
+		Renderer->GetMaskData().MaskFrameData.x += Move / RendererScaleX;
+	}
+	
+	GetTransform().SetWorldPosition(MovePos);
 
 	if (_Info.StateTime > 2.0f)
 	{
@@ -100,8 +116,21 @@ void PortalKnife::DrawStart(const StateInfo& _Info)
 
 void PortalKnife::DrawUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float4 CurPos = float4::LerpLimit(StartPos, DestPos, _Info.StateTime * DrawInSpeed);
-	GetTransform().SetWorldPosition(CurPos);
+	float4 CurPos = GetTransform().GetWorldPosition();
+	float4 MovePos = float4::Lerp(CurPos, DestPos, _DeltaTime * 4.2f);
+
+	// 마스크렌더러 위치조정
+	if (Renderer->GetMaskData().MaskFrameData.x <= 0.0f)
+	{
+		Renderer->GetMaskData().MaskFrameData.x = 0.0f;
+	}
+	else
+	{
+		float Move = (MovePos - CurPos).Length();
+		Renderer->GetMaskData().MaskFrameData.x -= Move / RendererScaleX;
+	}
+	
+	GetTransform().SetWorldPosition(MovePos);
 
 	if (_Info.StateTime > 0.5f)
 	{
@@ -111,12 +140,24 @@ void PortalKnife::DrawUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PortalKnife::ShootStart(const StateInfo& _Info)
 {
-
 }
 
 void PortalKnife::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	GetTransform().SetWorldMove({ Dir * MoveSpeed * _DeltaTime });
+	float4 CurPos = GetTransform().GetWorldPosition();
+	float4 MovePos = CurPos + Dir * MoveSpeed * _DeltaTime;
+
+	if (Renderer->GetMaskData().MaskFrameData.x >= 1.0f)
+	{
+		Renderer->GetMaskData().MaskFrameData.x = 1.0f;
+	}
+	else
+	{
+		float Move = (MovePos - CurPos).Length();
+		Renderer->GetMaskData().MaskFrameData.x += Move / RendererScaleX;
+	}
+
+	GetTransform().SetWorldPosition(MovePos);
 
 
 	if (_Info.StateTime > 3.0f)

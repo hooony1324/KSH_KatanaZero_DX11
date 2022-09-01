@@ -56,6 +56,6 @@ private:
 	class GameEngineCollision* Collision;
 
 	float4 Dir;
-
+	bool Reflected;
 };
 

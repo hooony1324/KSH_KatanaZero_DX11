@@ -9,19 +9,21 @@ void ReplayShots::AddScreenShot(GameEngineTexture* _Texture)
 
 void ReplayShots::SetScreenIndex(int _Index)
 {
-	ScreenRenderer->SetTexture(Shots[_Index]);
+	//	
 }
 
 void ReplayShots::PlayReverse(float _PlaySpeed)
 {
 	ReplayStart = true;
 	PlayDir = -1;
-	CurIndex = Shots.size() - 1;
+	CurIndex = static_cast<int>(Shots.size()) - 1;
 	PlaySpeed = _PlaySpeed;
 }
 
 ReplayShots::ReplayShots()
 	: PlaySpeed(1.0f)
+	, BaseRenderer(nullptr)
+	, ScreenRenderer(nullptr)
 {
 }
 
@@ -32,14 +34,14 @@ ReplayShots::~ReplayShots()
 void ReplayShots::Start()
 {
 	BaseRenderer = CreateComponent<GameEngineTextureRenderer>();
-	BaseRenderer->SetTexture("None.png");
+	BaseRenderer->SetTexture("spr_bunker_elevator_1.png");
 	BaseRenderer->GetTransform().SetLocalScale({ 1280, 720, 1 });
-	BaseRenderer->GetTransform().SetLocalPosition({ -640, 360, 1 });
+	//BaseRenderer->GetTransform().SetLocalPosition({ -640, 360, 1 });
 	
 
-	ScreenRenderer = CreateComponent<GameEngineTextureRenderer>();
+	ScreenRenderer = CreateComponent<GameEngineUIRenderer>();
 	ScreenRenderer->GetTransform().SetLocalScale({ 1280, 720, 1 });
-	ScreenRenderer->GetTransform().SetLocalPosition({ -640, 360, 1 });
+	ScreenRenderer->GetTransform().SetLocalPosition({ -640, 420, 1 });
 }
 
 void ReplayShots::OnEvent()
@@ -48,6 +50,8 @@ void ReplayShots::OnEvent()
 	ScreenRenderer->On();
 	ReplayStart = false;
 	FrameTime = 0.0f;
+
+
 }
 
 void ReplayShots::OffEvent()
