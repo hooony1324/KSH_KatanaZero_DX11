@@ -2,6 +2,8 @@
 #include "TentacleKnife.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include <GameEngineBase/GameEngineRandom.h>
+
 const float IdleY = 270;
 const float TakeOutY = -20;
 const float LoadY = -20;
@@ -182,11 +184,30 @@ void TentacleKnife::LoadUpdate(float _DeltaTime, const StateInfo& _Info)
 void TentacleKnife::StabStart(const StateInfo& _Info)
 {
 	IsStab = true;
+	StabSoundPlayed = false;
 }
 
+float CamShakeSpeed = 10;
 void TentacleKnife::StabUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	Position.y = GameEngineMath::Lerp(Position.y, StabY, _DeltaTime * StabSpeed);
+
+	// 카메라 흔들림
+	float DT = _Info.StateTime;
+	if (abs(Position.y - StabY) < 5.0f)
+	{
+		if (false == StabSoundPlayed)
+		{
+			int SoundIdx = GameEngineRandom::MainRandom.RandomInt(1, 2);
+			StabSound = GameEngineSound::SoundPlayControl("sound_boss_akirasyringe_stab_0" + std::to_string(SoundIdx) + ".wav");
+			StabSound.Volume(0.1f);
+			StabSoundPlayed = true;
+		}
+		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);
+		float ShakeY = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.6f, DT * CamShakeSpeed);
+
+		GetLevel()->GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 20, 0 });
+	}
 
 	if (_Info.StateTime > 0.4f)
 	{
@@ -195,6 +216,7 @@ void TentacleKnife::StabUpdate(float _DeltaTime, const StateInfo& _Info)
 
 		if (Count > 0)
 		{
+			StabSoundPlayed = false;
 			StateManager.ChangeState("Load");
 		}
 		else

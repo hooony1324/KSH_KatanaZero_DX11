@@ -155,6 +155,7 @@ void ContentsCore::TextureLoad()
 
 void ContentsCore::SoundLoad()
 {
+	
 	GameEngineDirectory Dir;
 	Dir.MoveParentToExitsChildDirectory("Resources");
 	Dir.Move("Resources");
@@ -165,5 +166,23 @@ void ContentsCore::SoundLoad()
 	for (auto& File : Files)
 	{
 		GameEngineSound::LoadRessource(File);
+	}
+	
+
+	{
+		GameEngineDirectory SoundDir{Dir};
+		std::vector<std::string> ResourceDirs = { "BGM", "Boss", "Player"};
+		for (const std::string& Val : ResourceDirs)
+		{
+			SoundDir.Move(Val);
+
+			std::vector<GameEngineFile> Files = SoundDir.GetAllFile();
+			for (auto& File : Files)
+			{
+				GameEngineSound::LoadRessource(File);
+			}
+
+			SoundDir.MoveParentToExitsChildDirectory(Val);
+		}
 	}
 }

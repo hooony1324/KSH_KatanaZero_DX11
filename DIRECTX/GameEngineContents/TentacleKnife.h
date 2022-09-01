@@ -86,5 +86,10 @@ private:
 	bool TakeOutEnd;
 	bool IdleEnd;
 	int Count;
+	bool StabSoundPlayed;
+
+	// SOUND
+private:
+	GameEngineSoundPlayer StabSound;
 };
 
