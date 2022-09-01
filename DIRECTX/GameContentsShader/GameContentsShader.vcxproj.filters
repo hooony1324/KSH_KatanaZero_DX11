@@ -18,5 +18,8 @@
     <FxCompile Include="..\Resources\Shader\TransformHeader.fx">
       <Filter>ShaderFx</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\Distortion.hlsl">
+      <Filter>Sahder</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

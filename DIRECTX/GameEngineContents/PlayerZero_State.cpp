@@ -62,8 +62,9 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 	// Æ÷¹°¼±
 	MoveVec = InputDir;
 	MoveSpeed = SPEED_PLAYER;
+	MoveVec.y *= 1.5f;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
-	MoveVec.x = static_cast<float>(cosf(FlyAngle));
+	//MoveVec.x = static_cast<float>(cosf(FlyAngle));
 
 	IsAttack = true;
 	IsFlip = false;

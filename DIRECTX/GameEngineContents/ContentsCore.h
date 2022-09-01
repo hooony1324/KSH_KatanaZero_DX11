@@ -34,6 +34,8 @@ protected:
 	virtual void End() override;
 private:
 	static float4 ContentsWindowSize;
+	void ShaderCompile();
+	void PipelineLoad();
 	void TextureLoad();
 	void SoundLoad();
 };

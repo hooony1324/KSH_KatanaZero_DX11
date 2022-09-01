@@ -226,6 +226,9 @@
     <ClInclude Include="GameContentsCustomRenderer.h">
       <Filter>ContentsRendering</Filter>
     </ClInclude>
+    <ClInclude Include="Effect_Distortion.h">
+      <Filter>ContentsRendering\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -381,6 +384,9 @@
     </ClCompile>
     <ClCompile Include="GameContentsCustomRenderer.cpp">
       <Filter>ContentsRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect_Distortion.cpp">
+      <Filter>ContentsRendering\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

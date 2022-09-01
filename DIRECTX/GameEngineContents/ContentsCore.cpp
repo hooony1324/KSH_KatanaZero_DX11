@@ -24,30 +24,9 @@ void ContentsCore::Start()
 	ControlGUI::Inst = GameEngineGUI::CreateGUIWindow<ControlGUI>("ControlGUI", nullptr);
 	ControlGUI::Inst->Off();
 
-	// 커스텀 쉐이더 파일 컴파일
-	GameEngineDirectory Dir;
-
-	Dir.MoveParentToExitsChildDirectory("Resources");
-	Dir.Move("Resources");
-	Dir.Move("Shader");
-
-	std::vector<GameEngineFile> Shaders = Dir.GetAllFile("hlsl");
-
-	for (size_t i = 0; i < Shaders.size(); i++)
-	{
-		GameEngineShader::AutoCompile(Shaders[i].GetFullPath());
-	}
-
-
-	// 커스텀 렌더링파이프라인 추가
-	{
-		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("TextureMask");
-		NewPipe->SetVertexShader("TextureMask.hlsl");
-		NewPipe->SetPixelShader("TextureMask.hlsl");
-	}
-
-
 	// < Resource Load >
+	ShaderCompile();
+	PipelineLoad();
 	TextureLoad();
 	SoundLoad();
 
@@ -108,6 +87,45 @@ void ContentsCore::Update(float _DeltaTime)
 
 void ContentsCore::End()
 {
+}
+
+void ContentsCore::ShaderCompile()
+{
+	// 커스텀 쉐이더 파일 컴파일
+	GameEngineDirectory Dir;
+
+	Dir.MoveParentToExitsChildDirectory("Resources");
+	Dir.Move("Resources");
+	Dir.Move("Shader");
+
+	std::vector<GameEngineFile> Shaders = Dir.GetAllFile("hlsl");
+
+	for (size_t i = 0; i < Shaders.size(); i++)
+	{
+		GameEngineShader::AutoCompile(Shaders[i].GetFullPath());
+	}
+
+}
+
+void ContentsCore::PipelineLoad()
+{
+	// 커스텀 렌더링파이프라인 추가
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("TextureMask");
+		NewPipe->SetVertexShader("TextureMask.hlsl");
+		NewPipe->SetPixelShader("TextureMask.hlsl");
+	}
+
+	// 포스트 이펙트 파이프라인은 FullRect 사용
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("Distortion");
+		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
+		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
+		NewPipe->SetVertexShader("Distortion.hlsl");
+		NewPipe->SetPixelShader("Distortion.hlsl");
+
+	}
+
 }
 
 void ContentsCore::TextureLoad()

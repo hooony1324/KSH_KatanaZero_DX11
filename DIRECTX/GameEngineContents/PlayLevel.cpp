@@ -16,6 +16,7 @@
 #include "Bullet.h"
 
 #include "ReplayShots.h"
+#include "Effect_Distortion.h"
 
 void PlayLevel::ChangeRoom(int _Index)
 {
@@ -138,6 +139,7 @@ void PlayLevel::LevelStartEvent()
 	CurRoom = Rooms[Room::CurRoomIndex];
 	RoomStateManager.ChangeState("RoomChange");
 
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
 }
 
 void PlayLevel::Update(float _DeltaTime)
