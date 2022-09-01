@@ -2,6 +2,7 @@
 #include "Room_Boss.h"
 
 #include "BossPsychoGiant.h"
+#include "Effect_Distortion.h"
 
 Room_Boss::Room_Boss()
 	: Background_Mid(nullptr)
@@ -150,29 +151,36 @@ void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 }
 
+float DeadTime;
 void Room_Boss::PlayStart(const StateInfo& _Info)
 {
+	DeadTime = 0.0f;
 }
 
 void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == BossGiant->IsDead())
 	{
-		StateManager.ChangeState("Distortion");
-		return;
+		DeadTime += _DeltaTime;
+		if (DeadTime > 2.0f)
+		{
+			StateManager.ChangeState("Distortion");
+			return;
+		}
+		
 	}
 }
 
 void Room_Boss::DistortionStart(const StateInfo& _Info)
 {
-
+	GetLevel()->GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
 }
 
 void Room_Boss::DistortionUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
 
-	if (_Info.StateTime > 4.0f)
+	if (_Info.StateTime > 1.5f)
 	{
 		GEngine::ChangeLevel("EndingLevel");
 		return;

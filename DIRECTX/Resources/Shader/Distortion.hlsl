@@ -37,12 +37,12 @@ float4 Distortion_PS(Output _Input) : SV_Target0
     // 효과넣기
     if (Effect.a > 0.0f)
     {
-        NewPos = OriginalPos + PixelUVSize * 50;
+        NewPos = OriginalPos + PixelUVSize * 30;
     }
     
     if (Effect.a <= 0.0f)
     {
-        NewPos = OriginalPos + PixelUVSize * -50;
+        NewPos = OriginalPos + PixelUVSize * -30;
     }
     
     float4 Result = (Tex.Sample(Smp, NewPos));
