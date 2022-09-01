@@ -2,6 +2,10 @@
 #include "BossProjectile.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include "PortalTurret.h"
+
+float ShootSpeed = 350.0f;
+
 BossProjectile::BossProjectile() 
 	: Reflected(false)
 	, Renderer(nullptr)
@@ -26,6 +30,7 @@ void BossProjectile::Start()
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 54, 48, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::ENEMY_ATTACK));
+	Collision->SetDebugSetting(CollisionType::CT_POINT2D, float4{1, 1, 1, 0.2f});
 	Collision->Off();
 
 
@@ -64,22 +69,28 @@ void BossProjectile::End()
 void BossProjectile::IdleStart(const StateInfo& _Info)
 {
 	Renderer->On();
-	Collision->On();
 	Renderer->ChangeFrameAnimation("idle");
 }
 
 void BossProjectile::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (true == Turret->IsDeath())
+	{
+		StateManager.ChangeState("Die");
+		return;
+	}
+
 	if (_Info.StateTime > 1.5f)
 	{
 		StateManager.ChangeState("Shoot");
+		return;
 	}
 }
 
-float ShootSpeed = 200.0f;
+
 void BossProjectile::ShootStart(const StateInfo& _Info)
 {
-
+	Collision->On();
 }
 
 void BossProjectile::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -112,6 +123,13 @@ bool BossProjectile::WallCheck()
 {
 	float4 CurPos = GetTransform().GetWorldPosition();
 	float4 Color = GlobalValueManager::ColMap->GetCurTexture()->GetPixelToFloat4(CurPos.ix(), CurPos.iy());
+
+	
+
+	if (Color.g > 0.5f)
+	{
+		int a = 0;
+	}
 
 	if (Color.CompareInt3D(float4::GREEN) ||
 		CurPos.x > 1280 || CurPos.x < 0 ||

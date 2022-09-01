@@ -5,7 +5,7 @@
 class BossProjectile : public GameEngineActor
 {
 public:
-	void Spawn(float4 _SpawnPos, float4 _PlayerPos)
+	void Spawn(class PortalTurret* _Turret, float4 _SpawnPos, float4 _PlayerPos)
 	{
 		float4 SpawnPos = _SpawnPos;
 		SpawnPos.z = 0;
@@ -15,6 +15,7 @@ public:
 
 		Dir = (PlayerPos - SpawnPos).NormalizeReturn();
 
+		Turret = _Turret;
 		StateManager.ChangeState("Idle");
 	}
 
@@ -54,6 +55,7 @@ private:
 private:
 	class GameEngineTextureRenderer* Renderer;
 	class GameEngineCollision* Collision;
+	class PortalTurret* Turret;
 
 	float4 Dir;
 	bool Reflected;

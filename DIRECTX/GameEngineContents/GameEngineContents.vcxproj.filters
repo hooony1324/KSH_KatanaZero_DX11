@@ -67,8 +67,11 @@
     <Filter Include="Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack">
       <UniqueIdentifier>{253e790d-bce5-4b3a-ab55-edf3c20f0314}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ContentsRenderer">
+    <Filter Include="ContentsRendering">
       <UniqueIdentifier>{eec8f8f7-7c21-4171-b661-782fc881d6fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentsRendering\PostEffect">
+      <UniqueIdentifier>{009007cf-d496-4302-9b67-46c18869c68d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -221,7 +224,7 @@
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClInclude>
     <ClInclude Include="GameContentsCustomRenderer.h">
-      <Filter>ContentsRenderer</Filter>
+      <Filter>ContentsRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,7 +380,7 @@
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClCompile>
     <ClCompile Include="GameContentsCustomRenderer.cpp">
-      <Filter>ContentsRenderer</Filter>
+      <Filter>ContentsRendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

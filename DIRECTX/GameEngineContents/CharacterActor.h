@@ -56,6 +56,18 @@ public:
 
 	bool CollisionSlashCheck();
 
+
+	// 방 변경시 상태 초기화
+	float4& GetMoveVector()
+	{
+		return MoveVec;
+	}
+
+	void SetCharacterIdle()
+	{
+		PlayerStateManager.ChangeState("Idle");
+	}
+
 private:
 	static bool CheatMode;
 
@@ -150,6 +162,11 @@ protected:
 	bool IsDead;		// hurtground ani 끝에 true로 설정해줌
 	bool DeadAniend;
 	bool Invincible; // 구르는 동안 무적
+
+	// 사운드
+protected:
+	GameEngineSoundPlayer RollSoundPlayer;
+	GameEngineSoundPlayer SlashSoundPlayer;
 	
 };
 

@@ -135,7 +135,7 @@ void PortalTurret::AttackStart(const StateInfo& _Info)
 
 	BossProjectile* Projectile = GetLevel()->CreateActor<BossProjectile>();
 
-	Projectile->Spawn(GetTransform().GetWorldPosition(), GlobalValueManager::PlayerPos);
+	Projectile->Spawn(this, GetTransform().GetWorldPosition(), GlobalValueManager::PlayerPos);
 }
 
 void PortalTurret::AttackUpdate(float _DeltaTime, const StateInfo& _Info)

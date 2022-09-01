@@ -153,8 +153,12 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 	RollTimer->Activate();
 	Renderer_Character->ChangeFrameAnimation("roll");
 	
-	MoveVec.x = InputDir.x * 1.5f;
+	MoveVec.x = InputDir.x;
+	MoveSpeed = SPEED_PLAYER * 2.0f;
 	Invincible = true;
+
+	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
+	RollSoundPlayer.Volume(0.05f);
 }
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -167,12 +171,13 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveSpeed = SPEED_PLAYER;
 		Invincible = false;
 
-		if (abs(MoveVec.x) > 0)
+		if (abs(InputDir.x) > 0)
 		{
 			PlayerStateManager.ChangeState("Run");
 		}
 		else
 		{
+			MoveVec.x = 0;
 			PlayerStateManager.ChangeState("Idle");
 		}
 	}
@@ -324,6 +329,7 @@ void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 	
 }
 
+
 void PlayerZero::FlipStart(const StateInfo& _Info)
 {
 	IsFlip = true;
@@ -332,13 +338,16 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 	
 	if (CurLookDir == -1)
 	{
-		FlyVector = { 1, 1.25f };
+		FlyVector = { 1.0f, 1.25f };
 	}
 	else
 	{
-		FlyVector = { -1, 1.25f };
+		FlyVector = { -1.0f, 1.25f };
 	}
 	MoveVec.x = FlyVector.x;
+
+	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
+	RollSoundPlayer.Volume(0.05f);
 }
 
 void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -347,7 +356,7 @@ void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	float DT = _Info.StateTime;
 	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
-	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
 
 	if (false == IsFall)
 	{
@@ -498,8 +507,8 @@ void PlayerZero::CreateSlash()
 	std::string Sound = "sound_player_slash_";
 	static int SoundIdx = 1;
 	Sound = Sound + std::to_string(SoundIdx) + ".wav";
-	GameEngineSoundPlayer SoundPlayer = GameEngineSound::SoundPlayControl(Sound);
-	SoundPlayer.Volume(0.5f);
+	SlashSoundPlayer = GameEngineSound::SoundPlayControl(Sound);
+	SlashSoundPlayer.Volume(0.1f);
 	if (++SoundIdx > 3)
 	{
 		SoundIdx = 1;

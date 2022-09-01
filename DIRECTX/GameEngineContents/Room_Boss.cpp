@@ -40,13 +40,13 @@ void Room_Boss::Start()
 	Background_Mid = CreateComponent<GameEngineTextureRenderer>();
 	Background_Mid->SetTexture("spr_psychboss_bg_1_0.png");
 	Background_Mid->GetTransform().SetLocalScale({1280, 734, 1});
-	Background_Mid->GetTransform().SetLocalMove({ 633, -560, GetDepth(ACTOR_DEPTH::BOSSMIDGROUND) });
+	Background_Mid->GetTransform().SetLocalMove({ 640, -560, GetDepth(ACTOR_DEPTH::BOSSMIDGROUND) });
 	Background_Mid->Off();
 
 	Background_Front = CreateComponent<GameEngineTextureRenderer>();
 	Background_Front->SetTexture("spr_psychboss_fg_0.png");
 	Background_Front->GetTransform().SetLocalScale({1350, 774, 1});
-	Background_Front->GetTransform().SetLocalMove({ 633, -545, GetDepth(ACTOR_DEPTH::BOSSFOREGROUND) });
+	Background_Front->GetTransform().SetLocalMove({ 640, -545, GetDepth(ACTOR_DEPTH::BOSSFOREGROUND) });
 	Background_Front->Off();
 
 	Background_Floor = CreateComponent<GameEngineTextureRenderer>();
@@ -62,6 +62,23 @@ void Room_Boss::Start()
 
 	// 세팅 시간
 	TimeLimit = false;
+
+	StateManager.CreateStateMember("Idle"
+		, std::bind(&Room_Boss::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2));
+
+	StateManager.CreateStateMember("Roar"
+		, std::bind(&Room_Boss::RoarUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&Room_Boss::RoarStart, this, std::placeholders::_1));
+
+	StateManager.CreateStateMember("Play"
+		, std::bind(&Room_Boss::PlayUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&Room_Boss::PlayStart, this, std::placeholders::_1));
+
+	StateManager.CreateStateMember("Distortion"
+		, std::bind(&Room_Boss::DistortionUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&Room_Boss::DistortionStart, this, std::placeholders::_1));
+
+	StateManager.ChangeState("Idle");
 
 	Off();
 }
@@ -79,7 +96,7 @@ void Room_Boss::OnEvent()
 
 	// 보스
 	BossGiant->On();
-
+	StateManager.ChangeState("Roar");
 
 }
 
@@ -102,12 +119,61 @@ void Room_Boss::OffEvent()
 
 }
 
+
 void Room_Boss::Update(float _DeltaTime)
 {
-	// 붉은 트렌지션
+	StateManager.Update(_DeltaTime);
 }
 
 void Room_Boss::End()
 {
 }
+
+
+void Room_Boss::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+
+}
+
+void Room_Boss::RoarStart(const StateInfo& _Info)
+{
+	RoarSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_03.ogg");
+	RoarSoundPlayer.Volume(0.1f);
+}
+
+void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (_Info.StateTime > 3.0f)
+	{
+		StateManager.ChangeState("Play");
+		return;
+	}
+}
+
+void Room_Boss::PlayStart(const StateInfo& _Info)
+{
+}
+
+void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (true == BossGiant->IsDead())
+	{
+		StateManager.ChangeState("Distortion");
+		return;
+	}
+}
+
+void Room_Boss::DistortionStart(const StateInfo& _Info)
+{
+}
+
+void Room_Boss::DistortionUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (_Info.StateTime > 2.0f)
+	{
+		GEngine::ChangeLevel("EndingLevel");
+		return;
+	}
+}
+
 

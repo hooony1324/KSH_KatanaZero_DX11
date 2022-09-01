@@ -57,6 +57,9 @@ void Room::SetCameraClampArea(float4& _LeftTop, float4& _RightBottom)
 
 void Room::PlayerSpawn(CharacterActor* _Player)
 {
-	_Player->Respawn(); // 소환시 처음 상태로
-	_Player->GetTransform().SetWorldPosition(PlayerSpawnPos);
+	PlayerActor = _Player;
+	PlayerActor->Respawn(); // 소환시 처음 상태로
+	PlayerActor->GetMoveVector() = float4::ZERO;
+	PlayerActor->SetCharacterIdle();
+	PlayerActor->GetTransform().SetWorldPosition(PlayerSpawnPos);
 }

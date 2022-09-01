@@ -27,10 +27,29 @@ protected:
 	void StairSetting() override {}
 
 private:
+	GameEngineStateManager StateManager;
+
+	void IdleUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void RoarStart(const StateInfo& _Info);
+	void RoarUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void PlayStart(const StateInfo& _Info);
+	void PlayUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void DistortionStart(const StateInfo& _Info);
+	void DistortionUpdate(float _DeltaTime, const StateInfo& _Info);
+
+private:
 	class BossPsychoGiant* BossGiant;
 
 	GameEngineTextureRenderer* Background_Mid;
 	GameEngineTextureRenderer* Background_Front;
 	GameEngineTextureRenderer* Background_Floor;
+
+	// SOUND
+private:
+	GameEngineSoundPlayer BGMSoundPlayer;
+	GameEngineSoundPlayer RoarSoundPlayer;
 };
 

@@ -65,6 +65,8 @@ protected:
 	bool TimeLimit;
 	float TimeLimitSeconds;
 
+	CharacterActor* PlayerActor;
+
 private:
 
 };
