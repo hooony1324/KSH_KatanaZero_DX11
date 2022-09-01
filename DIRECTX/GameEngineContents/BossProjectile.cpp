@@ -26,6 +26,7 @@ void BossProjectile::Start()
 	Renderer->CreateFrameAnimationFolder("die", FrameAnimation_DESC{ "projectile_die", 0.12f, false });
 	Renderer->ChangeFrameAnimation("idle");
 	Renderer->Off();
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET));
 
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 54, 48, GetDepth(ACTOR_DEPTH::COLLISION) });
@@ -59,7 +60,8 @@ void BossProjectile::Start()
 
 void BossProjectile::Update(float _DeltaTime)
 {
-	StateManager.Update(_DeltaTime);
+	float GroupDeltaScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+	StateManager.Update(_DeltaTime * GroupDeltaScale);
 }
 
 void BossProjectile::End()
@@ -91,6 +93,13 @@ void BossProjectile::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 void BossProjectile::ShootStart(const StateInfo& _Info)
 {
 	Collision->On();
+
+	// ¹æÇâ
+	float4 CurPos = GetTransform().GetWorldPosition();
+	CurPos.z = 0;
+	float4 PlayerPos = GlobalValueManager::PlayerPos;
+	PlayerPos.z = 0;
+	Dir = (PlayerPos - CurPos).NormalizeReturn();
 }
 
 void BossProjectile::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -123,8 +132,6 @@ bool BossProjectile::WallCheck()
 {
 	float4 CurPos = GetTransform().GetWorldPosition();
 	float4 Color = GlobalValueManager::ColMap->GetCurTexture()->GetPixelToFloat4(CurPos.ix(), CurPos.iy());
-
-	
 
 	if (Color.g > 0.5f)
 	{

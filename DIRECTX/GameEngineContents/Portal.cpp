@@ -26,6 +26,7 @@ void Portal::Start()
 	Renderer_Base->CreateFrameAnimationFolder("loop", FrameAnimation_DESC{"portal_loopback", 0.065f });
 	Renderer_Base->CreateFrameAnimationFolder("close", FrameAnimation_DESC{"portal_close", 0.065f });
 	Renderer_Base->Off();
+	Renderer_Base->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 
 	Renderer_OutLine = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_OutLine->SetSamplingModePoint();
@@ -34,6 +35,7 @@ void Portal::Start()
 	Renderer_OutLine->SetPivot(PIVOTMODE::LEFT);
 	Renderer_OutLine->CreateFrameAnimationFolder("loop", FrameAnimation_DESC{ "portal_loopfront", 0.065f });
 	Renderer_OutLine->Off();
+	Renderer_OutLine->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 
 	AllAnimationBind();
 

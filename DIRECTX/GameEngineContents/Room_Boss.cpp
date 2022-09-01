@@ -138,7 +138,7 @@ void Room_Boss::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 void Room_Boss::RoarStart(const StateInfo& _Info)
 {
 	RoarSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_03.ogg");
-	RoarSoundPlayer.Volume(0.1f);
+	RoarSoundPlayer.Volume(0.025f);
 }
 
 void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -165,11 +165,14 @@ void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void Room_Boss::DistortionStart(const StateInfo& _Info)
 {
+
 }
 
 void Room_Boss::DistortionUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 2.0f)
+
+
+	if (_Info.StateTime > 4.0f)
 	{
 		GEngine::ChangeLevel("EndingLevel");
 		return;

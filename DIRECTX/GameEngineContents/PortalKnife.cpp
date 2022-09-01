@@ -32,6 +32,7 @@ void PortalKnife::Start()
 	Renderer->Option.IsMask = 1;
 	RendererScaleX = Renderer->GetTransform().GetLocalScale().x;
 	Renderer->Off();
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 
 	StateManager.CreateStateMember("Idle"
 		, std::bind(&PortalKnife::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2));
@@ -54,7 +55,8 @@ void PortalKnife::Start()
 
 void PortalKnife::Update(float _DeltaTime)
 {
-	StateManager.Update(_DeltaTime);
+	float GroupDeltaScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+	StateManager.Update(_DeltaTime * GroupDeltaScale);
 }
 
 void PortalKnife::End()

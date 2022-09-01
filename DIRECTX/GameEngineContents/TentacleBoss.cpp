@@ -48,6 +48,7 @@ void TentacleBoss::Start()
 	Renderer->ChangeFrameAnimation("idle");
 	Renderer->GetTransform().SetLocalPosition({ 10, 0, 0 });
 	Renderer->Off();
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 60, 160, GetDepth(ACTOR_DEPTH::COLLISION) });
@@ -77,7 +78,8 @@ void TentacleBoss::Start()
 
 void TentacleBoss::Update(float _DeltaTime)
 {
-	StateManager.Update(_DeltaTime);
+	float GroupDeltaScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+	StateManager.Update(_DeltaTime * GroupDeltaScale);
 }
 
 void TentacleBoss::End()

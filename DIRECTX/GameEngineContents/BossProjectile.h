@@ -5,15 +5,9 @@
 class BossProjectile : public GameEngineActor
 {
 public:
-	void Spawn(class PortalTurret* _Turret, float4 _SpawnPos, float4 _PlayerPos)
+	void Spawn(class PortalTurret* _Turret, float4 _SpawnPos)
 	{
-		float4 SpawnPos = _SpawnPos;
-		SpawnPos.z = 0;
-		float4 PlayerPos = _PlayerPos;
-		PlayerPos.z = 0;
 		GetTransform().SetWorldPosition(_SpawnPos);
-
-		Dir = (PlayerPos - SpawnPos).NormalizeReturn();
 
 		Turret = _Turret;
 		StateManager.ChangeState("Idle");

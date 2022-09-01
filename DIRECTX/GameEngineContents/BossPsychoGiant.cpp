@@ -43,6 +43,7 @@ void BossPsychoGiant::Start()
 	Renderer_Tentacle->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 	Renderer_Tentacle->Off();
 
+
 	// 얼굴
 	Renderer_Face = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_Face->SetSamplingModePoint();
@@ -400,29 +401,29 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 // 무기 생성
 void BossPsychoGiant::SpawnPortalsUp()
 {
-	int Dirs[2] = { 1, -1 };
-	int Idx = GameEngineRandom::MainRandom.RandomInt(0, 1);
-	int Dir = Dirs[Idx];
 
-	for (int i = 0; i < 7; i++)
+	std::vector<int> Indexs = { 0, 1, 2, 3, 4, 5, 6 };
+	std::shuffle(Indexs.begin(), Indexs.end(), GameEngineRandom::MainRandom.GetFunc());
+
+	float SpawnTime = 0.0f;
+	for (int i : Indexs)
 	{
-		// 0 ~ 6, 6 ~ 0
-		int Idx = Dir > 0 ? i : 6 - i;
 
-		float4 SpawnPos = { 170 + Idx * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) };
-		Portals[Idx]->GetTransform().SetWorldPosition(SpawnPos);
-		Portals[Idx]->On();
-		Portals[Idx]->OnTimer(i * 0.15f);
-		Portals[Idx]->GetTransform().SetWorldRotation({ 0, 0, -90 });
+		float4 SpawnPos = { 170 + i * 154.0f, -250, GetDepth(ACTOR_DEPTH::BOSSPORTAL) };
+		Portals[i]->GetTransform().SetWorldPosition(SpawnPos);
+		Portals[i]->On();
+		Portals[i]->OnTimer(SpawnTime);
+		Portals[i]->GetTransform().SetWorldRotation({ 0, 0, -90 });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
-		Knife->Spawn(SpawnPos + float4{0, 10, 0}, -90.05f, i * 0.15f);
+		Knife->Spawn(SpawnPos + float4{0, 10, 0}, -90.05f, SpawnTime);
+		SpawnTime += 0.15f;
 	}
 }
 
 void BossPsychoGiant::SpawnPortalsDown()
 {
-	// ex) 0번과 6번은 사용하지 않음
+	// 0번과 6번은 사용하지 않음(거리 멀어서)
 	int NotUseIndex = GameEngineRandom::MainRandom.RandomInt(1, 5);
 
 	for (int i = 1; i < 6; i++)
@@ -450,16 +451,36 @@ float4 PortalVec = LeftDown - Origin;
 
 void BossPsychoGiant::SpawnPortalsRound()
 {
-	int Dirs[2] = { 1, -1 };
-	int Idx = GameEngineRandom::MainRandom.RandomInt(0, 1);
+	int Dirs[3] = { 1, -1 , 2};
+	int Idx = GameEngineRandom::MainRandom.RandomInt(0, 2);
 	int Dir = Dirs[Idx];
 
-	// 7개 -> 180 / 6 = 30도
-	for (int i = 0; i < 11; i++)
+	int StartIndex;
+	int EndIndex;
+	if (Dir == 1)
 	{
-		// 0 ~ 10, 10 ~ 0
-		int Idx = Dir > 0 ? i : 10 - i;
+		StartIndex = 0;
+		EndIndex = 11;
+	}
+	else if (Dir == -1)
+	{
+		StartIndex = 10;
+		EndIndex = -1;
+	}
+	else
+	{
+		StartIndex = 0;
+		EndIndex = 11;
+	}
 
+	// 7개 -> 180 / 6 = 30도
+	float SpawnTime = 0.0f;
+	for (int Idx = StartIndex; Idx != EndIndex; Idx += Dir)
+	{
+		if (Idx < 0 || Idx >= 11)
+		{
+			break;
+		}
 		// 소환 각도
 		float RotateDegree = Idx * (180 / 10.0f);
 		float4 PortalPos = float4::VectorRotationToDegreeZAxis(PortalVec, -RotateDegree) + Origin;
@@ -468,12 +489,13 @@ void BossPsychoGiant::SpawnPortalsRound()
 		// 회전 각도
 		float Rotate = float4::VectorXYtoDegree(PortalPos, Origin);
 		Portals[Idx]->On();
-		Portals[Idx]->OnTimer(i * 0.15f);
+		Portals[Idx]->OnTimer(SpawnTime);
 		Portals[Idx]->GetTransform().SetWorldRotation({ 0, 0, Rotate });
 
 		PortalKnife* Knife = GetLevel()->CreateActor<PortalKnife>();
 		float4 SpawnPos = float4::VectorRotationToDegreeZAxis(PortalVec + float4{ -10, 0, 0, 0 }, -RotateDegree) + Origin;
-		Knife->Spawn(SpawnPos, Rotate, i * 0.15f);
+		Knife->Spawn(SpawnPos, Rotate, SpawnTime);
+		SpawnTime += 0.15f;
 	}
 }
 

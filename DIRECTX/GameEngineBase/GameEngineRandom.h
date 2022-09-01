@@ -18,6 +18,11 @@ public:
 	// 이녀석가지고 생성하면 
 	static GameEngineRandom MainRandom;
 
+	std::mt19937_64& GetFunc()
+	{
+		return mt_;
+	}
+
 private:
 	// 제네레이터
 	// 메르헨 트위스터의 알고리즘으로 비트를 뒤섞는 녀석.

@@ -103,7 +103,9 @@ void TentacleKnife::Update(float _DeltaTime)
 		Position.x = GameEngineMath::Lerp(Position.x, GlobalValueManager::PlayerPos.x, _DeltaTime * FollowSpeed);
 	}
 
-	StateManager.Update(_DeltaTime);
+	
+	float GroupDeltaScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+	StateManager.Update(_DeltaTime * GroupDeltaScale);
 	GetTransform().SetWorldPosition(Position);
 }
 

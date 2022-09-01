@@ -44,6 +44,7 @@ void PortalTurret::Start()
 	Renderer->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "turret_attack", 0.12f, false });
 	Renderer->ChangeFrameAnimation("idle");
 	Renderer->Off();
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));
 
 	Collision = CreateComponent<GameEngineCollision>();
 	//Collision->GetTransform().SetLocalScale({ 66, 60, GetDepth(ACTOR_DEPTH::COLLISION)});
@@ -87,8 +88,8 @@ void PortalTurret::Start()
 
 void PortalTurret::Update(float _DeltaTime)
 {
-
-	StateManager.Update(_DeltaTime);
+	float GroupDeltaScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+	StateManager.Update(_DeltaTime * GroupDeltaScale);
 }
 
 void PortalTurret::End()
@@ -135,7 +136,7 @@ void PortalTurret::AttackStart(const StateInfo& _Info)
 
 	BossProjectile* Projectile = GetLevel()->CreateActor<BossProjectile>();
 
-	Projectile->Spawn(this, GetTransform().GetWorldPosition(), GlobalValueManager::PlayerPos);
+	Projectile->Spawn(this, GetTransform().GetWorldPosition());
 }
 
 void PortalTurret::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
