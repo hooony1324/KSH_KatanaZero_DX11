@@ -192,8 +192,5 @@ private:
 	std::vector<GameEngineCamera*> Cameras;
 
 	std::map<int, std::list<GameEngineCollision*>> AllCollisions;
-
-public:
-	std::vector<class GameEngineTexture*> ScreenShots;
 };
 
