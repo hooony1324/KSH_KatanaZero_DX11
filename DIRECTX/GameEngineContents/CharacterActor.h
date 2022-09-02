@@ -68,6 +68,8 @@ public:
 		PlayerStateManager.ChangeState("Idle");
 	}
 
+	void CreateUIShadow();
+
 private:
 	static bool CheatMode;
 
@@ -121,6 +123,7 @@ protected:
 	// È¿°ú
 	bool IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
 	void CreateBrightShadow();
+
 	GameEngineTextureRenderer* Renderer_SlashLight;
 
 	float4 CharacterPos;

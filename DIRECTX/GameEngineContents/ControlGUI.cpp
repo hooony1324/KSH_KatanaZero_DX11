@@ -48,6 +48,23 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		ImGui::Text(Name.c_str());
 	}
 
+	{
+		float4 Pos = GlobalValueManager::PlayerPos;
+		std::string Name = "PlayerPos : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y) + " : " + std::to_string(Pos.z);
+		ImGui::Text(Name.c_str());
+	}
+
+	{
+		float4 Pos = PlayLevel::PlayLevelInst->GetMainCamera()->GetTransform().GetWorldPosition();
+		std::string Name = "MainCamPos : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y) + " : " + std::to_string(Pos.z);
+		ImGui::Text(Name.c_str());
+	}
+
+	{
+		float4 Pos = PlayLevel::PlayLevelInst->GetUICamera()->GetTransform().GetWorldPosition();
+		std::string Name = "UICamPos : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y) + " : " + std::to_string(Pos.z);
+		ImGui::Text(Name.c_str());
+	}
 
 
 	if (true == ImGui::Button("CollisionDebugSwtich"))

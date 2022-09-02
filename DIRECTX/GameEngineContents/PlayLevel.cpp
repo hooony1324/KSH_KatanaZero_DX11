@@ -14,7 +14,7 @@
 #include "ControlGUI.h"
 #include "SlowMotion.h"
 #include "Bullet.h"
-
+#include "CharacterShadow.h"
 #include "ReplayShots.h"
 
 void PlayLevel::ChangeRoom(int _Index)
@@ -413,6 +413,9 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 	SlowInSound = GameEngineSound::SoundPlayControl("sound_slomo_engage.ogg");
 	SlowInSound.Volume(0.5f);
 	SlowDeltaTime = 0;
+
+	CharacterShadow::SwitchShadowMode();
+
 }
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -421,6 +424,8 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	RoomPlayTotalTime += _DeltaTime * 0.5f;
 	SlowDeltaTime += _DeltaTime;
+
+	Player->CreateUIShadow();
 
 	if (SlowDeltaTime >= 1.0f)
 	{
@@ -454,6 +459,7 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 {
 	//GameEngineSound
+	CharacterShadow::SwitchShadowMode();
 }
 
 void PlayLevel::RoomShakeStart(const StateInfo& _Info)

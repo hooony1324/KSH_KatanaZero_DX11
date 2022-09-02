@@ -255,15 +255,39 @@ bool CharacterActor::CollisionSlashCheck()
 	return false;
 }
 
+static float BSSumTime;
 void CharacterActor::CreateBrightShadow()
 {
+	if (BSSumTime > 0.004f)
+	{
+		BSSumTime = 0;
+
+		// 그림자
+		if (IsDead == false && abs(MoveVec.x) > 0 || abs(MoveVec.y) > 0)
+		{
+			// 현재 애니메이션의 텍스쳐 1장 복사
+			CharacterShadow* Shadow = GetLevel()->CreateActor<CharacterShadow>();
+			Shadow->DetachObject();
+			Shadow->SetShadow(Renderer_Character->GetCurTexture(), PrevLookDir, GetTransform().GetWorldPosition() + float4{ 0, 0, 10 }, 0.12f);
+			Shadow->On();
+		}
+	}
+	else
+	{
+		BSSumTime += GameEngineTime::GetDeltaTime();
+	}
+}
+
+void CharacterActor::CreateUIShadow()
+{
 	// 그림자
-	if (IsDead == false && abs(MoveVec.x) > 0 || abs(MoveVec.y) > 0)
+	if (IsDead == false)
 	{
 		// 현재 애니메이션의 텍스쳐 1장 복사
 		CharacterShadow* Shadow = GetLevel()->CreateActor<CharacterShadow>();
 		Shadow->DetachObject();
-		Shadow->SetShadow(Renderer_Character->GetCurTexture(), 0.12f, PrevLookDir, GetTransform().GetWorldPosition() + float4{0, 0, 10});
+		Shadow->SetUIShadow(Renderer_Character->GetCurTexture(), PrevLookDir, GetTransform().GetWorldPosition(), 0.05f);
 		Shadow->On();
 	}
+
 }

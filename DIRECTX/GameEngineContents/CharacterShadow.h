@@ -14,7 +14,10 @@ public:
 class CharacterShadow : public GameEngineActor
 {
 public:
-	void SetShadow(GameEngineTexture* _Texture, float _DeathTime, int ShadowDir, float4 _InstancePos);
+	static void SwitchShadowMode();
+
+	void SetShadow(GameEngineTexture* _Texture, int ShadowDir, float4 _InstancePos, float _DeathTime = 0.12f);
+	void SetUIShadow(GameEngineTexture* _Texture, int ShadowDir, float4 _InstancePos, float _DeathTime = 0.12f);
 
 public:
 	// constrcuter destructer
@@ -35,10 +38,12 @@ protected:
 	void OnEvent() override;
 
 private:
-	GameEngineTextureRenderer* Renderer;
+	GameEngineTextureRenderer* TexRenderer;
+	GameEngineUIRenderer* UIRenderer;
 	float SetDeathTime;
 	static int ColorIndex;
 	static int ShadowCount;
+	static bool UIShadowOn;
 
 };
 
