@@ -54,6 +54,7 @@ protected:
 
 protected:
 	// 룸 마다 꼭 설정해주어야 함
+	GameEngineTextureRenderer* BackBackGround;
 	GameEngineTextureRenderer* Background;
 	GameEngineTextureRenderer* Background_ColMap;
 

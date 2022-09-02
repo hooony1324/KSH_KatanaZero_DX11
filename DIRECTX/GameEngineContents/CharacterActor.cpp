@@ -218,6 +218,8 @@ bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngin
 		float4 ThisPos = _This->GetTransform().GetWorldPosition();
 		OtherPos.z = 0;
 		ThisPos.z = 0;
+		
+		// 화면을 가로지르는 이펙트
 		SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
 		Fx->GetTransform().SetWorldPosition(OtherPos);
 		Fx->SetSlashLightDir(OtherPos - ThisPos);

@@ -173,16 +173,6 @@ void EnemyActor::OnEvent()
 	}
 
 	StateManager.ChangeState("Spawn");
-
-	if (PrevLookDir > 0)
-	{
-		GetTransform().PixLocalPositiveX();
-	}
-	if (PrevLookDir < 0)
-	{
-		GetTransform().PixLocalNegativeX();
-	}
-
 }
 
 void EnemyActor::WallCheck()
@@ -492,6 +482,15 @@ void EnemyActor::WalkStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("walk");
 	MoveVec.x = static_cast<float>(PrevLookDir);
+
+	if (MoveVec.x >= 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
 }
 
 void EnemyActor::WalkUpdate(float _DeltaTime, const StateInfo& _Info)

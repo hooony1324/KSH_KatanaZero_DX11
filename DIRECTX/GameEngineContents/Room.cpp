@@ -35,6 +35,11 @@ bool Room::IsEnemyAllDead()
 
 void Room::EmptyRoomInit()
 {
+	BackBackGround = CreateComponent<GameEngineTextureRenderer>();
+	BackBackGround->SetTexture("None.png");
+	BackBackGround->GetTransform().SetWorldScale({ 2000, 2000, 1 });
+	
+	
 	Background = CreateComponent<GameEngineTextureRenderer>();
 	Background_ColMap = CreateComponent<GameEngineTextureRenderer>();
 
@@ -47,6 +52,10 @@ void Room::InitCameraClampArea()
 	CamClamp_Center = { BackgroundScale.x / 2, -BackgroundScale.y / 2 };
 	CamClamp_LeftTop = { CamClamp_Center.x - ClampScale.x, CamClamp_Center.y + ClampScale.y };
 	CamClamp_RightBottom = { CamClamp_Center.x + ClampScale.x, CamClamp_Center.y - ClampScale.y };
+
+
+	BackBackGround->GetTransform().SetWorldPosition(CamClamp_Center);
+	BackBackGround->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) + 10});
 }
 
 void Room::SetCameraClampArea(float4& _LeftTop, float4& _RightBottom)

@@ -125,7 +125,7 @@ void PlayLevel::Start()
 	Replay->GetTransform().SetWorldPosition({ 640, -420, GetDepth(ACTOR_DEPTH::UI) });
 	Replay->Off();
 	
-
+	
 }
 
 void PlayLevel::LevelStartEvent()
@@ -466,8 +466,6 @@ void PlayLevel::RoomShakeStart(const StateInfo& _Info)
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 0.1f);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), 0.1f);
 
-
-	_Info.StateTime;
 }
 
 void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -475,9 +473,9 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 	float DT = _Info.StateTime * 80;
 	
 	// 카메라 흔들림
-	float ShakeX = sinf(DT * 10.0f) * powf(0.5f, DT);
-	float ShakeY = sinf(DT * 10.0f) * powf(0.5f, DT);
-	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 10, 0 });
+	float ShakeX = sinf(DT * 10.0f) * powf(0.98f, DT);
+	float ShakeY = sinf(DT * 10.0f) * powf(0.97f, DT);
+	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 5, ShakeY * 20, 0 });
 
 	if (_Info.StateTime >= 0.4f)
 	{
@@ -509,4 +507,5 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 {
+
 }
