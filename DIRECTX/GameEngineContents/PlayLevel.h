@@ -19,8 +19,6 @@ public:
 		return static_cast<int>(Rooms.size());
 	}
 
-
-
 public:
 	// constrcuter destructer
 	PlayLevel();

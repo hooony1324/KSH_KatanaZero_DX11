@@ -1,8 +1,10 @@
 #include "PreCompile.h"
 #include "GlobalValueManager.h"
+#include "CharacterActor.h"
 
 GameEngineTextureRenderer* GlobalValueManager::ColMap = nullptr;
 float4 GlobalValueManager::PlayerPos;
+CharacterActor* GlobalValueManager::Player = nullptr;
 std::list<GameEngineCollision*> GlobalValueManager::Collision_UpStairs;
 std::list<GameEngineCollision*> GlobalValueManager::Collision_DownStairs;
 
@@ -17,6 +19,12 @@ void GlobalValueManager::ClearStairs()
 	{
 		Collision->Death();
 	}
+}
+
+GlobalValueManager::~GlobalValueManager()
+{
+	ColMap = nullptr;
+	Player = nullptr;
 }
 
 int GlobalValueManager::SlowEnergy = 11;

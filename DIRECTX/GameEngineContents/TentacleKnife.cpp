@@ -202,7 +202,7 @@ void TentacleKnife::StabUpdate(float _DeltaTime, const StateInfo& _Info)
 		{
 			int SoundIdx = GameEngineRandom::MainRandom.RandomInt(1, 2);
 			StabSound = GameEngineSound::SoundPlayControl("sound_boss_akirasyringe_stab_0" + std::to_string(SoundIdx) + ".wav");
-			StabSound.Volume(0.1f);
+			StabSound.Volume(0.05f);
 			StabSoundPlayed = true;
 		}
 		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);

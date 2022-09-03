@@ -40,6 +40,8 @@ private:
 	void DistortionStart(const StateInfo& _Info);
 	void DistortionUpdate(float _DeltaTime, const StateInfo& _Info);
 
+	void PlayerBlock();
+
 private:
 	class BossPsychoGiant* BossGiant;
 

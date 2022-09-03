@@ -3,6 +3,7 @@
 
 #include "BossPsychoGiant.h"
 #include "Effect_Distortion.h"
+#include "CharacterActor.h"
 
 Room_Boss::Room_Boss()
 	: Background_Mid(nullptr)
@@ -124,6 +125,9 @@ void Room_Boss::OffEvent()
 void Room_Boss::Update(float _DeltaTime)
 {
 	StateManager.Update(_DeltaTime);
+
+	PlayerBlock();
+	
 }
 
 void Room_Boss::End()
@@ -167,8 +171,9 @@ void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
 			StateManager.ChangeState("Distortion");
 			return;
 		}
-		
 	}
+
+
 }
 
 void Room_Boss::DistortionStart(const StateInfo& _Info)
@@ -184,6 +189,20 @@ void Room_Boss::DistortionUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		GEngine::ChangeLevel("EndingLevel");
 		return;
+	}
+}
+
+void Room_Boss::PlayerBlock()
+{
+	float4 Pos = GlobalValueManager::PlayerPos;
+	if (Pos.x <= 113)
+	{
+		GlobalValueManager::Player->GetTransform().SetWorldPosition(Pos + float4::RIGHT);
+	}
+
+	if (Pos.x >= 1130)
+	{
+		GlobalValueManager::Player->GetTransform().SetWorldPosition(Pos + float4::LEFT);
 	}
 }
 

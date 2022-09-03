@@ -7,6 +7,7 @@ public:
 	static GameEngineTextureRenderer* ColMap;
 
 	static float4 PlayerPos;
+	static class CharacterActor* Player;
 	
 	// 현재 맵의 계단 정보
 	static std::list<GameEngineCollision*> Collision_UpStairs;
@@ -20,7 +21,7 @@ public:
 private:
 	// constrcuter destructer
 	GlobalValueManager() {}
-	~GlobalValueManager() {}
+	~GlobalValueManager();
 };
 
 // TimeScale을 구분함

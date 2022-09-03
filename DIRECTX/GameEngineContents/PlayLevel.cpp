@@ -69,6 +69,7 @@ void PlayLevel::Start()
 
 	// Player
 	Player = CreateActor<PlayerZero>(ACTORGROUP::TIMEGROUP);
+	GlobalValueManager::Player = Player;
 	Player->Off();
 
 	// Cursor
