@@ -363,10 +363,10 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 카메라 흔들림
 	if (DT <= 2.0f)
 	{
-		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);
-		float ShakeY = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.6f, DT * CamShakeSpeed);
+		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.88f, DT * CamShakeSpeed);
+		float ShakeY = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.88f, DT * CamShakeSpeed);
 
-		GetLevel()->GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 20, 0 });
+		GetLevel()->GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 20, ShakeY * 10, 0 });
 	}
 
 	if (DT > 1.5f)

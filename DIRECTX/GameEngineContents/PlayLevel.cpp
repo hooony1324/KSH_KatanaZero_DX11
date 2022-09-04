@@ -24,21 +24,10 @@ void PlayLevel::ChangeRoom(int _Index)
 		return;
 	}
 
-	// 마지막 방이면 엔딩
-	if (_Index == Rooms.size())
-	{
-		GEngine::ChangeLevel("EndingLevel");
-		return;
-	}
-
-	Room::CurRoomIndex = _Index;
-
-	// 방 치우기
-	// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
 	Player->Off();
-	//CurRoom->Clear();
 	CurRoom->Off();
 	Replay->Off();
+	Room::CurRoomIndex = _Index;
 	CurRoom = Rooms[_Index];
 
 	RoomStateManager.ChangeState("RoomChange");
@@ -337,10 +326,11 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 녹화 : 60fps ??
 	//if (ShotTime > (1 / 60.0f) )
 	//{ 
-	//	GameEngineTexture* CamShot = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
-	//	Replay->AddScreenShot(CamShot);
+	//	GameEngineTexture* CamTexture = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
+	//	Replay->AddScreenShot(CamTexture);
 	//	ShotTime = 0.0f;
 	//}
+
 
 }
 
@@ -358,20 +348,7 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true)//Effect_Transition->IsTransitionEnd())
 	{
-		//// 콜리전 맵을 계속 인식해서 방 변경시 잠깐 꺼주어야 함(픽셀체크하는 모든 객체)
-		//Player->Off();
-		//CurRoom->Clear();
-		//CurRoom->Off();
-		//++RoomIter;
 
-		//// 마지막 방이면 엔딩
-		//if (RoomIter == Rooms.end())
-		//{
-		//	GEngine::ChangeLevel("EndingLevel");
-		//	return;
-		//}
-
-		//RoomStateManager.ChangeState("RoomChange");
 		ChangeRoom(++Room::CurRoomIndex);
 	}
 }
@@ -412,7 +389,7 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 	
 	SlowEffect->SlowIn();
 	SlowInSound = GameEngineSound::SoundPlayControl("sound_slomo_engage.ogg");
-	SlowInSound.Volume(0.5f);
+	SlowInSound.Volume(0.1f);
 	SlowDeltaTime = 0;
 
 	CharacterShadow::SwitchShadowMode();
@@ -451,7 +428,7 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 
 		SlowInSound.Stop();
 		SlowOutSound = GameEngineSound::SoundPlayControl("sound_slomo_disengage.wav");
-		SlowOutSound.Volume(0.5f);
+		SlowOutSound.Volume(0.1f);
 
 		return;
 	}
@@ -459,16 +436,12 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 {
-	//GameEngineSound
 	CharacterShadow::SwitchShadowMode();
 }
 
 void PlayLevel::RoomShakeStart(const StateInfo& _Info)
 {
-	//GameEngineTime::GetInst()->SetGlobalScale(0.1f);
-	//TIMEGROUP, 
-	//TIMEGROUP_ENEMY, 
-	//TIMEGROUP_BULLET,
+
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 0.1f);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 0.1f);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), 0.1f);
@@ -482,7 +455,7 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 카메라 흔들림
 	float ShakeX = sinf(DT * 10.0f) * powf(0.98f, DT);
 	float ShakeY = sinf(DT * 10.0f) * powf(0.97f, DT);
-	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 5, ShakeY * 20, 0 });
+	GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });
 
 	if (_Info.StateTime >= 0.4f)
 	{
@@ -499,17 +472,13 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	Replay->On();
 	CurRoom->Off();
-	//CurRoom->Clear();
-	
-	Replay->SetScreenTexture(GameEngineTexture::Find("spr_portal_loop_back_0.png"));
+
+
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	
-
-	
-
 }
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)

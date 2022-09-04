@@ -228,19 +228,7 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		PlayerStateManager.ChangeState("Fall");
 	}
 
-	// ¹®
-	if (Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-		nullptr))
-	{
-		if (MoveVec.x > 0)
-		{
-			GetTransform().SetWorldMove({ -1, 0, 0 });
-		}
-		else
-		{
-			GetTransform().SetWorldMove({ 1, 0, 0 });
-		}
-	}
+
 }
 
 void PlayerZero::WallGrabStart(const StateInfo& _Info)

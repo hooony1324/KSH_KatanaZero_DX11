@@ -8,6 +8,8 @@ public:
 	void SetScreenTexture(GameEngineTexture* _Texture)
 	{
 		ScreenRenderer->SetTexture(_Texture);
+		ScreenRenderer->ScaleToTexture();
+		
 	}
 
 	void AddScreenShot(GameEngineTexture* _Texture);

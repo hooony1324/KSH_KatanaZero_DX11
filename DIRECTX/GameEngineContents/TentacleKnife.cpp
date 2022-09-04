@@ -4,7 +4,7 @@
 
 #include <GameEngineBase/GameEngineRandom.h>
 
-const float IdleY = 270;
+const float IdleY = 300;
 const float TakeOutY = -20;
 const float LoadY = -20;
 const float StabY = -360;

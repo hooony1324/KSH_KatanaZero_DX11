@@ -102,7 +102,7 @@ void PlayerZero::Update(float _DeltaTime)
 	// ¿Ãµø
 	LookCheck(InputDir.x);
 	PlayerMove(_DeltaTime);
-
+	StopAtDoor(_DeltaTime);
 	CoolTimeCheck();
 
 	//PrintPlayerDebug();

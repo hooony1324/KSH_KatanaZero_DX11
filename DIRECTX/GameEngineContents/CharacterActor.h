@@ -18,7 +18,7 @@ public:
 
 	inline bool IsRoomChangeAvailable()
 	{
-		return (Right_Red || Left_Red) && !IsDead;
+		return Red && !IsDead;
 	}
 
 	inline bool IsPlayerDead()
@@ -36,6 +36,7 @@ public:
 		IsDead = false;
 		Hp = 1;
 		Collision_Character->On();
+		Collision_Slash->Off();
 		PlayerStateManager.ChangeState("Idle");
 	}
 
@@ -84,6 +85,9 @@ public:
 	CharacterActor& operator=(const CharacterActor& _Other) = delete;
 	CharacterActor& operator=(CharacterActor&& _Other) noexcept = delete;
 
+protected:
+	void OnEvent() override;
+	void OffEvent() override;
 
 protected:
 	enum class STATE_WALL
@@ -105,7 +109,8 @@ protected:
 	void WallCheck();
 	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
-	
+	void StopAtDoor(float _Deltatime);
+
 	// ÇÇ°Ý
 	void EnemyAttackCheck();
 	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
@@ -145,10 +150,9 @@ protected:
 	bool DoubleDownBlue;
 	bool Left_Up;
 	bool Left_Down;
-	bool Right_Red;
 	bool Right_Up;
 	bool Right_Down;
-	bool Left_Red;
+	bool Red;
 	bool Left;
 	bool Right;
 

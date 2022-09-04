@@ -4,6 +4,7 @@
 
 #include "GameContentsCustomRenderer.h"
 #include <GameEngineCore/GameEngineRenderSet.h>
+#include <GameEngineBase/GameEngineDebug.h>
 
 TestActor::TestActor() 
 {
@@ -67,7 +68,6 @@ void TestActor::Update(float _DeltaTime)
 	{
 		// EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 		// GetLevel()->GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0)
-
 	}
 
 	if (GameEngineInput::GetInst()->IsPress("S"))

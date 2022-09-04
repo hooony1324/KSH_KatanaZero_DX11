@@ -25,6 +25,18 @@ CharacterActor::~CharacterActor()
 {
 }
 
+void CharacterActor::OnEvent()
+{
+	MoveVec = float4::ZERO;
+	Velocity = float4::ZERO;
+}
+
+void CharacterActor::OffEvent()
+{
+	MoveVec = float4::ZERO;
+	Velocity = float4::ZERO;
+}
+
 void CharacterActor::WallCheck()
 {
 	GameEngineTextureRenderer* CollisionMap = GlobalValueManager::ColMap;
@@ -48,8 +60,8 @@ void CharacterActor::WallCheck()
 	Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() - 30))).CompareInt3D(float4::GREEN);
 	Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() - 30))).CompareInt3D(float4::GREEN);
 	DoubleDown = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	Right_Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy()))).CompareInt3D(float4::RED);
-	Left_Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy()))).CompareInt3D(float4::RED);
+	Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy()))).CompareInt3D(float4::RED);
+
 
 	// ¶¥¿¡ ¹ÚÈû
 	if (Down || DownBlue)
@@ -147,6 +159,23 @@ void CharacterActor::LookCheck(float _InputOrVelocityDir)
 	}
 
 	PrevLookDir = CurLookDir;
+}
+
+void CharacterActor::StopAtDoor(float _DeltaTime)
+{
+	// ¹®
+	if (Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+		nullptr))
+	{
+		if (MoveVec.x > 0)
+		{
+			GetTransform().SetWorldMove(float4::LEFT * MoveSpeed * _DeltaTime);
+		}
+		else
+		{
+			GetTransform().SetWorldMove(float4::RIGHT * MoveSpeed * _DeltaTime);
+		}
+	}
 }
 
 void CharacterActor::EnemyAttackCheck()

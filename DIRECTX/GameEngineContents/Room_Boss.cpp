@@ -36,7 +36,7 @@ void Room_Boss::Start()
 	InitCameraClampArea();
 
 	// 스폰위치, 지형지물 등
-	PlayerSpawnPos = float4{ 640, -780, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 640, -760, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 	// bg > floor > fg
 	Background_Mid = CreateComponent<GameEngineTextureRenderer>();
@@ -125,8 +125,6 @@ void Room_Boss::OffEvent()
 void Room_Boss::Update(float _DeltaTime)
 {
 	StateManager.Update(_DeltaTime);
-
-	PlayerBlock();
 	
 }
 
@@ -173,7 +171,7 @@ void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 	}
 
-
+	PlayerBlock();
 }
 
 void Room_Boss::DistortionStart(const StateInfo& _Info)

@@ -38,6 +38,6 @@ private:
 	class GameContentsCustomRenderer* KnifeRenderer;
 	class GameContentsCustomRenderer* MaskedRenderer;
 
-
+	class GameEngineTextureRenderer* TextureRenderer;
 };
 
