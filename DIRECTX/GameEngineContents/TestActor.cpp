@@ -40,15 +40,11 @@ void TestActor::Start()
 	// 주사기 + 마스크
 	// 주사기가 점점 바깥으로 나옴
 	MaskedRenderer = CreateComponent<GameContentsCustomRenderer>();
-	MaskedRenderer->SetTexture("spr_psychboss_tentacle_idle_0.png");
-	MaskedRenderer->GetTransform().SetLocalScale({ 60, 160, GetDepth(ACTOR_DEPTH::COLLISION) });
-	MaskedRenderer->CreateFrameAnimationFolder("idle", CustomFrameAnimation_DESC{ "tentacleboss_idle", 0.12f });
-	MaskedRenderer->CreateFrameAnimationFolder("hurt", CustomFrameAnimation_DESC{ "tentacleboss_hurt", 0.5f, false });
-	MaskedRenderer->CreateFrameAnimationFolder("attack", CustomFrameAnimation_DESC{ "tentacleboss_attack", 0.12f, false });
-	MaskedRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutoutY", 0.065f, true });
+	MaskedRenderer->SetTexture("spr_psychboss_attack_knife_1.png");
+	MaskedRenderer->ScaleToTexture();
+	MaskedRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.065f, true });
 	MaskedRenderer->ChangeMaskAnimation("portal");
 	MaskedRenderer->Option.IsMask = 1;
-	MaskedRenderer->ChangeFrameAnimation("idle");
 	
 
 	GetTransform().SetWorldScale({ 2, 2, 1 });
@@ -66,12 +62,17 @@ void TestActor::Update(float _DeltaTime)
 {
 	if (GameEngineInput::GetInst()->IsPress("W"))
 	{
-		// EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
-		// GetLevel()->GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0)
+		
+		KnifeRenderer->GetAtlasData().FrameData.x += 0.02f;
 	}
 
 	if (GameEngineInput::GetInst()->IsPress("S"))
 	{
+		if (KnifeRenderer->GetAtlasData().FrameData.x <= 0.0f)
+		{
+			KnifeRenderer->GetAtlasData().FrameData.x = 0.0f;
+			return;
+		}
 		KnifeRenderer->GetAtlasData().FrameData.x -= 0.1f;
 	}
 

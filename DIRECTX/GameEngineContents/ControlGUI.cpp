@@ -70,10 +70,16 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	if (true == ImGui::Button("CollisionDebugSwtich"))
 	{
 		GEngine::CollisionDebugSwitch();
-
 	}
 
 	ImGui::SameLine();
+	if (true == ImGui::Button("CollisionMapSwtich"))
+	{
+		GlobalValueManager::ColMap->OnOffSwitch();
+	}
+
+
+
 	if (true == ImGui::Button("CheatMode"))
 	{
 		CharacterActor::CheatModeSwitch();
@@ -89,7 +95,6 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		GEngine::ChangeLevel("TestLevel");
 	}
 	
-	ImGui::SameLine();
 	if (true == ImGui::Button("TitleLevel"))
 	{
 		GEngine::ChangeLevel("TitleLevel");
