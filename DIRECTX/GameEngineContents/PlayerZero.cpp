@@ -73,6 +73,9 @@ void PlayerZero::Start()
 	// 최초 상태
 	PlayerStateManager.ChangeState("Idle");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
+
+	// 역재생
+	LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
 }
 
 void PlayerZero::Update(float _DeltaTime)
@@ -108,13 +111,14 @@ void PlayerZero::Update(float _DeltaTime)
 	//PrintPlayerDebug();
 
 	// 역재생
+	// TODO :: 역재생 중이면 Update하면 안됨
 	FrameCapturedData* Data = new FrameCapturedData();
 	Data->Position = GetTransform().GetWorldPosition();
 	Data->Texture = Renderer_Character->GetCurTexture();
 	Data->TextureScale = Data->Texture->GetScale();
 	CapturedDataList.push_back(Data);
 
-	LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
+
 
 }
 
