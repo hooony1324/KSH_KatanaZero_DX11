@@ -11,8 +11,7 @@ const float FORCE_REACTION = 1.0f; // 반작용 강도
 
 
 CharacterActor::CharacterActor()
-	: Renderer_Character(nullptr)
-	, MoveVec(float4::ZERO)
+	: MoveVec(float4::ZERO)
 	, PrevLookDir(1)
 	, CurLookDir(1)
 	, Hp(1)
@@ -257,7 +256,6 @@ bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngin
 
 	return true;
 }
-
 
 bool CharacterActor::CollisionSlashCheck()
 {

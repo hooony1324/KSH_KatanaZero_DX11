@@ -30,6 +30,10 @@ Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
 float4 Wave_PS(Output _Input) : SV_Target0
 {   
+    if (Option00 == 0)
+    {
+        return Tex.Sample(Smp, _Input.Tex.xy);
+    }
     // 화면 전체 그림을 받아오는 거임
     // fragCoord => SV_Position
     // iResolution => 화면 크기

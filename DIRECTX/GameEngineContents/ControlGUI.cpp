@@ -5,6 +5,7 @@
 #include "Cursor.h"
 #include "CharacterActor.h"
 #include "BossPsychoGiant.h"
+#include "Effect_Wave.h"
 
 ControlGUI* ControlGUI::Inst = nullptr;
 
@@ -94,7 +95,12 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	{
 		GEngine::ChangeLevel("TestLevel");
 	}
-	
+	ImGui::SameLine();
+	if (true == ImGui::Button("Effect_Wave"))
+	{
+		Effect_Wave::OnOffSwitch();
+	}
+
 	if (true == ImGui::Button("TitleLevel"))
 	{
 		GEngine::ChangeLevel("TitleLevel");

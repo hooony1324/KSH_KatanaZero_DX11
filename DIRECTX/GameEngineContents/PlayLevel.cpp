@@ -15,11 +15,11 @@
 #include "SlowMotion.h"
 #include "Bullet.h"
 #include "CharacterShadow.h"
-#include "ReplayShots.h"
 
 #include "Effect_Wave.h"
 #include "Effect_Distortion.h"
 #include "Effect_DistortionGlitch.h"
+#include "LiveActor.h"
 
 void PlayLevel::ChangeRoom(int _Index)
 {
@@ -30,7 +30,7 @@ void PlayLevel::ChangeRoom(int _Index)
 
 	Player->Off();
 	CurRoom->Off();
-	Replay->Off();
+
 	Room::CurRoomIndex = _Index;
 	CurRoom = Rooms[_Index];
 
@@ -113,14 +113,6 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomShakeUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomShakeStart, this, std::placeholders::_1));
 
-	
-
-	Replay = CreateActor<ReplayShots>();
-	Replay->GetTransform().SetWorldPosition({ 640, -420, GetDepth(ACTOR_DEPTH::UI) });
-	Replay->Off();
-	
-	
-	
 }
 
 void PlayLevel::LevelStartEvent()
@@ -133,7 +125,7 @@ void PlayLevel::LevelStartEvent()
 	CurRoom = Rooms[Room::CurRoomIndex];
 	RoomStateManager.ChangeState("RoomChange");
 
-	//GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 	//GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 }
 
@@ -329,15 +321,13 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 	}
 
-	// 녹화 : 60fps ??
-	//if (ShotTime > (1 / 60.0f) )
-	//{ 
-	//	GameEngineTexture* CamTexture = GetMainCamera()->GetCameraRenderTarget()->GetRenderTargetTexture(0);
-	//	Replay->AddScreenShot(CamTexture);
-	//	ShotTime = 0.0f;
-	//}
 
-
+	// 재시작
+	if (true == GameEngineInput::GetInst()->IsDown("R"))
+	{
+		RoomStateManager.ChangeState("RoomReverse");
+		return;
+	}
 }
 
 void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
@@ -473,18 +463,34 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 }
 
-// 역재생 화면
+// 되감기
+float SumTime;
+LiveActor* LivePlayer;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
-	Replay->On();
-	CurRoom->Off();
-
-
+	LivePlayer = reinterpret_cast<LiveActor*>(Player);
+	SumTime = 0.0f;
+	LivePlayer->Renderer_Character->CurAnimationPauseSwitch();
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	
+	SumTime += _DeltaTime;
+	if (SumTime < 0.5f)
+	{
+		return;
+	}
+	SumTime = 0;
+
+	if (LivePlayer->CapturedDataList.size() != 0)
+	{
+		FrameCapturedData* Data = LivePlayer->CapturedDataList.back();
+		LivePlayer->CapturedDataList.pop_back();
+		LivePlayer->GetTransform().SetWorldPosition(Data->Position);
+		LivePlayer->Renderer_Character->SetTexture(Data->Texture);
+	}
+
+
 }
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)

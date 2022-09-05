@@ -1,11 +1,11 @@
 #pragma once
-#include <GameEngineCore/GameEngineActor.h>
+#include "LiveActor.h"
 
 // 설명 : 모든 적 개체의 상태 -> Patrol > Chase > Attack 
 // Grunt ->
 class GameEngineTextureRenderer;
 class GameEngineCollision;
-class EnemyActor : public GameEngineActor
+class EnemyActor : public LiveActor
 {
 public:
 	void Respawn()

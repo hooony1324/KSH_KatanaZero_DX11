@@ -202,9 +202,6 @@
     <ClInclude Include="SlowMotion.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClInclude>
-    <ClInclude Include="ReplayShots.h">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
-    </ClInclude>
     <ClInclude Include="BossProjectile.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClInclude>
@@ -234,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="Effect_DistortionGlitch.h">
       <Filter>ContentsRendering\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="LiveActor.h">
+      <Filter>Levels\01.PlayLevel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -367,9 +367,6 @@
     <ClCompile Include="SlowMotion.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClCompile>
-    <ClCompile Include="ReplayShots.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
-    </ClCompile>
     <ClCompile Include="BossProjectile.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
     </ClCompile>
@@ -399,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="Effect_DistortionGlitch.cpp">
       <Filter>ContentsRendering\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="LiveActor.cpp">
+      <Filter>Levels\01.PlayLevel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

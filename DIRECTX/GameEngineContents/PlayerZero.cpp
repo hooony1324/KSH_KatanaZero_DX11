@@ -107,7 +107,11 @@ void PlayerZero::Update(float _DeltaTime)
 
 	//PrintPlayerDebug();
 
-
+	FrameCapturedData* Data = new FrameCapturedData();
+	Data->Position = GetTransform().GetWorldPosition();
+	Data->Texture = Renderer_Character->GetCurTexture();
+	Data->TextureScale = Data->Texture->GetScale();
+	CapturedDataList.push_back(Data);
 
 
 

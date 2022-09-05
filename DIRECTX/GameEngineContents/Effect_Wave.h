@@ -7,6 +7,12 @@
 class Effect_Wave : public GameEnginePostEffect
 {
 public:
+	static void OnOffSwitch()
+	{
+		OnOffOption = !OnOffOption;
+	}
+
+public:
 	// constrcuter destructer
 	Effect_Wave();
 	~Effect_Wave();
@@ -25,6 +31,7 @@ protected:
 	GameEngineRenderSet EffectSet;
 
 private:
+	static bool OnOffOption;
 	RenderOption Option;
 	float SumDeltaTime;
 };

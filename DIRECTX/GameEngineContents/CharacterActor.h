@@ -1,10 +1,10 @@
 #pragma once
-#include <GameEngineCore/GameEngineActor.h>
+#include "LiveActor.h"
 
 // 설명 : 플레이어(제로, 드래곤, ...), 또는 보스 몬스터
 class GameEngineTextureRenderer;
 class GameEngineCollision;
-class CharacterActor : public GameEngineActor
+class CharacterActor : public LiveActor
 {
 public:
 	void SetDead()
@@ -120,6 +120,7 @@ protected:
 
 // 이동 관련
 protected:
+	
 	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineCollision* Collision_Character;
 	GameEngineTextureRenderer* Renderer_Slash;
