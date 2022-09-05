@@ -36,12 +36,8 @@ float4 Wave_PS(Output _Input) : SV_Target0
     // iTime => playbacktime(재생시간)
     float2 TexPos = _Input.Tex.xy;
     float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f);
-        
-    
-    // uv.y -> 0 ~ 1 -> -0.5 ~ 0.5로
 
-    uv.y = uv.y;
-    uv.x = sin(uv.y * 10 + DeltaTime * 10.0f) / 10.0f;
+    uv.x = sin(uv.y * 10 + DeltaTime * 50.0f) / 10.0f;
     
     float2 SmpPos = float2(_Input.Tex.x + uv.x, _Input.Tex.y);
     float4 Color = Tex.Sample(Smp, SmpPos);

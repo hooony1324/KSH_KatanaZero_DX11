@@ -23,9 +23,12 @@ void Effect_DistortionGlitch::EffectInit()
 
 	EffectSet.SetPipeLine("DistortionGlitch");
 
-
-	Option.DeltaTime = 0.0f;
-	EffectSet.ShaderResources.SetConstantBufferLink("RenderOption", &Option, sizeof(Option));
+	if (true == EffectSet.ShaderResources.IsConstantBuffer("RenderOption"))
+	{
+		Option.DeltaTime = 0.0f;
+		EffectSet.ShaderResources.SetConstantBufferLink("RenderOption", &Option, sizeof(Option));
+	}
+	
 }
 
 void Effect_DistortionGlitch::Effect(GameEngineRenderTarget* _Target)

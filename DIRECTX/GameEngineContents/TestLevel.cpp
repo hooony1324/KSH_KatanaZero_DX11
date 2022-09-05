@@ -37,6 +37,7 @@ void TestLevel::LevelStartEvent()
 
 
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
+	//GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 }
 
 void TestLevel::Update(float _DeltaTime)

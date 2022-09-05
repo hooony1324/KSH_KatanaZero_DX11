@@ -22,6 +22,7 @@ void TestActor::Start()
 	BackGround->SetTexture("None.png");
 	BackGround->GetTransform().SetLocalScale({ 320, 180, 1 });
 	BackGround->GetTransform().SetLocalMove({ 0, 0, 100 });
+	BackGround->Off();
 
 	// 마스크 애니메이션
 	TestRenderer = CreateComponent<GameContentsCustomRenderer>();

@@ -133,7 +133,8 @@ void PlayLevel::LevelStartEvent()
 	CurRoom = Rooms[Room::CurRoomIndex];
 	RoomStateManager.ChangeState("RoomChange");
 
-	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
+	//GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
+	//GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 }
 
 void PlayLevel::Update(float _DeltaTime)
