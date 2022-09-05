@@ -17,6 +17,10 @@
 #include "CharacterShadow.h"
 #include "ReplayShots.h"
 
+#include "Effect_Wave.h"
+#include "Effect_Distortion.h"
+#include "Effect_DistortionGlitch.h"
+
 void PlayLevel::ChangeRoom(int _Index)
 {
 	if (_Index < 0)
@@ -116,6 +120,7 @@ void PlayLevel::Start()
 	Replay->Off();
 	
 	
+	
 }
 
 void PlayLevel::LevelStartEvent()
@@ -128,7 +133,7 @@ void PlayLevel::LevelStartEvent()
 	CurRoom = Rooms[Room::CurRoomIndex];
 	RoomStateManager.ChangeState("RoomChange");
 
-	
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -180,8 +185,8 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 	}
 
 	float4 CamPos = GetMainCameraActor()->GetTransform().GetWorldPosition();
-	float4 NextCamPos;
 	float4 PlayerPos = Player->GetTransform().GetWorldPosition();
+	float4 NextCamPos;
 	NextCamPos = float4::Lerp(CamPos, PlayerPos, _DeltaTime * 4.5f);
 
 	if (NextCamPos.x < CamClamp_LeftTop.x)

@@ -4,7 +4,6 @@
 
 struct MaskData
 {
-public:
 	float4 MaskFrameData;
 	float4 MaskPivotPos;
 };

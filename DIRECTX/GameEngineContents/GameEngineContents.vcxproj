@@ -193,6 +193,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Effect_DistortionGlitch.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Effect_Wave.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EndingLevel.h">
       <SubType>
       </SubType>
@@ -402,6 +410,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Effect_Distortion.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Effect_DistortionGlitch.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Effect_Wave.cpp">
       <SubType>
       </SubType>
     </ClCompile>

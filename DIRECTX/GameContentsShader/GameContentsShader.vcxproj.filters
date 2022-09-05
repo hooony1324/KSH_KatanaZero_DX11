@@ -21,5 +21,11 @@
     <FxCompile Include="..\Resources\Shader\Distortion.hlsl">
       <Filter>Sahder</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\Wave.hlsl">
+      <Filter>Sahder</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\DistortionGlitch.hlsl">
+      <Filter>Sahder</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

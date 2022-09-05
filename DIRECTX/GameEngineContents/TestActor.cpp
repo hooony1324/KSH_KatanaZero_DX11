@@ -18,6 +18,10 @@ void TestActor::Start()
 {
 	//ShotRenderer = CreateComponent<GameEngineTextureRenderer>();
 	//ShotRenderer->SetSamplingModePoint();
+	GameEngineTextureRenderer* BackGround = CreateComponent<GameEngineTextureRenderer>();
+	BackGround->SetTexture("None.png");
+	BackGround->GetTransform().SetLocalScale({ 320, 180, 1 });
+	BackGround->GetTransform().SetLocalMove({ 0, 0, 100 });
 
 	// 마스크 애니메이션
 	TestRenderer = CreateComponent<GameContentsCustomRenderer>();

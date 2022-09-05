@@ -5,6 +5,9 @@
 
 #include "TestActor.h"
 #include "Portal.h"
+#include "Effect_DistortionGlitch.h"
+#include "Effect_Distortion.h"
+#include "Effect_Wave.h"
 
 TestLevel::TestLevel() 
 {
@@ -32,8 +35,8 @@ void TestLevel::LevelStartEvent()
 		ControlGUI::GetInst()->On();
 	}
 
-	int a = 0;
-	//portal->On();
+
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 }
 
 void TestLevel::Update(float _DeltaTime)
