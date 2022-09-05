@@ -322,7 +322,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 
-	// 재시작
+	// 되감기
 	if (true == GameEngineInput::GetInst()->IsDown("R"))
 	{
 		RoomStateManager.ChangeState("RoomReverse");
@@ -470,7 +470,8 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	LivePlayer = reinterpret_cast<LiveActor*>(Player);
 	SumTime = 0.0f;
-	LivePlayer->Renderer_Character->CurAnimationPauseSwitch();
+	Player->Renderer_Character->Off();
+	LivePlayer->FrameDataRenderer->On();
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -487,7 +488,8 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 		FrameCapturedData* Data = LivePlayer->CapturedDataList.back();
 		LivePlayer->CapturedDataList.pop_back();
 		LivePlayer->GetTransform().SetWorldPosition(Data->Position);
-		LivePlayer->Renderer_Character->SetTexture(Data->Texture);
+		LivePlayer->FrameDataRenderer->SetTexture(Data->Texture);
+		LivePlayer->FrameDataRenderer->GetTransform().SetLocalScale(Data->TextureScale);
 	}
 
 
@@ -495,5 +497,5 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 {
-
+	Player->Renderer_Character->On();
 }

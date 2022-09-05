@@ -71,6 +71,8 @@ public:
 
 	void CreateUIShadow();
 
+	GameEngineTextureRenderer* Renderer_Character;
+
 private:
 	static bool CheatMode;
 
@@ -121,7 +123,6 @@ protected:
 // 이동 관련
 protected:
 	
-	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineCollision* Collision_Character;
 	GameEngineTextureRenderer* Renderer_Slash;
 	GameEngineCollision* Collision_Slash;
