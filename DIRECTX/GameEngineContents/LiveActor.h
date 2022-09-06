@@ -18,6 +18,14 @@ public:
 class LiveActor : public GameEngineActor
 {
 public:
+	void RemoveCapturedData();
+	void PlayReverseCapturedData();
+	bool IsReverseEnd()
+	{
+		return IsReverse && CapturedDataList.size() == 0;
+	}
+	
+public:
 	// constrcuter destructer
 	LiveActor();
 	virtual ~LiveActor();
@@ -28,8 +36,19 @@ public:
 	LiveActor& operator=(const LiveActor& _Other) = delete;
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
+protected:
 	std::list<FrameCapturedData*> CapturedDataList;
 	GameEngineTextureRenderer* FrameDataRenderer;
 	bool IsReverse;
+
+	// 역재생
+protected:
+	// 플레이어, 총알, 등의 렌더러가 있는 자식에서 꼭 구현해야함
+	virtual void PushFrameCpaturedData() = 0;
+
+	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
+	virtual void ReverseStartSetting() = 0;
+	virtual void ReverseEndSetting() = 0;
+
 };
 

@@ -39,6 +39,10 @@ void Room_Factory2::Start()
 	FanGuard->GetTransform().SetWorldPosition({ 1423.5f, -368, GetDepth(ACTOR_DEPTH::FOREGROUND) });
 	FanGuard->Off();
 
+	// Fan
+	PtrFan = GetLevel()->CreateActor<Fan>();
+	PtrFan->Off();
+
 	// 몬스터
 	EnemyGrunt* Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
 	Grunt->SetSpawnPos({ 737, -720, GetDepth(ACTOR_DEPTH::ENEMY) });
@@ -59,7 +63,7 @@ void Room_Factory2::OnEvent()
 	FanGuard->On();
 
 	// 지형지물
-	PtrFan = GetLevel()->CreateActor<Fan>();
+	PtrFan->On();
 	PtrFan->GetTransform().SetWorldPosition({ 1430, -375, GetDepth(ACTOR_DEPTH::DOOR) });
 
 	// 적 관련
@@ -86,10 +90,7 @@ void Room_Factory2::OffEvent()
 
 
 	// 지형지물
-	if (nullptr != PtrFan)
-	{
-		PtrFan->Death();
-	}
+	PtrFan->Off();
 	FanGuard->Off();
 
 	// 적 관련

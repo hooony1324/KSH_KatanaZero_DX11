@@ -238,17 +238,19 @@ void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 {
+	// 역재생용 프레임들 버리기
+	Player->RemoveCapturedData();
 
 }
 
 float SlowRecoverTime;
-float ShotTime;
+float FrameTime;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
 	SlowRecoverTime = 0.0f;
 
 	// 화면 녹화 시작 지점
-	ShotTime = 0.0f;
+	FrameTime = 0.0f;
 }
 
 // @@@ 게임 플레이 @@@
@@ -257,8 +259,11 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 카메라 플레이어 따라다니기
 	CameraFollow(_DeltaTime);
 
+	// 역재생용 프레임 저장
+	Player->PushFrameCpaturedData();
+
 	RoomPlayTotalTime += _DeltaTime;
-	ShotTime += _DeltaTime;
+	FrameTime += _DeltaTime;
 
 	if (GlobalValueManager::SlowEnergy < 11)
 	{
@@ -300,10 +305,9 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	// 방 사이즈 별로 월드 밖 이동 제한(보스 방)
 
 
-	// 시간제한 있는 방
+	// 시간제한 있는 방 UI
 	if (true == CurRoom->IsTimeLimit())
 	{
 		float LimitTime = CurRoom->GetTimeLimit();
@@ -368,7 +372,7 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 		UI->RestartUIOff();
 		RoomStateManager.ChangeState("RoomReverse");
 
-		// 아직 살아있는 총알 없앰
+		// 아직 살아있는 총알 없앰 -> 룸이 바뀔 때 없애도록 추후 수정
 		std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
 		for (auto Bullet : Bullets)
 		{
@@ -465,51 +469,36 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 // 되감기
-float SumTime;
-LiveActor* LivePlayer;
+
+const float ReverseSpeed = 1.0f;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
-	LivePlayer = reinterpret_cast<LiveActor*>(Player);
-	SumTime = 0.0f;
-	Player->Renderer_Character->Off();
-	LivePlayer->FrameDataRenderer->On();
-	// 플레이어 업데이트 중지
-	LivePlayer->IsReverse = true;
+
+
+	Player->ReverseStartSetting();
+
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), ReverseSpeed);
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	SumTime += _DeltaTime;
-	if (SumTime < 0.000005f)
-	{
-		return;
-	}
-	SumTime = 0;
 
-	if (LivePlayer->CapturedDataList.size() != 0)
-	{
-		FrameCapturedData* Data = LivePlayer->CapturedDataList.back();
-		LivePlayer->GetTransform().SetWorldPosition(Data->Position);
-		LivePlayer->FrameDataRenderer->SetTexture(Data->Texture);
-		LivePlayer->FrameDataRenderer->GetTransform().SetLocalScale(Data->TextureScale);
-		
-		// 메모리 해제
-		LivePlayer->CapturedDataList.pop_back();
-		delete Data;
-	}
+	Player->PlayReverseCapturedData();
+
 
 	CameraFollow(_DeltaTime);
 
-	if (LivePlayer->CapturedDataList.size() == 0)
+	if (Player->IsReverseEnd())
 	{
-		RoomStateManager.ChangeState("RoomPlay");
+		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1.0f);
+		RoomStateManager.ChangeState("RoomChange");
 		return;
 	}
 }
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 {
-	LivePlayer->IsReverse = false;
-	LivePlayer->FrameDataRenderer->Off();
-	Player->Renderer_Character->On();
+	Player->ReverseEndSetting();
+
+	
 }

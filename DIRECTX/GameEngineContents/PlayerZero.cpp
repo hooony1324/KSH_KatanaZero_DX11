@@ -41,11 +41,6 @@ void PlayerZero::Start()
 
 	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
-	
-	// 중심 디버그용
-	//GameEngineTextureRenderer* test = CreateComponent<GameEngineTextureRenderer>();
-	//test->SetTexture("None.png");
-	//test->ScaleToTexture();
 
 	// 콜리전
 	float4 	CharacterScale = Renderer_Character->GetTransform().GetLocalScale();
@@ -80,6 +75,7 @@ void PlayerZero::Start()
 
 void PlayerZero::Update(float _DeltaTime)
 {
+	// 역재생
 	if (true == IsReverse)
 	{
 		return;
@@ -112,13 +108,6 @@ void PlayerZero::Update(float _DeltaTime)
 	CoolTimeCheck();
 
 	//PrintPlayerDebug();
-
-	// 역재생
-	FrameCapturedData* Data = new FrameCapturedData();
-	Data->Position = GetTransform().GetWorldPosition();
-	Data->Texture = Renderer_Character->GetCurTexture();
-	Data->TextureScale = Data->Texture->GetScale();
-	CapturedDataList.push_back(Data);
 
 
 }

@@ -168,6 +168,13 @@ protected:
 	float FlyRadian;
 	int PrevLookDir;
 	float AimPaddingX;
-	
+
+	// 역재생
+public:
+	void PushFrameCpaturedData() override {};
+
+	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
+	virtual void ReverseStartSetting() override {};
+	virtual void ReverseEndSetting() override {};
 };
 

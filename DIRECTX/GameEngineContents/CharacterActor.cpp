@@ -26,6 +26,8 @@ CharacterActor::~CharacterActor()
 
 void CharacterActor::OnEvent()
 {
+	CurLookDir = 1;
+	FrameDataRenderer->Off();
 	MoveVec = float4::ZERO;
 	Velocity = float4::ZERO;
 }
@@ -305,6 +307,34 @@ void CharacterActor::CreateBrightShadow()
 	}
 }
 
+void CharacterActor::PushFrameCpaturedData()
+{
+	// 역재생
+	FrameCapturedData* Data = new FrameCapturedData();
+	Data->Position = GetTransform().GetWorldPosition();
+	Data->Texture = Renderer_Character->GetCurTexture();
+	Data->TextureScale = Data->Texture->GetScale();
+	CapturedDataList.push_back(Data);
+}
+
+void CharacterActor::ReverseStartSetting()
+{
+	Renderer_Character->Off();
+	FrameDataRenderer->On();
+
+	// 플레이어 업데이트 중지
+	IsReverse = true;
+}
+
+void CharacterActor::ReverseEndSetting()
+{
+	IsReverse = false;
+	FrameDataRenderer->Off();
+	Renderer_Character->On();
+}
+
+
+// 슬로우상태, 어두운 화면일 때 그림자
 void CharacterActor::CreateUIShadow()
 {
 	// 그림자

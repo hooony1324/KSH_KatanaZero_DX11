@@ -71,7 +71,6 @@ public:
 
 	void CreateUIShadow();
 
-	GameEngineTextureRenderer* Renderer_Character;
 
 private:
 	static bool CheatMode;
@@ -120,9 +119,10 @@ protected:
 
 	GameEngineStateManager PlayerStateManager;
 
-// 이동 관련
+// 기본
 protected:
 	
+	GameEngineTextureRenderer* Renderer_Character;
 	GameEngineCollision* Collision_Character;
 	GameEngineTextureRenderer* Renderer_Slash;
 	GameEngineCollision* Collision_Slash;
@@ -176,6 +176,12 @@ protected:
 protected:
 	GameEngineSoundPlayer RollSoundPlayer;
 	GameEngineSoundPlayer SlashSoundPlayer;
-	
+
+	// 역재생
+public:
+	virtual void PushFrameCpaturedData() override;
+	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
+	virtual void ReverseStartSetting() override;
+	virtual void ReverseEndSetting() override;
 };
 
