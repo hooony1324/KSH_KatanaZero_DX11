@@ -8,6 +8,11 @@ class GameEngineCollision;
 class EnemyActor : public LiveActor
 {
 public:
+	bool IsDead()
+	{
+		return Hp <= 0;
+	}
+
 	void Respawn()
 	{
 		GetTransform().SetWorldPosition(SpawnPos);
@@ -171,10 +176,9 @@ protected:
 
 	// 역재생
 public:
-	void PushFrameCpaturedData() override {};
-
+	virtual void PushFrameCpaturedData() override;
 	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
-	virtual void ReverseStartSetting() override {};
-	virtual void ReverseEndSetting() override {};
+	virtual void ReverseStartSetting() override;
+	virtual void ReverseEndSetting() override;
 };
 

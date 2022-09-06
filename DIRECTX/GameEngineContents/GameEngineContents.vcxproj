@@ -287,10 +287,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Ray.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Room.h">
       <SubType>
       </SubType>
@@ -505,10 +501,6 @@
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
-      <SubType>
-      </SubType>
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <SubType>

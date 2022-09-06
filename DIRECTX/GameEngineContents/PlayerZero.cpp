@@ -68,9 +68,6 @@ void PlayerZero::Start()
 	// 최초 상태
 	PlayerStateManager.ChangeState("Idle");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
-
-	// 역재생
-	LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
 }
 
 void PlayerZero::Update(float _DeltaTime)

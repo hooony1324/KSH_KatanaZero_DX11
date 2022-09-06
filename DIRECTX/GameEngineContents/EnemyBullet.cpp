@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "EnemyBullet.h"
+#include "EnemyActor.h"
 
 
 EnemyBullet::EnemyBullet()
@@ -72,17 +73,17 @@ void EnemyBullet::PlayerSlashCheck()
 			Collision->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 
 			std::list<GameEngineActor*> Enemies = GetLevel()->GetGroup(ACTORGROUP::TIMEGROUP_ENEMY);
-			GameEngineActor* Enemy = nullptr;
+			EnemyActor* Enemy = nullptr;
 			float4 BulletVec = GetTransform().GetWorldPosition();
 			BulletVec.z = 0;
 
-			// On Enemy선택
+			// Hp > 0 Enemy선택
 			for (GameEngineActor* Ptr : Enemies)
 			{
-				if (true == Ptr->IsUpdate())
+				Enemy = dynamic_cast<EnemyActor*>(Ptr);
+				if (false == Enemy->IsDead())
 				{
-					Enemy = Ptr;
-					break;
+					Enemy = nullptr;
 				}
 			}
 
@@ -96,7 +97,7 @@ void EnemyBullet::PlayerSlashCheck()
 			}
 			else
 			{
-				// 적 없으면
+				// 적 없으면 날아온 반대방향으로 
 				float4 SlashVec = _Other->GetTransform().GetWorldPosition();
 				SlashVec.z = 0;
 

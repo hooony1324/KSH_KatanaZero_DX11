@@ -26,6 +26,12 @@ CharacterActor::~CharacterActor()
 
 void CharacterActor::OnEvent()
 {
+	// ¿ªÀç»ý
+	if (nullptr == FrameDataRenderer)
+	{
+		LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
+	}
+
 	CurLookDir = 1;
 	FrameDataRenderer->Off();
 	MoveVec = float4::ZERO;

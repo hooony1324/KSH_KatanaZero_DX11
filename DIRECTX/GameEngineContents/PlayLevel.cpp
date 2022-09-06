@@ -225,6 +225,22 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	// UI
 	RoomPlayTotalTime = 0.0f;
 	UI->SetTimeBarLength(1);
+
+	// 역재생
+	CaptureGroup.clear();
+	for (int i = 1; i < 4; i++)
+	{
+		std::list<GameEngineActor*> Group = GetGroup(i);
+
+		for (GameEngineActor* Ptr : Group)
+		{
+			LiveActor* Actor = dynamic_cast<LiveActor*>(Ptr);
+			if (Actor != nullptr)
+			{
+				CaptureGroup.push_back(Actor);
+			}
+		}
+	}
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -251,6 +267,11 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 
 	// 화면 녹화 시작 지점
 	FrameTime = 0.0f;
+	
+
+
+
+
 }
 
 // @@@ 게임 플레이 @@@
@@ -260,7 +281,12 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	CameraFollow(_DeltaTime);
 
 	// 역재생용 프레임 저장
-	Player->PushFrameCpaturedData();
+	//Player->PushFrameCpaturedData();
+	for (LiveActor* Actor : CaptureGroup)
+	{
+		Actor->PushFrameCpaturedData();
+	}
+
 
 	RoomPlayTotalTime += _DeltaTime;
 	FrameTime += _DeltaTime;
@@ -372,12 +398,7 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 		UI->RestartUIOff();
 		RoomStateManager.ChangeState("RoomReverse");
 
-		// 아직 살아있는 총알 없앰 -> 룸이 바뀔 때 없애도록 추후 수정
-		std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
-		for (auto Bullet : Bullets)
-		{
-			Bullet->Death();
-		}
+
 	}
 }
 
@@ -473,9 +494,14 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 const float ReverseSpeed = 1.0f;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
+	
 
 
-	Player->ReverseStartSetting();
+	//Player->ReverseStartSetting();
+	for (LiveActor* Actor : CaptureGroup)
+	{
+		Actor->ReverseStartSetting();
+	}
 
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), ReverseSpeed);
 }
@@ -483,8 +509,11 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
-	Player->PlayReverseCapturedData();
-
+	//Player->PlayReverseCapturedData();
+	for (LiveActor* Actor : CaptureGroup)
+	{
+		Actor->PlayReverseCapturedData();
+	}
 
 	CameraFollow(_DeltaTime);
 
@@ -498,7 +527,18 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 {
-	Player->ReverseEndSetting();
+	//Player->ReverseEndSetting();
+	for (LiveActor* Actor : CaptureGroup)
+	{
+		Actor->ReverseEndSetting();
+		Actor->RemoveCapturedData();
+	}
 
-	
+
+	// 총알
+	std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
+	for (auto Bullet : Bullets)
+	{
+		Bullet->Death();
+	}
 }

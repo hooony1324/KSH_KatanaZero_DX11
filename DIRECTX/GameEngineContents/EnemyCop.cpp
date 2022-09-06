@@ -50,10 +50,20 @@ void EnemyCop::Start()
 		, std::bind(&EnemyCop::ShootUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&EnemyCop::ShootStart, this, std::placeholders::_1));
 
+	// 开犁积
+	FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
+	FrameDataRenderer->SetPivot(PIVOTMODE::BOT);
+	FrameDataRenderer->Off();
 }
 
 void EnemyCop::Update(float _DeltaTime)
 {
+	// 开犁积
+	if (true == IsReverse)
+	{
+		return;
+	}
+
 	PlayerAttackCheck();
 
 	// 寒

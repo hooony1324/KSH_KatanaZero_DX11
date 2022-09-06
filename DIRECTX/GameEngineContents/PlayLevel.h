@@ -61,7 +61,8 @@ private:
 	class GameEngineSoundPlayer SlowInSound;
 	class GameEngineSoundPlayer SlowOutSound;
 
-	class ReplayShots* Replay;
+	// ¿ªÀç»ý
+	std::list<class LiveActor*> CaptureGroup;
 
 
 // FSM : RoomPlay, RoomReplay, RoomChange

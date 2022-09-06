@@ -178,9 +178,6 @@
     <ClInclude Include="Bullet.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\EnemyActor</Filter>
-    </ClInclude>
     <ClInclude Include="TestLevel.h">
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClInclude>
@@ -342,9 +339,6 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Enemy\EnemyActor</Filter>
     </ClCompile>
     <ClCompile Include="TestLevel.cpp">
       <Filter>Levels\99.TESTLEVEL</Filter>

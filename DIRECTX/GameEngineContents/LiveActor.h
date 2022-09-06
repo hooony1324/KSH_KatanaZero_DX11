@@ -6,7 +6,7 @@
 class FrameCapturedData
 {
 public:
-	FrameCapturedData() : Texture(nullptr) {};
+	FrameCapturedData() : Texture(nullptr), TextureScale(float4::ZERO) {};
 	~FrameCapturedData() {};
 
 	float4 Position;
@@ -17,14 +17,6 @@ public:
 
 class LiveActor : public GameEngineActor
 {
-public:
-	void RemoveCapturedData();
-	void PlayReverseCapturedData();
-	bool IsReverseEnd()
-	{
-		return IsReverse && CapturedDataList.size() == 0;
-	}
-	
 public:
 	// constrcuter destructer
 	LiveActor();
@@ -42,7 +34,7 @@ protected:
 	bool IsReverse;
 
 	// 역재생
-protected:
+public:
 	// 플레이어, 총알, 등의 렌더러가 있는 자식에서 꼭 구현해야함
 	virtual void PushFrameCpaturedData() = 0;
 
@@ -50,5 +42,12 @@ protected:
 	virtual void ReverseStartSetting() = 0;
 	virtual void ReverseEndSetting() = 0;
 
+
+	void PlayReverseCapturedData();
+	void RemoveCapturedData();
+	bool IsReverseEnd()
+	{
+		return IsReverse && CapturedDataList.size() == 0;
+	}
 };
 

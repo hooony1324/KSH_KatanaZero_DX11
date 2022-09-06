@@ -28,6 +28,7 @@ void LiveActor::RemoveCapturedData()
 
 void LiveActor::PlayReverseCapturedData()
 {
+
 	if (CapturedDataList.size() == 0)
 	{
 		return;
@@ -36,8 +37,13 @@ void LiveActor::PlayReverseCapturedData()
 	FrameCapturedData* Data = CapturedDataList.back();
 
 	GetTransform().SetWorldPosition(Data->Position);
-	FrameDataRenderer->SetTexture(Data->Texture);
-	FrameDataRenderer->GetTransform().SetLocalScale(Data->TextureScale);
+	
+	if (nullptr != Data->Texture)
+	{
+		FrameDataRenderer->SetTexture(Data->Texture);
+		FrameDataRenderer->GetTransform().SetLocalScale(Data->TextureScale);
+	}
+
 
 	// 역재생은 바로 메모리 해제
 	CapturedDataList.pop_back();

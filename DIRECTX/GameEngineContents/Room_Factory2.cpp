@@ -69,10 +69,7 @@ void Room_Factory2::OnEvent()
 	// Àû °ü·Ã
 	for (EnemyActor* Enemy : Enemies)
 	{
-		if (false == Enemy->IsUpdate())
-		{
-			Enemy->On();
-		}
+		Enemy->On();
 
 		Enemy->Respawn();
 	}

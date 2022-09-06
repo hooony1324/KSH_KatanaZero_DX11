@@ -67,10 +67,21 @@ void EnemyGrunt::Start()
 	IsChasingEnemy = true;
 	StateManager.ChangeState("Spawn");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
+
+	// 开犁积
+	FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
+	FrameDataRenderer->SetPivot(PIVOTMODE::BOT);
+	FrameDataRenderer->Off();
 }
 
 void EnemyGrunt::Update(float _DeltaTime)
 {
+	// 开犁积
+	if (true == IsReverse)
+	{
+		return;
+	}
+
 	PlayerAttackCheck();
 
 	// 寒

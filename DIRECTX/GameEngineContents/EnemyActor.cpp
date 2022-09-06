@@ -173,6 +173,8 @@ void EnemyActor::OnEvent()
 	}
 
 	StateManager.ChangeState("Spawn");
+
+
 }
 
 void EnemyActor::WallCheck()
@@ -1010,4 +1012,42 @@ void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.y = 0;
 		StateManager.ChangeState("Run");
 	}
+}
+
+
+// 역재생
+void EnemyActor::PushFrameCpaturedData()
+{
+	// 역재생
+	FrameCapturedData* Data = new FrameCapturedData();
+	Data->Position = GetTransform().GetWorldPosition();
+	Data->Texture = Renderer_Character->GetCurTexture();
+	if (nullptr != Data->Texture)
+	{
+		Data->Texture = Renderer_Character->GetCurTexture();
+		Data->TextureScale = Data->Texture->GetScale();
+	}
+
+	CapturedDataList.push_back(Data);
+}
+
+void EnemyActor::ReverseStartSetting()
+{
+	if (false == IsUpdate())
+	{
+		On();
+	}
+
+	Renderer_Character->Off();
+	FrameDataRenderer->On();
+
+	// 플레이어 업데이트 중지
+	IsReverse = true;
+}
+
+void EnemyActor::ReverseEndSetting()
+{
+	IsReverse = false;
+	FrameDataRenderer->Off();
+	Renderer_Character->On();
 }
