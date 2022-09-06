@@ -4,22 +4,18 @@
 
 LiveActor::LiveActor()
 	: FrameDataRenderer(nullptr)
+	, IsReverse(false)
 {
 }
 
 LiveActor::~LiveActor() 
 {
-	std::list<FrameCapturedData*>::iterator StartIt = CapturedDataList.begin();
-	std::list<FrameCapturedData*>::iterator EndIt = CapturedDataList.end();
-
-	for (; StartIt != EndIt; ++StartIt)
+	for (auto& Val : CapturedDataList)
 	{
-		if (*StartIt != nullptr)
-		{
-			delete *StartIt;
-			*StartIt = nullptr;
-		}
+		Val->Texture = nullptr;
+		delete Val;
 	}
+	CapturedDataList.clear();
 }
 
 

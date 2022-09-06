@@ -98,7 +98,8 @@ void PlayLevel::Start()
 
 	RoomStateManager.CreateStateMember("RoomReverse"
 		, std::bind(&PlayLevel::RoomReverseUpdate, this, std::placeholders::_1, std::placeholders::_2)
-		, std::bind(&PlayLevel::RoomReverseStart, this, std::placeholders::_1));
+		, std::bind(&PlayLevel::RoomReverseStart, this, std::placeholders::_1)
+		, std::bind(&PlayLevel::RoomReverseEnd, this, std::placeholders::_1));
 
 	RoomStateManager.CreateStateMember("RoomRestart"
 		, std::bind(&PlayLevel::RoomClickToRestartUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -472,12 +473,14 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	SumTime = 0.0f;
 	Player->Renderer_Character->Off();
 	LivePlayer->FrameDataRenderer->On();
+	// 플레이어 업데이트 중지
+	LivePlayer->IsReverse = true;
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	SumTime += _DeltaTime;
-	if (SumTime < 0.5f)
+	if (SumTime < 0.000005f)
 	{
 		return;
 	}
@@ -486,16 +489,27 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (LivePlayer->CapturedDataList.size() != 0)
 	{
 		FrameCapturedData* Data = LivePlayer->CapturedDataList.back();
-		LivePlayer->CapturedDataList.pop_back();
 		LivePlayer->GetTransform().SetWorldPosition(Data->Position);
 		LivePlayer->FrameDataRenderer->SetTexture(Data->Texture);
 		LivePlayer->FrameDataRenderer->GetTransform().SetLocalScale(Data->TextureScale);
+		
+		// 메모리 해제
+		LivePlayer->CapturedDataList.pop_back();
+		delete Data;
 	}
 
+	CameraFollow(_DeltaTime);
 
+	if (LivePlayer->CapturedDataList.size() == 0)
+	{
+		RoomStateManager.ChangeState("RoomPlay");
+		return;
+	}
 }
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 {
+	LivePlayer->IsReverse = false;
+	LivePlayer->FrameDataRenderer->Off();
 	Player->Renderer_Character->On();
 }

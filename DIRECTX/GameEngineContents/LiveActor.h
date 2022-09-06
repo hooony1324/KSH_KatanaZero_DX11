@@ -13,9 +13,6 @@ public:
 	GameEngineTexture* Texture;
 	float4 TextureScale;
 	
-	
-	//GameContentsCustomRenderer* CustomRenderer;
-
 };
 
 class LiveActor : public GameEngineActor
@@ -23,7 +20,7 @@ class LiveActor : public GameEngineActor
 public:
 	// constrcuter destructer
 	LiveActor();
-	~LiveActor();
+	virtual ~LiveActor();
 
 	// delete Function
 	LiveActor(const LiveActor& _Other) = delete;
@@ -33,5 +30,6 @@ public:
 
 	std::list<FrameCapturedData*> CapturedDataList;
 	GameEngineTextureRenderer* FrameDataRenderer;
+	bool IsReverse;
 };
 

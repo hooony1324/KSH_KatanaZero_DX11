@@ -80,6 +80,11 @@ void PlayerZero::Start()
 
 void PlayerZero::Update(float _DeltaTime)
 {
+	if (true == IsReverse)
+	{
+		return;
+	}
+
 	// 프리카메라 모드면 움직임 X
 	if (true == GetLevel()->GetMainCameraActor()->IsFreeCameraMode())
 	{
@@ -91,7 +96,6 @@ void PlayerZero::Update(float _DeltaTime)
 		return;
 	}
 
-
 	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
 	EnemyAttackCheck();
 	WallCheck();
@@ -99,7 +103,6 @@ void PlayerZero::Update(float _DeltaTime)
 
 	PlayerStateManager.Update(_DeltaTime);
 	FloatTimeCheck(_DeltaTime);
-
 
 
 	// 이동
@@ -111,13 +114,11 @@ void PlayerZero::Update(float _DeltaTime)
 	//PrintPlayerDebug();
 
 	// 역재생
-	// TODO :: 역재생 중이면 Update하면 안됨
 	FrameCapturedData* Data = new FrameCapturedData();
 	Data->Position = GetTransform().GetWorldPosition();
 	Data->Texture = Renderer_Character->GetCurTexture();
 	Data->TextureScale = Data->Texture->GetScale();
 	CapturedDataList.push_back(Data);
-
 
 
 }
@@ -129,7 +130,7 @@ void PlayerZero::End()
 void PlayerZero::InputCheck()
 {
 	InputDir = float4::ZERO;
-	// CLICK
+	// 게임 화면 밖이면 공격 안하도록
 	bool ClickAble = Cursor::IsClickAble();
 
 
