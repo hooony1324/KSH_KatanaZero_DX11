@@ -36,7 +36,7 @@ void Room_Factory1::Start()
 	PlayerSpawnPos = float4{ 220, -630, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 	PtrDoor = GetLevel()->CreateActor<Door>(ACTORGROUP::TIMEGROUP);
-	PtrDoor->GetTransform().SetWorldMove({ 575, -320 });
+	PtrDoor->GetTransform().SetWorldMove({ 608, -320 });
 	PtrDoor->Off();
 
 	// 적 소환 리스트 1400, -310

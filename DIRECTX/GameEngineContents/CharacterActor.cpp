@@ -319,13 +319,14 @@ void CharacterActor::PushFrameCpaturedData()
 	FrameCapturedData* Data = new FrameCapturedData();
 	Data->Position = GetTransform().GetWorldPosition();
 	Data->Texture = Renderer_Character->GetCurTexture();
-	Data->TextureScale = Data->Texture->GetScale();
+	Data->TextureScale = Renderer_Character->GetTransform().GetLocalScale();
 	CapturedDataList.push_back(Data);
 }
 
 void CharacterActor::ReverseStartSetting()
 {
 	Renderer_Character->Off();
+	Renderer_Slash->Off();
 	FrameDataRenderer->On();
 
 	// 플레이어 업데이트 중지

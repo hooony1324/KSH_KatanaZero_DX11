@@ -33,6 +33,7 @@ void Door::Start()
 	Renderer->SetSamplingModePoint();
 	Renderer->ScaleToTexture();
 	Renderer->GetTransform().PixLocalNegativeX();
+	Renderer->SetPivotToVector({ -20, 0, 0 });
 	Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "door_idle", 0.1f, true });
 	Renderer->CreateFrameAnimationFolder("open", FrameAnimation_DESC{ "door_open", 0.1f, false });
 	Renderer->ChangeFrameAnimation("idle");
@@ -40,7 +41,7 @@ void Door::Start()
 	Collision = CreateComponent<GameEngineCollision>();
 	float4 Scale = Renderer->GetTransform().GetLocalScale();
 	Collision->GetTransform().SetLocalScale(float4{ 15, Scale.y, GetDepth(ACTOR_DEPTH::DOOR) });
-	Collision->GetTransform().SetLocalPosition({ 20, 0 , 0 });
+	Collision->GetTransform().SetLocalPosition({ 0, 0 , 0 });
 	Collision->ChangeOrder(COLLISIONGROUP::DOOR);
 	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 0, 0, 0.25f });
 
@@ -48,6 +49,11 @@ void Door::Start()
 	GetTransform().SetLocalScale({ 2.0f, 2.0f, 1 });
 	GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::DOOR) });
 
+	// ¿ªÀç»ý
+	FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
+	FrameDataRenderer->SetSamplingModePoint();
+	FrameDataRenderer->SetPivotToVector({ -20, 0, 0 });
+	FrameDataRenderer->Off();
 }
 
 void Door::OnEvent()
@@ -63,6 +69,7 @@ void Door::OffEvent()
 	Collision->Off();
 }
 
+
 void Door::Update(float _DeltaTime)
 {
 	
@@ -72,4 +79,32 @@ void Door::Update(float _DeltaTime)
 
 void Door::End()
 {
+}
+
+void Door::PushFrameCpaturedData()
+{
+	FrameCapturedData* Data = new FrameCapturedData();
+	Data->Position = GetTransform().GetWorldPosition();
+	Data->Texture = Renderer->GetCurTexture();
+	if (nullptr != Data->Texture)
+	{
+		Data->Texture = Renderer->GetCurTexture();
+		Data->TextureScale = Renderer->GetTransform().GetLocalScale();
+	}
+
+	CapturedDataList.push_back(Data);
+}
+
+void Door::ReverseStartSetting()
+{
+	Renderer->Off();
+	FrameDataRenderer->On();
+
+}
+
+void Door::ReverseEndSetting()
+{
+
+	FrameDataRenderer->Off();
+	Renderer->On();
 }

@@ -226,21 +226,7 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	RoomPlayTotalTime = 0.0f;
 	UI->SetTimeBarLength(1);
 
-	// 역재생
-	CaptureGroup.clear();
-	for (int i = 1; i < 4; i++)
-	{
-		std::list<GameEngineActor*> Group = GetGroup(i);
 
-		for (GameEngineActor* Ptr : Group)
-		{
-			LiveActor* Actor = dynamic_cast<LiveActor*>(Ptr);
-			if (Actor != nullptr)
-			{
-				CaptureGroup.push_back(Actor);
-			}
-		}
-	}
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -254,9 +240,23 @@ void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 {
-	// 역재생용 프레임들 버리기
-	Player->RemoveCapturedData();
+	// 역재생 초기화
+	// 역재생 프레임을 저장할 그룹 판별
+	CaptureGroup.clear();
+	for (int i = 1; i < 4; i++)
+	{
+		std::list<GameEngineActor*> Group = GetGroup(i);
 
+		for (GameEngineActor* Ptr : Group)
+		{
+			LiveActor* Actor = dynamic_cast<LiveActor*>(Ptr);
+			if (Actor != nullptr && true == Actor->IsUpdate())
+			{
+				Actor->RemoveCapturedData();
+				CaptureGroup.push_back(Actor);
+			}
+		}
+	}
 }
 
 float SlowRecoverTime;
@@ -267,10 +267,6 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 
 	// 화면 녹화 시작 지점
 	FrameTime = 0.0f;
-	
-
-
-
 
 }
 
@@ -491,12 +487,10 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 
 // 되감기
 
-const float ReverseSpeed = 1.0f;
+const float ReverseSpeed = 55.0f;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	
-
-
 	//Player->ReverseStartSetting();
 	for (LiveActor* Actor : CaptureGroup)
 	{
@@ -504,6 +498,7 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	}
 
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), ReverseSpeed);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), ReverseSpeed);
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -520,6 +515,7 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (Player->IsReverseEnd())
 	{
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1.0f);
+		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1.0f);
 		RoomStateManager.ChangeState("RoomChange");
 		return;
 	}
@@ -531,7 +527,6 @@ void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 	for (LiveActor* Actor : CaptureGroup)
 	{
 		Actor->ReverseEndSetting();
-		Actor->RemoveCapturedData();
 	}
 
 

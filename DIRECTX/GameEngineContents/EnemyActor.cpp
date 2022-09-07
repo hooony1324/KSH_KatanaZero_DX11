@@ -1025,7 +1025,7 @@ void EnemyActor::PushFrameCpaturedData()
 	if (nullptr != Data->Texture)
 	{
 		Data->Texture = Renderer_Character->GetCurTexture();
-		Data->TextureScale = Data->Texture->GetScale();
+		Data->TextureScale = Renderer_Character->GetTransform().GetLocalScale();
 	}
 
 	CapturedDataList.push_back(Data);
@@ -1037,7 +1037,6 @@ void EnemyActor::ReverseStartSetting()
 	{
 		On();
 	}
-
 	Renderer_Character->Off();
 	FrameDataRenderer->On();
 

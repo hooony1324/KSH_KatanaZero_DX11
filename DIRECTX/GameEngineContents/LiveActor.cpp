@@ -38,6 +38,7 @@ void LiveActor::PlayReverseCapturedData()
 
 	GetTransform().SetWorldPosition(Data->Position);
 	
+	// PixelLocalNega Àû¿ë¾ÈµÊ??
 	if (nullptr != Data->Texture)
 	{
 		FrameDataRenderer->SetTexture(Data->Texture);
