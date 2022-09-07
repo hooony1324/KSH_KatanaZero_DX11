@@ -33,7 +33,7 @@ void Room_Factory1::Start()
 	InitCameraClampArea();
 
 
-	PlayerSpawnPos = float4{ 220, -630, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 220, -635, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 	PtrDoor = GetLevel()->CreateActor<Door>(ACTORGROUP::TIMEGROUP);
 	PtrDoor->GetTransform().SetWorldMove({ 608, -320 });
@@ -47,7 +47,7 @@ void Room_Factory1::Start()
 	
 	// 400, -330
 	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
-	Cop->SetSpawnPos({ 400, -340, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Cop->SetSpawnPos({ 400, -350, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Cop->Off();
 	Enemies.push_back(Cop);
 

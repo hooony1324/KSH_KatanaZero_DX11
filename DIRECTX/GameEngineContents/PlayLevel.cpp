@@ -226,16 +226,18 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	RoomPlayTotalTime = 0.0f;
 	UI->SetTimeBarLength(1);
 
-
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true)//Effect_Transition->IsTransitionEnd())
+	CameraFollow(_DeltaTime);
+
+	if (_Info.StateTime > 0.2f)
 	{
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
 	}
+
 }
 
 void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
@@ -261,6 +263,7 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 float SlowRecoverTime;
 float FrameTime;
+bool WaveOff;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
 	SlowRecoverTime = 0.0f;
@@ -268,20 +271,32 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	// 화면 녹화 시작 지점
 	FrameTime = 0.0f;
 
+	WaveOff = false;
 }
 
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (_Info.StateTime > 0.8f && false == WaveOff)
+	{
+		Effect_Wave::WaveOff();
+		WaveOff = true;
+		Player->SetReverse(false);
+	}
+
 	// 카메라 플레이어 따라다니기
 	CameraFollow(_DeltaTime);
 
 	// 역재생용 프레임 저장
-	//Player->PushFrameCpaturedData();
-	for (LiveActor* Actor : CaptureGroup)
+	if (FrameTime > 0.008f)
 	{
-		Actor->PushFrameCpaturedData();
+		for (LiveActor* Actor : CaptureGroup)
+		{
+			Actor->PushFrameCpaturedData();
+		}
+		FrameTime = 0.0f;
 	}
+
 
 
 	RoomPlayTotalTime += _DeltaTime;
@@ -487,7 +502,7 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 
 // 되감기
 
-const float ReverseSpeed = 55.0f;
+const float ReverseSpeed = 1.0f;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	
@@ -514,6 +529,7 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (Player->IsReverseEnd())
 	{
+		Effect_Wave::WaveOn();
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1.0f);
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1.0f);
 		RoomStateManager.ChangeState("RoomChange");
@@ -536,4 +552,5 @@ void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 	{
 		Bullet->Death();
 	}
+
 }

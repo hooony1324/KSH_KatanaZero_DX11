@@ -7,6 +7,11 @@ class GameEngineCollision;
 class CharacterActor : public LiveActor
 {
 public:
+	void SetReverse(bool _Val)
+	{
+		IsReverse = _Val;
+	}
+
 	void SetDead()
 	{
 		//IsDead = true;

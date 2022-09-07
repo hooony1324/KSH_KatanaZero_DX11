@@ -32,16 +32,21 @@ void CharacterActor::OnEvent()
 		LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
 	}
 
+	IsReverse = true;
 	CurLookDir = 1;
 	FrameDataRenderer->Off();
 	MoveVec = float4::ZERO;
 	Velocity = float4::ZERO;
+	Renderer_Slash->Off();
+	WallGrab = false;
 }
 
 void CharacterActor::OffEvent()
 {
 	MoveVec = float4::ZERO;
 	Velocity = float4::ZERO;
+	Renderer_Slash->Off();
+	WallGrab = false;
 }
 
 void CharacterActor::WallCheck()

@@ -12,6 +12,16 @@ public:
 		OnOffOption = !OnOffOption;
 	}
 
+	static void WaveOff()
+	{
+		OnOffOption = 0;
+	}
+
+	static void WaveOn()
+	{
+		OnOffOption = 1;
+	}
+
 public:
 	// constrcuter destructer
 	Effect_Wave();
