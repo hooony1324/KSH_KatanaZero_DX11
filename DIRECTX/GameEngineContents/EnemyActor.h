@@ -8,6 +8,7 @@ class GameEngineCollision;
 class EnemyActor : public LiveActor
 {
 public:
+
 	bool IsDead()
 	{
 		return Hp <= 0;

@@ -10,7 +10,6 @@ const float4 Gravity = { 0, -9.8f, 0 };
 PlayerZero::PlayerZero()
 	: AttackAble(true)
 	, RollAble(true)
-	, InputDir(float4::ZERO)
 	, MouseDir(float4::ZERO)
 {
 	InitSpeed = SPEED_PLAYER;
@@ -37,7 +36,7 @@ void PlayerZero::Start()
 	Renderer_Character->SetTexture("spr_idle_0.png");
 	Renderer_Character->ScaleToTexture();
 	Renderer_Slash->SetTexture("spr_slash_0.png");
-	Renderer_Slash->ScaleToTexture();
+	Renderer_Slash->GetTransform().SetLocalScale({92, 32, 1});
 
 	Renderer_Character->ChangeFrameAnimation("idle");
 	Renderer_Slash->ChangeFrameAnimation("slash");
@@ -115,6 +114,11 @@ void PlayerZero::End()
 
 void PlayerZero::InputCheck()
 {
+	if (false == InputValid)
+	{
+		return;
+	}
+
 	InputDir = float4::ZERO;
 	// 게임 화면 밖이면 공격 안하도록
 	bool ClickAble = Cursor::IsClickAble();
@@ -301,7 +305,7 @@ void PlayerZero::StateManagerInit()
 void PlayerZero::CreateAllAnimation()
 {
 	// Player
-	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.05f , false});
+	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.03f , false});
 	Renderer_Character->CreateFrameAnimationFolder("fall", FrameAnimation_DESC{ "fall", 0.1125f });
 	Renderer_Character->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "idle", 0.1125f });
 	Renderer_Character->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.05f , false});
@@ -319,7 +323,7 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("hurtground", FrameAnimation_DESC{ "hurtground", 0.1125f, false });
 
 	// Slash
-	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.07f, false });
+	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.03f, false });
 	Renderer_Slash->Off();
 
 	// 애니메이션 바인딩
@@ -364,6 +368,7 @@ void PlayerZero::CreateAllAnimation()
 
 	Renderer_Slash->AnimationBindEnd("slash", [=](const FrameAnimation_DESC& _Info)
 		{
+			Renderer_Slash->Off();
 			Collision_Slash->Off();
 		});
 

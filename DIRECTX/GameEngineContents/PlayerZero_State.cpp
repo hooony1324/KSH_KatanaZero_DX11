@@ -61,7 +61,7 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 	
 	// Æ÷¹°¼±
 	MoveVec = InputDir;
-	MoveSpeed = SPEED_PLAYER;
+	MoveSpeed = 700;
 	MoveVec.y *= 1.5f;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
 	//MoveVec.x = static_cast<float>(cosf(FlyAngle));
@@ -89,20 +89,26 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (true == Attack_AniEnd)
 	{
-		MoveVec.y = 0.0f;
+		Renderer_Character->ChangeFrameAnimation("fall");
 		Attack_AniEnd = false;
+	}
+
+	if (MoveVec.y <= 0)
+	{
+		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Fall");
 	}
+
 
 }
 
 void PlayerZero::FallStart(const StateInfo& _Info)
 {
-	Renderer_Character->ChangeFrameAnimation("fall");
+	MoveSpeed = 600;
 
-	if (abs(MoveVec.x) <= 0.0005f)
+	if (abs(MoveVec.x) <= 0.005f)
 	{
-		MoveVec.x = 0.05f * CurLookDir;
+		MoveVec.x = 0.04f * CurLookDir;
 	}
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, { MoveVec.x, MoveVec.y });
 }
@@ -110,7 +116,20 @@ void PlayerZero::FallStart(const StateInfo& _Info)
 void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
-	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+
+	if (abs(InputDir.x) < 0.1f)
+	{
+		//_DeltaTime * 1.5f
+		MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
+	}
+	else
+	{
+		MoveVec.x += InputDir.x * 0.02f;
+		if (abs(MoveVec.x) > 0.7f)
+		{
+			MoveVec.x = MoveVec.x < 0.0f ? -0.7f : 0.7f;
+		}
+	}
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity;
 
 
@@ -127,11 +146,17 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayerZero::JumpStart(const StateInfo& _Info)
 {
 	IsJump = true;
-	MoveSpeed = SPEED_PLAYER;
+	MoveSpeed = 700;
 	Renderer_Character->ChangeFrameAnimation("jump");
 	MoveVec = InputDir.NormalizeReturn();
-	MoveVec.y = 1.5f;
-	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
+	//FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
+	//MoveVec.y = static_cast<float>(sinf(FlyAngle));
+	if (MoveVec.x < 0.1f)
+	{
+		MoveVec.y = 0.7f;
+	}
+
+	float inputval = GameEngineInput::GetInst()->GetTime("W");
 }
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -139,12 +164,18 @@ void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 	CreateBrightShadow();
 
 	float DT = _Info.StateTime;
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity;
-	MoveVec.x += InputDir.x * 0.4f * _DeltaTime;
+
+
+
+	MoveVec.y = MoveVec.y - 9.8f * _DeltaTime / AntiGravity;
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
 
 	if (MoveVec.y <= 0)
 	{
 		IsJump = false;
+		MoveSpeed = SPEED_PLAYER;
+
+		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 	}
 }

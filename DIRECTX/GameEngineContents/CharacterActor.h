@@ -7,9 +7,9 @@ class GameEngineCollision;
 class CharacterActor : public LiveActor
 {
 public:
-	void SetReverse(bool _Val)
+	void SetInputValid(bool _Val)
 	{
-		IsReverse = _Val;
+		InputValid = _Val;
 	}
 
 	void SetDead()
@@ -138,6 +138,8 @@ protected:
 
 	GameEngineTextureRenderer* Renderer_SlashLight;
 
+	bool InputValid;
+	float4 InputDir;
 	float4 CharacterPos;
 	float InitSpeed;
 	float MoveSpeed; // ¼Ó·Â

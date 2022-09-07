@@ -33,7 +33,7 @@ void Room_Factory1::Start()
 	InitCameraClampArea();
 
 
-	PlayerSpawnPos = float4{ 220, -635, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 220, -645, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 	PtrDoor = GetLevel()->CreateActor<Door>(ACTORGROUP::TIMEGROUP);
 	PtrDoor->GetTransform().SetWorldMove({ 608, -320 });
@@ -41,13 +41,13 @@ void Room_Factory1::Start()
 
 	// 적 소환 리스트 1400, -310
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
-	Grunt->SetSpawnPos({ 1400, -310, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Grunt->SetSpawnPos({ 1400, -320, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Grunt->Off();
 	Enemies.push_back(Grunt);
 	
 	// 400, -330
 	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
-	Cop->SetSpawnPos({ 400, -350, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Cop->SetSpawnPos({ 400, -360, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Cop->Off();
 	Enemies.push_back(Cop);
 

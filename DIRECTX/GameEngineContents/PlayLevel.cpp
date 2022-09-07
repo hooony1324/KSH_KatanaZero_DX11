@@ -232,7 +232,8 @@ void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	CameraFollow(_DeltaTime);
 
-	if (_Info.StateTime > 0.2f)
+	// 추후 변환 효과
+	if (true)
 	{
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
@@ -277,18 +278,18 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 0.8f && false == WaveOff)
+	if (_Info.StateTime > 0.6f && false == WaveOff)
 	{
 		Effect_Wave::WaveOff();
 		WaveOff = true;
-		Player->SetReverse(false);
+		Player->SetInputValid(true);
 	}
 
 	// 카메라 플레이어 따라다니기
 	CameraFollow(_DeltaTime);
 
 	// 역재생용 프레임 저장
-	if (FrameTime > 0.008f)
+	if (FrameTime > 0.01f)
 	{
 		for (LiveActor* Actor : CaptureGroup)
 		{
@@ -501,14 +502,14 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 // 되감기
-
 const float ReverseSpeed = 1.0f;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
-	
-	//Player->ReverseStartSetting();
+	Player->SetInputValid(false);
+
 	for (LiveActor* Actor : CaptureGroup)
 	{
+		// 액터의 Update를 막음
 		Actor->ReverseStartSetting();
 	}
 
@@ -529,7 +530,7 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (Player->IsReverseEnd())
 	{
-		Effect_Wave::WaveOn();
+		//Effect_Wave::WaveOn();
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1.0f);
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1.0f);
 		RoomStateManager.ChangeState("RoomChange");

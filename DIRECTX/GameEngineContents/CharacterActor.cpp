@@ -16,6 +16,8 @@ CharacterActor::CharacterActor()
 	, CurLookDir(1)
 	, Hp(1)
 	, Invincible(false)
+	, InputValid(true)
+	, InputDir(float4::ZERO)
 {
 
 }
@@ -32,9 +34,10 @@ void CharacterActor::OnEvent()
 		LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
 	}
 
-	IsReverse = true;
+	InputValid = false;
 	CurLookDir = 1;
 	FrameDataRenderer->Off();
+	InputDir = float4::ZERO;
 	MoveVec = float4::ZERO;
 	Velocity = float4::ZERO;
 	Renderer_Slash->Off();
@@ -43,6 +46,7 @@ void CharacterActor::OnEvent()
 
 void CharacterActor::OffEvent()
 {
+	InputDir = float4::ZERO;	
 	MoveVec = float4::ZERO;
 	Velocity = float4::ZERO;
 	Renderer_Slash->Off();

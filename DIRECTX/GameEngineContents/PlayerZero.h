@@ -47,7 +47,7 @@ private:
 	// 입력
 	float4 MousePos;
 	float4 MouseDir;
-	float4 InputDir;
+
 
 	// 상태
 	float JumpInput;
