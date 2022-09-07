@@ -56,6 +56,10 @@ void GameEngineFontRenderer::Render(float _DeltaTime)
 	FontTarget->Setting();
 	Font->FontDraw(Text, FontSize, ScreenPostion, Color, static_cast<int>(LR) | static_cast<int>(TB));
 	GameEngineRenderingPipeLine::AllShaderReset();
+
+	// SetTexture 
+	// FontTarget 화면 전체크기만한 그림이에요
+
 	Camera->GetCameraRenderTarget()->Merge(FontTarget);
 
 	//GameEngineRenderTarget::SetPrevRenderTarget();
