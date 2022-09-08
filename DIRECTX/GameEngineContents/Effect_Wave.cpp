@@ -28,10 +28,10 @@ void Effect_Wave::EffectInit()
 
 	Option.DeltaTime = 0.0f;
 	
-	if (true == EffectSet.ShaderResources.IsConstantBuffer("RenderOption"))
+	if (true == EffectSet.ShaderResources.IsConstantBuffer("CustomRenderOption"))
 	{
-		EffectSet.ShaderResources.SetConstantBufferLink("RenderOption", &Option, sizeof(Option));
-		Option.Option00 = static_cast<int>(OnOffOption);
+		EffectSet.ShaderResources.SetConstantBufferLink("CustomRenderOption", &Option, sizeof(Option));
+		Option.OnOff = static_cast<int>(OnOffOption);
 	}
 	
 }
@@ -40,9 +40,11 @@ void Effect_Wave::Effect(GameEngineRenderTarget* _Target)
 {
 	CopyTarget->Copy(_Target);
 
-	SumDeltaTime += GameEngineTime::GetDeltaTime();
-	Option.DeltaTime = SumDeltaTime;
-	Option.Option00 = static_cast<int>(OnOffOption);
+	float DeltaTime = GameEngineTime::GetDeltaTime();
+	SumDeltaTime += DeltaTime;
+	Option.DeltaTime = DeltaTime;
+	Option.SumDeltaTime = SumDeltaTime;
+	Option.OnOff = static_cast<int>(OnOffOption);
 	EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 
 	_Target->Clear();

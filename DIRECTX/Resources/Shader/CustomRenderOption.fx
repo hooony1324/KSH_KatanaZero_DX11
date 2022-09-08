@@ -1,9 +1,9 @@
-cbuffer RenderOption : register(b10)
+cbuffer CustomRenderOption : register(b10)
 {
     float DeltaTime;
+    float SumDeltaTime;
     int IsMask;
-    int IsJump;
-    int Option00;
+    int OnOff;
     int Option01;
     int Option02;
     int Option03;

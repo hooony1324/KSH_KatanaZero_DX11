@@ -29,7 +29,8 @@ void PortalKnife::Start()
 	Renderer->ScaleToTexture();
 	Renderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.065f, true });
 	Renderer->ChangeMaskAnimation("portal");
-	Renderer->Option.IsMask = 1;
+	Renderer->CustomOption.IsMask = 1;
+	Renderer->CustomOption.OnOff = 1;
 	RendererScaleX = Renderer->GetTransform().GetLocalScale().x;
 	Renderer->Off();
 	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP));

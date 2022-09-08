@@ -43,7 +43,7 @@ void TentacleBoss::Start()
 	Renderer->CreateFrameAnimationFolder("attack", CustomFrameAnimation_DESC{ "tentacleboss_attack", 0.12f, false });
 	Renderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutoutY", 0.065f, true });
 	Renderer->ChangeMaskAnimation("portal");
-	Renderer->Option.IsMask = 1;
+	Renderer->CustomOption.IsMask = 1;
 	RendererScaleY = Renderer->GetTransform().GetLocalScale().y;
 	Renderer->ChangeFrameAnimation("idle");
 	Renderer->GetTransform().SetLocalPosition({ 10, 0, 0 });

@@ -49,7 +49,7 @@ void TestActor::Start()
 	MaskedRenderer->ScaleToTexture();
 	MaskedRenderer->CreateMaskAnimationFolder("portal", CustomFrameAnimation_DESC{ "portal_cutout", 0.065f, true });
 	MaskedRenderer->ChangeMaskAnimation("portal");
-	MaskedRenderer->Option.IsMask = 1;
+	MaskedRenderer->CustomOption.IsMask = 1;
 	
 
 	GetTransform().SetWorldScale({ 2, 2, 1 });

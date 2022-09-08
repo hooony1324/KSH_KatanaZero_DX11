@@ -113,6 +113,8 @@ public:
 class GameContentsCustomRenderer : public GameEngineDefaultRenderer
 {
 	friend CustomFrameAnimation;
+public:
+	CustomRenderOption CustomOption;
 
 public:
 	// constrcuter destructer
@@ -263,6 +265,7 @@ private:
 	GameEngineTexture* MaskTex;
 	GameEngineTexture* CurTex;
 
+	
 	AtlasData AtlasDataInst;
 	PixelData PixelDataInst;
 	MaskData MaskDataInst;

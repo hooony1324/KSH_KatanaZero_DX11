@@ -1,5 +1,5 @@
 #include "TransformHeader.fx"
-#include "RenderOption.fx"
+#include "CustomRenderOption.fx"
 
 struct Input
 {
@@ -31,19 +31,23 @@ SamplerState Smp : register(s0);
 float4 Wave_PS(Output _Input) : SV_Target0
 {   
     // Option00 -> OnOff플래그
-    if (Option00 == 0)
+    if (OnOff == 0)
     {
         return Tex.Sample(Smp, _Input.Tex.xy);
     }
 
-    float2 TexPos = _Input.Tex.xy;
-    float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 1440.0f);
-
-    uv.x = sin(uv.y * 10 + DeltaTime * 20.0f) / 10.0f;
     
-    float2 SmpPos = float2(_Input.Tex.x + uv.x, _Input.Tex.y);
-    float4 Color = Tex.Sample(Smp, SmpPos);
+    // 웨이브
+    float2 TexPos = _Input.Tex.xy;
+    float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f); // uv : 0 ~ 1
 
+    uv.x = (sin(uv.y * 15 + SumDeltaTime * 15.0f)) / 30.0f;
+    uv.y = 0;
+    
+    float2 SmpPos = float2(TexPos.x + uv.x, TexPos.y + uv.y);
+    float4 Color = Tex.Sample(Smp, SmpPos);
+    
+    
     return Color;
 }
 

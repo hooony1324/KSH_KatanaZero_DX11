@@ -6,6 +6,7 @@
 #include "GameEngineLevel.h"
 #include "GameEngineVertexs.h"
 #include "GameEngineConstantBuffer.h"
+#include "GameEngineStructuredBuffer.h"
 #include <math.h>
 
 
@@ -404,6 +405,7 @@ void GameEngineCore::EngineResourcesDestroy()
 	GameEngineRasterizer::ResourcesDestroy();
 	GameEngineBlend::ResourcesDestroy();
 	GameEngineConstantBuffer::ResourcesDestroy();
+	GameEngineStructuredBuffer::ResourcesDestroy();
 	GameEngineSound::ResourcesDestroy();
 	GameEngineFont::ResourcesDestroy();
 

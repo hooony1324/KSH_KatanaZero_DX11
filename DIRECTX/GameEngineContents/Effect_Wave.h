@@ -42,7 +42,7 @@ protected:
 
 private:
 	static bool OnOffOption;
-	RenderOption Option;
+	CustomRenderOption Option;
 	float SumDeltaTime;
 };
 

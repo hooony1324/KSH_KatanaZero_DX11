@@ -16,6 +16,7 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 {
 	IsJump = false;
 	Renderer_Character->ChangeFrameAnimation("idle");
+	WallGrab = false;
 }
 
 void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -78,7 +79,14 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 슬래쉬 애니메이션 끝나면 콜리전 끄기
 	float DT = _Info.StateTime;
 	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - FloatDeltaTime / 2;
+	
+	float MinusPower = FloatDeltaTime / 2;
+	if (MinusPower > 0.7f)
+	{
+		MinusPower = 0.7f;
+	}
+
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - MinusPower;
 
 	if (WallState == STATE_WALL::RIGHT || WallState == STATE_WALL::RIGHTSLOPE
 		|| WallState == STATE_WALL::LEFT || WallState == STATE_WALL::LEFTSLOPE)
@@ -356,13 +364,17 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 	WallGrab = false;
 	Renderer_Character->ChangeFrameAnimation("flip");
 	
+	float y = abs(static_cast<float>(sinf(40 * GameEngineMath::DegreeToRadian)));
+	float x = static_cast<float>(cosf(40 * GameEngineMath::DegreeToRadian));
+	y *= 1.2f;
+	x *= 1.5f;
 	if (CurLookDir == -1)
 	{
-		FlyVector = { 1.0f, 1.25f };
+		FlyVector = float4{ x, y }.NormalizeReturn();
 	}
 	else
 	{
-		FlyVector = { -1.0f, 1.25f };
+		FlyVector = float4{ -x, y }.NormalizeReturn();
 	}
 	MoveVec.x = FlyVector.x;
 

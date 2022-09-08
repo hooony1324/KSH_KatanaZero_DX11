@@ -24,6 +24,6 @@ protected:
 	GameEngineRenderSet EffectSet;
 
 private:
-	RenderOption Option;
+	CustomRenderOption Option;
 	float SumDeltaTime;
 };

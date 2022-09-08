@@ -12,7 +12,7 @@
     <FxCompile Include="..\Resources\Shader\TextureMask.hlsl">
       <Filter>Sahder</Filter>
     </FxCompile>
-    <FxCompile Include="..\Resources\Shader\RenderOption.fx">
+    <FxCompile Include="..\Resources\Shader\CustomRenderOption.fx">
       <Filter>ShaderFx</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\TransformHeader.fx">

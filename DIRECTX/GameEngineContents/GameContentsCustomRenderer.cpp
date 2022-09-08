@@ -196,6 +196,11 @@ void GameContentsCustomRenderer::SetTextureRendererSetting()
 {
 	SetPipeLine("TextureMask");
 
+	if (true == ShaderResources.IsConstantBuffer("CustomRenderOption"))
+	{
+		ShaderResources.SetConstantBufferLink("CustomRenderOption", &CustomOption, sizeof(CustomOption));
+	}
+
 	AtlasDataInst.FrameData.PosX = 0.0f;
 	AtlasDataInst.FrameData.PosY = 0.0f;
 	AtlasDataInst.FrameData.SizeX = 1.0f;
@@ -494,7 +499,7 @@ void GameContentsCustomRenderer::Update(float _Delta)
 		CurAni->Update(_Delta);
 	}
 
-	if (Option.IsMask == 1)
+	if (CustomOption.IsMask == 1)
 	{
 		CurMask->MaskUpdate(_Delta);
 	}
