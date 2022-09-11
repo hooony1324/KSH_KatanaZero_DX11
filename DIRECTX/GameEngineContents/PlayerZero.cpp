@@ -3,6 +3,8 @@
 
 #include "Timer.h"
 #include "Cursor.h"
+#include <GameEngineBase/magic_enum.hpp>
+#include "Door.h"
 
 
 const float4 Gravity = { 0, -9.8f, 0 };
@@ -11,6 +13,7 @@ PlayerZero::PlayerZero()
 	: AttackAble(true)
 	, RollAble(true)
 	, MouseDir(float4::ZERO)
+
 {
 	InitSpeed = SPEED_PLAYER;
 	MoveSpeed = InitSpeed;
@@ -100,11 +103,12 @@ void PlayerZero::Update(float _DeltaTime)
 	// 이동
 	LookCheck(InputDir.x);
 	PlayerMove(_DeltaTime);
-	StopAtDoor(_DeltaTime);
 	CoolTimeCheck();
 
+	// 디버그
 	//PrintPlayerDebug();
-
+	auto State = magic_enum::enum_name(WallState);
+	GlobalValueManager::PlayerWallState = State;
 
 }
 
@@ -187,53 +191,59 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	}
 	case CharacterActor::STATE_WALL::UNDERGROUND:
-		Velocity.y = 1.0f;
+		GetTransform().SetWorldMove({ 0, 1, 0 });
+		return;
 		break;
 	case CharacterActor::STATE_WALL::RIGHTSLOPE:
 	{
-		if (Velocity.y > 0)
+		if (Velocity.y > 1.0f)
 		{
 			break;
 		}
-		// 우상향
-		float Vector = MoveSpeed * _DeltaTime;
-		if (Velocity.x > 0 && CurLookDir > 0)
+
+		if (abs(Velocity.x) < 1.0f )
 		{
-			GetTransform().SetWorldMove({ Vector, Vector, 0 });
 			return;
 		}
-		// 좌하향
-		else if(Velocity.x < 0 && CurLookDir < 0)
-		{
-			GetTransform().SetWorldMove({ -Vector, -Vector, 0 });
-			return;
-		}
+		
+		float NewVelocity = Velocity.x * 0.7f;
+		Velocity = float4{ NewVelocity, NewVelocity, 0 };
 		break;
+
 	}
 	case CharacterActor::STATE_WALL::LEFTSLOPE:
 	{
-		if (Velocity.y > 0)
+		if (Velocity.y > 1.0f)
 		{
 			break;
 		}
-		// 우하향
-		float Vector = MoveSpeed * _DeltaTime;
-		if (Velocity.x > 0 && CurLookDir > 0)
+
+		if (abs(Velocity.x) < 1.0f)
 		{
-			GetTransform().SetWorldMove({ Vector, -Vector, 0 });
 			return;
 		}
-		// 좌상향
-		else if(Velocity.x < 0 && CurLookDir < 0)
-		{
-			GetTransform().SetWorldMove({ -Vector, Vector, 0 });
-			return;
-		}
+
+		float NewVelocity = Velocity.x * 0.7f;
+		Velocity = float4{ NewVelocity, -NewVelocity, 0 };
 		break;
 	}
 	default:
 		break;
 	}
+
+	if (false == DoorBreaking)
+	{
+		Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+			{
+				DoorBreaking = true;
+				PlayerStateManager.ChangeState("DoorBreak");
+				Velocity.x = 0;
+				DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+				return false;
+			});
+	}
+
 
 
 	GetTransform().SetWorldMove(Velocity);
@@ -299,22 +309,28 @@ void PlayerZero::StateManagerInit()
 		, std::bind(&PlayerZero::DeadUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayerZero::DeadStart, this, std::placeholders::_1)
 	);;
+
+	PlayerStateManager.CreateStateMember("DoorBreak"
+		, std::bind(&PlayerZero::DoorBreakUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayerZero::DoorBreakStart, this, std::placeholders::_1)
+	);;
 }
 
 
 void PlayerZero::CreateAllAnimation()
 {
 	// Player
+	Renderer_Character->SetScaleModeImage();
 	Renderer_Character->CreateFrameAnimationFolder("attack", FrameAnimation_DESC{ "attack", 0.03f , false});
 	Renderer_Character->CreateFrameAnimationFolder("fall", FrameAnimation_DESC{ "fall", 0.1125f });
 	Renderer_Character->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "idle", 0.1125f });
-	Renderer_Character->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.05f , false});
+	Renderer_Character->CreateFrameAnimationFolder("idle_to_run", FrameAnimation_DESC{ "idle_to_run", 0.04f , false});
 	Renderer_Character->CreateFrameAnimationFolder("jump", FrameAnimation_DESC{ "jump", 0.1125f });
 	Renderer_Character->CreateFrameAnimationFolder("postcrouch", FrameAnimation_DESC{ "postcrouch", 0.08f , false});
 	Renderer_Character->CreateFrameAnimationFolder("precrouch", FrameAnimation_DESC{ "precrouch", 0.08f , false});
 	Renderer_Character->CreateFrameAnimationFolder("roll", FrameAnimation_DESC{ "roll", 0.05f });
 	Renderer_Character->CreateFrameAnimationFolder("run", FrameAnimation_DESC{ "run", 0.08f });
-	Renderer_Character->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.05f , false});
+	Renderer_Character->CreateFrameAnimationFolder("run_to_idle", FrameAnimation_DESC{ "run_to_idle", 0.08f , false});
 	Renderer_Character->CreateFrameAnimationFolder("wallgrab", FrameAnimation_DESC{ "wallgrab", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("wallslide", FrameAnimation_DESC{ "wallslide", 0.08f, false });
 	Renderer_Character->CreateFrameAnimationFolder("flip", FrameAnimation_DESC{ "flip", 0.05f, false });
@@ -322,20 +338,19 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->CreateFrameAnimationFolder("hurtfly", FrameAnimation_DESC{ "hurtfly", 0.1125f, false });
 	Renderer_Character->CreateFrameAnimationFolder("hurtground", FrameAnimation_DESC{ "hurtground", 0.1125f, false });
 
+	Renderer_Character->CreateFrameAnimationFolder("doorbreak", FrameAnimation_DESC{ "doorbreak", 0.1f , false });
+
 	// Slash
 	Renderer_Slash->CreateFrameAnimationFolder("slash", FrameAnimation_DESC{ "player_slash", 0.03f, false });
 	Renderer_Slash->Off();
 
 	// 애니메이션 바인딩
 	Renderer_Character->AnimationBindStart("idle_to_run", [=](const FrameAnimation_DESC&) { IdleRun_AniEnd = false; });
-	Renderer_Character->AnimationBindFrame("idle_to_run", [=](const FrameAnimation_DESC&) 
-		{
-			if (InputDir.CompareInt2D({ 0, 0 }))
-			{
-				MoveVec = float4::ZERO;
-				PlayerStateManager.ChangeState("Idle");
-			}
-		});
+	//Renderer_Character->AnimationBindFrame("idle_to_run", [=](const FrameAnimation_DESC& _Info) 
+		//{
+		//	// 걷기 -> 달리기 중단하고 걷기->IDLE
+		//
+		//});
 	Renderer_Character->AnimationBindEnd("idle_to_run", [=](const FrameAnimation_DESC&) { IdleRun_AniEnd = true; });
 
 	Renderer_Character->AnimationBindStart("run_to_idle", [=](const FrameAnimation_DESC&) { RunIdle_AniEnd = false; });
@@ -375,6 +390,31 @@ void PlayerZero::CreateAllAnimation()
 	Renderer_Character->AnimationBindEnd("hurtground", [=](const FrameAnimation_DESC& _Info)
 		{
 			DeadAniend = true;
+		});
+
+	// DoorBreak
+	Renderer_Character->AnimationBindStart("doorbreak", [=](const FrameAnimation_DESC& _Info)
+		{
+			Renderer_Character->SetPivotToVector({ 0, 5, 0 });
+		});
+
+	Renderer_Character->AnimationBindFrame("doorbreak", [=](const FrameAnimation_DESC& _Info)
+		{
+			if (4 == _Info.CurFrame)
+			{
+				if (nullptr != DoorPtr)
+				{
+					DoorPtr->Open();
+					DoorPtr = nullptr;
+				}
+			}
+		}); 
+	Renderer_Character->AnimationBindEnd("doorbreak", [=](const FrameAnimation_DESC&) 
+		{ 
+			CamShake = true;
+			DoorBreaking = false;
+			PlayerStateManager.ChangeState("Idle");
+			Renderer_Character->SetPivotToVector(float4::ZERO);
 		});
 }
 

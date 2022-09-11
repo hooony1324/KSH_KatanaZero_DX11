@@ -8,6 +8,8 @@ public:
 
 	static float4 PlayerPos;
 	static class CharacterActor* Player;
+	static std::string PlayerWallState;
+	static std::string PlayerState;
 	
 	// 현재 맵의 계단 정보
 	static std::list<GameEngineCollision*> Collision_UpStairs;

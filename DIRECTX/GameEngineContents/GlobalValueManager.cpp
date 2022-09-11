@@ -8,6 +8,9 @@ CharacterActor* GlobalValueManager::Player = nullptr;
 std::list<GameEngineCollision*> GlobalValueManager::Collision_UpStairs;
 std::list<GameEngineCollision*> GlobalValueManager::Collision_DownStairs;
 
+std::string GlobalValueManager::PlayerWallState;
+std::string GlobalValueManager::PlayerState;
+
 void GlobalValueManager::ClearStairs()
 {
 	for (GameEngineCollision* Collision : Collision_UpStairs)

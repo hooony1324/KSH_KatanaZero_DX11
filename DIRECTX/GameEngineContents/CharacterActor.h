@@ -60,7 +60,7 @@ public:
 		CheatMode = false;
 	}
 
-	bool CollisionSlashCheck();
+	bool ShakeMainCamera();
 
 
 	// 방 변경시 상태 초기화
@@ -138,6 +138,8 @@ protected:
 
 	GameEngineTextureRenderer* Renderer_SlashLight;
 
+	GameEngineCollision* SlashingCollision; // 
+
 	bool InputValid;
 	float4 InputDir;
 	float4 CharacterPos;
@@ -178,6 +180,10 @@ protected:
 	bool IsDead;		// hurtground ani 끝에 true로 설정해줌
 	bool DeadAniend;
 	bool Invincible; // 구르는 동안 무적
+
+	bool DoorBreaking;
+	class Door* DoorPtr;
+	bool CamShake;
 
 	// 사운드
 protected:

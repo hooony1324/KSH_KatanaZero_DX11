@@ -4,6 +4,7 @@
 #include "Cursor.h"
 #include <algorithm>
 
+#include "Door.h"
 
 
 
@@ -17,6 +18,7 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 	IsJump = false;
 	Renderer_Character->ChangeFrameAnimation("idle");
 	WallGrab = false;
+	IsFlip = false;
 }
 
 void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -25,32 +27,39 @@ void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (true == IsFall && !IsJump)
 	{
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
 
 	// Jump
 	if (InputDir.y > 0 && !IsFall)
 	{
 		PlayerStateManager.ChangeState("Jump");
+		return;
+	}
+
+	// Roll
+	if (abs(InputDir.x) >= 1.0f && InputDir.y <= -1.0f)
+	{
+		PlayerStateManager.ChangeState("Roll");
+		return;
 	}
 
 	// Run
 	if (abs(InputDir.x) > 0 && !IsFall)
 	{
 		PlayerStateManager.ChangeState("IdleToRun");
+		return;
 	}
 
 	// 땅 뚫고 내려가기
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
-		GetTransform().SetWorldMove({ 0, -4, 0 });
+		GetTransform().SetWorldMove({ 0, -2, 0 });
+		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
 
-	float4 RollDir = float4{ abs(InputDir.x), InputDir.y };
-	if (RollDir.CompareInt2D({ 1, -1 }))
-	{
-		PlayerStateManager.ChangeState("Roll");
-	}
 
 }
 
@@ -65,10 +74,27 @@ void PlayerZero::AttackStart(const StateInfo& _Info)
 	MoveSpeed = 700;
 	MoveVec.y *= 1.5f;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
-	//MoveVec.x = static_cast<float>(cosf(FlyAngle));
 
 	IsAttack = true;
 	IsFlip = false;
+
+
+	if (MoveVec.x >= 0.7f && WallState == STATE_WALL::RIGHTSLOPE)
+	{
+		MoveVec = float4::VectorRotationToDegreeZAxis(float4::RIGHT, 55).NormalizeReturn();
+	}
+
+	if (MoveVec.x <= -0.7f && WallState == STATE_WALL::LEFTSLOPE)
+	{
+		MoveVec = float4::VectorRotationToDegreeZAxis(float4::RIGHT, 50).NormalizeReturn();
+		MoveVec.x *= -1.0f;
+	}
+
+	if (MoveVec.y <= 0.08f)
+	{
+		GetTransform().SetWorldMove({ 0, 10, 0 });
+		MoveVec.y = 0.7f;
+	}
 
 }
 
@@ -88,12 +114,6 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity - MinusPower;
 
-	if (WallState == STATE_WALL::RIGHT || WallState == STATE_WALL::RIGHTSLOPE
-		|| WallState == STATE_WALL::LEFT || WallState == STATE_WALL::LEFTSLOPE)
-	{
-		MoveVec.x = 0;
-	}
-
 
 	if (true == Attack_AniEnd)
 	{
@@ -101,10 +121,11 @@ void PlayerZero::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 		Attack_AniEnd = false;
 	}
 
-	if (MoveVec.y <= 0)
+	if (MoveVec.y < 0)
 	{
 		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
 
 
@@ -118,6 +139,14 @@ void PlayerZero::FallStart(const StateInfo& _Info)
 	{
 		MoveVec.x = 0.04f * CurLookDir;
 	}
+
+	// 걷다가 낭떠러지
+	//if (abs(MoveVec.x) >= 0.90f)
+	//{
+	//	MoveVec.x = 1.0f;
+	//	MoveVec.y = 0.0f;
+	//}
+
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, { MoveVec.x, MoveVec.y });
 }
 
@@ -138,8 +167,24 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 			MoveVec.x = MoveVec.x < 0.0f ? -0.7f : 0.7f;
 		}
 	}
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity;
 
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity * 0.8f;
+	// 부유감 좀 있음
+	if (MoveVec.y <= -0.8f)
+	{
+		MoveVec.y = -0.8f;
+	}
+
+
+	if (DownBlue || DoubleDownBlue || 
+		WallState == STATE_WALL::RIGHTSLOPE || WallState == STATE_WALL::LEFTSLOPE)
+	{
+		MoveVec = float4::ZERO;
+		Velocity = float4::ZERO;
+		MoveSpeed = SPEED_PLAYER;
+		PlayerStateManager.ChangeState("Idle");
+		return;
+	}
 
 	if (false == IsFall)
 	{
@@ -147,6 +192,7 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 		Velocity = float4::ZERO;
 		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Idle");
+		return;
 	}
 }
 
@@ -157,14 +203,22 @@ void PlayerZero::JumpStart(const StateInfo& _Info)
 	MoveSpeed = 700;
 	Renderer_Character->ChangeFrameAnimation("jump");
 	MoveVec = InputDir.NormalizeReturn();
-	//FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, MoveVec);
-	//MoveVec.y = static_cast<float>(sinf(FlyAngle));
+
 	if (MoveVec.x < 0.1f)
 	{
 		MoveVec.y = 0.7f;
 	}
 
-	float inputval = GameEngineInput::GetInst()->GetTime("W");
+	if (MoveVec.x >= 0.7f && WallState == STATE_WALL::RIGHTSLOPE)
+	{
+		MoveVec = float4::VectorRotationToDegreeZAxis(float4::RIGHT, 55).NormalizeReturn();
+	}
+
+	if (MoveVec.x <= -0.7f && WallState == STATE_WALL::LEFTSLOPE)
+	{
+		MoveVec = float4::VectorRotationToDegreeZAxis(float4::RIGHT, 50).NormalizeReturn();
+		MoveVec.x *= -1.0f;
+	}
 }
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -173,9 +227,7 @@ void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	float DT = _Info.StateTime;
 
-
-
-	MoveVec.y = MoveVec.y - 9.8f * _DeltaTime / AntiGravity;
+	MoveVec.y = MoveVec.y - 9.8f * _DeltaTime / AntiGravity * 0.8f;
 	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
 
 	if (MoveVec.y <= 0)
@@ -186,6 +238,7 @@ void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 	}
+
 }
 
 void PlayerZero::RollStart(const StateInfo& _Info)
@@ -194,7 +247,7 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("roll");
 	
 	MoveVec.x = InputDir.x;
-	MoveSpeed = SPEED_PLAYER * 2.0f;
+	MoveSpeed = SPEED_PLAYER * 1.7f;
 	Invincible = true;
 
 	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
@@ -214,20 +267,24 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 		if (abs(InputDir.x) > 0)
 		{
 			PlayerStateManager.ChangeState("Run");
+			return;
 		}
 		else
 		{
-			MoveVec.x = 0;
-			PlayerStateManager.ChangeState("Idle");
+			PlayerStateManager.ChangeState("RunToIdle");
+			return;
 		}
 	}
 
 
 	if (IsFall)
 	{
-		CheatModeSwitch();
+		Invincible = false;
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
+
+
 }
 
 void PlayerZero::RunStart(const StateInfo& _Info)
@@ -242,29 +299,33 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (InputDir.y > 0)
 	{
 		PlayerStateManager.ChangeState("Jump");
+		return;
 	}
 
 	// 중간 방향전환
 	if (InputDir.x * MoveVec.x < 0)
 	{
 		PlayerStateManager.ChangeState("IdleToRun");
+		return;
 	}
 
 	float4 RollDir = float4{ abs(InputDir.x), InputDir.y };
 	if (RollDir.CompareInt2D({ 1, -1 }))
 	{
 		PlayerStateManager.ChangeState("Roll");
+		return;
 	}
 
 	if (InputDir.CompareInt2D(float4::ZERO))
 	{
-		MoveVec.x = 0;
 		PlayerStateManager.ChangeState("RunToIdle");
+		return;
 	}
 
 	if (abs(InputDir.x) && IsFall)
 	{
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
 
 
@@ -290,7 +351,7 @@ void PlayerZero::WallGrabStart(const StateInfo& _Info)
 	// MoveVec 이 양수면 조금 올라간다(Grab)
 	// MoveVec 이 음수면 내려간다(Slide)
 	MoveVec.x = 0; 
-	FlyVector = { 0, MoveVec.y * 1.3f };
+	FlyVector = { 0, MoveVec.y * 1.6f };
 	MoveVec.y = 0;
 	IsFlip = false;
 	Flipable = false;
@@ -305,6 +366,7 @@ void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (MoveVec.y <= 0.00005f)
 	{
 		PlayerStateManager.ChangeState("WallSlide");
+		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("W"))
@@ -312,6 +374,7 @@ void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 		WallGrab = false;
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
 		PlayerStateManager.ChangeState("Flip");
+		return;
 	}
 
 	if (false == IsFall)
@@ -321,6 +384,7 @@ void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
 		PlayerStateManager.ChangeState("Idle");
 		WallGrab = false;
+		return;
 	}
 
 }
@@ -345,6 +409,7 @@ void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
 		PlayerStateManager.ChangeState("Idle");
 		WallGrab = false;
+		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("W"))
@@ -352,6 +417,7 @@ void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
 		PlayerStateManager.ChangeState("Flip");
 		WallGrab = false;
+		return;
 	}
 
 	
@@ -366,8 +432,7 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 	
 	float y = abs(static_cast<float>(sinf(40 * GameEngineMath::DegreeToRadian)));
 	float x = static_cast<float>(cosf(40 * GameEngineMath::DegreeToRadian));
-	y *= 1.2f;
-	x *= 1.5f;
+
 	if (CurLookDir == -1)
 	{
 		FlyVector = float4{ x, y }.NormalizeReturn();
@@ -377,6 +442,7 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 		FlyVector = float4{ -x, y }.NormalizeReturn();
 	}
 	MoveVec.x = FlyVector.x;
+	MoveSpeed = 700;
 
 	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
 	RollSoundPlayer.Volume(0.05f);
@@ -388,13 +454,14 @@ void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	float DT = _Info.StateTime;
 	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
-	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime * 0.7f);
 
 	if (false == IsFall)
 	{
 		IsFlip = false;
 		MoveVec = float4::ZERO;
 		Velocity = float4::ZERO;
+		MoveSpeed = SPEED_PLAYER;
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
 		PlayerStateManager.ChangeState("Idle");
 	}
@@ -405,40 +472,81 @@ void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayerZero::RunToIdleStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("run_to_idle");
+	
 }
 
 void PlayerZero::RunToIdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true == RunIdle_AniEnd)
+	float DT = _Info.StateTime;
+	
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime * 10.0f);
+
+	// Roll
+	if (abs(InputDir.x) >= 1.0f && InputDir.y <= -1.0f)
+	{
+		PlayerStateManager.ChangeState("Roll");
+		return;
+	}
+
+	if (abs(MoveVec.x) <= 0.001f)
 	{
 		PlayerStateManager.ChangeState("Idle");
+		return;
 	}
+	
+	if (DT >= 0.15f && abs(InputDir.x) > 0.5f)
+	{
+		MoveVec.x = 0.0f;
+		PlayerStateManager.ChangeState("IdleToRun");
+		return;
+	}
+	
 
 	if (InputDir.y > 0)
 	{
 		PlayerStateManager.ChangeState("Jump");
+		return;
 	}
 
 	// 땅 뚫고 내려가기
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
 		GetTransform().SetWorldMove({ 0, -2, 0 });
+		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
 }
 
 void PlayerZero::IdleToRunStart(const StateInfo& _Info)
 {
-	MoveSpeed = 20.0f;
 	Renderer_Character->ChangeFrameAnimation("idle_to_run");
+	
 }
 
 void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true == IdleRun_AniEnd)
+	float DT = _Info.StateTime;
+	float MoveX = pow(DT, 3.0f) * 50; // 25 : 0.2초만에 0~1
+	MoveVec.x = MoveX * InputDir.x;
+
+	// Roll
+	if (abs(InputDir.x) >= 1.0f && InputDir.y <= -1.0f)
 	{
-		MoveSpeed = SPEED_PLAYER;
+		PlayerStateManager.ChangeState("Roll");
+		return;
+	}
+
+	if (DT >= 0.2f)
+	{
 		PlayerStateManager.ChangeState("Run");
+		return;
+	}
+
+	if (abs(InputDir.x) < 0.1f)
+	{
+		PlayerStateManager.ChangeState("RunToIdle");
+		return;
 	}
 
 	// 땅 뚫고 내려가기
@@ -446,13 +554,16 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveSpeed = SPEED_PLAYER;
 		GetTransform().SetWorldMove({ 0, -2, 0 });
+		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
+		return;
 	}
 
 	if (InputDir.y > 0)
 	{
 		MoveSpeed = SPEED_PLAYER;
 		PlayerStateManager.ChangeState("Jump");
+		return;
 	}
 
 
@@ -510,6 +621,28 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.x *= -0.3f;
 	}
 
+
+}
+
+void PlayerZero::DoorBreakStart(const StateInfo& _Info)
+{
+	MoveVec.x = 0;
+	Renderer_Character->ChangeFrameAnimation("doorbreak");
+
+
+	if (InputDir.x < 0)
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
+	else if (InputDir.x > 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+
+}
+
+void PlayerZero::DoorBreakUpdate(float _DeltaTime, const StateInfo& _Info)
+{
 
 }
 
@@ -590,6 +723,8 @@ void PlayerZero::PrintPlayerDebug()
 	default:
 		break;
 	}
+	
+
 
 	//std::string Output = "Velocity : " + std::to_string(Velocity.x) + "/" + std::to_string(Velocity.y);
 	//GameEngineDebug::OutPutString(Output);

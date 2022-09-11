@@ -263,14 +263,14 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 }
 
 float SlowRecoverTime;
-float FrameTime;
+float ShotFrameTime;
 bool WaveOff;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
 	SlowRecoverTime = 0.0f;
 
 	// 화면 녹화 시작 지점
-	FrameTime = 0.0f;
+	ShotFrameTime = 0.0f;
 
 	WaveOff = false;
 }
@@ -289,19 +289,19 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	CameraFollow(_DeltaTime);
 
 	// 역재생용 프레임 저장
-	if (FrameTime > 0.01f)
+	if (ShotFrameTime > 0.01f)
 	{
 		for (LiveActor* Actor : CaptureGroup)
 		{
 			Actor->PushFrameCpaturedData();
 		}
-		FrameTime = 0.0f;
+		ShotFrameTime = 0.0f;
 	}
 
 
 
 	RoomPlayTotalTime += _DeltaTime;
-	FrameTime += _DeltaTime;
+	ShotFrameTime += _DeltaTime;
 
 	if (GlobalValueManager::SlowEnergy < 11)
 	{
@@ -315,7 +315,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 공격 성공시 화면 흔들림 효과
-	if (true == Player->CollisionSlashCheck())
+	if (true == Player->ShakeMainCamera())
 	{
 		RoomStateManager.ChangeState("RoomShake");
 		return;

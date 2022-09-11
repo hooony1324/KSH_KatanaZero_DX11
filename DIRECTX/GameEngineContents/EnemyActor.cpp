@@ -174,6 +174,10 @@ void EnemyActor::OnEvent()
 
 	StateManager.ChangeState("Spawn");
 
+	if (false == Collision_Character->IsUpdate())
+	{
+		Collision_Character->On();
+	}
 
 }
 

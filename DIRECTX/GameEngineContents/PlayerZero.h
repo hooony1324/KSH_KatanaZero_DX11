@@ -2,7 +2,7 @@
 #include "CharacterActor.h"
 #include <GameEngineBase/GameEngineSound.h>
 
-const float SPEED_PLAYER = 400.0f;
+const float SPEED_PLAYER = 500.0f;
 
 // 설명 :
 class Timer;
@@ -92,6 +92,9 @@ private:
 	void DeadStart(const StateInfo& _Info);
 	void DeadUpdate(float _DeltaTime, const StateInfo& _Info);
 
+	void DoorBreakStart(const StateInfo& _Info);
+	void DoorBreakUpdate(float _DeltaTime, const StateInfo& _Info);
+
 	void InputCheck();
 	void CoolTimeCheck();
 
@@ -109,6 +112,7 @@ private:
 	// CoolTime
 	bool AttackAble;
 	bool RollAble;
+
 
 // 바인딩
 private:

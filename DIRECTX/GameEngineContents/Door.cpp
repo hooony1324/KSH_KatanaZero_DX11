@@ -16,12 +16,11 @@ void Door::Close()
 	Renderer->ChangeFrameAnimation("idle");
 }
 
-bool Door::Open(GameEngineCollision* _This, GameEngineCollision* _Other)
+void Door::Open()
 {
 	Collision->Off();
 	Renderer->ChangeFrameAnimation("open");
 
-	return true;
 }
 
 void Door::Start()
@@ -73,8 +72,7 @@ void Door::OffEvent()
 void Door::Update(float _DeltaTime)
 {
 	
-	Collision->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_AABB2D
-		, std::bind(&Door::Open, this, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 void Door::End()

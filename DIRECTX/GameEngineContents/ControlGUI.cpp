@@ -62,8 +62,7 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	}
 
 	{
-		float4 Pos = PlayLevel::PlayLevelInst->GetUICamera()->GetTransform().GetWorldPosition();
-		std::string Name = "UICamPos : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y) + " : " + std::to_string(Pos.z);
+		std::string Name = "WallState : " + GlobalValueManager::PlayerWallState;
 		ImGui::Text(Name.c_str());
 	}
 

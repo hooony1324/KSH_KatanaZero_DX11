@@ -8,7 +8,7 @@ class Door : public LiveActor
 {
 public:
 	void Close();
-	bool Open(GameEngineCollision* _This, GameEngineCollision* _Other);
+	void Open();
 
 public:
 	// constrcuter destructer

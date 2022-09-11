@@ -18,6 +18,9 @@ CharacterActor::CharacterActor()
 	, Invincible(false)
 	, InputValid(true)
 	, InputDir(float4::ZERO)
+	, DoorBreaking(false)
+	, DoorPtr(nullptr)
+	, CamShake(false)
 {
 
 }
@@ -42,15 +45,21 @@ void CharacterActor::OnEvent()
 	Velocity = float4::ZERO;
 	Renderer_Slash->Off();
 	WallGrab = false;
+	DoorBreaking = false;
+	DoorPtr = nullptr;
+	CamShake = false;
 }
 
 void CharacterActor::OffEvent()
 {
-	InputDir = float4::ZERO;	
+	InputDir = float4::ZERO;
 	MoveVec = float4::ZERO;
 	Velocity = float4::ZERO;
 	Renderer_Slash->Off();
 	WallGrab = false;
+	DoorBreaking = false;
+	DoorPtr = nullptr;
+	CamShake = false;
 }
 
 void CharacterActor::WallCheck()
@@ -110,12 +119,12 @@ void CharacterActor::WallCheck()
 	}
 
 	// 왼쪽 오른쪽 벽
-	if (Left_Up)
+	if (Left_Up && Left)
 	{
 		WallState = STATE_WALL::LEFT;
 		return;
 	}
-	if (Right_Up)
+	if (Right_Up && Right)
 	{
 		WallState = STATE_WALL::RIGHT;
 		return;
@@ -185,11 +194,11 @@ void CharacterActor::StopAtDoor(float _DeltaTime)
 	{
 		if (MoveVec.x > 0)
 		{
-			GetTransform().SetWorldMove(float4::LEFT * MoveSpeed * _DeltaTime);
+			MoveVec.x = -1.0f;
 		}
 		else
 		{
-			GetTransform().SetWorldMove(float4::RIGHT * MoveSpeed * _DeltaTime);
+			MoveVec.x = 1.0f;
 		}
 	}
 }
@@ -246,24 +255,21 @@ bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* 
 
 
 // 같은 콜리전 계속 부딛힌거면 false
-GameEngineCollision* SlashedCol;
+
 bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	if (SlashedCol == _Other)
-	{
-		return false;
-	}
+	_Other->Off();
 
 	// 충돌 발생
-	SlashedCol = _Other;
+	//SlashedCol = _Other;
 
-	if (nullptr == dynamic_cast<Door*>(_Other->GetActor()))
+	if (nullptr == DoorPtr)
 	{
 		float4 OtherPos = _Other->GetTransform().GetWorldPosition();
 		float4 ThisPos = _This->GetTransform().GetWorldPosition();
 		OtherPos.z = 0;
 		ThisPos.z = 0;
-		
+
 		// 화면을 가로지르는 이펙트
 		SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
 		Fx->GetTransform().SetWorldPosition(OtherPos);
@@ -274,15 +280,26 @@ bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngin
 	return true;
 }
 
-bool CharacterActor::CollisionSlashCheck()
+bool CharacterActor::ShakeMainCamera()
 {
 	float4 SlashLightDir;
 
-	if (Collision_Slash->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
-	{
-		return true;
-	}
+	Collision_Slash->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+		{
+			DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+			if (nullptr != DoorPtr)
+			{
+				DoorPtr->Open();
+				DoorBreaking = true;
+				DoorPtr = nullptr;
+				CamShake = true;
+			}
+
+			return false;
+		});
+
+
 
 	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_OBB2D,
 		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
@@ -293,6 +310,12 @@ bool CharacterActor::CollisionSlashCheck()
 	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_OBB2D,
 		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
+		return true;
+	}
+
+	if (true == CamShake)
+	{
+		CamShake = false;
 		return true;
 	}
 
