@@ -275,6 +275,7 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (IsFall)
 	{
 		Invincible = false;
+		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 		return;
 	}
@@ -317,8 +318,9 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (abs(InputDir.x) && IsFall)
+	if (abs(InputDir.x) > 0 && true == IsFall)
 	{
+		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 		return;
 	}

@@ -163,7 +163,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	case CharacterActor::STATE_WALL::RIGHT:
 	{
-		
+
 		if (!IsAttack && IsFall && InputDir.x > 0 || IsFlip)
 		{
 			Velocity.x = 0;
