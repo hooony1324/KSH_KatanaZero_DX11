@@ -19,6 +19,7 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("idle");
 	WallGrab = false;
 	IsFlip = false;
+	IsAttack = false;
 }
 
 void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -140,12 +141,6 @@ void PlayerZero::FallStart(const StateInfo& _Info)
 		MoveVec.x = 0.04f * CurLookDir;
 	}
 
-	// °È´Ù°¡ ³¶¶°·¯Áö
-	//if (abs(MoveVec.x) >= 0.90f)
-	//{
-	//	MoveVec.x = 1.0f;
-	//	MoveVec.y = 0.0f;
-	//}
 
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, { MoveVec.x, MoveVec.y });
 }

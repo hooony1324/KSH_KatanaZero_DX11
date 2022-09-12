@@ -77,8 +77,8 @@ void CharacterActor::WallCheck()
 	Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::GREEN);
 	DownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::BLUE);
 	Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
-	Left_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
-	Right_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
+	Left_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 21, -(CharacterPos.iy() - 20 ))).CompareInt3D(float4::GREEN);
+	Right_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 21, -(CharacterPos.iy() - 20 ))).CompareInt3D(float4::GREEN);
 	Right_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
 	Left_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
 	DoubleDownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::BLUE);
@@ -131,13 +131,13 @@ void CharacterActor::WallCheck()
 	}
 
 	// 슬로프 체크
-	if (Left && Left_Down)
+	if (!Left_Up && Left && Left_Down)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (Right && Right_Down)
+	if (!Right_Up && Right && Right_Down)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;

@@ -138,7 +138,7 @@ protected:
 
 	GameEngineTextureRenderer* Renderer_SlashLight;
 
-	GameEngineCollision* SlashingCollision; // 
+	GameEngineTextureRenderer* TestTexture; // 
 
 	bool InputValid;
 	float4 InputDir;

@@ -163,20 +163,34 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	case CharacterActor::STATE_WALL::RIGHT:
 	{
-		Velocity.x = -1;
+		
 		if (!IsAttack && IsFall && InputDir.x > 0 || IsFlip)
 		{
+			Velocity.x = 0;
 			WallGrabCheck();
 		}
+		else
+		{
+			GetTransform().SetWorldMove(float4::LEFT);
+			return;
+		}
+
 		break;
 	}
 	case CharacterActor::STATE_WALL::LEFT:
 	{
-		Velocity.x = 1;
+
 		if (!IsAttack && IsFall && InputDir.x < 0 || IsFlip)
 		{
+			Velocity.x = 0;
 			WallGrabCheck();
 		}
+		else
+		{
+			GetTransform().SetWorldMove(float4::RIGHT);
+			return;
+		}
+
 		break;
 	}		
 	case CharacterActor::STATE_WALL::UP:
