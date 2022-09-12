@@ -8,7 +8,7 @@
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
 
-
+GameEngineCollision* CurSlashingCollision = nullptr;
 
 CharacterActor::CharacterActor()
 	: MoveVec(float4::ZERO)
@@ -48,6 +48,7 @@ void CharacterActor::OnEvent()
 	DoorBreaking = false;
 	DoorPtr = nullptr;
 	CamShake = false;
+	CurSlashingCollision = nullptr;
 }
 
 void CharacterActor::OffEvent()
@@ -60,6 +61,7 @@ void CharacterActor::OffEvent()
 	DoorBreaking = false;
 	DoorPtr = nullptr;
 	CamShake = false;
+	CurSlashingCollision = nullptr;
 }
 
 void CharacterActor::WallCheck()
@@ -87,6 +89,8 @@ void CharacterActor::WallCheck()
 	DoubleDown = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
 	Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy()))).CompareInt3D(float4::RED);
 
+	Down_Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 15, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	Down_Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 15, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
 
 	// 땅에 박힘
 	if (Down || DownBlue)
@@ -131,13 +135,13 @@ void CharacterActor::WallCheck()
 	}
 
 	// 슬로프 체크
-	if (!Left_Up && Left && Left_Down)
+	if (!Left_Up && Left && Left_Down && Down_Left)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (!Right_Up && Right && Right_Down)
+	if (!Right_Up && Right && Right_Down && Down_Right)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
@@ -255,15 +259,14 @@ bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* 
 
 
 // 같은 콜리전 계속 부딛히면 안됨
-static GameEngineCollision* CurCollision = nullptr;
 bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	if (CurCollision == _Other)
+	if (CurSlashingCollision == _Other)
 	{
 		return false;
 	}
 
-	CurCollision = _Other;
+	CurSlashingCollision = _Other;
 
 
 	// 충돌 발생

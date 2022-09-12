@@ -210,12 +210,14 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	case CharacterActor::STATE_WALL::RIGHTSLOPE:
 	{
+		// 점프나 공격 위로하면 슬로프 타는게 아님
 		if (Velocity.y > 1.0f)
 		{
 			break;
 		}
 
-		if (abs(Velocity.x) < 1.0f )
+		// 움직임 없으면 가만히 있을것
+		if (abs(Velocity.x) < 0.5f )
 		{
 			return;
 		}

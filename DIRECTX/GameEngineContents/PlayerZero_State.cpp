@@ -5,7 +5,7 @@
 #include <algorithm>
 
 #include "Door.h"
-
+#include "JumpCloud.h"
 
 
 const float AntiGravity = 5.2f;
@@ -156,7 +156,7 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 	else
 	{
-		MoveVec.x += InputDir.x * 0.02f;
+		MoveVec.x += InputDir.x * _DeltaTime * 3;
 		if (abs(MoveVec.x) > 0.7f)
 		{
 			MoveVec.x = MoveVec.x < 0.0f ? -0.7f : 0.7f;
@@ -214,6 +214,10 @@ void PlayerZero::JumpStart(const StateInfo& _Info)
 		MoveVec = float4::VectorRotationToDegreeZAxis(float4::RIGHT, 50).NormalizeReturn();
 		MoveVec.x *= -1.0f;
 	}
+
+	// FX
+	JumpCloud* Cloud = GetLevel()->CreateActor<JumpCloud>();
+	Cloud->GetTransform().SetWorldPosition(GetTransform().GetWorldPosition() + float4{0, -35});
 }
 
 void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)

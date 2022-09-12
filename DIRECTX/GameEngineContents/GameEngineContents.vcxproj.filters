@@ -43,9 +43,6 @@
     <Filter Include="Levels\00.TitleLevel\Actor">
       <UniqueIdentifier>{cd620d5a-4fd5-426f-b37a-f7e28a3ffc84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01.PlayLevel\Actor\UI\Effect">
-      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\99.TESTLEVEL">
       <UniqueIdentifier>{edd5620d-6864-4f8e-8a1d-68780daa0453}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,9 @@
     </Filter>
     <Filter Include="ContentsRendering\PostEffect">
       <UniqueIdentifier>{009007cf-d496-4302-9b67-46c18869c68d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\Effect">
+      <UniqueIdentifier>{ae572b6f-77a0-4601-a357-5a8c2b322aba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -185,16 +185,13 @@
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClInclude>
     <ClInclude Include="SlashFX.h">
-      <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClInclude>
     <ClInclude Include="BossPsychoGiant.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="CharacterShadow.h">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
-    </ClInclude>
-    <ClInclude Include="RoomCutscene.h">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
     <ClInclude Include="SlowMotion.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
@@ -231,6 +228,9 @@
     </ClInclude>
     <ClInclude Include="LiveActor.h">
       <Filter>Levels\01.PlayLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpCloud.h">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -347,16 +347,13 @@
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClCompile>
     <ClCompile Include="SlashFX.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\UI\Effect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClCompile>
     <ClCompile Include="BossPsychoGiant.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="CharacterShadow.cpp">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
-    </ClCompile>
-    <ClCompile Include="RoomCutscene.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
     <ClCompile Include="SlowMotion.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
@@ -393,6 +390,9 @@
     </ClCompile>
     <ClCompile Include="LiveActor.cpp">
       <Filter>Levels\01.PlayLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpCloud.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

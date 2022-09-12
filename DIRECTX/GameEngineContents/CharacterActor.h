@@ -165,6 +165,9 @@ protected:
 	bool Red;
 	bool Left;
 	bool Right;
+	bool Down_Left;
+	bool Down_Right;
+
 
 	bool IsJump;
 	bool IsFall; // 중력 적용해서 떨어짐
@@ -188,6 +191,7 @@ protected:
 protected:
 	GameEngineSoundPlayer RollSoundPlayer;
 	GameEngineSoundPlayer SlashSoundPlayer;
+	GameEngineSoundPlayer ReflectSoundPlayer;
 
 	// 역재생
 public:
