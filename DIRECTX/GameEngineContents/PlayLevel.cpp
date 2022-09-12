@@ -7,6 +7,7 @@
 #include "PlayerZero.h"
 #include "Room_Factory1.h"
 #include "Room_Factory2.h"
+#include "Room_Factory3.h"
 #include "Room_Boss.h"
 #include "Cursor.h"
 #include "UIManager.h"
@@ -57,10 +58,12 @@ void PlayLevel::Start()
 	// Rooms
 	Room1 = CreateActor<Room_Factory1>();
 	Room2 = CreateActor<Room_Factory2>();
-	Room3 = CreateActor<Room_Boss>();
+	Room3 = CreateActor< Room_Factory3>();
+	Room4 = CreateActor<Room_Boss>();
 	Rooms.push_back(Room1);
 	Rooms.push_back(Room2);
 	Rooms.push_back(Room3);
+	Rooms.push_back(Room4);
 
 	// Player
 	Player = CreateActor<PlayerZero>(ACTORGROUP::TIMEGROUP);
@@ -266,7 +269,6 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 float SlowRecoverTime;
 float ShotFrameTime;
-bool WaveOff;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
 	SlowRecoverTime = 0.0f;
@@ -274,18 +276,14 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	// 화면 녹화 시작 지점
 	ShotFrameTime = 0.0f;
 
-	WaveOff = false;
+
+	Effect_Wave::WaveOff();
+	Player->SetInputValid(true);
 }
 
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 0.6f && false == WaveOff)
-	{
-		Effect_Wave::WaveOff();
-		WaveOff = true;
-		Player->SetInputValid(true);
-	}
 
 	// 카메라 플레이어 따라다니기
 	CameraFollow(_DeltaTime);
@@ -506,6 +504,8 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 // 되감기
 float ReverseDeltaTime;
 float FramePlaySpeed;
+float TotalPlayTime;
+float WaveStart;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	Player->SetInputValid(false);
@@ -517,9 +517,10 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	}
 
 	ReverseDeltaTime = 0.0f;
+	WaveStart = false;
 
 	int TotalPlayFrame = Player->GetCaptureSize();
-	float TotalPlayTime = TotalPlayFrame * FrameCaptureTime;
+	TotalPlayTime = TotalPlayFrame * FrameCaptureTime;
 	
 	// 기본 2배속
 	// 플레이타임 5초 넘으면 리버스플레이시간 5초 이내로
@@ -532,6 +533,7 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 		FramePlaySpeed = FrameCaptureTime * 0.5f;
 	}
 
+	Effect_Wave::WaveOn();
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -546,7 +548,6 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 	ReverseDeltaTime = 0.0f;
 	
 
-	//Player->PlayReverseCapturedData();
 	for (LiveActor* Actor : CaptureGroup)
 	{
 		Actor->PlayReverseCapturedData();
@@ -556,7 +557,6 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (Player->IsReverseEnd())
 	{
-		//Effect_Wave::WaveOn();
 		RoomStateManager.ChangeState("RoomChange");
 		return;
 	}
@@ -564,7 +564,7 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 {
-	//Player->ReverseEndSetting();
+
 	for (LiveActor* Actor : CaptureGroup)
 	{
 		Actor->ReverseEndSetting();

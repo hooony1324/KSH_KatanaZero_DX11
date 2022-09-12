@@ -48,6 +48,7 @@ private:
 	Room* Room1;
 	Room* Room2;
 	Room* Room3;
+	Room* Room4;
 	std::vector<Room*> Rooms;
 
 	//GameEngineCameraActor* Cam;
