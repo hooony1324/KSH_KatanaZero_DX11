@@ -232,6 +232,9 @@
     <ClInclude Include="JumpCloud.h">
       <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="Room_Factory3.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -393,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="JumpCloud.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Room_Factory3.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

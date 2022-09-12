@@ -18,6 +18,12 @@ public:
 class LiveActor : public GameEngineActor
 {
 public:
+	int GetCaptureSize()
+	{
+		return static_cast<int>(CapturedDataList.size());
+	}
+
+public:
 	// constrcuter destructer
 	LiveActor();
 	virtual ~LiveActor();

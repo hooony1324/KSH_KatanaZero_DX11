@@ -21,6 +21,8 @@
 #include "Effect_DistortionGlitch.h"
 #include "LiveActor.h"
 
+const float FrameCaptureTime = 0.016f; // 60FPS
+
 void PlayLevel::ChangeRoom(int _Index)
 {
 	if (_Index < 0)
@@ -289,7 +291,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	CameraFollow(_DeltaTime);
 
 	// 역재생용 프레임 저장
-	if (ShotFrameTime > 0.01f)
+	if (ShotFrameTime >= FrameCaptureTime)
 	{
 		for (LiveActor* Actor : CaptureGroup)
 		{
@@ -502,7 +504,8 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 // 되감기
-const float ReverseSpeed = 1.0f;
+float ReverseDeltaTime;
+float FramePlaySpeed;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	Player->SetInputValid(false);
@@ -513,12 +516,35 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 		Actor->ReverseStartSetting();
 	}
 
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), ReverseSpeed);
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), ReverseSpeed);
+	ReverseDeltaTime = 0.0f;
+
+	int TotalPlayFrame = Player->GetCaptureSize();
+	float TotalPlayTime = TotalPlayFrame * FrameCaptureTime;
+	
+	// 기본 2배속
+	// 플레이타임 5초 넘으면 리버스플레이시간 5초 이내로
+	if (TotalPlayTime > 5.0f)
+	{
+		FramePlaySpeed = 2.5f / TotalPlayFrame;
+	}
+	else
+	{
+		FramePlaySpeed = FrameCaptureTime * 0.5f;
+	}
+
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	CameraFollow(_DeltaTime);
+
+	ReverseDeltaTime += _DeltaTime;
+	if (ReverseDeltaTime < FramePlaySpeed)
+	{
+		return;
+	}
+	ReverseDeltaTime = 0.0f;
+	
 
 	//Player->PlayReverseCapturedData();
 	for (LiveActor* Actor : CaptureGroup)
@@ -526,13 +552,11 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 		Actor->PlayReverseCapturedData();
 	}
 
-	CameraFollow(_DeltaTime);
+
 
 	if (Player->IsReverseEnd())
 	{
 		//Effect_Wave::WaveOn();
-		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1.0f);
-		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1.0f);
 		RoomStateManager.ChangeState("RoomChange");
 		return;
 	}
