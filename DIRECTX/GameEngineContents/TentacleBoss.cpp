@@ -52,7 +52,7 @@ void TentacleBoss::Start()
 
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 60, 160, GetDepth(ACTOR_DEPTH::COLLISION) });
-	Collision->GetTransform().SetLocalPosition({ 0, -107, 0 });
+	Collision->GetTransform().SetLocalPosition({ 5, -90, 0 });
 	Collision->ChangeOrder(COLLISIONGROUP::ENEMY);
 	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 0, 0, 0.2f });
 	Collision->Off();

@@ -254,11 +254,17 @@ bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* 
 }
 
 
-// 같은 콜리전 계속 부딛힌거면 false
-
+// 같은 콜리전 계속 부딛히면 안됨
+static GameEngineCollision* CurCollision = nullptr;
 bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	_Other->Off();
+	if (CurCollision == _Other)
+	{
+		return false;
+	}
+
+	CurCollision = _Other;
+
 
 	// 충돌 발생
 	//SlashedCol = _Other;
