@@ -22,10 +22,13 @@ void Effect_DistortionGlitch::EffectInit()
 
 	EffectSet.SetPipeLine("DistortionGlitch");
 
+	OnOffOption = false;
+
 	if (true == EffectSet.ShaderResources.IsConstantBuffer("CustomRenderOption"))
 	{
 		Option.DeltaTime = 0.0f;
 		EffectSet.ShaderResources.SetConstantBufferLink("CustomRenderOption", &Option, sizeof(Option));
+		Option.OnOff = static_cast<int>(OnOffOption);
 	}
 	
 }

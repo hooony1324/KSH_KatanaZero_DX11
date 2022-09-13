@@ -5,6 +5,18 @@
 class Effect_Distortion : public CustomPostEffect
 {
 public:
+	static Effect_Distortion* Inst;
+	static Effect_Distortion* GetInst()
+	{
+		if (nullptr == Inst)
+		{
+			MsgBoxAssert("생성되지 않은 이펙트를 사용하려고 했습니다");
+		}
+
+		return Inst;
+	}
+
+public:
 	// constrcuter destructer
 	Effect_Distortion();
 	~Effect_Distortion();

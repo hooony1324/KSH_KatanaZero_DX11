@@ -176,14 +176,13 @@ void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void Room_Boss::DistortionStart(const StateInfo& _Info)
 {
-	GetLevel()->GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
+	Effect_Distortion::GetInst()->EffectOn();
 }
 
 void Room_Boss::DistortionUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
-
-	if (_Info.StateTime > 1.5f)
+	if (_Info.StateTime > 0.8f)
 	{
 		GEngine::ChangeLevel("EndingLevel");
 		return;

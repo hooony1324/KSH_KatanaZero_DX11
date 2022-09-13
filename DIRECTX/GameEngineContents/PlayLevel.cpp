@@ -133,6 +133,7 @@ void PlayLevel::LevelStartEvent()
 
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
 }
 
 void PlayLevel::Update(float _DeltaTime)

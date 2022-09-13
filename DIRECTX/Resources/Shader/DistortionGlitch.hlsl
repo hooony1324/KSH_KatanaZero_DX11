@@ -55,7 +55,7 @@ float Ramp(float y, float start, float end)
 float Stripe(Output _Input, float2 uv)
 {
     float noi = Noise(_Input, uv * float2(0.5f, 1.0f) + float2(1.0f, 3.0f));
-    return Ramp(fmod(uv.y * 4.0f + SumDeltaTime / 2.0f + sin(SumDeltaTime + sin(SumDeltaTime * 0.63f)), 1.0f), 0.5f, 0.6f) * noi;
+    return Ramp(fmod(uv.y * 5.0f + SumDeltaTime / 2.0f + sin(SumDeltaTime + sin(SumDeltaTime * 0.63f)), 1.0f), 0.5f, 0.6f) * noi;
 
 }
 
@@ -91,9 +91,6 @@ float4 DistortionGlitch_PS(Output _Input) : SV_Target0
         return Tex.Sample(Smp, _Input.Tex.xy);
     }
 
-    
-    // ¿þÀÌºê
-    float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f); // uv : 0 ~ 1
     float2 TexPos = _Input.Tex.xy;
     float2 SmpPos;
     
@@ -104,8 +101,8 @@ float4 DistortionGlitch_PS(Output _Input) : SV_Target0
     
     video += Stripe(_Input, SmpPos);
     video += Noise(_Input, SmpPos * 2.0f) / 2.0f;
-    video *= vignette;
-    video *= (12.0f + fmod(SmpPos.y * 30.0f + SumDeltaTime, 1.0f)) / 13.0f;
+    //video *= vignette;
+    //video *= (12.0f + fmod(SmpPos.y * 30.0f + SumDeltaTime, 1.0f)) / 13.0f;
     
     float4 Color = float4(video.r, video.g, video.b, 1.0f);
     
