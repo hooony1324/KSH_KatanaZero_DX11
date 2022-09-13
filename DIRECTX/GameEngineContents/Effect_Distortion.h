@@ -1,9 +1,8 @@
 #pragma once
-#include <GameEngineCore/GameEngineRenderTarget.h>
-#include <GameEngineCore/GameEngineRenderSet.h>
+#include "CustomPostEffect.h"
 
 // Ό³Έν :
-class Effect_Distortion : public GameEnginePostEffect
+class Effect_Distortion : public CustomPostEffect
 {
 public:
 	// constrcuter destructer
@@ -18,11 +17,6 @@ public:
 
 	void EffectInit() override;
 	void Effect(GameEngineRenderTarget* _Target) override;
-
-protected:
-	GameEngineRenderTarget* CopyTarget;
-	GameEngineRenderSet EffectSet;
-
 
 };
 

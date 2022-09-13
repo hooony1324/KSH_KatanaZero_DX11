@@ -132,7 +132,7 @@ void PlayLevel::LevelStartEvent()
 	RoomStateManager.ChangeState("RoomChange");
 
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
-	//GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -277,7 +277,7 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	ShotFrameTime = 0.0f;
 
 
-	Effect_Wave::WaveOff();
+	Effect_Wave::GetInst()->EffectOff();
 	Player->SetInputValid(true);
 }
 
@@ -533,7 +533,7 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 		FramePlaySpeed = FrameCaptureTime * 0.5f;
 	}
 
-	Effect_Wave::WaveOn();
+	Effect_Wave::GetInst()->EffectOn();
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)

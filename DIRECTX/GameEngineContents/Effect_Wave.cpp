@@ -2,24 +2,22 @@
 #include "Effect_Wave.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-bool Effect_Wave::OnOffOption;
+Effect_Wave* Effect_Wave::Inst = nullptr;
 
 Effect_Wave::Effect_Wave() 
-	: CopyTarget(nullptr)
 {
 }
 
 Effect_Wave::~Effect_Wave() 
 {
-	if (nullptr != CopyTarget)
-	{
-		delete CopyTarget;
-		CopyTarget = nullptr;
-	}
+	Inst = nullptr;
+
 }
 
 void Effect_Wave::EffectInit()
 {
+	Inst = this;
+
 	CopyTarget = new GameEngineRenderTarget();
 	CopyTarget->CreateRenderTargetTexture(GameEngineWindow::GetScale(), DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, float4::ZERO);
 

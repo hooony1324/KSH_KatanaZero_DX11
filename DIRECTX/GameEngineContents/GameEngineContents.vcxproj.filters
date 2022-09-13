@@ -235,6 +235,9 @@
     <ClInclude Include="Room_Factory3.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
+    <ClInclude Include="CustomPostEffect.h">
+      <Filter>ContentsRendering\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -399,6 +402,9 @@
     </ClCompile>
     <ClCompile Include="Room_Factory3.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomPostEffect.cpp">
+      <Filter>ContentsRendering\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

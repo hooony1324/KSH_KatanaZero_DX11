@@ -2,22 +2,21 @@
 #include "Effect_DistortionGlitch.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+Effect_DistortionGlitch* Effect_DistortionGlitch::Inst = nullptr;
+
 Effect_DistortionGlitch::Effect_DistortionGlitch() 
-	: CopyTarget(nullptr)
 {
 }
 
 Effect_DistortionGlitch::~Effect_DistortionGlitch() 
 {
-	if (nullptr != CopyTarget)
-	{
-		delete CopyTarget;
-		CopyTarget = nullptr;
-	}
+
 }
 
 void Effect_DistortionGlitch::EffectInit()
 {
+	Inst = this;
+
 	CopyTarget = new GameEngineRenderTarget();
 	CopyTarget->CreateRenderTargetTexture(GameEngineWindow::GetScale(), DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, float4::ZERO);
 
@@ -35,9 +34,11 @@ void Effect_DistortionGlitch::Effect(GameEngineRenderTarget* _Target)
 {
 	CopyTarget->Copy(_Target);
 
-	SumDeltaTime += GameEngineTime::GetDeltaTime();
-	Option.DeltaTime = SumDeltaTime;
-
+	float DeltaTime = GameEngineTime::GetDeltaTime();
+	SumDeltaTime += DeltaTime;
+	Option.DeltaTime = DeltaTime;
+	Option.SumDeltaTime = SumDeltaTime;
+	Option.OnOff = static_cast<int>(OnOffOption);
 
 	EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 

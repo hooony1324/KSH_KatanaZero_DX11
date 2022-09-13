@@ -55,7 +55,7 @@ void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 	// ¶¥ ¶Õ°í ³»·Á°¡±â
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
-		GetTransform().SetWorldMove({ 0, -2, 0 });
+		GetTransform().SetWorldMove({ 0, -3, 0 });
 		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 		return;
@@ -512,7 +512,7 @@ void PlayerZero::RunToIdleUpdate(float _DeltaTime, const StateInfo& _Info)
 	// ¶¥ ¶Õ°í ³»·Á°¡±â
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
-		GetTransform().SetWorldMove({ 0, -2, 0 });
+		GetTransform().SetWorldMove({ 0, -3, 0 });
 		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 		return;
@@ -554,7 +554,11 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (InputDir.y < 0 && DoubleDownBlue)
 	{
 		MoveSpeed = SPEED_PLAYER;
-		GetTransform().SetWorldMove({ 0, -2, 0 });
+		GetTransform().SetWorldMove({ 0, -3, 0 });
+	}
+
+	if (true == IsFall)
+	{
 		Renderer_Character->ChangeFrameAnimation("fall");
 		PlayerStateManager.ChangeState("Fall");
 		return;

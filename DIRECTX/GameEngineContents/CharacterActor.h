@@ -1,6 +1,12 @@
 #pragma once
 #include "LiveActor.h"
 
+struct Pix
+{
+	int x;
+	int y;
+};
+
 // 설명 : 플레이어(제로, 드래곤, ...), 또는 보스 몬스터
 class GameEngineTextureRenderer;
 class GameEngineCollision;
@@ -112,7 +118,14 @@ protected:
 
 // 상태 체크
 protected:
+	// 픽셀 충돌
 	void WallCheck();
+	void PixelSetting();
+
+	GameEngineTextureRenderer* CollisionMap;
+	std::vector<Pix> Pixels;
+	std::vector<GameEngineTextureRenderer*> PixelRenderers;
+
 	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
 	void StopAtDoor(float _Deltatime);
@@ -199,5 +212,6 @@ public:
 	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
 	virtual void ReverseStartSetting() override;
 	virtual void ReverseEndSetting() override;
+
 };
 

@@ -6,6 +6,7 @@
 #include "CharacterActor.h"
 #include "BossPsychoGiant.h"
 #include "Effect_Wave.h"
+#include "Effect_DistortionGlitch.h"
 
 ControlGUI* ControlGUI::Inst = nullptr;
 
@@ -94,12 +95,22 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	{
 		GEngine::ChangeLevel("TestLevel");
 	}
-	ImGui::SameLine();
+	
+	ImGui::NewLine();
+	ImGui::Text("Post Effects");
 	if (true == ImGui::Button("Effect_Wave"))
 	{
-		Effect_Wave::OnOffSwitch();
+		Effect_Wave::GetInst()->EffectSwitch();
+	}
+	ImGui::SameLine();
+	if (true == ImGui::Button("Effect_DistortionGlitch"))
+	{
+		Effect_DistortionGlitch::GetInst()->EffectSwitch();
 	}
 
+
+	ImGui::NewLine();
+	ImGui::Text("Levels");
 	if (true == ImGui::Button("TitleLevel"))
 	{
 		GEngine::ChangeLevel("TitleLevel");

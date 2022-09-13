@@ -23,7 +23,7 @@ void Room_Factory3::Start()
 	Background->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_0) });
 	Background->Off();
 
-	Background_ColMap->SetTexture("room_factory_2_colmap.png");
+	Background_ColMap->SetTexture("room_factory_4_colmap.png");
 	Background_ColMap->ScaleToTexture();
 	Background_ColMap->SetPivot(PIVOTMODE::LEFTTOP);
 	Background_ColMap->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
@@ -33,7 +33,7 @@ void Room_Factory3::Start()
 	InitCameraClampArea();
 
 
-	PlayerSpawnPos = float4{ 220, -645, GetDepth(ACTOR_DEPTH::PLAYER) };
+	PlayerSpawnPos = float4{ 220, -920, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 	//// 적 소환 리스트 1400, -310
 	//Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);

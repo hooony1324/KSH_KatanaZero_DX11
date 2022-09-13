@@ -1,25 +1,19 @@
 #pragma once
-#include <GameEngineCore/GameEngineRenderTarget.h>
-#include <GameEngineCore/GameEngineRenderSet.h>
-
+#include "CustomPostEffect.h"
 
 // 설명 :
-class Effect_Wave : public GameEnginePostEffect
+class Effect_Wave : public CustomPostEffect
 {
 public:
-	static void OnOffSwitch()
+	static Effect_Wave* Inst;
+	static Effect_Wave* GetInst()
 	{
-		OnOffOption = !OnOffOption;
-	}
+		if (nullptr == Inst)
+		{
+			MsgBoxAssert("생성되지 않은 이펙트를 사용하려고 했습니다");
+		}
 
-	static void WaveOff()
-	{
-		OnOffOption = 0;
-	}
-
-	static void WaveOn()
-	{
-		OnOffOption = 1;
+		return Inst;
 	}
 
 public:
@@ -36,13 +30,5 @@ public:
 	void EffectInit() override;
 	void Effect(GameEngineRenderTarget* _Target) override;
 
-protected:
-	GameEngineRenderTarget* CopyTarget;
-	GameEngineRenderSet EffectSet;
-
-private:
-	static bool OnOffOption;
-	CustomRenderOption Option;
-	float SumDeltaTime;
 };
 

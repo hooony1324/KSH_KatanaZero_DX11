@@ -3,17 +3,12 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 Effect_Distortion::Effect_Distortion() 
-	: CopyTarget(nullptr)
 {
 }
 
 Effect_Distortion::~Effect_Distortion() 
 {
-	if (nullptr != CopyTarget)
-	{
-		delete CopyTarget;
-		CopyTarget = nullptr;
-	}
+
 }
 
 void Effect_Distortion::EffectInit()

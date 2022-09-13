@@ -10,6 +10,22 @@ const float FORCE_REACTION = 1.0f; // 반작용 강도
 
 GameEngineCollision* CurSlashingCollision = nullptr;
 
+// Pixel 위치
+Pix DownPix = { 0, -34 };
+Pix DownBluePix = { 0, -34 };
+Pix DoubleDownPix = { 0, -35 };
+Pix DoubleDownBluePix = { 0, -35 };
+Pix UpPix = { 0, 34 };
+Pix Left_UpPix = { -21, -20 };
+Pix Right_UpPix = { 21, -20 };
+Pix Right_DownPix = { 20, -35 };
+Pix Left_DownPix = { -20, -35 };
+Pix LeftPix = { -20, -30 };
+Pix RightPix = { 20, -30 };
+Pix RedPix = { 0, 0 };
+Pix Down_LeftPix = { -15, -35 };
+Pix Down_RightPix = { 15, -35 };
+
 CharacterActor::CharacterActor()
 	: MoveVec(float4::ZERO)
 	, PrevLookDir(1)
@@ -37,6 +53,8 @@ void CharacterActor::OnEvent()
 		LiveActor::FrameDataRenderer = CreateComponent<GameEngineTextureRenderer>();
 	}
 
+	CollisionMap = GlobalValueManager::ColMap;
+
 	InputValid = false;
 	CurLookDir = 1;
 	FrameDataRenderer->Off();
@@ -49,6 +67,34 @@ void CharacterActor::OnEvent()
 	DoorPtr = nullptr;
 	CamShake = false;
 	CurSlashingCollision = nullptr;
+
+	if (Pixels.size() == 0)
+	{
+		Pixels.push_back(DownPix);
+		Pixels.push_back(DownBluePix);
+		Pixels.push_back(DoubleDownPix);
+		Pixels.push_back(DoubleDownBluePix);
+		Pixels.push_back(UpPix);
+		Pixels.push_back(Left_UpPix);
+		Pixels.push_back(Right_UpPix);
+		Pixels.push_back(Right_DownPix);
+		Pixels.push_back(Left_DownPix);
+		Pixels.push_back(LeftPix);
+		Pixels.push_back(RightPix);
+		Pixels.push_back(RedPix);
+		Pixels.push_back(Down_LeftPix);
+		Pixels.push_back(Down_RightPix);
+
+		// Pix Debug
+		for (Pix Pixel : Pixels)
+		{
+			GameEngineTextureRenderer* Renderer = CreateComponent<GameEngineTextureRenderer>();
+			Renderer->SetTexture("None_yellow.png");
+			Renderer->GetTransform().SetLocalScale({ 1, 1, 1 });
+			Renderer->GetTransform().SetLocalMove({ static_cast<float>(Pixel.x) * 0.5f, static_cast<float>(Pixel.y) * 0.5f });
+		}
+	}
+
 }
 
 void CharacterActor::OffEvent()
@@ -64,33 +110,38 @@ void CharacterActor::OffEvent()
 	CurSlashingCollision = nullptr;
 }
 
+void CharacterActor::PixelSetting()
+{
+	// y값 반전 주의
+	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
+	CharacterPos = GlobalValueManager::PlayerPos;
+
+
+	Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + DownPix.x, -(CharacterPos.iy() + DownPix.y)).CompareInt3D(float4::GREEN);
+	DownBlue = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + DownBluePix.x, -(CharacterPos.iy() + DownBluePix.y)).CompareInt3D(float4::BLUE);
+	DoubleDown = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + DoubleDownPix.x, -(CharacterPos.iy() + DoubleDownPix.y)).CompareInt3D(float4::GREEN);
+	DoubleDownBlue = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + DoubleDownBluePix.x, -(CharacterPos.iy() + DoubleDownBluePix.y)).CompareInt3D(float4::BLUE);
+	Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + UpPix.x, -(CharacterPos.iy() + UpPix.y)).CompareInt3D(float4::GREEN);
+	Left_Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Left_UpPix.x, -(CharacterPos.iy() + Left_UpPix.y)).CompareInt3D(float4::GREEN);
+	Right_Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_UpPix.x, -(CharacterPos.iy() + Right_UpPix.y)).CompareInt3D(float4::GREEN);
+	Right_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_DownPix.x, -(CharacterPos.iy() + Right_DownPix.y)).CompareInt3D(float4::GREEN);
+	Left_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Left_DownPix.x, -(CharacterPos.iy() + Left_DownPix.y)).CompareInt3D(float4::GREEN);
+	Left = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + LeftPix.x, -(CharacterPos.iy() + LeftPix.y)).CompareInt3D(float4::GREEN);
+	Right = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + RightPix.x, -(CharacterPos.iy() + RightPix.y)).CompareInt3D(float4::GREEN);
+	Red = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + RedPix.x, -(CharacterPos.iy() + RedPix.y)).CompareInt3D(float4::RED);
+
+	Down_Left = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Down_LeftPix.x, -(CharacterPos.iy() + Down_LeftPix.y)).CompareInt3D(float4::GREEN);
+	Down_Right = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Down_RightPix.x, -(CharacterPos.iy() + Down_RightPix.y)).CompareInt3D(float4::GREEN);
+}
+
 void CharacterActor::WallCheck()
 {
-	GameEngineTextureRenderer* CollisionMap = GlobalValueManager::ColMap;
 	if (nullptr == CollisionMap)
 	{
 		MsgBoxAssert("충돌맵이 nullptr 입니다");
 	}
 
-	// y값 반전 주의
-	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
-	CharacterPos = GlobalValueManager::PlayerPos;
-
-	Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::GREEN);
-	DownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 34))).CompareInt3D(float4::BLUE);
-	Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() + 34))).CompareInt3D(float4::GREEN);
-	Left_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 21, -(CharacterPos.iy() - 20 ))).CompareInt3D(float4::GREEN);
-	Right_Up = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 21, -(CharacterPos.iy() - 20 ))).CompareInt3D(float4::GREEN);
-	Right_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	Left_Down = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	DoubleDownBlue = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::BLUE);
-	Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 20, -(CharacterPos.iy() - 30))).CompareInt3D(float4::GREEN);
-	Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 20, -(CharacterPos.iy() - 30))).CompareInt3D(float4::GREEN);
-	DoubleDown = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	Red = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix(), -(CharacterPos.iy()))).CompareInt3D(float4::RED);
-
-	Down_Left = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() - 15, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
-	Down_Right = (CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + 15, -(CharacterPos.iy() - 35))).CompareInt3D(float4::GREEN);
+	PixelSetting();
 
 	// 땅에 박힘
 	if (Down || DownBlue)
@@ -109,7 +160,7 @@ void CharacterActor::WallCheck()
 	}
 
 	// 공중
-	if (!Down && !DoubleDown && !Left_Down && !Right_Down)
+	if (!Down && !DoubleDown && !Down_Left && !Down_Right)
 	{
 		WallState = STATE_WALL::NONE;
 		IsFall = true;
@@ -135,13 +186,13 @@ void CharacterActor::WallCheck()
 	}
 
 	// 슬로프 체크
-	if (!Left_Up && Left && Left_Down && Down_Left)
+	if (!Left_Up && Left && Down_Left)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::LEFTSLOPE;
 	}
 
-	if (!Right_Up && Right && Right_Down && Down_Right)
+	if (!Right_Up && Right && Down_Right)
 	{
 		IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
