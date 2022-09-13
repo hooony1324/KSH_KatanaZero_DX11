@@ -56,8 +56,8 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	}
 
 	{
-		float4 Pos = PlayLevel::PlayLevelInst->GetMainCamera()->GetTransform().GetWorldPosition();
-		std::string Name = "MainCamPos : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y) + " : " + std::to_string(Pos.z);
+		float4 Pos = PlayLevel::PlayLevelInst->GetMainCameraActor()->GetTransform().GetWorldPosition();
+		std::string Name = "MainCamActorPos : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y) + " : " + std::to_string(Pos.z);
 		ImGui::Text(Name.c_str());
 	}
 
