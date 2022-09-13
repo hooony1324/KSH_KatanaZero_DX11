@@ -38,11 +38,17 @@ void Effect_Wave::Effect(GameEngineRenderTarget* _Target)
 {
 	CopyTarget->Copy(_Target);
 
+	if (false == OnOffOption)
+	{
+		SumDeltaTime = 0.0f;
+		return;
+	}
+
+	Option.OnOff = static_cast<int>(OnOffOption);
 	float DeltaTime = GameEngineTime::GetDeltaTime();
 	SumDeltaTime += DeltaTime;
 	Option.DeltaTime = DeltaTime;
 	Option.SumDeltaTime = SumDeltaTime;
-	Option.OnOff = static_cast<int>(OnOffOption);
 	EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 
 	_Target->Clear();

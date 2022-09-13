@@ -23,77 +23,71 @@ Output Distortion_VS(Input _Input)
     return NewOutPut;
 }
 
-float random2d(float2 n)
+float rand(float2 p)
 {
-    return frac(sin(dot(n, float2(12.9898f, 4.1414f))) * 43758.5453f);
+    float t = floor(SumDeltaTime * 10.0f) / 30.0f;
+    return frac(sin(dot(p, float2(t * 12.9898f, t * 78.233f))) * 43758.5453);
 }
 
-float randomRange(float2 seed, float min, float max)
+float noise(float2 uv, float blockiness)
 {
-    return min + random2d(seed) * (max - min);
+    float2 lv = frac(uv);
+    float2 id = floor(uv);
+    
+    float n1 = rand(id);
+    float n2 = rand(id + float2(1, 0));
+    float n3 = rand(id + float2(0, 1));
+    float n4 = rand(id + float2(1, 1));
+    
+    float2 u = smoothstep(0.0f, 1.0f + blockiness, lv);
+    
+    return lerp(lerp(n1, n2, u.x), lerp(n3, n4, u.x), u.y);
+
 }
 
-float insideRange(float v, float bottom, float top)
+float fbm(float2 uv, int count, float blockiness, float complexity)
 {
-    return step(bottom, v) - step(top, v);
+    float val = 0.0f;
+    float amp = 0.5f;
+    
+    while (count != 0)
+    {
+        val += amp * noise(uv, blockiness);
+        amp *= 0.5f;
+        uv *= complexity;
+        count--;
+    }
+
+    return val;
 }
+
+#define glitchAmplitude 0.9 // increase
+#define glitchNarrowness 2.0
+#define glitchBlockiness 2.0
+#define glitchMinimizer 6.0 // decrease
 
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
-
-#define AMT 0.2 //0 ~ 1 glitch amount
-#define SPEED 0.3 //0 ~ 1 speed
 float4 Distortion_PS(Output _Input) : SV_Target0
 {
-
-    
     // Option00 -> OnOff플래그
     if (OnOff == 0)
     {
         return Tex.Sample(Smp, _Input.Tex.xy);
     }
 
-    float time = floor(SumDeltaTime * SPEED * 60.0f);
     float2 TexPos = _Input.Tex.xy;
-    float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f); // uv : 0 ~ 1
 
-    // 원본 가져오고
-    float3 Color = Tex.Sample(Smp, TexPos).rgb;
-
-    // 랜덤하게 수평 자르기
-    float maxOffset = AMT / 2.0f;
-    for (float i = 0.0f; i < 10.0f * AMT; i += 1.0f)
-    {
-        float sliceY = random2d(float2(time, 2345.0f + float(i)));
-        float sliceH = random2d(float2(time, 9035.0f + float(i))) * 0.25f;
-        float hOffset = randomRange(float2(time, 9625.0f + float(i)), -maxOffset, maxOffset);
-        float uvOff = TexPos;
-        uvOff.x += hOffset;
-        if (insideRange(TexPos.y, sliceY, frac(sliceY + sliceH)) == 1.0f)
-        {
-            Color = Tex.Sample(Smp, uvOff).rgb;
-        }
-    }
+    float aspect = _Input.Pos.x / _Input.Pos.y;
+    float2 a = float2(TexPos.x * aspect, TexPos.y);
+    float2 uv2 = float2(a.x / _Input.Pos.x, exp(a.y));
     
-    // 결과 도출
-    float maxColorOffset = AMT / 6.0f;
-    float rnd = random2d(float2(time, 9545.0f));
-    float2 colorOffset = float2(randomRange(float2(time, 9545.0f), -maxColorOffset, maxColorOffset),
-    randomRange(float2(time, 7205.0f), -maxColorOffset, maxColorOffset));
+    float shift = glitchAmplitude * pow(fbm(uv2, 4, glitchBlockiness, glitchNarrowness), glitchMinimizer);
     
-    if (rnd < 0.33f)
-    {
-        Color.r = Tex.Sample(Smp, TexPos + colorOffset).r;
-    }
-    else if (rnd < 0.66f)
-    {
-        Color.g = Tex.Sample(Smp, TexPos + colorOffset).g;
-    }
-    else
-    {
-        Color.b = Tex.Sample(Smp, TexPos + colorOffset).b;
-    }
+    float colR = Tex.Sample(Smp, float2(TexPos.x + shift, TexPos.y)).r * (1.0 - shift);
+    float colG = Tex.Sample(Smp, float2(TexPos.x - shift, TexPos.y)).g * (1.0 - shift);
+    float colB = Tex.Sample(Smp, float2(TexPos.x - shift, TexPos.y)).b * (1.0 - shift);
     
-    float4 Result = float4(Color.rgb, 1.0f);
+    float4 Result = float4(colR, colG, colB, 1.0f);
     return Result;
 }
