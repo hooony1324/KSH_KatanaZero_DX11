@@ -21,6 +21,7 @@ void DiamondTransition::Start()
 
 	Diamonds.resize(22);
 
+	Black = true;
 	for (size_t y = 0; y < NumY; y++)
 	{
 		for (size_t x = 0; x < NumX; x++)
@@ -28,21 +29,20 @@ void DiamondTransition::Start()
 			GameEngineUIRenderer* Renderer = CreateComponent<GameEngineUIRenderer>();
 			Renderer->SetPivot(PIVOTMODE::LEFTTOP);
 			Renderer->SetSamplingModePoint();
+			Renderer->SetTexture("spr_transition_square.png");
 			Renderer->GetTransform().SetLocalScale({ 32, 32, 2 });
-			Renderer->CreateFrameAnimationFolder("changeblack", FrameAnimation_DESC{ "transition_in", 0.01f, false });
-			Renderer->CreateFrameAnimationFolder("changewhite", FrameAnimation_DESC{ "transition_out", 0.01f, false });
-			Renderer->ChangeFrameAnimation("changewhite");
+			Renderer->CreateFrameAnimationFolder("idle", FrameAnimation_DESC{ "transition_idle", 0.1f, false });
+			Renderer->CreateFrameAnimationFolder("changeblack", FrameAnimation_DESC{ "transition_in", 0.005f, false });
+			Renderer->CreateFrameAnimationFolder("changewhite", FrameAnimation_DESC{ "transition_out", 0.005f, false });
+			Renderer->ChangeFrameAnimation("idle");
 
 			// 위치선정
 			Renderer->GetTransform().SetLocalPosition({ x * 32.0f, y * -32.0f, 0 });
-			Renderer->Off();
+			Renderer->On();
 
 			Diamonds[y].push_back(Renderer);
 
-			Renderer->AnimationBindEnd("changeblack", [=](const FrameAnimation_DESC& _Info)
-				{
-					//Renderer->SetTexture("spr_transition_square.png");
-				});
+			
 
 			Renderer->AnimationBindEnd("changewhite", [=](const FrameAnimation_DESC& _Info)
 				{
