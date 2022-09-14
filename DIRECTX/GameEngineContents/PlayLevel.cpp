@@ -239,7 +239,7 @@ void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 	CameraFollow(_DeltaTime);
 
 	// 추후 변환 효과
-	if (true)
+	if (_Info.StateTime > 0.2f)
 	{
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
@@ -252,6 +252,7 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 	// 역재생 초기화
 	// 역재생 프레임을 저장할 그룹 판별
 	CaptureGroup.clear();
+	// Group 1 ~ 3번 캡쳐
 	for (int i = 1; i < 4; i++)
 	{
 		std::list<GameEngineActor*> Group = GetGroup(i);
@@ -266,6 +267,11 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 			}
 		}
 	}
+
+
+	Effect_Wave::GetInst()->EffectOff();
+	Effect_DistortionGlitch::GetInst()->EffectOff();
+	Player->SetInputValid(true);
 }
 
 float SlowRecoverTime;
@@ -278,8 +284,6 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	ShotFrameTime = 0.0f;
 
 
-	Effect_Wave::GetInst()->EffectOff();
-	Player->SetInputValid(true);
 }
 
 // @@@ 게임 플레이 @@@
@@ -579,4 +583,5 @@ void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 		Bullet->Death();
 	}
 
+	Effect_DistortionGlitch::GetInst()->EffectOn();
 }
