@@ -164,10 +164,16 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	case CharacterActor::STATE_WALL::RIGHT:
 	{
 
-		if (!IsAttack && IsFall && InputDir.x > 0 || IsFlip)
+		if (!IsAttack && IsFall && MoveVec.x > 0 || IsFlip)
 		{
-			Velocity.x = 0;
-			WallGrabCheck();
+			if (InputDir.x <= 0 && !IsFlip)
+			{
+				Velocity.x = 0;
+			}
+			else
+			{
+				WallGrabCheck();
+			}
 		}
 		else
 		{
@@ -180,10 +186,16 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	case CharacterActor::STATE_WALL::LEFT:
 	{
 
-		if (!IsAttack && IsFall && InputDir.x < 0 || IsFlip)
+		if (!IsAttack && IsFall && MoveVec.x < 0 || IsFlip)
 		{
-			Velocity.x = 0;
-			WallGrabCheck();
+			if (InputDir.x >= 0 && !IsFlip)
+			{
+				Velocity.x = 0;
+			}
+			else
+			{
+				WallGrabCheck();
+			}
 		}
 		else
 		{
