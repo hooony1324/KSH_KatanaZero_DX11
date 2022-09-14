@@ -5,9 +5,9 @@
 
 #include "TestActor.h"
 #include "Portal.h"
-#include "Effect_DistortionGlitch.h"
-#include "Effect_Distortion.h"
 #include "Effect_Wave.h"
+#include "Effect_Distortion.h"
+#include "Effect_DistortionGlitch.h"
 
 TestLevel::TestLevel() 
 {

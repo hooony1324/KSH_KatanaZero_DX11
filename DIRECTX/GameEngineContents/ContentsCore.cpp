@@ -143,6 +143,7 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
+
 }
 
 void ContentsCore::TextureLoad()

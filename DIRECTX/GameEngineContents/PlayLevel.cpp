@@ -11,7 +11,6 @@
 #include "Room_Boss.h"
 #include "Cursor.h"
 #include "UIManager.h"
-#include "Transition.h"
 #include "ControlGUI.h"
 #include "SlowMotion.h"
 #include "Bullet.h"
@@ -22,6 +21,8 @@
 #include "Effect_DistortionGlitch.h"
 #include "LiveActor.h"
 
+#include "DiamondTransition.h"
+
 const float FrameCaptureTime = 0.016f; // 60FPS
 
 void PlayLevel::ChangeRoom(int _Index)
@@ -31,11 +32,13 @@ void PlayLevel::ChangeRoom(int _Index)
 		return;
 	}
 
+	PrevRoom = CurRoom;
 	Player->Off();
 	CurRoom->Off();
 
 	Room::CurRoomIndex = _Index;
 	CurRoom = Rooms[_Index];
+	
 
 	RoomStateManager.ChangeState("RoomChange");
 }
@@ -43,6 +46,7 @@ void PlayLevel::ChangeRoom(int _Index)
 PlayLevel* PlayLevel::PlayLevelInst = nullptr;
 PlayLevel::PlayLevel()
 	: CurRoom(nullptr)
+	, PrevRoom(nullptr)
 {
 }
 
@@ -78,14 +82,12 @@ void PlayLevel::Start()
 	UI = CreateActor<UIManager>();
 	UI->GetTransform().SetWorldPosition({ 0, 0, GetDepth(ACTOR_DEPTH::UI) });
 
-	// Transition
-	//Effect_Transition = CreateActor<Transition>();
-	//Effect_Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
-	//Effect_Transition->Off();
-
+	// Effect
 	SlowEffect = CreateActor<SlowMotion>();
 	SlowEffect->GetTransform().SetWorldPosition({0, 0, GetDepth(ACTOR_DEPTH::SLOWTRANSITON)});
 
+	Transition = CreateActor<DiamondTransition>();
+	Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 
 	RoomStateManager.CreateStateMember("RoomChange"
 		, std::bind(&PlayLevel::RoomChangeUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -215,8 +217,7 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 float RoomPlayTotalTime; // 방 1개 단위, 제한시간 비교용도
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
-	//Effect_Transition->FadeOut();
-	//CurRoom->Clear();
+
 
 	CurRoom->On();
 
@@ -232,14 +233,19 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	RoomPlayTotalTime = 0.0f;
 	UI->SetTimeBarLength(1);
 
+	if (true == Transition->IsBlack())
+	{
+		Transition->ChangeState(DiamondTransition::STATE::CHANGEWHITE);
+	}
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	CameraFollow(_DeltaTime);
 
+
 	// 추후 변환 효과
-	if (_Info.StateTime > 0.2f)
+	if (true == Transition->IsChangeWhiteEnd())
 	{
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
@@ -385,21 +391,20 @@ void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
 
 void PlayLevel::RoomExitStart(const StateInfo& _Info)
 {
-	//Effect_Transition->FadeIn();
+	Transition->ChangeState(DiamondTransition::STATE::CHANGEBLACK);
 }
 
 void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true)//Effect_Transition->IsTransitionEnd())
+	if (true == Transition->IsChangeBlackEnd())
 	{
-
 		ChangeRoom(++Room::CurRoomIndex);
 	}
 }
 
 void PlayLevel::RoomExitEnd(const StateInfo& _Info)
 {
-
+	
 
 }
 

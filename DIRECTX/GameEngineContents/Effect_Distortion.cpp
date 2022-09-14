@@ -36,6 +36,13 @@ void Effect_Distortion::Effect(GameEngineRenderTarget* _Target)
 {
 	CopyTarget->Copy(_Target);
 
+
+	if (false == OnOffOption)
+	{
+		SumDeltaTime = 0.0f;
+		return;
+	}
+
 	float DeltaTime = GameEngineTime::GetDeltaTime();
 	SumDeltaTime += DeltaTime;
 	Option.DeltaTime = DeltaTime;

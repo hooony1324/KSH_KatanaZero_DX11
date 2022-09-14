@@ -58,9 +58,6 @@
     <Filter Include="Levels\01.PlayLevel\Actor\Enemy\Boss">
       <UniqueIdentifier>{2858a637-3a1f-43d8-a691-11a3826a6cb9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01.PlayLevel\Actor\Rooms\Etc">
-      <UniqueIdentifier>{36e13c3b-e228-495e-bca0-b4acc64eaf6c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack">
       <UniqueIdentifier>{253e790d-bce5-4b3a-ab55-edf3c20f0314}</UniqueIdentifier>
     </Filter>
@@ -87,9 +84,6 @@
     </ClInclude>
     <ClInclude Include="TitleLevel.h">
       <Filter>Levels\00.TitleLevel</Filter>
-    </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="TitlePlate.h">
       <Filter>Levels\00.TitleLevel\Actor</Filter>
@@ -151,9 +145,6 @@
     <ClInclude Include="UIManager.h">
       <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Transition.h">
-      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyCop.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\EnemyActor</Filter>
     </ClInclude>
@@ -192,9 +183,6 @@
     </ClInclude>
     <ClInclude Include="CharacterShadow.h">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
-    </ClInclude>
-    <ClInclude Include="SlowMotion.h">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClInclude>
     <ClInclude Include="BossProjectile.h">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
@@ -238,6 +226,12 @@
     <ClInclude Include="CustomPostEffect.h">
       <Filter>ContentsRendering\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="DiamondTransition.h">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SlowMotion.h">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -252,9 +246,6 @@
     </ClCompile>
     <ClCompile Include="TitleLevel.cpp">
       <Filter>Levels\00.TitleLevel</Filter>
-    </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="TitlePlate.cpp">
       <Filter>Levels\00.TitleLevel\Actor</Filter>
@@ -319,9 +310,6 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Transition.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\UI</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyCop.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\EnemyActor</Filter>
     </ClCompile>
@@ -360,9 +348,6 @@
     </ClCompile>
     <ClCompile Include="CharacterShadow.cpp">
       <Filter>Levels\01.PlayLevel\Actor\CharacterActor</Filter>
-    </ClCompile>
-    <ClCompile Include="SlowMotion.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\Rooms\Etc</Filter>
     </ClCompile>
     <ClCompile Include="BossProjectile.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Enemy\Boss\BossAttack</Filter>
@@ -405,6 +390,12 @@
     </ClCompile>
     <ClCompile Include="CustomPostEffect.cpp">
       <Filter>ContentsRendering\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="DiamondTransition.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SlowMotion.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

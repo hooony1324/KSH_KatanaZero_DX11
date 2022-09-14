@@ -23,7 +23,7 @@ public:
 public:
 	// constrcuter destructer
 	CustomPostEffect();
-	~CustomPostEffect();
+	virtual ~CustomPostEffect();
 
 	// delete Function
 	CustomPostEffect(const CustomPostEffect& _Other) = delete;

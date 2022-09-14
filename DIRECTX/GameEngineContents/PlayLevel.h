@@ -45,6 +45,7 @@ private:
 
 	UIManager* UI;
 	Room* CurRoom;
+	Room* PrevRoom;
 	Room* Room1;
 	Room* Room2;
 	Room* Room3;
@@ -61,6 +62,8 @@ private:
 	class SlowMotion* SlowEffect;
 	class GameEngineSoundPlayer SlowInSound;
 	class GameEngineSoundPlayer SlowOutSound;
+
+	class DiamondTransition* Transition;
 
 	// ¿ªÀç»ý
 	std::list<class LiveActor*> CaptureGroup;
