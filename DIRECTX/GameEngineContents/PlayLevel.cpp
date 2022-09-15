@@ -23,7 +23,7 @@
 
 #include "DiamondTransition.h"
 
-const float FrameCaptureTime = 0.016f; // 60FPS
+
 
 void PlayLevel::ChangeRoom(int _Index)
 {
@@ -282,6 +282,7 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 	Player->SetInputValid(true);
 }
 
+float FrameCaptureTime = 0.016f; // 60FPS
 float SlowRecoverTime;
 float ShotFrameTime;
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
@@ -297,6 +298,8 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
+	FrameCaptureTime = GameEngineMath::LerpLimit(0.016f, 0.06f, RoomPlayTotalTime);
 
 	// 카메라 플레이어 따라다니기
 	CameraFollow(_DeltaTime);
@@ -516,8 +519,6 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 // 되감기
 float ReverseDeltaTime;
 float FramePlaySpeed;
-float TotalPlayTime;
-float WaveStart;
 void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 {
 	Player->SetInputValid(false);
@@ -529,21 +530,7 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	}
 
 	ReverseDeltaTime = 0.0f;
-	WaveStart = false;
-
-	int TotalPlayFrame = Player->GetCaptureSize();
-	TotalPlayTime = TotalPlayFrame * FrameCaptureTime;
-	
-	// 기본 2배속
-	// 플레이타임 5초 넘으면 리버스플레이시간 5초 이내로
-	if (TotalPlayTime > 5.0f)
-	{
-		FramePlaySpeed = 2.5f / TotalPlayFrame;
-	}
-	else
-	{
-		FramePlaySpeed = FrameCaptureTime * 0.5f;
-	}
+	FramePlaySpeed = 0.008f;
 
 	Effect_Wave::GetInst()->EffectOn();
 }

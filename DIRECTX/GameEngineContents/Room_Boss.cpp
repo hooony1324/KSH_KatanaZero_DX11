@@ -421,6 +421,7 @@ void Room_Boss::SceneMutatedStart(const StateInfo& _Info)
 
 
 	// 월드 -> 뷰포트
+	// MainCam이 플레이어 때문에 이동해 있음
 	GameEngineCamera* MainCam = GetLevel()->GetMainCamera();
 	float4 PlayerPos = CutScene_Player->GetTransform().GetWorldPosition();
 	float4 BossPos = CutScene_Boss->GetTransform().GetWorldPosition();
