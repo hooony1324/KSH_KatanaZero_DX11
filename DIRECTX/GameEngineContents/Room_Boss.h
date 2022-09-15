@@ -25,6 +25,7 @@ protected:
 	void OffEvent() override;
 
 	void StairSetting() override {}
+	void CutSceneSetting();
 
 private:
 	GameEngineStateManager StateManager;
@@ -33,7 +34,6 @@ private:
 
 	void CutSceneStart(const StateInfo& _Info);
 	void CutSceneUpdate(float _DeltaTime, const StateInfo& _Info);
-	void CutSceneEnd(const StateInfo& _Info);
 
 	void RoarStart(const StateInfo& _Info);
 	void RoarUpdate(float _DeltaTime, const StateInfo& _Info);
@@ -46,21 +46,39 @@ private:
 
 	void PlayerBlock();
 
+	// SOUND
+private:
+	GameEngineSoundPlayer BGMSoundPlayer;
+	GameEngineSoundPlayer RoarSoundPlayer;
+
 private:
 	class BossPsychoGiant* BossGiant;
 
 	GameEngineTextureRenderer* Background_Mid;
 	GameEngineTextureRenderer* Background_Front;
+	GameEngineTextureRenderer* Background_FrontRed;
 	GameEngineTextureRenderer* Background_Floor;
 
 	// ÄÆ¾À
+private:
 	GameEngineTextureRenderer* CutScene_Player;
 	GameEngineTextureRenderer* CutScene_Boss;
 	GameEngineTextureRenderer* CutScene_Back;
 
-	// SOUND
-private:
-	GameEngineSoundPlayer BGMSoundPlayer;
-	GameEngineSoundPlayer RoarSoundPlayer;
+	GameEngineStateManager CutSceneStateManager;
+
+	void SceneIdleUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void SceneMutateStart(const StateInfo& _Info);
+	void SceneMutateUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void SceneDistortionStart(const StateInfo& _Info);
+	void SceneDistortionUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void SceneMutatedStart(const StateInfo& _Info);
+	void SceneMutatedUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	bool WalkStart;
+	float RedTime;
 };
 

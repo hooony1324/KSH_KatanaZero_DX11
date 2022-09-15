@@ -5,6 +5,7 @@
 class CustomPostEffect : public GameEnginePostEffect
 {
 public:
+	CustomRenderOption Option;
 	void EffectSwitch()
 	{
 		OnOffOption = !OnOffOption;
@@ -37,7 +38,6 @@ protected:
 
 protected:
 	bool OnOffOption;
-	CustomRenderOption Option;
 	float SumDeltaTime;
 };
 
