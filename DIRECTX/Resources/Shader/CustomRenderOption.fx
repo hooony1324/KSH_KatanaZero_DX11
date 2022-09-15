@@ -4,7 +4,7 @@ cbuffer CustomRenderOption : register(b10)
     float SumDeltaTime;
     int IsMask;
     int OnOff;
-    int Option01;
+    int Version;
     int Option02;
     int Option03;
     int Option04;

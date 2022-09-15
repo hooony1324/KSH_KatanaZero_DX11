@@ -39,27 +39,31 @@ float4 Wave_PS(Output _Input) : SV_Target0
     float2 TexPos = _Input.Tex.xy;
     
     // ¿þÀÌºê ver1
-    //float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f); // uv : 0 ~ 1
-    //uv.x = (sin(uv.y * 15 + SumDeltaTime * 30.0f)) / 60.0f;
-    //uv.y = 0;
-    //TexPos = float2(TexPos.x + uv.x, TexPos.y + uv.y);
- 
-    
-    
+    if (Version == 0)
+    {
+        float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f); // uv : 0 ~ 1
+        uv.x = (sin(uv.y * 15 + SumDeltaTime * 10.0f)) / 60.0f;
+        uv.y = 0;
+        TexPos = float2(TexPos.x + uv.x, TexPos.y + uv.y);
+    }
     // ¿þÀÌºê ver2
-    float POWER = 0.04f;                // ÁÂ¿ì Èçµé¸²
-    float VERTICAL_SPREAD = 5.0f;       // vertically
-    float ANIM_SPEED = 0.4f;
+    else if (Version == 1)
+    {
+        float POWER = 0.04f; // ÁÂ¿ì Èçµé¸²
+        float VERTICAL_SPREAD = 5.0f; // vertically
+        float ANIM_SPEED = 0.4f;
     
-    float y = (TexPos.y + SumDeltaTime * ANIM_SPEED) * VERTICAL_SPREAD;
+        float y = (TexPos.y + SumDeltaTime * ANIM_SPEED) * VERTICAL_SPREAD;
     
-    TexPos.x += (
-    //sin(y)                            // ¹è°æÂÊ Å« Èçµé¸²
-    + sin(y * 10.0f) * 0.2f
-    //+ sin(y * 50.0f) * 0.03f          // ÀÜ ÁÖ¸§
-    )
-    * POWER
-    * sin(TexPos.y * 3.14f);
+        TexPos.x += (
+        //sin(y)                            // ¹è°æÂÊ Å« Èçµé¸²
+        +sin(y * 10.0f) * 0.2f
+        //+ sin(y * 50.0f) * 0.03f          // ÀÜ ÁÖ¸§
+        )
+        * POWER
+        * sin(TexPos.y * 3.14f);
+    }
+
 
     float4 Color = Tex.Sample(Smp, TexPos);
     return Color;

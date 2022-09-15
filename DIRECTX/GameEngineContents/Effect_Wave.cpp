@@ -25,6 +25,7 @@ void Effect_Wave::EffectInit()
 	OnOffOption = false;
 
 	Option.DeltaTime = 0.0f;
+	Option.Version = 1;
 	
 	if (true == EffectSet.ShaderResources.IsConstantBuffer("CustomRenderOption"))
 	{

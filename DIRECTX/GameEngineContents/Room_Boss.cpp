@@ -5,6 +5,7 @@
 #include "Effect_Distortion.h"
 #include "CharacterActor.h"
 #include "Effect_Distortion.h"
+#include "Effect_Wave.h"
 
 Room_Boss::Room_Boss()
 	: Background_Mid(nullptr)
@@ -218,6 +219,15 @@ void Room_Boss::PlayStart(const StateInfo& _Info)
 {
 	DeadTime = 0.0f;
 
+	if (false == BossGiant->IsUpdate())
+	{
+		Background->On();
+		Background_Mid->On();
+		Background_Front->On();
+		Background_Floor->On();
+		BossGiant->On();
+	}
+
 	// 브금 ON
 }
 
@@ -244,8 +254,9 @@ void Room_Boss::DistortionStart(const StateInfo& _Info)
 void Room_Boss::DistortionUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
-	if (_Info.StateTime > 0.8f)
+	if (_Info.StateTime > 1.0f)
 	{
+		Effect_Distortion::GetInst()->EffectOff();
 		GEngine::ChangeLevel("EndingLevel");
 		return;
 	}
@@ -405,6 +416,8 @@ void Room_Boss::SceneDistortionUpdate(float _DeltaTime, const StateInfo& _Info)
 void Room_Boss::SceneMutatedStart(const StateInfo& _Info)
 {
 	// 울부짖음 + 웨이브
+	Effect_Wave::GetInst()->EffectOn();
+	Effect_Wave::GetInst()->Option.Version = 0;
 }
 
 void Room_Boss::SceneMutatedUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -415,6 +428,8 @@ void Room_Boss::SceneMutatedUpdate(float _DeltaTime, const StateInfo& _Info)
 		CutScene_Back->Off();
 		CutScene_Player->Off();
 		CutScene_Boss->Off();
+		Effect_Wave::GetInst()->EffectOff();
+		Effect_Wave::GetInst()->Option.Version = 1;
 		RoarSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_03.ogg");
 		RoarSoundPlayer.Volume(0.025f);
 		StateManager.ChangeState("Roar");
