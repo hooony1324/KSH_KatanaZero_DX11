@@ -18,11 +18,12 @@ void TestActor::Start()
 {
 	//ShotRenderer = CreateComponent<GameEngineTextureRenderer>();
 	//ShotRenderer->SetSamplingModePoint();
-	GameEngineTextureRenderer* BackGround = CreateComponent<GameEngineTextureRenderer>();
+	BackGround = CreateComponent<GameEngineTextureRenderer>();
 	BackGround->SetTexture("None.png");
 	BackGround->GetTransform().SetLocalScale({ 320, 180, 1 });
-	BackGround->GetTransform().SetLocalMove({ 0, 0, 100 });
-	BackGround->Off();
+	BackGround->GetTransform().SetWorldPosition({ -0, 0 });
+	BackGround->GetPixelData().PlusColor.r = 1;
+	BackGround->On();
 
 	// 마스크 애니메이션
 	TestRenderer = CreateComponent<GameContentsCustomRenderer>();
@@ -107,6 +108,8 @@ void TestActor::Update(float _DeltaTime)
 		MaskedRenderer->GetMaskData().MaskFrameData.x -= MoveX/2 / ScaleX;
 	}
 
+
+	BackGround->GetPixelData().PlusColor.a -= _DeltaTime * 0.5f;
 }
 
 void TestActor::End()

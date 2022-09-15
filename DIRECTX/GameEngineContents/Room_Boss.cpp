@@ -57,7 +57,7 @@ void Room_Boss::Start()
 	Background_FrontRed->SetTexture("None.png");
 	Background_FrontRed->GetTransform().SetLocalScale({ 1280, 720, 1 });
 	Background_FrontRed->GetTransform().SetWorldPosition({ 640, -510, GetDepth(ACTOR_DEPTH::TRANSITION) });
-	Background_FrontRed->GetPixelData().PlusColor.r = 255;
+	Background_FrontRed->GetPixelData().PlusColor.r = 1;
 	Background_FrontRed->GetPixelData().MulColor.g = 0;
 	Background_FrontRed->GetPixelData().MulColor.b = 0;
 	Background_FrontRed->GetPixelData().MulColor.a = 1;
@@ -205,7 +205,7 @@ void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (Background_FrontRed->GetPixelData().MulColor.a > 0.0f)
 	{
-		Background_FrontRed->GetPixelData().MulColor.a *= 1 - _DeltaTime * 3;
+		Background_FrontRed->GetPixelData().MulColor.a -= _DeltaTime;
 		if (Background_FrontRed->GetPixelData().MulColor.a <= 0.000005f)
 		{
 			Background_FrontRed->GetPixelData().MulColor.a = 0.000001f;
@@ -418,6 +418,24 @@ void Room_Boss::SceneMutatedStart(const StateInfo& _Info)
 	// 울부짖음 + 웨이브
 	Effect_Wave::GetInst()->EffectOn();
 	Effect_Wave::GetInst()->Option.Version = 0;
+
+
+	// 월드 -> 뷰포트
+	GameEngineCamera* MainCam = GetLevel()->GetMainCamera();
+	float4 PlayerPos = CutScene_Player->GetTransform().GetWorldPosition();
+	float4 BossPos = CutScene_Boss->GetTransform().GetWorldPosition();
+	float4 CamPos = MainCam->GetTransform().GetWorldPosition();
+
+	float4x4 MVP = MainCam->GetTransform().GetWorldViewProjection();
+
+	PlayerPos = (PlayerPos - CamPos) * MVP;
+	BossPos = (BossPos - CamPos) * MVP;
+
+	CutScene_Player->ChangeCamera(CAMERAORDER::UICAMERA);
+	CutScene_Boss->ChangeCamera(CAMERAORDER::UICAMERA);
+
+	CutScene_Player->GetTransform().SetWorldPosition(PlayerPos);
+	CutScene_Boss->GetTransform().SetWorldPosition(BossPos);
 }
 
 void Room_Boss::SceneMutatedUpdate(float _DeltaTime, const StateInfo& _Info)

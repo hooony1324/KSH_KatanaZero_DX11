@@ -32,12 +32,12 @@ protected:
 
 
 private:
+	class GameEngineTextureRenderer* BackGround;
 	class GameEngineTextureRenderer* ShotRenderer;
 	class GameContentsCustomRenderer* TestRenderer;
 	class GameContentsCustomRenderer* CameraRenderer;
 	class GameContentsCustomRenderer* KnifeRenderer;
 	class GameContentsCustomRenderer* MaskedRenderer;
 
-	class GameEngineTextureRenderer* TextureRenderer;
 };
 
