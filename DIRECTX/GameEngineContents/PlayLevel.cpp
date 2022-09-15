@@ -247,7 +247,7 @@ void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 	// 추후 변환 효과
-	if (true == Transition->IsChangeWhiteEnd())
+	if (true == Transition->IsChangeWhiteEnd() && _Info.StateTime > 0.3f)
 	{
 		RoomStateManager.ChangeState("RoomPlay");
 		return;

@@ -68,6 +68,11 @@ void Room_Boss::Start()
 	StateManager.CreateStateMember("Idle"
 		, std::bind(&Room_Boss::IdleUpdate, this, std::placeholders::_1, std::placeholders::_2));
 
+	StateManager.CreateStateMember("CutScene"
+		, std::bind(&Room_Boss::CutSceneUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&Room_Boss::CutSceneStart, this, std::placeholders::_1)
+		, std::bind(&Room_Boss::CutSceneEnd, this, std::placeholders::_1));
+
 	StateManager.CreateStateMember("Roar"
 		, std::bind(&Room_Boss::RoarUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&Room_Boss::RoarStart, this, std::placeholders::_1));
@@ -83,6 +88,10 @@ void Room_Boss::Start()
 	StateManager.ChangeState("Idle");
 
 	Off();
+
+	// ÄÆ¾À
+
+
 }
 
 void Room_Boss::OnEvent()
@@ -137,6 +146,23 @@ void Room_Boss::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
 }
+
+void Room_Boss::CutSceneStart(const StateInfo& _Info)
+{
+	
+}
+
+void Room_Boss::CutSceneUpdate(float _Deltatime, const StateInfo& _Info)
+{
+
+}
+
+
+void Room_Boss::CutSceneStart(const StateInfo& _Info)
+{
+
+}
+
 
 void Room_Boss::RoarStart(const StateInfo& _Info)
 {

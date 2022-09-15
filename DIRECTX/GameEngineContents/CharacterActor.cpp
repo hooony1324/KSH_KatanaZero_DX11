@@ -10,21 +10,7 @@ const float FORCE_REACTION = 1.0f; // 반작용 강도
 
 GameEngineCollision* CurSlashingCollision = nullptr;
 
-// Pixel 위치
-Pix DownPix = { 0, -34 };
-Pix DownBluePix = { 0, -34 };
-Pix DoubleDownPix = { 0, -35 };
-Pix DoubleDownBluePix = { 0, -35 };
-Pix UpPix = { 0, 34 };
-Pix Left_UpPix = { -21, -20 };
-Pix Right_UpPix = { 21, -20 };
-Pix Right_DownPix = { 20, -35 };
-Pix Left_DownPix = { -20, -35 };
-Pix LeftPix = { -20, -30 };
-Pix RightPix = { 20, -30 };
-Pix RedPix = { 0, 0 };
-Pix Down_LeftPix = { -15, -35 };
-Pix Down_RightPix = { 15, -35 };
+
 
 CharacterActor::CharacterActor()
 	: MoveVec(float4::ZERO)

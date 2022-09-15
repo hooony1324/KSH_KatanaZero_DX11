@@ -1,11 +1,6 @@
 #pragma once
 #include "LiveActor.h"
 
-struct Pix
-{
-	int x;
-	int y;
-};
 
 // 설명 : 플레이어(제로, 드래곤, ...), 또는 보스 몬스터
 class GameEngineTextureRenderer;
@@ -123,8 +118,7 @@ protected:
 	void PixelSetting();
 
 	GameEngineTextureRenderer* CollisionMap;
-	std::vector<Pix> Pixels;
-	std::vector<GameEngineTextureRenderer*> PixelRenderers;
+
 
 	void FloatTimeCheck(float _DeltaTime);
 	void LookCheck(float _InputOrVelocityDir);
@@ -213,5 +207,22 @@ public:
 	virtual void ReverseStartSetting() override;
 	virtual void ReverseEndSetting() override;
 
+
+private:
+	// Pixel 위치
+	Pix DownPix = { 0, -34 };
+	Pix DownBluePix = { 0, -34 };
+	Pix DoubleDownPix = { 0, -35 };
+	Pix DoubleDownBluePix = { 0, -35 };
+	Pix UpPix = { 0, 34 };
+	Pix Left_UpPix = { -21, -20 };
+	Pix Right_UpPix = { 21, -20 };
+	Pix Right_DownPix = { 20, -35 };
+	Pix Left_DownPix = { -20, -35 };
+	Pix LeftPix = { -20, -30 };
+	Pix RightPix = { 20, -30 };
+	Pix RedPix = { 0, 0 };
+	Pix Down_LeftPix = { -15, -35 };
+	Pix Down_RightPix = { 15, -35 };
 };
 

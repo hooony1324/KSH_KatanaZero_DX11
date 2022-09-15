@@ -31,6 +31,10 @@ private:
 
 	void IdleUpdate(float _DeltaTime, const StateInfo& _Info);
 
+	void CutSceneStart(const StateInfo& _Info);
+	void CutSceneUpdate(float _DeltaTime, const StateInfo& _Info);
+	void CutSceneEnd(const StateInfo& _Info);
+
 	void RoarStart(const StateInfo& _Info);
 	void RoarUpdate(float _DeltaTime, const StateInfo& _Info);
 
@@ -48,6 +52,11 @@ private:
 	GameEngineTextureRenderer* Background_Mid;
 	GameEngineTextureRenderer* Background_Front;
 	GameEngineTextureRenderer* Background_Floor;
+
+	// ÄÆ¾À
+	GameEngineTextureRenderer* CutScene_Player;
+	GameEngineTextureRenderer* CutScene_Boss;
+	GameEngineTextureRenderer* CutScene_Back;
 
 	// SOUND
 private:

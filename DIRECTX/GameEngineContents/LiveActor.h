@@ -3,6 +3,13 @@
 
 // 설명 : 플레이어, 적, 몬스터, 총알, ...
 // '액터'의 위치, 상태
+
+struct Pix
+{
+	int x;
+	int y;
+};
+
 class FrameCapturedData
 {
 public:
@@ -23,6 +30,7 @@ public:
 		return static_cast<int>(CapturedDataList.size());
 	}
 
+
 public:
 	// constrcuter destructer
 	LiveActor();
@@ -35,6 +43,7 @@ public:
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
 protected:
+	std::vector<Pix> Pixels; // 디버깅용
 	std::list<FrameCapturedData*> CapturedDataList;
 	GameEngineTextureRenderer* FrameDataRenderer;
 	bool IsReverse;

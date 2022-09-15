@@ -179,6 +179,29 @@ void EnemyActor::OnEvent()
 		Collision_Character->On();
 	}
 
+	if (Pixels.size() == 0)
+	{
+		Pixels.push_back(DownPix);
+		Pixels.push_back(DownBluePix);
+		Pixels.push_back(DoubleDownPix);
+		Pixels.push_back(DoubleDownBluePix);
+		Pixels.push_back(Left_UpPix);
+		Pixels.push_back(Right_UpPix);
+		Pixels.push_back(Right_DownPix);
+		Pixels.push_back(Left_DownPix);
+		Pixels.push_back(LeftPix);
+		Pixels.push_back(RightPix);
+
+		// Pix Debug
+		for (Pix Pixel : Pixels)
+		{
+			GameEngineTextureRenderer* Renderer = CreateComponent<GameEngineTextureRenderer>();
+			Renderer->SetTexture("None_yellow.png");
+			Renderer->GetTransform().SetLocalScale({ 1, 1, 1 });
+			Renderer->GetTransform().SetLocalMove({ static_cast<float>(Pixel.x) * 0.5f, static_cast<float>(Pixel.y) * 0.5f });
+		}
+	}
+
 }
 
 void EnemyActor::WallCheck()
@@ -203,8 +226,6 @@ void EnemyActor::WallCheck()
 		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() + 72))).CompareInt3D(float4::GREEN);
 	Left_Up = (CurCollisionMap->GetCurTexture()
 		->GetPixelToFloat4(EnemyPos.ix() - 20, -(EnemyPos.iy() + 72))).CompareInt3D(float4::GREEN);
-	Right_Up = (CurCollisionMap->GetCurTexture()
-		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() + 72))).CompareInt3D(float4::GREEN);
 	Right_Down = (CurCollisionMap->GetCurTexture()
 		->GetPixelToFloat4(EnemyPos.ix() + 20, -(EnemyPos.iy() - 2))).CompareInt3D(float4::GREEN);
 	Left_Down = (CurCollisionMap->GetCurTexture()
@@ -217,7 +238,6 @@ void EnemyActor::WallCheck()
 	if (Down || DownBlue && Left_Down && Right_Down)
 	{
 		WallState = STATE_WALL::UNDERGROUND;
-		GetTransform().SetWorldMove({ 0, 1, 0 });
 		IsFall = false;
 		return;
 	}
@@ -432,6 +452,40 @@ void EnemyActor::Move(float _DeltaTime)
 
 	MoveVec.z = 0;
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
+
+	// ¶¥¿¡ ¹ÚÇûÀ¸¸é
+	if (WallState == STATE_WALL::UNDERGROUND)
+	{
+		
+	}
+
+	switch (WallState)
+	{
+	case EnemyActor::STATE_WALL::NONE:
+		break;
+	case EnemyActor::STATE_WALL::RIGHT:
+		break;
+	case EnemyActor::STATE_WALL::LEFT:
+		break;
+	case EnemyActor::STATE_WALL::UP:
+		break;
+	case EnemyActor::STATE_WALL::DOWN:
+		break;
+	case EnemyActor::STATE_WALL::DOWNBLUE:
+		break;
+	case EnemyActor::STATE_WALL::UNDERGROUND:
+	{
+		GetTransform().SetWorldMove(float4::UP * MoveSpeed * _DeltaTime);
+		return;
+	}
+	case EnemyActor::STATE_WALL::RIGHTSLOPE:
+		break;
+	case EnemyActor::STATE_WALL::LEFTSLOPE:
+		break;
+	default:
+		break;
+	}
+
 	GetTransform().SetWorldMove(Velocity);
 
 }

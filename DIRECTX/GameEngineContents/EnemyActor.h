@@ -181,5 +181,18 @@ public:
 	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
 	virtual void ReverseStartSetting() override;
 	virtual void ReverseEndSetting() override;
+
+private:
+	// Pixel 위치
+	Pix DownPix = { 0, -1 };
+	Pix DoubleDownPix = { 0, -2 };
+	Pix DownBluePix = { 0, -1 };
+	Pix DoubleDownBluePix = { 0, -2 };
+	Pix LeftPix = { -20, -1 };
+	Pix RightPix = { 20, -1 };
+	Pix Right_UpPix = { 20, 72 };
+	Pix Left_UpPix = { -20, 72 };
+	Pix Right_DownPix = { 20, -2 };
+	Pix Left_DownPix = { -20, -2 };
 };
 
