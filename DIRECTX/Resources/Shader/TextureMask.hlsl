@@ -40,7 +40,6 @@ Output TextureMask_VS(Input _Input)
     NewOutPut.Pos = mul(_Input.Pos + PivotPos, WorldViewProjection);
     NewOutPut.PosLocal = _Input.Pos;
     
-    
     NewOutPut.Tex0.x = (_Input.Tex.x * TextureFrameSize.x) + TextureFramePos.x;
     NewOutPut.Tex0.y = (_Input.Tex.y * TextureFrameSize.y) + TextureFramePos.y;
     

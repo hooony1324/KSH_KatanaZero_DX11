@@ -47,6 +47,7 @@ enum class COLLISIONGROUP
 	ENEMY_ATTACK,
 	DOOR,
 	STAIR,
+	CURSOR,
 };
 
 enum class ACTOR_DEPTH

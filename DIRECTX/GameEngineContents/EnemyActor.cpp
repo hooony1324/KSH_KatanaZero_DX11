@@ -443,6 +443,8 @@ void EnemyActor::LookDirCheck()
 
 void EnemyActor::Move(float _DeltaTime)
 {
+
+
 	// 도중에 플레이어 죽었으면
 	if (PlayerCollision != nullptr && false == PlayerCollision->IsUpdate())
 	{

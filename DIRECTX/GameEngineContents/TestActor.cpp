@@ -109,7 +109,7 @@ void TestActor::Update(float _DeltaTime)
 	}
 
 
-	BackGround->GetPixelData().PlusColor.a -= _DeltaTime * 0.5f;
+	//BackGround->GetPixelData().PlusColor.a -= _DeltaTime * 0.5f;
 }
 
 void TestActor::End()

@@ -77,7 +77,7 @@ void EnemyGrunt::Start()
 void EnemyGrunt::Update(float _DeltaTime)
 {
 	// ¿ªÀç»ý
-	if (true == IsReverse)
+	if (true == IsReverse )
 	{
 		return;
 	}

@@ -48,6 +48,9 @@ private:
 
 private:
 	GameEngineUIRenderer* Renderer;
+	GameEngineCollision* Collision;
+	class EnemyActor* ClickedActor;
+
 	static float4 ScreenPosition;
 	static float4 WorldPosition;
 	static float4 WorldPositionToActor;

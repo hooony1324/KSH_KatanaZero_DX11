@@ -8,6 +8,7 @@ class GameEngineCollision;
 class EnemyActor : public LiveActor
 {
 public:
+	bool IsClicked; // µð¹ö±ë¿ë
 
 	bool IsDead()
 	{
@@ -166,6 +167,7 @@ protected:
 	GameEngineCollision* Collision_Character;
 	GameEngineCollision* Collision_ChaseSensor;	
 	GameEngineCollision* Collision_Aim;
+
 
 	float4 Velocity;
 	float4 MoveVec;

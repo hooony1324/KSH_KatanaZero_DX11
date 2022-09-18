@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "Cursor.h"
 #include <GameEngineContents/ContentsCore.h>
+#include "EnemyActor.h"
 
 float4 Cursor::ScreenPosition = float4::ZERO;
 float4 Cursor::WorldPosition = float4::ZERO;
@@ -25,6 +26,11 @@ void Cursor::Start()
 
 	Boundary = ContentsCore::GetContentsWindowSize();
 
+	//Collision = CreateComponent<GameEngineCollision>();
+	//Collision->GetTransform().SetLocalScale({ 10, 10, 10000 });
+	//Collision->ChangeOrder(COLLISIONGROUP::CURSOR);
+	//Collision->SetDebugSetting(CollisionType::CT_AABB2D, float4::YELLOW);
+
 }
 
 void Cursor::Update(float _DeltaTime)
@@ -39,6 +45,12 @@ void Cursor::Update(float _DeltaTime)
 	//GameEngineDebug::OutPutString(Output);
 	CursorVisibleOutScreen();
 
+	//if (true == GameEngineInput::GetInst()->IsDown("MouseMid") &&
+	//	true == Collision->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_AABB2D
+	//		, nullptr))
+	//{
+	//	
+	//}
 }
 
 void Cursor::End()

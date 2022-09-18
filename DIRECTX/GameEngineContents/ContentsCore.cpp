@@ -39,6 +39,7 @@ void ContentsCore::Start()
 
 	// Input Key
 	GameEngineInput::GetInst()->CreateKey("MouseLeft", VK_LBUTTON);
+	GameEngineInput::GetInst()->CreateKey("MouseMid", VK_MBUTTON);
 	GameEngineInput::GetInst()->CreateKey("W", 'W');
 	GameEngineInput::GetInst()->CreateKey("A", 'A');
 	GameEngineInput::GetInst()->CreateKey("S", 'S');
