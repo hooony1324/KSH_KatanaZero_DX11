@@ -30,7 +30,7 @@ struct Output
 // 그래픽카드에서 이뤄지는것.
 Output TargetMerge_VS(Input _Input)
 {
-    Output NewOutPut = (Output) 0;
+    Output NewOutPut = (Output)0;
     NewOutPut.Pos = _Input.Pos;
     NewOutPut.Tex = _Input.Tex;
     return NewOutPut;
