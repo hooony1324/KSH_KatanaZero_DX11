@@ -9,6 +9,8 @@
 #include "Effect_DistortionGlitch.h"
 #include "Effect_Distortion.h"
 
+#include "LiveActor.h"
+
 ControlGUI* ControlGUI::Inst = nullptr;
 
 ControlGUI::ControlGUI()
@@ -63,11 +65,6 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		ImGui::Text(Name.c_str());
 	}
 
-	{
-		std::string Name = "WallState : " + GlobalValueManager::PlayerWallState;
-		ImGui::Text(Name.c_str());
-	}
-
 
 	if (true == ImGui::Button("CollisionDebugSwtich"))
 	{
@@ -78,6 +75,12 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	if (true == ImGui::Button("CollisionMapSwtich"))
 	{
 		GlobalValueManager::ColMap->OnOffSwitch();
+	}
+
+	ImGui::SameLine();
+	if (true == ImGui::Button("WallStateDebug"))
+	{
+		LiveActor::SwitchWallStateDebug();
 	}
 
 

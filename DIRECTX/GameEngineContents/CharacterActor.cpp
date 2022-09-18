@@ -4,6 +4,7 @@
 #include "SlashFX.h"
 #include "Door.h"
 #include "CharacterShadow.h"
+#include <GameEngineBase/magic_enum.hpp>
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -182,6 +183,18 @@ void CharacterActor::WallCheck()
 	{
 		IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
+	}
+
+
+	if (true == LiveActor::WallStateDebugOn)
+	{
+		FRenderer_WallState->On();
+		std::string_view State = magic_enum::enum_name(WallState);
+		FRenderer_WallState->SetText(State.data());
+	}
+	else
+	{
+		FRenderer_WallState->Off();
 	}
 
 }

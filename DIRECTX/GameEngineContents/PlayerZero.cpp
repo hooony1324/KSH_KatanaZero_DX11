@@ -70,6 +70,14 @@ void PlayerZero::Start()
 	// 최초 상태
 	PlayerStateManager.ChangeState("Idle");
 	GetTransform().SetLocalScale({ 2, 2, 1 });
+
+	// 벽체크
+	FRenderer_WallState = CreateComponent<GameEngineFontRenderer>();
+	FRenderer_WallState->SetText("fonttest");
+	FRenderer_WallState->SetLeftAndRightSort(LeftAndRightSort::CENTER);
+	FRenderer_WallState->SetPositionMode(FontPositionMode::WORLD);
+	FRenderer_WallState->SetSize(20);
+	FRenderer_WallState->GetTransform().SetLocalPosition({ 0, 30, 0 });
 }
 
 void PlayerZero::Update(float _DeltaTime)
@@ -231,6 +239,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		// 움직임 없으면 가만히 있을것
 		if (abs(Velocity.x) < 0.5f )
 		{
+			Velocity.y = 0;
 			return;
 		}
 		

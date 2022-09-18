@@ -35,15 +35,16 @@ void Room_Factory3::Start()
 
 	PlayerSpawnPos = float4{ 220, -920, GetDepth(ACTOR_DEPTH::PLAYER) };
 
-	//// 적 소환 리스트 1400, -310
-	//Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
-	//Grunt->SetSpawnPos({ 1400, -320, GetDepth(ACTOR_DEPTH::ENEMY) });
-	//Grunt->Off();
-	//Enemies.push_back(Grunt);
 
-	//// 400, -330
+	EnemyGrunt* Grunt;
+	Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
+	Grunt->SetSpawnPos({ 1500, -640, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Grunt->Off();
+	Enemies.push_back(Grunt);
+
+	//EnemyCop* Cop;
 	//Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
-	//Cop->SetSpawnPos({ 400, -360, GetDepth(ACTOR_DEPTH::ENEMY) });
+	//Cop->SetSpawnPos({ 1500, -640, GetDepth(ACTOR_DEPTH::ENEMY) });
 	//Cop->Off();
 	//Enemies.push_back(Cop);
 

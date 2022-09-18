@@ -113,8 +113,6 @@ void Room_Boss::OnEvent()
 	// 맵 관련
 	GlobalValueManager::ColMap = Background_ColMap;
 
-
-
 	// 상태에 따라 : 최초 시작, 방 리버스 된 후
 	if (Background_FrontRed->GetPixelData().MulColor.a <= 0.05f)
 	{
@@ -219,7 +217,6 @@ void Room_Boss::PlayStart(const StateInfo& _Info)
 {
 	DeadTime = 0.0f;
 
-	if (false == BossGiant->IsUpdate())
 	{
 		Background->On();
 		Background_Mid->On();

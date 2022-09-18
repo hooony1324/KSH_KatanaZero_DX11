@@ -25,6 +25,11 @@ public:
 class LiveActor : public GameEngineActor
 {
 public:
+	static void SwitchWallStateDebug()
+	{
+		WallStateDebugOn = !WallStateDebugOn;
+	}
+
 	int GetCaptureSize()
 	{
 		return static_cast<int>(CapturedDataList.size());
@@ -43,7 +48,11 @@ public:
 	LiveActor& operator=(LiveActor&& _Other) noexcept = delete;
 
 protected:
-	std::vector<Pix> Pixels; // µð¹ö±ë¿ë
+	// ÇÈ¼¿Ã¼Å© µð¹ö±ë
+	std::vector<Pix> Pixels; 
+	GameEngineFontRenderer* FRenderer_WallState;
+	static bool WallStateDebugOn;
+
 	std::list<FrameCapturedData*> CapturedDataList;
 	GameEngineTextureRenderer* FrameDataRenderer;
 	bool IsReverse;

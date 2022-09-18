@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "EnemyActor.h"
 #include "EnemyBullet.h"
-
+#include <GameEngineBase/magic_enum.hpp>
 
 bool TurnEnd;
 bool GroundAniEnd = false;
@@ -90,6 +90,12 @@ void EnemyActor::CreateRendererAndCollision()
 	Renderer_GunArm = CreateComponent<GameEngineTextureRenderer>();
 	Renderer_GunArm->Off();
 
+	FRenderer_WallState = CreateComponent<GameEngineFontRenderer>();
+	FRenderer_WallState->SetText("fonttest");
+	FRenderer_WallState->SetLeftAndRightSort(LeftAndRightSort::CENTER);
+	FRenderer_WallState->SetPositionMode(FontPositionMode::WORLD);
+	FRenderer_WallState->SetSize(20);
+	FRenderer_WallState->GetTransform().SetLocalPosition({ 0, 50, 0 });
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -114,6 +120,7 @@ void EnemyActor::CreateAllFolderAnimation()
 	Renderer_Character->AnimationBindEnd("attack", [=](const FrameAnimation_DESC&) { AttackAniEnd = true; });
 
 	Renderer_Character->SetScaleModeImage();
+
 }
 
 void EnemyActor::CreateAllState()
@@ -261,13 +268,11 @@ void EnemyActor::WallCheck()
 	if (Left_Up && Left_Down)
 	{
 		WallState = STATE_WALL::LEFT;
-		GetTransform().SetWorldMove({ 1, 0, 0 });
 		return;
 	}
 	if (Right_Up && Right_Down)
 	{
 		WallState = STATE_WALL::RIGHT;
-		GetTransform().SetWorldMove({ -1, 0, 0 });
 		return;
 	}
 
@@ -290,6 +295,17 @@ void EnemyActor::WallCheck()
 	{
 		//IsFall = false;
 		WallState = STATE_WALL::RIGHTSLOPE;
+	}
+
+	if (true == LiveActor::WallStateDebugOn)
+	{
+		FRenderer_WallState->On();
+		std::string_view State = magic_enum::enum_name(WallState);
+		FRenderer_WallState->SetText(State.data());
+	}
+	else
+	{
+		FRenderer_WallState->Off();
 	}
 
 }
@@ -443,8 +459,6 @@ void EnemyActor::LookDirCheck()
 
 void EnemyActor::Move(float _DeltaTime)
 {
-
-
 	// 도중에 플레이어 죽었으면
 	if (PlayerCollision != nullptr && false == PlayerCollision->IsUpdate())
 	{
@@ -454,12 +468,6 @@ void EnemyActor::Move(float _DeltaTime)
 
 	MoveVec.z = 0;
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
-
-	// 땅에 박혔으면
-	if (WallState == STATE_WALL::UNDERGROUND)
-	{
-		
-	}
 
 	switch (WallState)
 	{

@@ -2,6 +2,8 @@
 #include "LiveActor.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+bool LiveActor::WallStateDebugOn = false;
+
 LiveActor::LiveActor()
 	: FrameDataRenderer(nullptr)
 	, IsReverse(false)
