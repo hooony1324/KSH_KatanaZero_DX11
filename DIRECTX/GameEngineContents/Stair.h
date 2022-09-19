@@ -11,15 +11,8 @@ public:
 
 	void Spawn(float4 _WorldPos, Stair* _Up = nullptr, Stair* _Down = nullptr);
 	
-	// 1대 n 연결시 사용
-	void AddDownStair(Stair* _Down)
-	{
-		DownStairs.push_back(_Down);
-	}
-	void AddUpStair(Stair* _Up)
-	{
-		UpStairs.push_back(_Up);
-	}
+
+	void SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs);
 
 public:
 	// constrcuter destructer
@@ -39,8 +32,8 @@ protected:
 
 
 private:
-	std::list<Stair*> UpStairs;
-	std::list<Stair*> DownStairs;
+	Stair* UpStair;
+	Stair* DownStair;
 	GameEngineCollision* Collision;
 	GameEngineFontRenderer* FRenderer_Debug;
 

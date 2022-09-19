@@ -111,17 +111,18 @@ void Room_Factory1::OffEvent()
 // 계단이 있는 방이면 세팅해주어야 함
 void Room_Factory1::StairSetting()
 {
-	Stair* DownStair = GetLevel()->CreateActor<Stair>();
-	Stair* UpStair = GetLevel()->CreateActor<Stair>();
+	// 1층 2층
+	Stair* Stair1 = GetLevel()->CreateActor<Stair>();
+	Stair* Stair2 = GetLevel()->CreateActor<Stair>();
 
-	DownStair->Spawn({ 1130, -355,  GetDepth(ACTOR_DEPTH::COLLISION) }, UpStair);
-	UpStair->Spawn({ 737, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, nullptr, DownStair);
+	Stair1->Spawn({ 737, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, Stair2, nullptr);
+	Stair2->Spawn({ 1130, -355,  GetDepth(ACTOR_DEPTH::COLLISION) }, nullptr, Stair1);
 		
-	DownStair->Off();
-	UpStair->Off();
+	Stair1->Off();
+	Stair2->Off();
 
-	Stairs.push_back(DownStair);
-	Stairs.push_back(UpStair);
+	Stairs.push_back(Stair1);
+	Stairs.push_back(Stair2);
 }
 
 void Room_Factory1::Update(float _DeltaTime)

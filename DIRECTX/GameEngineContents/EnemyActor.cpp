@@ -338,8 +338,9 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 	Hp--;
 	if (Hp <= 0)
 	{
-		FlyVec = _This->GetTransform().GetWorldPosition() - _Other->GetTransform().GetWorldPosition();
-		FlyVec.z = 0;
+		float SlashDegree = _Other->GetTransform().GetLocalRotation().z;
+		float4 Dir = float4::DegreeToDirection2D(SlashDegree);
+		FlyVec = Dir;
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
 	}
@@ -483,7 +484,10 @@ void EnemyActor::Move(float _DeltaTime)
 	{
 	case EnemyActor::STATE_WALL::NONE:
 	{
-		Velocity.y += -MoveSpeed * _DeltaTime;
+		if (0 != StateManager.GetCurStateStateName().compare("Hurtfly"))
+		{
+			Velocity.y += -MoveSpeed * _DeltaTime;
+		}
 		break;
 	}
 	case EnemyActor::STATE_WALL::RIGHT:
@@ -500,7 +504,7 @@ void EnemyActor::Move(float _DeltaTime)
 		}
 
 		// 추격중 내려가기 (먼저 계단에 도달해야됨)
-		if (DoubleDownBlue && StateManager.GetCurStateStateName().compare("Run"))
+		if (DoubleDownBlue && 0 == StateManager.GetCurStateStateName().compare("Run"))
 		{
 			int a = 0;
 		}
@@ -511,7 +515,7 @@ void EnemyActor::Move(float _DeltaTime)
 		break;
 	case EnemyActor::STATE_WALL::UNDERGROUND:
 	{
-		GetTransform().SetWorldMove(float4::UP * MoveSpeed * _DeltaTime);
+		GetTransform().SetWorldMove(float4::UP);
 		return;
 	}
 	case EnemyActor::STATE_WALL::RIGHTSLOPE:
@@ -756,11 +760,11 @@ void EnemyActor::HurtflyStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 	Renderer_GunArm->Off();
 
-	FlyVec.x *= 0.8f;
-	FlyVec.y *= 1.1f;
+	FlyVec.x *= 3.0f;
+	FlyVec.y *= 3.0f;
 	MoveVec = FlyVec;
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
-	MoveSpeed *= 3.0f;
+	MoveSpeed *= 2.0f;
 }
 
 void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -768,23 +772,35 @@ void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 	float DT = _Info.StateTime;
 
 	// 날라감
-	MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
+	//MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
+	MoveVec.y = MoveVec.y - (9.8f * _DeltaTime) / 6.0f;
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
 
-	// 벽과 충돌 체크 -> None이 아니라면으로 바꿔야
-	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
+	if (Left_Up != Right_Up)
 	{
-		MoveVec.x *= -0.3f;
+		MoveVec.x *= -0.5f;
+	}
+
+	if (Right_Up && Left_Up && (Left != Right))
+	{
+		MoveVec.x = 0.0f;
 	}
 
 	if (WallState == STATE_WALL::UP)
 	{
-		MoveVec.y = -1;
+		MoveVec.y = -0.1f;
 	}
 
+	if (MoveVec.y <= -1.0f)
+	{
+		MoveVec.y = -0.99f;
+	}
 
 	// 땅에 닿으면
-	if (MoveVec.y < 0 && (Down || Left || Right))
+	if (MoveVec.y <= 0.0f && (WallState == STATE_WALL::DOWN || WallState == STATE_WALL::UNDERGROUND ||
+		WallState == STATE_WALL::LEFTSLOPE || WallState == STATE_WALL::RIGHTSLOPE))
 	{
+		MoveVec.y = 0;
 		StateManager.ChangeState("Hurtground");
 	}
 }
@@ -800,19 +816,19 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 	// MoveVec.x -> 0으로
 	float DT = _Info.StateTime;
 
+	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime * 3.0f);
+
 	if (DT > 3.0f)
 	{
 		Off();
 	}
 
-	if (Left || Right)
+	// 슬로프는 아니고 양쪽 벽 부딪히면
+	if (Left && Left_Up || Right && Right_Up)
 	{
-		MoveVec.x = 0;
+		MoveVec.x *= -0.5f;
 	}
-	else
-	{
-		MoveVec.x = GameEngineMath::LerpLimit(FlyVec.x, 0, DT);
-	}
+	
 
 }
 
@@ -828,7 +844,7 @@ bool FindPlayerNearestStair(GameEngineCollision* _Left, GameEngineCollision* _Ri
 
 void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 {
-
+	int a = 0;
 }
 
 void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -841,6 +857,8 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 {
+
+	Stair::PlayerNearestStair->SearchEnemyPassingDownStairs(GetTransform().GetWorldPosition().y, StairsToPlayer);
 
 }
 

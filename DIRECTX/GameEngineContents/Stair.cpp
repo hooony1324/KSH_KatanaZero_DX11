@@ -4,6 +4,28 @@
 
 Stair* Stair::PlayerNearestStair = nullptr;
 
+// 1類 > 2類 > 3類 牖戲煎 Enemy鬚儀�� 3類 2類 1類 頂溥螞棻
+void Stair::SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs)
+{
+	Stair* CurStair = PlayerNearestStair;
+
+	while (nullptr != CurStair)
+	{
+		bool SameFloor = abs(CurStair->GetTransform().GetWorldPosition().y - _EnemyPosY) < 40;
+		if (false == SameFloor)
+		{
+			_PassbyStairs.push_back(CurStair);
+			CurStair = CurStair->UpStair;
+		}
+		else
+		{
+			_PassbyStairs.push_back(CurStair);
+			break;
+		}
+	}
+
+}
+
 Stair::Stair()
 {
 }
@@ -34,8 +56,8 @@ void Stair::Start()
 
 void Stair::Spawn(float4 _WorldPos, Stair* _Up, Stair* _Down)
 {
-	UpStairs.push_back(_Up);
-	DownStairs.push_back(_Down);
+	UpStair = _Up;
+	DownStair = _Down;
 
 	GetTransform().SetWorldPosition({ _WorldPos.x, _WorldPos.y, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 }
