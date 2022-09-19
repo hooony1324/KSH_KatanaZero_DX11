@@ -43,7 +43,7 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 
 	{
 		float4 Pos = Cursor::GetCursorWorldPosition();
-		std::string Name = "MouseWorldPosition : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y);
+		std::string Name = "MouseCameraPosition : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y);
 		ImGui::Text(Name.c_str());
 	}
 

@@ -232,6 +232,9 @@
     <ClInclude Include="SlowMotion.h">
       <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="Stair.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -396,6 +399,9 @@
     </ClCompile>
     <ClCompile Include="SlowMotion.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Stair.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

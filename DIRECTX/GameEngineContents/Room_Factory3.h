@@ -22,7 +22,7 @@ protected:
 	void OnEvent() override;
 	void OffEvent() override;
 
-	void StairSetting() override {};
+	void StairSetting() override;
 private:
 
 };

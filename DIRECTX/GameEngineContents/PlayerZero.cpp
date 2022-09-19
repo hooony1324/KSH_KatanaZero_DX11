@@ -255,8 +255,9 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			break;
 		}
 
-		if (abs(Velocity.x) < 1.0f)
+		if (abs(Velocity.x) < 0.5f)
 		{
+			Velocity.y = 0;
 			return;
 		}
 

@@ -5,23 +5,19 @@
 GameEngineTextureRenderer* GlobalValueManager::ColMap = nullptr;
 float4 GlobalValueManager::PlayerPos;
 CharacterActor* GlobalValueManager::Player = nullptr;
-std::list<GameEngineCollision*> GlobalValueManager::Collision_UpStairs;
-std::list<GameEngineCollision*> GlobalValueManager::Collision_DownStairs;
 
+std::list<Stair*> GlobalValueManager::Stairs;
 std::string GlobalValueManager::PlayerWallState;
 std::string GlobalValueManager::PlayerState;
 
 void GlobalValueManager::ClearStairs()
 {
-	for (GameEngineCollision* Collision : Collision_UpStairs)
+	for (Stair* Ptr : Stairs)
 	{
-		Collision->Death();
+		Ptr->Off();
+		Ptr = nullptr;
 	}
-	
-	for (GameEngineCollision* Collision : Collision_DownStairs)
-	{
-		Collision->Death();
-	}
+	Stairs.clear();
 }
 
 GlobalValueManager::~GlobalValueManager()

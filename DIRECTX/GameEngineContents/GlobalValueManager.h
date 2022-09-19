@@ -1,4 +1,5 @@
 #pragma once
+#include "Stair.h"
 
 class GlobalValueManager
 {
@@ -12,9 +13,7 @@ public:
 	static std::string PlayerState;
 	
 	// 현재 맵의 계단 정보
-	static std::list<GameEngineCollision*> Collision_UpStairs;
-	static std::list<GameEngineCollision*> Collision_DownStairs;
-
+	static std::list<Stair*> Stairs;
 	static void ClearStairs();
 
 	// 슬로우

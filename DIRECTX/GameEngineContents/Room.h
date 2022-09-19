@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
+#include "Stair.h"
 
 // Ό³Έν :
 class GameEngineTextureRenderer;
@@ -67,6 +68,7 @@ protected:
 	float TimeLimitSeconds;
 
 	CharacterActor* PlayerActor;
+	std::list<Stair*> Stairs;
 
 private:
 

@@ -90,7 +90,7 @@ void EnemyGrunt::Update(float _DeltaTime)
 	// 액션 체크
 	PlayerAlertCheck();
 
-	PlayerOnFloorCheck();
+	PlayerSameFloorCheck();
 	// 상태에 따라 MoveVec 결정
 	StateManager.Update(_DeltaTime);
 

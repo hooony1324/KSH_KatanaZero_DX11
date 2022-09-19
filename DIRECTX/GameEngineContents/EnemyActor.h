@@ -102,8 +102,9 @@ protected:
 	void PlayerAlertCheck();
 	bool SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other);
 	GameEngineCollision* PlayerCollision;
-	void PlayerOnFloorCheck();
+	void PlayerSameFloorCheck();
 	bool FindPlayer;
+	class CharacterActor* ChasingPlayer;
 	float4 PlayerPos;
 	float4 EnemyPos;
 	float4 PlayerDir;
@@ -190,11 +191,11 @@ private:
 	Pix DoubleDownPix = { 0, -2 };
 	Pix DownBluePix = { 0, -1 };
 	Pix DoubleDownBluePix = { 0, -2 };
-	Pix LeftPix = { -20, -1 };
-	Pix RightPix = { 20, -1 };
-	Pix Right_UpPix = { 20, 72 };
-	Pix Left_UpPix = { -20, 72 };
-	Pix Right_DownPix = { 20, -2 };
-	Pix Left_DownPix = { -20, -2 };
+	Pix LeftPix = { -20, 3 };
+	Pix RightPix = { 20, 3 };
+	Pix Right_UpPix = { 20, 70 };
+	Pix Left_UpPix = { -20, 70 };
+	Pix Right_DownPix = { 15, -2 };
+	Pix Left_DownPix = { -15, -2 };
 };
 

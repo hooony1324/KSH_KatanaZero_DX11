@@ -56,6 +56,9 @@ void Room_Factory1::Start()
 	TimeLimit = true;
 	SetCurTimeLimitSeconds(60.0f);
 
+	// 계단
+	StairSetting();
+
 	Off();
 }
 
@@ -65,17 +68,20 @@ void Room_Factory1::OnEvent()
 	Background->On();
 	GlobalValueManager::ColMap = Background_ColMap;
 
-	// 아래층 계단
-	StairSetting();
-
 	// 지형 소환
 	PtrDoor->On();
+
+	GlobalValueManager::ClearStairs();
+	for (Stair* Ptr : Stairs)
+	{
+		Ptr->On();
+		GlobalValueManager::Stairs.push_back(Ptr);
+	}
 
 	// 적 관련
 	for (EnemyActor* Enemy : Enemies)
 	{
 		Enemy->On();
-
 		Enemy->Respawn();
 	}
 }
@@ -105,26 +111,17 @@ void Room_Factory1::OffEvent()
 // 계단이 있는 방이면 세팅해주어야 함
 void Room_Factory1::StairSetting()
 {
-	GlobalValueManager::ClearStairs();
+	Stair* DownStair = GetLevel()->CreateActor<Stair>();
+	Stair* UpStair = GetLevel()->CreateActor<Stair>();
 
-	{
-		GameEngineCollision* DownStair = CreateComponent<GameEngineCollision>();
-		DownStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
-		DownStair->GetTransform().SetWorldPosition({ 1130, -355, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
-		DownStair->ChangeOrder(COLLISIONGROUP::STAIR);
-		DownStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 1, 0, 0.25f });
-		GlobalValueManager::Collision_DownStairs.push_back(DownStair);
-	}
+	DownStair->Spawn({ 1130, -355,  GetDepth(ACTOR_DEPTH::COLLISION) }, UpStair);
+	UpStair->Spawn({ 737, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, nullptr, DownStair);
+		
+	DownStair->Off();
+	UpStair->Off();
 
-	{
-		GameEngineCollision* UpStair = CreateComponent<GameEngineCollision>();
-		UpStair->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
-		UpStair->GetTransform().SetWorldPosition({ 737, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
-		UpStair->SetDebugSetting(CollisionType::CT_AABB2D, { 0, 0, 1, 0.25f });
-		UpStair->ChangeOrder(COLLISIONGROUP::STAIR);
-		GlobalValueManager::Collision_UpStairs.push_back(UpStair);
-	}
-
+	Stairs.push_back(DownStair);
+	Stairs.push_back(UpStair);
 }
 
 void Room_Factory1::Update(float _DeltaTime)

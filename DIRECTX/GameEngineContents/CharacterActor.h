@@ -77,6 +77,10 @@ public:
 
 	void CreateUIShadow();
 
+	bool IsGround()
+	{
+		return !IsFall;
+	}
 
 private:
 	static bool CheatMode;
@@ -175,7 +179,6 @@ protected:
 	bool Down_Left;
 	bool Down_Right;
 
-
 	bool IsJump;
 	bool IsFall; // Áß·Â Àû¿ëÇØ¼­ ¶³¾îÁü
 	bool WallGrab;
@@ -217,8 +220,8 @@ private:
 	Pix UpPix = { 0, 34 };
 	Pix Left_UpPix = { -21, -20 };
 	Pix Right_UpPix = { 21, -20 };
-	Pix Right_DownPix = { 20, -35 };
-	Pix Left_DownPix = { -20, -35 };
+	//Pix Right_DownPix = { 20, -35 };
+	//Pix Left_DownPix = { -20, -35 };
 	Pix LeftPix = { -20, -30 };
 	Pix RightPix = { 20, -30 };
 	Pix RedPix = { 0, 0 };
