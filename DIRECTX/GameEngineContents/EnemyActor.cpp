@@ -332,7 +332,7 @@ void EnemyActor::PlayerAttackCheck()
 	);
 }
 
-bool EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
+CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 플레이어의 공격 위치를 받아서 반대로 날려짐
 	Hp--;
@@ -350,7 +350,7 @@ bool EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other
 		_Other->GetActor()->Death();
 	}
 
-	return true;
+	return CollisionReturn::Break;
 }
 
 void EnemyActor::PlayerAlertCheck()
@@ -378,12 +378,12 @@ void EnemyActor::PlayerAlertCheck()
 		std::bind(&EnemyActor::SeePlayer, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-bool EnemyActor::DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Other)
+CollisionReturn EnemyActor::DoorCheck(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	return true;
+	return CollisionReturn::Break;
 }
 
-bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other)
+CollisionReturn EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 느낌표 + 추적 시작
 	PlayerCollision = _Other;
@@ -392,7 +392,7 @@ bool EnemyActor::SeePlayer(GameEngineCollision* _This, GameEngineCollision* _Oth
 	StateManager.ChangeState("Alert");
 	FindPlayer = true;
 	ChasingPlayer = dynamic_cast<CharacterActor*>(_Other->GetActor());
-	return true;
+	return CollisionReturn::Break;
 }
 
 void EnemyActor::PlayerSameFloorCheck()

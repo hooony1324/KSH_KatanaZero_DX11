@@ -9,6 +9,8 @@
 #include "Effect_Distortion.h"
 #include "Effect_DistortionGlitch.h"
 
+#include "TestMonster.h"
+
 TestLevel::TestLevel() 
 {
 }
@@ -25,6 +27,8 @@ void TestLevel::Start()
 	portal = CreateActor<Portal>();
 	portal->GetTransform().SetWorldMove(float4::RIGHT * 100);
 	portal->Off();
+
+	TestMonster* monster = CreateActor<TestMonster>();
 }
 
 
@@ -39,6 +43,7 @@ void TestLevel::LevelStartEvent()
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
+
 }
 
 void TestLevel::Update(float _DeltaTime)
@@ -49,7 +54,10 @@ void TestLevel::Update(float _DeltaTime)
 		portal->On();
 	}
 
-	
+	if (true == GameEngineInput::GetInst()->IsDown("NumPad0"))
+	{
+		GetMainCameraActor()->FreeCameraModeOnOff();
+	}
 
 }
 

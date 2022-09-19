@@ -60,9 +60,9 @@ void GameEngineCollision::ChangeOrder(int _Order)
 
 bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 	, CollisionType _OtherType
-	, std::function<bool(GameEngineCollision* _This, GameEngineCollision* _Other)> _Update /*= nullptr*/
-	, std::function<bool(GameEngineCollision* _This, GameEngineCollision* _Other)> _Enter /*= nullptr*/
-	, std::function<bool(GameEngineCollision* _This, GameEngineCollision* _Other)> _Exit /*= nullptr*/)
+	, std::function<CollisionReturn(GameEngineCollision* _This, GameEngineCollision* _Other)> _Update /*= nullptr*/
+	, std::function<CollisionReturn(GameEngineCollision* _This, GameEngineCollision* _Other)> _Enter /*= nullptr*/
+	, std::function<CollisionReturn(GameEngineCollision* _This, GameEngineCollision* _Other)> _Exit /*= nullptr*/)
 {
 	if (false == IsUpdate())
 	{
@@ -99,7 +99,7 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 					// 이 충돌체와는 처음 충돌했다.
 					CollisionCheck.insert(Collision);
 
-					if (true == _Enter(this, Collision))
+					if (nullptr != _Enter && CollisionReturn::Break == _Enter(this, Collision))
 					{
 						return true;
 					}
@@ -107,7 +107,7 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 				}
 				else 
 				{
-					if (true == _Update(this, Collision))
+					if (nullptr != _Update && CollisionReturn::Break == _Update(this, Collision))
 					{
 						return true;
 					}
@@ -118,7 +118,7 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 				if (nullptr != _Update)
 				{
 					// 넣어줘야 한다를 명시하는 겁니다.
-					if (true == _Update(this, Collision))
+					if (CollisionReturn::Break == _Update(this, Collision))
 					{
 						return true;
 					}
@@ -135,9 +135,9 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 			{
 				if (CollisionCheck.end() != CollisionCheck.find(Collision))
 				{
-					if (true == _Exit(this, Collision))
+					if (nullptr != _Exit && CollisionReturn::Break == _Exit(this, Collision))
 					{
-						return true;
+						return false;
 					}
 
 					CollisionCheck.erase(Collision);

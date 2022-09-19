@@ -331,7 +331,7 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 공격 성공시 화면 흔들림 효과
-	if (true == Player->ShakeMainCamera())
+	if (true == Player->RoomShakeActivate())
 	{
 		RoomStateManager.ChangeState("RoomShake");
 		return;

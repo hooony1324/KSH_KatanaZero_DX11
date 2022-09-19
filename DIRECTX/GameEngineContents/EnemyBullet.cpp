@@ -66,7 +66,7 @@ void EnemyBullet::PlayerSlashCheck()
 			// ÃÑ¾Ë³¢¸® ºÎµúÈ÷¸é ¹«½Ã
 			if (nullptr != dynamic_cast<EnemyBullet*>(_Other->GetActor()))
 			{
-				return true;
+				return CollisionReturn::Break;
 			}
 			
 			
@@ -107,6 +107,6 @@ void EnemyBullet::PlayerSlashCheck()
 			
 			float Rot = float4::VectorXYtoDegree(float4::ZERO, Dir);
 			GetTransform().SetWorldRotation({ 0, 0, Rot });
-			return true; 
+			return CollisionReturn::Break;
 		});
 }

@@ -80,9 +80,13 @@ void GameEngineCamera::Render(float _DeltaTime)
 			Renderer->GetTransform().SetView(View);
 			Renderer->GetTransform().SetProjection(Projection);
 			Renderer->GetTransform().CalculateWorldViewProjection();
+
+			// 인스턴싱 정보 수집
 			Renderer->Render(ScaleTime);
 		}
 	}
+
+	// 다끝나면 인스턴싱을 랜더링
 }
 
 void GameEngineCamera::SetCameraOrder(CAMERAORDER _Order)

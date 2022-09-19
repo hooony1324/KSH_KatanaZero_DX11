@@ -57,6 +57,7 @@ void PlayerZero::Start()
 	Collision_Slash->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 	Collision_Slash->Off();
 	Collision_Slash->SetDebugSetting(CollisionType::CT_OBB2D, { 1, 1, 1, 0.25f });
+	Collision_Slash->SetCollisionMode(CollisionMode::Ex);
 
 	// 쿨타임 설정
 	AttackTimer = CreateComponent<Timer>();
@@ -278,7 +279,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 				PlayerStateManager.ChangeState("DoorBreak");
 				Velocity.x = 0;
 				DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
-				return false;
+				return CollisionReturn::Break;
 			});
 	}
 
@@ -449,7 +450,6 @@ void PlayerZero::CreateAllAnimation()
 		}); 
 	Renderer_Character->AnimationBindEnd("doorbreak", [=](const FrameAnimation_DESC&) 
 		{ 
-			CamShake = true;
 			DoorBreaking = false;
 			PlayerStateManager.ChangeState("Idle");
 			Renderer_Character->SetPivotToVector(float4::ZERO);

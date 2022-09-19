@@ -9,9 +9,6 @@
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
 
-GameEngineCollision* CurSlashingCollision = nullptr;
-
-
 
 CharacterActor::CharacterActor()
 	: MoveVec(float4::ZERO)
@@ -23,7 +20,6 @@ CharacterActor::CharacterActor()
 	, InputDir(float4::ZERO)
 	, DoorBreaking(false)
 	, DoorPtr(nullptr)
-	, CamShake(false)
 {
 
 }
@@ -52,8 +48,7 @@ void CharacterActor::OnEvent()
 	WallGrab = false;
 	DoorBreaking = false;
 	DoorPtr = nullptr;
-	CamShake = false;
-	CurSlashingCollision = nullptr;
+
 
 	if (Pixels.size() == 0)
 	{
@@ -93,8 +88,6 @@ void CharacterActor::OffEvent()
 	WallGrab = false;
 	DoorBreaking = false;
 	DoorPtr = nullptr;
-	CamShake = false;
-	CurSlashingCollision = nullptr;
 }
 
 void CharacterActor::PixelSetting()
@@ -271,7 +264,7 @@ void CharacterActor::EnemyAttackCheck()
 
 }
 
-bool CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
+CollisionReturn CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 공격 위치를 받아서 반대로 날려짐
 	Hp--;
@@ -286,10 +279,10 @@ bool CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCollision* _O
 		PlayerStateManager.ChangeState("Dead");
 	}
 
-	return true;
+	return CollisionReturn::Break;
 }
 
-bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* _Other)
+CollisionReturn CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	// 공격 위치를 받아서 반대로 날려짐
 	Hp--;
@@ -304,25 +297,23 @@ bool CharacterActor::HitBullet(GameEngineCollision* _This, GameEngineCollision* 
 		PlayerStateManager.ChangeState("Dead");
 	}
 
-	return true;
+	return CollisionReturn::Break;
 }
 
 
 // 같은 콜리전 계속 부딛히면 안됨
-bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
+CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
-	if (CurSlashingCollision == _Other)
+
+	DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+	if (nullptr != DoorPtr)
 	{
-		return false;
+		DoorPtr->Open();
+		DoorBreaking = true;
+		DoorPtr = nullptr;
 	}
 
-	CurSlashingCollision = _Other;
-
-
-	// 충돌 발생
-	//SlashedCol = _Other;
-
-	if (nullptr == DoorPtr)
+	else if (nullptr == DoorPtr)
 	{
 		float4 OtherPos = _Other->GetTransform().GetWorldPosition();
 		float4 ThisPos = _This->GetTransform().GetWorldPosition();
@@ -336,47 +327,32 @@ bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngin
 	}
 
 
-	return true;
+	return  CollisionReturn::Break;
 }
 
-bool CharacterActor::ShakeMainCamera()
+bool CharacterActor::RoomShakeActivate()
 {
-	float4 SlashLightDir;
 
-	Collision_Slash->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
-		{
-			DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
-			if (nullptr != DoorPtr)
-			{
-				DoorPtr->Open();
-				DoorBreaking = true;
-				DoorPtr = nullptr;
-				CamShake = true;
-			}
-
-			return false;
-		});
-
-
-
-	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_OBB2D,
+	if (Collision_Slash->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_OBB2D,
 		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
 		return true;
 	}
 
-	if (Collision_Slash->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_OBB2D,
+
+	if (Collision_Slash->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY), CollisionType::CT_OBB2D,
 		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
 		return true;
 	}
 
-	if (true == CamShake)
+	if (Collision_Slash->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY_ATTACK), CollisionType::CT_OBB2D,
+		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
 	{
-		CamShake = false;
 		return true;
 	}
+
+
 
 	return false;
 }

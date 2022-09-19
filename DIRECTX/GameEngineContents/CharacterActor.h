@@ -61,7 +61,7 @@ public:
 		CheatMode = false;
 	}
 
-	bool ShakeMainCamera();
+	bool RoomShakeActivate();
 
 
 	// 방 변경시 상태 초기화
@@ -130,8 +130,8 @@ protected:
 
 	// 피격
 	void EnemyAttackCheck();
-	bool Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
-	bool HitBullet(GameEngineCollision* _This, GameEngineCollision* _Other);
+	CollisionReturn Damaged(GameEngineCollision* _This, GameEngineCollision* _Other);
+	CollisionReturn HitBullet(GameEngineCollision* _This, GameEngineCollision* _Other);
 
 	GameEngineStateManager PlayerStateManager;
 
@@ -144,7 +144,7 @@ protected:
 	GameEngineCollision* Collision_Slash;
 
 	// 효과
-	bool IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
+	CollisionReturn IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
 	void CreateBrightShadow();
 
 	GameEngineTextureRenderer* Renderer_SlashLight;
@@ -195,7 +195,6 @@ protected:
 
 	bool DoorBreaking;
 	class Door* DoorPtr;
-	bool CamShake;
 
 	// 사운드
 protected:

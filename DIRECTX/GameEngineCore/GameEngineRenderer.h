@@ -53,6 +53,11 @@ public:
 
     void SetRenderingOrder(int _Order);
 
+	virtual void InstancingOn() 
+	{
+		IsInstancing = true;
+	};
+
 protected:
 	virtual void Start();
 	virtual void Update(float _DeltaTime) {}
@@ -65,6 +70,7 @@ protected:
     class GameEngineCamera* Camera;
 	CAMERAORDER CameraOrder;
     int RenderingOrder;
+	bool IsInstancing;
 
 private:
 	virtual void Render(float _DeltaTime) = 0;

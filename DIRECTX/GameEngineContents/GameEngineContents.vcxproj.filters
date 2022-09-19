@@ -235,6 +235,9 @@
     <ClInclude Include="Stair.h">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
     </ClInclude>
+    <ClInclude Include="TestMonster.h">
+      <Filter>Levels\99.TESTLEVEL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -402,6 +405,9 @@
     </ClCompile>
     <ClCompile Include="Stair.cpp">
       <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMonster.cpp">
+      <Filter>Levels\99.TESTLEVEL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
