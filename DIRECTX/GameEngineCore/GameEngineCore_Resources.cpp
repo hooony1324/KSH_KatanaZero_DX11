@@ -13,6 +13,7 @@
 // Resources Header
 #include "GameEngineVertexBuffer.h"
 #include "GameEngineIndexBuffer.h"
+#include "GameEngineInstancingBuffer.h"
 #include "GameEngineTexture.h"
 #include "GameEngineFolderTexture.h"
 #include "GameEngineSampler.h"
@@ -418,6 +419,7 @@ void GameEngineCore::EngineResourcesDestroy()
 	GameEngineBlend::ResourcesDestroy();
 	GameEngineConstantBuffer::ResourcesDestroy();
 	GameEngineStructuredBuffer::ResourcesDestroy();
+	GameEngineInstancingBuffer::ResourcesDestroy();
 	GameEngineSound::ResourcesDestroy();
 	GameEngineFont::ResourcesDestroy();
 

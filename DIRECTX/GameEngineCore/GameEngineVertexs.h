@@ -8,6 +8,7 @@ class GameEngineLayOutDesc
 	friend class GameEngineInputLayOut;
 
 public:
+	unsigned int InstancingSize;
 	unsigned int LayOutOffset;
 	std::map<const char*, int> SemanticIndexData;
 	std::vector<D3D11_INPUT_ELEMENT_DESC> InputLayOutDesc;

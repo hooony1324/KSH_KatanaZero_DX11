@@ -180,7 +180,14 @@ void GameEngineLayOutDesc::AddInputLayOut(
 	// 인스턴스 버퍼용
 	LayOutDesc.InputSlot = _InputSlot;
 	LayOutDesc.InstanceDataStepRate = _InstanceDataStepRate; 
-	LayOutOffset += FormatToByteScale(LayOutDesc.Format);
+
+	unsigned int FormatSize = FormatToByteScale(LayOutDesc.Format);
+	LayOutOffset += FormatSize;
+
+	if (_inputClass == D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_INSTANCE_DATA)
+	{
+		InstancingSize += FormatSize;
+	}
 
 	InputLayOutDesc.push_back(LayOutDesc);
 }

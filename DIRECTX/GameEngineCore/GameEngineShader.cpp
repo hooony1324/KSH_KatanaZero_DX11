@@ -142,6 +142,14 @@ void GameEngineShader::ShaderResCheck()
 	CompileInfo->GetDesc(&Info);
 
 	D3D11_SHADER_INPUT_BIND_DESC ResInfo;
+	// D3D11_SIGNATURE_PARAMETER_DESC InputDesc;
+
+	//for (size_t i = 0; i < Info.InputParameters; i++)
+	//{
+	//	CompileInfo->GetInputParameterDesc(i, &InputDesc);
+
+	//	int a = 0;
+	//}
 
 	// Info.BoundResources 이게 이 쉐이더에서 사용된 총 리소스 양
 	for (UINT i = 0; i < Info.BoundResources; i++)

@@ -50,13 +50,17 @@ void GameEngineDefaultRenderer::Render(float _DeltaTime)
 		MsgBoxAssert("랜더링 파이프라인이 세팅되지 않으면 랜더링을 할수 없습니다.");
 	}
 
-	if (false == IsInstancing)
+	if (false == IsInstancing())
 	{
 		// 준비된 모든 리소스들을 다 세팅해준다.
 		ShaderResources.AllResourcesSetting();
 		PipeLine->Rendering();
 		ShaderResources.AllResourcesReset();
-	} 
+	}
+	else 
+	{
+		Camera->PushInstancing(PipeLine, 1);
+	}
 }
 
 
@@ -76,8 +80,5 @@ void GameEngineDefaultRenderer::InstancingOn()
 {
 	GameEngineRenderer::InstancingOn();
 
-	if (false == PipeLine->GetVertexShader()->IsInstancing())
-	{
-		MsgBoxAssert("인스턴싱이 불가능한 랜더러 입니다.")
-	}
+	Camera->PushInstancing(PipeLine, 1);
 }

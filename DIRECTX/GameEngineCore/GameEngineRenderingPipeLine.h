@@ -66,6 +66,11 @@ public:
 	void Rendering(bool IsInstancing = false);
 
 
+	inline GameEngineVertexBuffer* GetVertexBuffer()
+	{
+		return VertexBuffer;
+	}
+
 	inline GameEngineVertexShader* GetVertexShader() 
 	{
 		return VertexShader;

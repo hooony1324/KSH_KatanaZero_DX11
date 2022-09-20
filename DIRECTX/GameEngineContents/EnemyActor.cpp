@@ -787,7 +787,7 @@ void EnemyActor::HurtflyStart(const StateInfo& _Info)
 	FlyVec.y *= FlyPower;
 	MoveVec = FlyVec;
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
-	MoveSpeed *= 2.0f;
+	MoveSpeed *= 4.0f;
 }
 
 void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -798,6 +798,7 @@ void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 	//MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
 	MoveVec.y = MoveVec.y - (9.8f * _DeltaTime) / 6.0f;
 	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime);
+	MoveSpeed = GameEngineMath::Lerp(MoveSpeed, 300, _DeltaTime);
 
 	if (Left_Up != Right_Up)
 	{
