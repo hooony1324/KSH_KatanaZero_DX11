@@ -102,6 +102,7 @@ protected:
 	GameEngineCollision* PlayerCollision;
 	class CharacterActor* ChasingPlayer;
 	std::vector<Stair*> StairsToPlayer;
+	Stair* CurDestEndStair;
 	Stair* CurDestStair;
 	bool IsDoorFront;	// 순찰 중 문이 플레이어 앞에 있음
 	bool IsDoor;		// 순찰 중 문이 앞에 있음
@@ -175,6 +176,7 @@ protected:
 	float4 MoveVec;
 	float MoveSpeed;
 	float4 FlyVec;
+	float FlyPower;
 	float FlyRadian;
 	int PrevLookDir;
 	float AimPaddingX;

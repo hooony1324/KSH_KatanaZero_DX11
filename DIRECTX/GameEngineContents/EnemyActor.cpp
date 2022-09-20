@@ -220,6 +220,7 @@ void EnemyActor::WallCheck()
 {
 	// y값 반전 주의
 	EnemyPos = GetTransform().GetWorldPosition();
+	EnemyPos.z = 0;
 
 	Down = (CurCollisionMap->GetCurTexture()
 		->GetPixelToFloat4(EnemyPos.ix() + DownPix.x, -(EnemyPos.iy() + DownPix.y))).CompareInt3D(float4::GREEN);
@@ -336,20 +337,39 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 {
 	// 플레이어의 공격 위치를 받아서 반대로 날려짐
 	Hp--;
-	if (Hp <= 0)
+
+	if (Hp > 0)
+	{
+		return CollisionReturn::Break;
+	}
+	// 플레이어가 반사한 총알공격이면 총알 없앰
+
+	float4 Enemy = _This->GetTransform().GetWorldPosition() + float4{ 0, 30 , 0 };
+	Enemy.z = 0;
+	float4 Attack = _Other->GetTransform().GetWorldPosition();
+	Attack.z = 0;
+
+	if (nullptr != dynamic_cast<EnemyBullet*>(_Other->GetActor()))
+	{
+		_Other->GetActor()->Death();
+
+		FlyVec = Enemy - Attack;
+		FlyPower = std::clamp(FlyVec.Length(), 1.0f, 3.0f);
+		FlyVec.Normalize();
+		StateManager.ChangeState("Hurtfly");
+	}
+	// 총알말고 다른 공격이면
+	else
 	{
 		float SlashDegree = _Other->GetTransform().GetLocalRotation().z;
 		float4 Dir = float4::DegreeToDirection2D(SlashDegree);
 		FlyVec = Dir;
+		FlyPower = std::clamp(float4(Enemy - Attack).Length(), 1.0f, 3.0f);
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
 	}
 
-	// 플레이어가 반사한 총알공격이면 총알 없앰
-	if (nullptr != dynamic_cast<EnemyBullet*>(_Other->GetActor()))
-	{
-		_Other->GetActor()->Death();
-	}
+
 
 	return CollisionReturn::Break;
 }
@@ -691,12 +711,15 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 같은 층에 없으면 계단으로
 	if (false == PlayerSameFloor)
 	{
+		CurDestEndStair = Stair::PlayerNearestStair;
+
 		if (PlayerDir.y > 0)
 		{
 			StateManager.ChangeState("GoUpstair");
 		}
 		else
 		{
+			CurDestEndStair->SearchEnemyPassingDownStairs(GetTransform().GetWorldPosition().y, StairsToPlayer);
 			StateManager.ChangeState("GoDownstair");
 		}
 		return;
@@ -760,8 +783,8 @@ void EnemyActor::HurtflyStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 	Renderer_GunArm->Off();
 
-	FlyVec.x *= 3.0f;
-	FlyVec.y *= 3.0f;
+	FlyVec.x *= FlyPower;
+	FlyVec.y *= FlyPower;
 	MoveVec = FlyVec;
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
 	MoveSpeed *= 2.0f;
@@ -832,16 +855,6 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
-// 플레이어와의 거리가 짧은 순 정렬(내려가는 계단)
-bool FindPlayerNearestStair(GameEngineCollision* _Left, GameEngineCollision* _Right)
-{
-	float Left = (_Left->GetTransform().GetWorldPosition() - GlobalValueManager::PlayerPos ).Length();
-	float Right = (_Right->GetTransform().GetWorldPosition() - GlobalValueManager::PlayerPos).Length();
-
-	return Left < Right;
-}
-
-
 void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 {
 	int a = 0;
@@ -857,15 +870,39 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 {
+	if (StairsToPlayer.size() > 0)
+	{
+		CurDestStair = StairsToPlayer.back();
+		StairsToPlayer.pop_back();
+	}
+	else
+	{
+		StateManager.ChangeState("Run");
+		return;
+	}
 
-	Stair::PlayerNearestStair->SearchEnemyPassingDownStairs(GetTransform().GetWorldPosition().y, StairsToPlayer);
+	float4 StairPos = CurDestStair->GetTransform().GetWorldPosition();
+	
+	MoveVec.x = StairPos.x - EnemyPos.x < 0 ? -1.0f : 1.0f;
 
+	// 렌더러 방향전환
 }
 
 void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 첫 목표 계단까지 간다, 첫 목표 계단 다음은 무조건 슬로프임
+	// 계단 도착했으면 남아있는 계단 확인한다
+	// 남아있는 계단 있으면 changestate(godownstair)
+	// 남아있는 계단 없으면 changestate(run)
+	// 현재최종목표계단 달라졌으면 changestate(run)
 
 
+
+	/*if (CurDestStair != Stair::PlayerNearestStair)
+	{
+		StateManager.ChangeState("Run");
+		return;
+	}*/
 }
 
 void EnemyActor::SlopeRunStart(const StateInfo& _Info)

@@ -2,7 +2,7 @@
 #include "CharacterActor.h"
 #include <GameEngineBase/GameEngineSound.h>
 
-const float SPEED_PLAYER = 500.0f;
+const float SPEED_PLAYER = 550.0f;
 
 // Ό³Έν :
 class Timer;

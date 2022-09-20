@@ -401,7 +401,7 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 // 무기 생성
 void BossPsychoGiant::SpawnPortalsUp()
 {
-
+	// 랜덤한 중복되지 않는 숫자 뽑기
 	std::vector<int> Indexs = { 0, 1, 2, 3, 4, 5, 6 };
 	std::shuffle(Indexs.begin(), Indexs.end(), GameEngineRandom::MainRandom.GetFunc());
 

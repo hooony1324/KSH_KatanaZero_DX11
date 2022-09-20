@@ -59,8 +59,8 @@ void CharacterActor::OnEvent()
 		Pixels.push_back(UpPix);
 		Pixels.push_back(Left_UpPix);
 		Pixels.push_back(Right_UpPix);
-		//Pixels.push_back(Right_DownPix);
-		//Pixels.push_back(Left_DownPix);
+		Pixels.push_back(Right_DownPix);
+		Pixels.push_back(Left_DownPix);
 		Pixels.push_back(LeftPix);
 		Pixels.push_back(RightPix);
 		Pixels.push_back(RedPix);
@@ -104,8 +104,8 @@ void CharacterActor::PixelSetting()
 	Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + UpPix.x, -(CharacterPos.iy() + UpPix.y)).CompareInt3D(float4::GREEN);
 	Left_Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Left_UpPix.x, -(CharacterPos.iy() + Left_UpPix.y)).CompareInt3D(float4::GREEN);
 	Right_Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_UpPix.x, -(CharacterPos.iy() + Right_UpPix.y)).CompareInt3D(float4::GREEN);
-	//Right_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_DownPix.x, -(CharacterPos.iy() + Right_DownPix.y)).CompareInt3D(float4::GREEN);
-	//Left_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Left_DownPix.x, -(CharacterPos.iy() + Left_DownPix.y)).CompareInt3D(float4::GREEN);
+	Right_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_DownPix.x, -(CharacterPos.iy() + Right_DownPix.y)).CompareInt3D(float4::GREEN);
+	Left_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Left_DownPix.x, -(CharacterPos.iy() + Left_DownPix.y)).CompareInt3D(float4::GREEN);
 	Left = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + LeftPix.x, -(CharacterPos.iy() + LeftPix.y)).CompareInt3D(float4::GREEN);
 	Right = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + RightPix.x, -(CharacterPos.iy() + RightPix.y)).CompareInt3D(float4::GREEN);
 	Red = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + RedPix.x, -(CharacterPos.iy() + RedPix.y)).CompareInt3D(float4::RED);
@@ -140,7 +140,8 @@ void CharacterActor::WallCheck()
 	}
 
 	// АјСп
-	if (!Down && !DoubleDown && !Down_Left && !Down_Right)
+	if (!Down && !DoubleDown && !Left_Down && !Right_Down
+		&& !Down_Left && !Down_Right && !Left && !Right)
 	{
 		WallState = STATE_WALL::NONE;
 		IsFall = true;
