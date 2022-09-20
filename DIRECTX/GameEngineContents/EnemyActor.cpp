@@ -94,11 +94,18 @@ void EnemyActor::CreateRendererAndCollision()
 	Renderer_GunArm->Off();
 
 	FRenderer_WallState = CreateComponent<GameEngineFontRenderer>();
-	FRenderer_WallState->SetText("fonttest");
+	FRenderer_WallState->SetText("default");
 	FRenderer_WallState->SetLeftAndRightSort(LeftAndRightSort::CENTER);
 	FRenderer_WallState->SetPositionMode(FontPositionMode::WORLD);
-	FRenderer_WallState->SetSize(20);
+	FRenderer_WallState->SetSize(16);
 	FRenderer_WallState->GetTransform().SetLocalPosition({ 0, 50, 0 });
+
+	FRenderer_FSMState = CreateComponent<GameEngineFontRenderer>();
+	FRenderer_FSMState->SetText("default");
+	FRenderer_FSMState->SetLeftAndRightSort(LeftAndRightSort::CENTER);
+	FRenderer_FSMState->SetPositionMode(FontPositionMode::WORLD);
+	FRenderer_FSMState->SetSize(16);
+	FRenderer_FSMState->GetTransform().SetLocalPosition({ 0, 60, 0 });
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -309,12 +316,18 @@ void EnemyActor::WallCheck()
 	if (true == LiveActor::WallStateDebugOn)
 	{
 		FRenderer_WallState->On();
-		std::string_view State = magic_enum::enum_name(WallState);
-		FRenderer_WallState->SetText(State.data());
+		FRenderer_FSMState->On();
+
+		std::string_view WState = magic_enum::enum_name(WallState);
+		FRenderer_WallState->SetText(WState.data());
+
+		std::string FSMState = StateManager.GetCurStateStateName();
+		FRenderer_WallState->SetText(FSMState);
 	}
 	else
 	{
 		FRenderer_WallState->Off();
+		FRenderer_FSMState->Off();
 	}
 
 }
@@ -354,7 +367,9 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 		_Other->GetActor()->Death();
 
 		FlyVec = Enemy - Attack;
-		FlyPower = std::clamp(FlyVec.Length(), 1.0f, 3.0f);
+		// 가까울수록 큰 힘, 멀수록 작은힘
+		float len = FlyVec.Length();
+		FlyPower = 3 / (std::clamp(FlyVec.Length(), 1.0f, 3.0f));
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
 	}
@@ -364,7 +379,8 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 		float SlashDegree = _Other->GetTransform().GetLocalRotation().z;
 		float4 Dir = float4::DegreeToDirection2D(SlashDegree);
 		FlyVec = Dir;
-		FlyPower = std::clamp(float4(Enemy - Attack).Length(), 1.0f, 3.0f);
+		float Normalize = float4(Enemy - Attack).Length() / 30.0f;
+		FlyPower = 3 / std::clamp(Normalize, 1.0f, 3.0f);
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
 	}
@@ -441,8 +457,9 @@ void EnemyActor::PlayerSameFloorCheck()
 
 
 	// 같은층 다른층 판단
+	//float4 FloorPos = Stair::PlayerNearestStair->GetTransform().GetWorldPosition();
 	float HeightSub = PlayerPos.y - EnemyPos.y;
-	if (abs(HeightSub) > 30.0f 
+	if (abs(HeightSub) > 250.0f 
 		&& true == ChasingPlayer->IsGround())
 	{
 		PlayerSameFloor = false;
@@ -690,7 +707,7 @@ void EnemyActor::AlertUpdate(float _DeltaTime, const StateInfo& _Info)
 void EnemyActor::RunStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("run");
-	MoveVec.x = static_cast<float>(PrevLookDir);
+	MoveVec.x = static_cast<float>(PlayerDir.x);
 	MoveVec.y = 0;
 }
 
@@ -699,27 +716,26 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 ChaseTurn
-	if (PrevLookDir != PlayerDir.ix() && true == PlayerSameFloor)
+	if (MoveVec.x != PlayerDir.ix() && true == PlayerSameFloor)
 	{
 		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 
 
-
-
 	// 같은 층에 없으면 계단으로
 	if (false == PlayerSameFloor)
 	{
-		CurDestEndStair = Stair::PlayerNearestStair;
+		CurPlayerHereStair = Stair::PlayerNearestStair;
 
 		if (PlayerDir.y > 0)
 		{
+			CurPlayerHereStair->SearchEnemyPassingUpStairs(GetTransform().GetWorldPosition().y, StairsToPlayer);
 			StateManager.ChangeState("GoUpstair");
 		}
 		else
 		{
-			CurDestEndStair->SearchEnemyPassingDownStairs(GetTransform().GetWorldPosition().y, StairsToPlayer);
+			CurPlayerHereStair->SearchEnemyPassingDownStairs(GetTransform().GetWorldPosition().y, StairsToPlayer);
 			StateManager.ChangeState("GoDownstair");
 		}
 		return;
@@ -727,7 +743,7 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 	// 사거리 안에 들어오면 Attack
-	if (abs(PlayerPos.x - EnemyPos.x) < AttackRange)
+	if (true == PlayerSameFloor && abs(PlayerPos.x - EnemyPos.x) < AttackRange)
 	{
 		StateManager.ChangeState("Attack");
 		return;
@@ -856,19 +872,92 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
+bool UpStairArrived;
 void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 {
-	int a = 0;
+	if (StairsToPlayer.size() > 0)
+	{
+		CurDestStair = StairsToPlayer.back();
+		StairsToPlayer.pop_back();
+	}
+	else
+	{
+		StateManager.ChangeState("Run");
+		return;
+	}
+
+	float4 StairPos = CurDestStair->GetTransform().GetWorldPosition();
+
+	MoveVec.x = StairPos.x - EnemyPos.x < 0 ? -1.0f : 1.0f;
+
+	// 렌더러 방향전환
+	if (MoveVec.x > 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
+
+	UpStairArrived = false;
 }
 
 void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 첫 목표 계단까지 간다(무조건 같은 층), 첫 목표 계단 다음은 슬로프임
+	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+		{
+			if (CurDestStair == _Other->GetActor())
+			{
+				// 방향전환
+				MoveVec.x *= -1;
+				if (MoveVec.x > 0)
+				{
+					Renderer_Character->GetTransform().PixLocalPositiveX();
+				}
+				else
+				{
+					Renderer_Character->GetTransform().PixLocalNegativeX();
+				}
+				UpStairArrived = true;
+			}
+			else
+			{
+				UpStairArrived = false;
+			}
+			return CollisionReturn::Break;
+		});
 
+	// 계단 도착하면 한번 더 올라가기
+	if (true == UpStairArrived && nullptr != CurDestStair->UpStair)
+	{
+		StateManager.ChangeState("GoUpstair");
+		return;
+	}
+
+
+	// 사거리 안에 들어오면 Attack
+	if (true == PlayerSameFloor && (PlayerPos - EnemyPos).Length() < AttackRange)
+	{
+		StairsToPlayer.clear();
+		StateManager.ChangeState("Attack");
+		return;
+	}
+
+	// 슬로프 도착 전에 목표 바뀜
+	if (CurPlayerHereStair != Stair::PlayerNearestStair)
+	{
+		StairsToPlayer.clear();
+		StateManager.ChangeState("Run");
+		return;
+	}
 
 
 }
 
-
+bool DownStairArrived;
 void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 {
 	if (StairsToPlayer.size() > 0)
@@ -887,39 +976,123 @@ void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 	MoveVec.x = StairPos.x - EnemyPos.x < 0 ? -1.0f : 1.0f;
 
 	// 렌더러 방향전환
+	if (MoveVec.x > 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+	}
+
+	DownStairArrived = false;
 }
 
 void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	// 첫 목표 계단까지 간다, 첫 목표 계단 다음은 무조건 슬로프임
-	// 계단 도착했으면 남아있는 계단 확인한다
-	// 남아있는 계단 있으면 changestate(godownstair)
-	// 남아있는 계단 없으면 changestate(run)
-	// 현재최종목표계단 달라졌으면 changestate(run)
+	// 첫 목표 계단까지 간다(무조건 같은 층), 첫 목표 계단 다음은 슬로프임
+	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+		{
+			if (CurDestStair == _Other->GetActor())
+			{
+				MoveVec.x *= -1;
+				if (MoveVec.x > 0)
+				{
+					Renderer_Character->GetTransform().PixLocalPositiveX();
+				}
+				else
+				{
+					Renderer_Character->GetTransform().PixLocalNegativeX();
+				}
+				DownStairArrived = true;
+			}
+			else
+			{
+				DownStairArrived = false;
+			}
+
+			return CollisionReturn::Break;
+		});
 
 
-
-	/*if (CurDestStair != Stair::PlayerNearestStair)
+	// 슬로프 도착 전에 목표 바뀜
+	if (CurPlayerHereStair != Stair::PlayerNearestStair)
 	{
+		StairsToPlayer.clear();
 		StateManager.ChangeState("Run");
 		return;
-	}*/
+	}
+
+
+	// 슬로프 도착하면 내려가기 시작
+	if ( true == DownStairArrived 
+		&&(MoveVec.x < 0 &&  !Right_Down|| MoveVec.x > 0 && !Left_Down)
+		&& true == DoubleDownBlue)
+	{
+		StateManager.ChangeState("SlopeRun");
+		return;
+	}
+	
 }
 
+// 계단 내려가기에만 적용되는 상태
+bool CurDestStairArrived;
 void EnemyActor::SlopeRunStart(const StateInfo& _Info)
 {
+	// 계단으로 내려가야함
+	GetTransform().SetWorldMove(float4::DOWN * 2);
 
+	// 계단에 도착했으면 새로운 계단 목표임
+	if (nullptr != CurDestStair->DownStair)
+	{
+		CurDestStair = StairsToPlayer.back();
+		StairsToPlayer.pop_back();
+	}
 
-
+	CurDestStairArrived = false;
 }
 
 void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	// 끝까지 내려갔으면
+	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::STAIR, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+		{
+			if (CurDestStair == _Other->GetActor())
+			{
+				CurDestStairArrived = true;
+			}
+			return CollisionReturn::Break;
+		});
 
+	// 한번더 내려가기
+	if (true == CurDestStairArrived)
+	{
+		StateManager.ChangeState("GoDownstair");
+		return;
+	}
+
+
+	// 도중에 목표 바뀜
+	if (CurPlayerHereStair != Stair::PlayerNearestStair)
+	{
+		StairsToPlayer.clear();
+		StateManager.ChangeState("Run");
+		return;
+	}
+
+	// 사거리 안에 들어오면 == 같은층에 있으면, Attack
+	if (true == PlayerSameFloor && (PlayerPos - EnemyPos).Length() < AttackRange)
+	{
+		StairsToPlayer.clear();
+		StateManager.ChangeState("Attack");
+		return;
+	}
 }
 
 
-// 역재생
+// 역재생 관련 세팅
 void EnemyActor::PushFrameCpaturedData()
 {
 	// 역재생

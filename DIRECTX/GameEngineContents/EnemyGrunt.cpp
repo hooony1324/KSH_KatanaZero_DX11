@@ -144,17 +144,12 @@ void EnemyGrunt::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (PlayerDir.ix() != PrevLookDir)
 	{
 		StateManager.ChangeState("ChaseTurn");
+		return;
 	}
 	else
 	{
-		if (Left || Right)
-		{
-			StateManager.ChangeState("SlopeRun");
-		}
-		else
-		{
-			StateManager.ChangeState("Run");
-		}
+		StateManager.ChangeState("Run");
+		return;
 	}
 
 

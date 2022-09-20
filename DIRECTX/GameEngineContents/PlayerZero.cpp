@@ -77,8 +77,15 @@ void PlayerZero::Start()
 	FRenderer_WallState->SetText("fonttest");
 	FRenderer_WallState->SetLeftAndRightSort(LeftAndRightSort::CENTER);
 	FRenderer_WallState->SetPositionMode(FontPositionMode::WORLD);
-	FRenderer_WallState->SetSize(20);
+	FRenderer_WallState->SetSize(16);
 	FRenderer_WallState->GetTransform().SetLocalPosition({ 0, 30, 0 });
+
+	FRenderer_FSMState = CreateComponent<GameEngineFontRenderer>();
+	FRenderer_FSMState->SetText("default");
+	FRenderer_FSMState->SetLeftAndRightSort(LeftAndRightSort::CENTER);
+	FRenderer_FSMState->SetPositionMode(FontPositionMode::WORLD);
+	FRenderer_FSMState->SetSize(16);
+	FRenderer_FSMState->GetTransform().SetLocalPosition({ 0, 40, 0 });
 }
 
 void PlayerZero::Update(float _DeltaTime)

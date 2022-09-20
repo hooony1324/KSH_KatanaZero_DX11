@@ -16,8 +16,8 @@ public:
 	FrameCapturedData() : Texture(nullptr), TextureScale(float4::ZERO) {};
 	~FrameCapturedData() {};
 
-	float4 Position;
 	GameEngineTexture* Texture;
+	float4 Position;
 	float4 TextureScale;
 	
 };
@@ -50,11 +50,12 @@ public:
 protected:
 	// 픽셀체크 디버깅
 	std::vector<Pix> Pixels; 
+	GameEngineFontRenderer* FRenderer_FSMState;
 	GameEngineFontRenderer* FRenderer_WallState;
 	static bool WallStateDebugOn;
 
 	std::list<FrameCapturedData*> CapturedDataList;
-	GameEngineTextureRenderer* FrameDataRenderer;
+	GameEngineTextureRenderer* FrameDataRenderer;	// 역재생 전용 렌더러
 	bool IsReverse;
 
 	// 역재생

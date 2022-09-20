@@ -102,7 +102,7 @@ protected:
 	GameEngineCollision* PlayerCollision;
 	class CharacterActor* ChasingPlayer;
 	std::vector<Stair*> StairsToPlayer;
-	Stair* CurDestEndStair;
+	Stair* CurPlayerHereStair;
 	Stair* CurDestStair;
 	bool IsDoorFront;	// 순찰 중 문이 플레이어 앞에 있음
 	bool IsDoor;		// 순찰 중 문이 앞에 있음

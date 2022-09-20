@@ -13,6 +13,10 @@ public:
 	
 
 	void SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs);
+	void SearchEnemyPassingUpStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs);
+
+	Stair* UpStair;
+	Stair* DownStair;
 
 public:
 	// constrcuter destructer
@@ -32,8 +36,7 @@ protected:
 
 
 private:
-	Stair* UpStair;
-	Stair* DownStair;
+
 	GameEngineCollision* Collision;
 	GameEngineFontRenderer* FRenderer_Debug;
 

@@ -183,12 +183,18 @@ void CharacterActor::WallCheck()
 	if (true == LiveActor::WallStateDebugOn)
 	{
 		FRenderer_WallState->On();
+		FRenderer_FSMState->On();
+
 		std::string_view State = magic_enum::enum_name(WallState);
 		FRenderer_WallState->SetText(State.data());
+
+		std::string FsmState = PlayerStateManager.GetCurStateStateName();
+		FRenderer_FSMState->SetText(FsmState);
 	}
 	else
 	{
 		FRenderer_WallState->Off();
+		FRenderer_FSMState->Off();
 	}
 
 }

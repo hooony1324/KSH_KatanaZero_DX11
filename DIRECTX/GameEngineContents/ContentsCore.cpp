@@ -188,6 +188,10 @@ void ContentsCore::TextureLoad()
 			TexDir.MoveParentToExitsChildDirectory(Val);
 		}
 	}
+
+	Dir.Move("UI");
+	GameEngineFont::Load(Dir.GetFullPath() + "\font_korean.png");
+
 }
 
 void ContentsCore::SoundLoad()

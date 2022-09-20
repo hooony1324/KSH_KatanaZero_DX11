@@ -7,6 +7,7 @@ Stair* Stair::PlayerNearestStair = nullptr;
 // 1類 > 2類 > 3類 牖戲煎 Enemy鬚儀�� 3類 2類 1類 頂溥螞棻
 void Stair::SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs)
 {
+	_PassbyStairs.clear();
 	Stair* CurStair = PlayerNearestStair;
 
 	while (nullptr != CurStair)
@@ -24,6 +25,25 @@ void Stair::SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& 
 		}
 	}
 
+}
+
+void Stair::SearchEnemyPassingUpStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs)
+{
+	Stair* CurStair = PlayerNearestStair;
+
+	while (nullptr != CurStair)
+	{
+		bool SameFloor = abs(CurStair->GetTransform().GetWorldPosition().y - _EnemyPosY < 40);
+		if (true == SameFloor)
+		{
+			break;
+		}
+		else
+		{
+			_PassbyStairs.push_back(CurStair);
+			CurStair = CurStair->DownStair;
+		}
+	}
 }
 
 Stair::Stair()
