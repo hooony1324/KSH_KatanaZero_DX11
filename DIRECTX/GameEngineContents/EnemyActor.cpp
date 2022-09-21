@@ -211,13 +211,13 @@ void EnemyActor::OnEvent()
 		Pixels.push_back(RightPix);
 
 		// Pix Debug
-		for (Pix Pixel : Pixels)
-		{
-			GameEngineTextureRenderer* Renderer = CreateComponent<GameEngineTextureRenderer>();
-			Renderer->SetTexture("None_yellow.png");
-			Renderer->GetTransform().SetLocalScale({ 1, 1, 1 });
-			Renderer->GetTransform().SetLocalMove({ static_cast<float>(Pixel.x) * 0.5f, static_cast<float>(Pixel.y) * 0.5f });
-		}
+		//for (Pix Pixel : Pixels)
+		//{
+		//	GameEngineTextureRenderer* Renderer = CreateComponent<GameEngineTextureRenderer>();
+		//	Renderer->SetTexture("None_yellow.png");
+		//	Renderer->GetTransform().SetLocalScale({ 1, 1, 1 });
+		//	Renderer->GetTransform().SetLocalMove({ static_cast<float>(Pixel.x) * 0.5f, static_cast<float>(Pixel.y) * 0.5f });
+		//}
 	}
 
 
@@ -402,8 +402,10 @@ void EnemyActor::PlayerAlertCheck()
 	}
 
 	// 문에 막히면
-	IsDoor = Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-		std::bind(&EnemyActor::DoorCheck, this, std::placeholders::_1, std::placeholders::_2));
+	IsDoor = Collision_Character->IsCollision(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_AABB2D,
+		std::bind(&EnemyActor::DoorCheck, this, std::placeholders::_1, std::placeholders::_2), 
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
 
 	// 문이 플레이어 앞에 있으면
 	IsDoorFront = Collision_ChaseSensor->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
@@ -474,18 +476,18 @@ void EnemyActor::PlayerSameFloorCheck()
 	if (true == ChasingPlayer->IsGround())
 	{
 		// 플레이어가 적보다 위에 있음
-		if (HeightSub > 0 && HeightSub < 240)
+		if (HeightSub > 0 && HeightSub < 240 && abs(FloorSub) < 50)
 		{
 			PlayerSameFloor = true;
 		}
-		else if (HeightSub >= 240)
+		else if (HeightSub >= 240 || FloorSub >= 50)
 		{
 			PlayerSameFloor = false;
 		}
 		// 플레이어가 적보다 아래에 있음
 		else
 		{
-			if (abs(FloorSub) >= 240)
+			if (abs(FloorSub) >= 230)
 			{
 				PlayerSameFloor = false;
 			}
@@ -810,6 +812,12 @@ void EnemyActor::ChaseTurnStart(const StateInfo& _Info)
 
 void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (PrevLookDir != PlayerDir.x)
+	{
+		StateManager.ChangeState("ChaseTurn");
+		return;
+	}
+
 	if (false == TurnEnd)
 	{
 		return;
@@ -910,7 +918,7 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 	}
 	else
 	{
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 
@@ -936,32 +944,52 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	// 첫 목표 계단까지 간다(무조건 같은 층), 첫 목표 계단 다음은 슬로프임
-	Collision_Character->IsCollisionExitBase(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::STAIR), CollisionType::CT_AABB2D,
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other)
-		{
-			if (CurDestStair == _Other->GetActor())
+	if (false == UpStairArrived)
+	{
+		Collision_Character->IsCollisionExitBase(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::STAIR), CollisionType::CT_AABB2D,
+			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
 			{
-				// 방향전환
-				MoveVec.x *= -1;
-				if (MoveVec.x > 0)
+				bool TargetStairArrived = CurDestStair == _Other->GetActor();
+
+				if (CurDestStair == _Other->GetActor())
 				{
-					Renderer_Character->GetTransform().PixLocalPositiveX();
-					PrevLookDir = 1;
+					// 다음계단 같은층이면
+					if (nullptr != CurDestStair->UpStair)
+					{
+						if (abs(CurDestStair->GetTransform().GetWorldPosition().y - CurDestStair->DownStair->GetTransform().GetWorldPosition().y)
+							< 40)
+						{
+							StateManager.ChangeState("GoUpstair");
+							return  CollisionReturn::ContinueCheck;
+						}
+					}
+					// 마지막 계단이었다면
+					else
+					{
+						MoveVec.x = PlayerDir.x;
+					}
+
+					// 방향전환
+					if (MoveVec.x > 0)
+					{
+						Renderer_Character->GetTransform().PixLocalPositiveX();
+						PrevLookDir = 1;
+					}
+					else
+					{
+						Renderer_Character->GetTransform().PixLocalNegativeX();
+						PrevLookDir = -1;
+					}
+					UpStairArrived = true;
 				}
 				else
 				{
-					Renderer_Character->GetTransform().PixLocalNegativeX();
-					PrevLookDir = -1;
+					UpStairArrived = false;
 				}
-				UpStairArrived = true;
-			}
-			else
-			{
-				UpStairArrived = false;
-			}
-			return CollisionReturn::Break;
-		}, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; }
-		, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
+				return CollisionReturn::ContinueCheck;
+			}, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; }
+			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
+	}
 
 	// 계단 도착하면 한번 더 올라가기
 	if (true == UpStairArrived && nullptr != CurDestStair->UpStair)
@@ -983,7 +1011,7 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (CurPlayerHereStair != Stair::PlayerNearestStair)
 	{
 		StairsToPlayer.clear();
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 
@@ -1000,7 +1028,7 @@ void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 	}
 	else
 	{
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 
@@ -1077,7 +1105,7 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (CurPlayerHereStair != Stair::PlayerNearestStair)
 	{
 		StairsToPlayer.clear();
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 
@@ -1108,7 +1136,7 @@ void EnemyActor::SlopeRunStart(const StateInfo& _Info)
 	}
 	else
 	{
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 
@@ -1144,19 +1172,12 @@ void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
 	}
 
-	//// 한번더 내려가기
-	//if (true == CurDestStairArrived && nullptr != CurDestStair->DownStair)
-	//{
-	//	StateManager.ChangeState("GoDownstair");
-	//	return;
-	//}
-
 
 	// 도중에 목표 바뀜
 	if (CurPlayerHereStair != Stair::PlayerNearestStair)
 	{
 		StairsToPlayer.clear();
-		StateManager.ChangeState("Run");
+		StateManager.ChangeState("ChaseTurn");
 		return;
 	}
 

@@ -143,17 +143,18 @@ void EnemyGrunt::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 턴 할지 뛸 지 결정
-	if (PlayerDir.ix() != PrevLookDir)
-	{
-		StateManager.ChangeState("ChaseTurn");
-		return;
-	}
-	else
-	{
-		StateManager.ChangeState("Run");
-		return;
-	}
+	//if (PlayerDir.ix() != PrevLookDir)
+	//{
+	//	StateManager.ChangeState("ChaseTurn");
+	//	return;
+	//}
+	//else
+	//{
+	//	StateManager.ChangeState("Run");
+	//	return;
+	//}
 
+	StateManager.ChangeState("ChaseTurn");
 
 
 }

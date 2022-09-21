@@ -221,10 +221,10 @@ private:
 	Pix Right_UpPix = { 20, -0 };
 	Pix Right_DownPix = { 20, -35 };
 	Pix Left_DownPix = { -20, -35 };
-	Pix LeftPix = { -20, -30 };
-	Pix RightPix = { 20, -30 };
+	Pix LeftPix = { -20, -34 };
+	Pix RightPix = { 20, -34 };
 	Pix RedPix = { 0, 0 };
-	Pix Down_LeftPix = { -15, -35 };
-	Pix Down_RightPix = { 15, -35 };
+	Pix Down_LeftPix = { -19, -35 };
+	Pix Down_RightPix = { 19, -35 };
 };
 

@@ -124,7 +124,7 @@ void Room_Factory3::StairSetting()
 
 
 	Stair1_2->Spawn({ 991, -930, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, Stair2_Right, nullptr);
-	Stair2_Right->Spawn({ 1264, -640, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, Stair2_3, Stair1_2);
+	Stair2_Right->Spawn({ 1295, -640, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, Stair2_3, Stair1_2);
 	Stair2_3->Spawn({ 560, -640, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, Stair3, Stair2_Right);
 	Stair3->Spawn({ 290, -350, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, nullptr, Stair2_3);
 

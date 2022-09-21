@@ -72,17 +72,17 @@ Stair::~Stair()
 void Stair::Start()
 {
 	Collision = CreateComponent<GameEngineCollision>();
-	Collision->GetTransform().SetLocalScale({ 20, 20, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision->GetTransform().SetLocalScale({ 10, 10, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1.0f, 0.8f, 0.0f, 0.25f });
 	Collision->ChangeOrder(COLLISIONGROUP::STAIR);
 
 
 	FRenderer_Debug = CreateComponent<GameEngineFontRenderer>();
 	FRenderer_Debug->SetText("Player Here!");
-	FRenderer_Debug->SetSize(20);
+	FRenderer_Debug->SetSize(16);
 	FRenderer_Debug->SetLeftAndRightSort(LeftAndRightSort::CENTER);
 	FRenderer_Debug->SetPositionMode(FontPositionMode::WORLD);
-	FRenderer_Debug->GetTransform().SetLocalPosition({ 0, 40, 0 });
+	FRenderer_Debug->GetTransform().SetLocalPosition({ 0, 30, 0 });
 	FRenderer_Debug->Off();
 	
 

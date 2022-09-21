@@ -68,13 +68,13 @@ void CharacterActor::OnEvent()
 		Pixels.push_back(Down_RightPix);
 
 		// Pix Debug
-		for (Pix Pixel : Pixels)
-		{
-			GameEngineTextureRenderer* Renderer = CreateComponent<GameEngineTextureRenderer>();
-			Renderer->SetTexture("None_yellow.png");
-			Renderer->GetTransform().SetLocalScale({ 1, 1, 1 });
-			Renderer->GetTransform().SetLocalMove({ static_cast<float>(Pixel.x) * 0.5f, static_cast<float>(Pixel.y) * 0.5f });
-		}
+		//for (Pix Pixel : Pixels)
+		//{
+		//	GameEngineTextureRenderer* Renderer = CreateComponent<GameEngineTextureRenderer>();
+		//	Renderer->SetTexture("None_yellow.png");
+		//	Renderer->GetTransform().SetLocalScale({ 1, 1, 1 });
+		//	Renderer->GetTransform().SetLocalMove({ static_cast<float>(Pixel.x) * 0.5f, static_cast<float>(Pixel.y) * 0.5f });
+		//}
 	}
 
 }

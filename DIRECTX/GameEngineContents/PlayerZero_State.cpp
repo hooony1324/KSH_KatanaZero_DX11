@@ -322,6 +322,7 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
+	// 슬로프->평지 문제있음
 	// 달리다가 슬로프, 달리다가 낭떨어지 구분
 	if (WallState == STATE_WALL::NONE)
 	{
