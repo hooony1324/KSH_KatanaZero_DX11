@@ -120,10 +120,12 @@ void EnemyGrunt::AttackStart(const StateInfo& _Info)
 	if (PrevLookDir > 0)
 	{
 		Renderer_Slash->GetTransform().PixLocalPositiveX();
+		PrevLookDir = 1;
 	}
 	else
 	{
 		Renderer_Slash->GetTransform().PixLocalNegativeX();
+		PrevLookDir = -1;
 	}
 }
 

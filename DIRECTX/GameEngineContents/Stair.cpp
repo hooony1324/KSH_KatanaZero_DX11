@@ -12,7 +12,21 @@ void Stair::SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& 
 
 	while (nullptr != CurStair)
 	{
-		bool SameFloor = abs(CurStair->GetTransform().GetWorldPosition().y - _EnemyPosY) < 40;
+		float DistanceY = CurStair->GetTransform().GetWorldPosition().y - _EnemyPosY;
+		bool SameFloor;
+		if (DistanceY > 35)
+		{
+			SameFloor = false;
+		}
+		else if (DistanceY < -240)
+		{
+			SameFloor = false;
+		}
+		else
+		{
+			SameFloor = true;
+		}
+
 		if (false == SameFloor)
 		{
 			_PassbyStairs.push_back(CurStair);
@@ -29,6 +43,7 @@ void Stair::SearchEnemyPassingDownStairs(float _EnemyPosY, std::vector<Stair*>& 
 
 void Stair::SearchEnemyPassingUpStairs(float _EnemyPosY, std::vector<Stair*>& _PassbyStairs)
 {
+	_PassbyStairs.clear();
 	Stair* CurStair = PlayerNearestStair;
 
 	while (nullptr != CurStair)
