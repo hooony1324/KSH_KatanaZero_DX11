@@ -6,6 +6,7 @@
 
 #include "Door.h"
 #include "JumpCloud.h"
+#include "GameContentsCustomRenderer.h"
 
 
 const float AntiGravity = 5.2f;

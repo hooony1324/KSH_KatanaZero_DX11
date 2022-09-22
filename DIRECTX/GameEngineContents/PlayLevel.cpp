@@ -19,9 +19,11 @@
 #include "Effect_Wave.h"
 #include "Effect_Distortion.h"
 #include "Effect_DistortionGlitch.h"
+#include "Effect_PointLight.h"
 #include "LiveActor.h"
 
 #include "DiamondTransition.h"
+#include "ChromakeyGreen.h"
 
 
 
@@ -87,7 +89,7 @@ void PlayLevel::Start()
 	SlowEffect->GetTransform().SetWorldPosition({0, 0, GetDepth(ACTOR_DEPTH::SLOWTRANSITON)});
 
 	Transition = CreateActor<DiamondTransition>();
-	Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
+	Transition->GetTransform().SetWorldPosition({ -640, 328, GetDepth(ACTOR_DEPTH::TRANSITION) });
 
 	RoomStateManager.CreateStateMember("RoomChange"
 		, std::bind(&PlayLevel::RoomChangeUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -121,6 +123,10 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomShakeUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomShakeStart, this, std::placeholders::_1));
 
+	// Rim Light ¿ëµµ
+	GameEngineActor* Chromakey = CreateActor<ChromakeyGreen>();
+	ChromakeyGreen::ChromakeyOff();
+
 }
 
 void PlayLevel::LevelStartEvent()
@@ -136,6 +142,7 @@ void PlayLevel::LevelStartEvent()
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_PointLight>();
 
 	
 }

@@ -8,6 +8,7 @@
 #include "Effect_Wave.h"
 #include "Effect_Distortion.h"
 #include "Effect_DistortionGlitch.h"
+#include "Effect_PointLight.h"
 
 #include "TestMonster.h"
 
@@ -43,6 +44,7 @@ void TestLevel::LevelStartEvent()
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
+	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_PointLight>();
 
 }
 

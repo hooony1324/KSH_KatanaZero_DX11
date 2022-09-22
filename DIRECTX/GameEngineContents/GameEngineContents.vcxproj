@@ -177,6 +177,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="ChromakeyGreen.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentsCore.h">
       <SubType>
       </SubType>
@@ -202,6 +206,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Effect_DistortionGlitch.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Effect_PointLight.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -249,6 +257,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="GameContentsLightRenderer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GlobalValueManager.h">
       <SubType>
       </SubType>
@@ -274,6 +286,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="ControlGUI.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -405,6 +421,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="ChromakeyGreen.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="ContentsCore.cpp">
       <SubType>
       </SubType>
@@ -430,6 +450,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Effect_DistortionGlitch.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Effect_PointLight.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -477,6 +501,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="GameContentsLightRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GlobalValueManager.cpp">
       <SubType>
       </SubType>
@@ -503,6 +531,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="ControlGUI.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
       <SubType>
       </SubType>
     </ClCompile>

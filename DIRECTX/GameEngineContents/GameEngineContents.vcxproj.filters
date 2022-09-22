@@ -238,6 +238,18 @@
     <ClInclude Include="TestMonster.h">
       <Filter>Levels\99.TESTLEVEL</Filter>
     </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect_PointLight.h">
+      <Filter>ContentsRendering\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="GameContentsLightRenderer.h">
+      <Filter>ContentsRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ChromakeyGreen.h">
+      <Filter>ContentsRendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -408,6 +420,18 @@
     </ClCompile>
     <ClCompile Include="TestMonster.cpp">
       <Filter>Levels\99.TESTLEVEL</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Rooms</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect_PointLight.cpp">
+      <Filter>ContentsRendering\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="GameContentsLightRenderer.cpp">
+      <Filter>ContentsRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ChromakeyGreen.cpp">
+      <Filter>ContentsRendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

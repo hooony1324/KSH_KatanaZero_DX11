@@ -129,6 +129,7 @@
   <ItemGroup>
     <FxCompile Include="..\Resources\Shader\Distortion.hlsl" />
     <FxCompile Include="..\Resources\Shader\DistortionGlitch.hlsl" />
+    <FxCompile Include="..\Resources\Shader\PointLight.hlsl" />
     <FxCompile Include="..\Resources\Shader\TextureMask.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>

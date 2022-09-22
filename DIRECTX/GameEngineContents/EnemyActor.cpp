@@ -323,7 +323,7 @@ void EnemyActor::WallCheck()
 		FRenderer_WallState->SetText(WState.data());
 
 		std::string FSMState = StateManager.GetCurStateStateName();
-		FRenderer_WallState->SetText(FSMState);
+		FRenderer_FSMState->SetText(FSMState);
 	}
 	else
 	{
@@ -1054,7 +1054,6 @@ void EnemyActor::GoDownstairStart(const StateInfo& _Info)
 void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
-	
 	// 첫 목표 계단까지 간다(무조건 같은 층), 첫 목표 계단 다음은 슬로프임
 	if (false == DownStairArrived)
 	{
@@ -1075,6 +1074,10 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 							StateManager.ChangeState("GoDownstair");
 							return  CollisionReturn::ContinueCheck;
 						}
+					}
+					else
+					{
+						MoveVec.x = PlayerDir.x;
 					}
 
 					// 다음계단 아래층이면 슬로프거쳐야됨 

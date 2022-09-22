@@ -70,15 +70,11 @@ float4 TextureMask_PS(Output _Input) : SV_Target0
         clip(-1);
     }
     
-    // 슬라이스
-    if (_Input.Tex0.x < Slice.x)
-    {
-        clip(-1);
-    }
+
+    
  
     
     float4 RenderColor = (Tex.Sample(Smp, _Input.Tex0.xy) * MulColor) + PlusColor;
-    
     return RenderColor;
 
 }

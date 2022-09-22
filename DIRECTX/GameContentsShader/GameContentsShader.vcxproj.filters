@@ -27,5 +27,8 @@
     <FxCompile Include="..\Resources\Shader\DistortionGlitch.hlsl">
       <Filter>Sahder</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\PointLight.hlsl">
+      <Filter>Sahder</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

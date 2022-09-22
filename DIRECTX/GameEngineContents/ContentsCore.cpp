@@ -144,6 +144,15 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
+	// 포스트 이펙트 파이프라인은 FullRect 사용
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("PointLight");
+		NewPipe->SetVertexShader("PointLight.hlsl");
+		NewPipe->SetPixelShader("PointLight.hlsl");
+		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
+		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
+	}
+
 
 }
 

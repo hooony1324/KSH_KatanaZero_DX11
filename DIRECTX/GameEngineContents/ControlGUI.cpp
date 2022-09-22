@@ -8,6 +8,7 @@
 #include "Effect_Wave.h"
 #include "Effect_DistortionGlitch.h"
 #include "Effect_Distortion.h"
+#include "Effect_PointLight.h"
 
 #include "LiveActor.h"
 
@@ -115,6 +116,11 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 	if (true == ImGui::Button("Effect_DistortionGlitch"))
 	{
 		Effect_DistortionGlitch::GetInst()->EffectSwitch();
+	}
+	ImGui::SameLine();
+	if (true == ImGui::Button("Effect_PointLight"))
+	{
+		Effect_PointLight::GetInst()->EffectSwitch();
 	}
 
 

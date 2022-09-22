@@ -4,6 +4,7 @@
 #include "Door.h"
 #include "EnemyGrunt.h"
 #include "EnemyCop.h"
+#include "PointLight.h"
 
 Room_Factory1::Room_Factory1() 
 {
@@ -39,25 +40,28 @@ void Room_Factory1::Start()
 	PtrDoor->GetTransform().SetWorldMove({ 608, -320 });
 	PtrDoor->Off();
 
-	// 적 소환 리스트 1400, -310
+	// 적 소환
 	Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
 	Grunt->SetSpawnPos({ 1400, -320, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Grunt->Off();
 	Enemies.push_back(Grunt);
 	
-	// 400, -330
 	Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
 	Cop->SetSpawnPos({ 400, -360, GetDepth(ACTOR_DEPTH::ENEMY) });
 	Cop->Off();
 	Enemies.push_back(Cop);
 
+	// 지형
+	// 계단
+	StairSetting();
+	
+	// 빛
+	PointLight* Light = GetLevel()->CreateActor<PointLight>();
+	Light->GetTransform().SetWorldPosition({ 220, -550, GetDepth(ACTOR_DEPTH::BACKGROUND_4) });
 
 	// 세팅 시간
 	TimeLimit = true;
 	SetCurTimeLimitSeconds(60.0f);
-
-	// 계단
-	StairSetting();
 
 	Off();
 }
