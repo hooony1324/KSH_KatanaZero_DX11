@@ -31,6 +31,16 @@ public:
 
 	void Setting();
 
+	inline ID3D11Buffer* GetBuffer() 
+	{
+		return Buffer;
+	}
+
+	inline UINT GetVertexSize()
+	{
+		return VertexSize;
+	}
+
 
 protected:
 	void BufferCreate(const void* _Data, UINT _VertexSize, UINT _VertexCount);

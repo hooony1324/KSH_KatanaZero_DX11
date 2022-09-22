@@ -49,6 +49,8 @@ public:
 	// 즉 점을 내마음대로 수치를 변경할수 있는 단계
 	void SetVertexShader(const std::string& _Name);
 
+	void SetVertexShader(GameEngineVertexShader* _Shader);
+
 	// 그렇게 해서 변환된 점을 어떻게 조합해서 면으로 만들것이냐를 여기서 처리합니다.
 	// 인덱스 버퍼가 세팅된다.
 	void SetInputAssembler2IndexBuffer(const std::string& _Name);
@@ -63,7 +65,9 @@ public:
 	void SetOutputMergerDepthStencil(const std::string& _Name);
 
 	// 랜더러 자체가 들어올 가능성이 높네요.
-	void Rendering(bool IsInstancing = false);
+	void Rendering();
+
+	void RenderingInstancing(int _RenderingCount, class GameEngineInstancingBuffer* _Buffer);
 
 
 	inline GameEngineVertexBuffer* GetVertexBuffer()
@@ -119,7 +123,10 @@ private:
 	// 내가 세팅해준다.
 
 	// 아래쪽 함수들의 실행
+
 	void InputAssembler1VertexBufferSetting();
+
+	void InputAssembler1InstancingVertexBufferSetting(class GameEngineInstancingBuffer* _Buffer);
 
 	void VertexShaderSetting();
 
@@ -135,7 +142,7 @@ private:
 
 	void Draw();
 
-	void InstancingDraw();
+	void InstancingDraw(int _RenderingCount);
 
 	void InstancingDataCollect();
 };

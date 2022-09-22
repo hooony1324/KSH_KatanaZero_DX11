@@ -106,16 +106,17 @@ public:
 	}
 
 	float4 GetCutScale(int _Index)
-	{
-		return { CutData[_Index].SizeX * static_cast<float>(Desc.Width), CutData[_Index].SizeY * static_cast<float>(Desc.Height) };
+	{					
+		return { CutData[_Index].SizeX * static_cast<float>(Desc.Width), CutData[_Index].SizeY * static_cast<float>(Desc.Height)};
 	}
-
 
 	void TextureCreate(const D3D11_TEXTURE2D_DESC& _Desc);
 
 	PixelColor GetPixelToPixelColor(int _x, int _y);
 
 	float4 GetPixelToFloat4(int _x, int _y);
+
+	void Cut(UINT _StartX, UINT _StartY, UINT _SizeX, UINT _SizeY);
 
 
 protected:

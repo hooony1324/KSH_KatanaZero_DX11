@@ -66,7 +66,6 @@ void GameEngineShader::AutoCompile(const std::string& _Path)
 				size_t FirstIndex = AllHlslCode.find_last_of(" ", VSInstEntryIndex);
 				std::string EntryName = AllHlslCode.substr(FirstIndex + 1, VSInstEntryIndex - FirstIndex - 1);
 				EntryName += "_VSINST";
-
 				Vertex->InstancingShaderCompile(_Path, EntryName);
 			}
 		}

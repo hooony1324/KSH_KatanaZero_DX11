@@ -8,6 +8,7 @@
 #include "GameEngineRasterizer.h"
 #include "GameEnginePixelShader.h"
 #include "GameEngineDepthStencil.h"
+#include "GameEngineInstancingBuffer.h"
 #include "GameEngineBlend.h"
 
 
@@ -98,6 +99,19 @@ void GameEngineRenderingPipeLine::SetVertexShader(const std::string& _Name)
 	}
 }
 
+void GameEngineRenderingPipeLine::SetVertexShader(GameEngineVertexShader* _Shader)
+{
+	VertexShader = _Shader;
+
+	// 인풋레이아웃이 만들어지지 않았는데.
+	// 인스턴싱때 문제될수 있다.
+	if (nullptr == InputLayOut && nullptr != VertexBuffer)
+	{
+		InputLayOut = GameEngineInputLayOut::Create(*VertexBuffer->GetLayOutDesc(), VertexShader);
+	}
+
+}
+
 void GameEngineRenderingPipeLine::SetInputAssembler2IndexBuffer(const std::string& _Name) 
 {
 	IndexBuffer = GameEngineIndexBuffer::Find(_Name);
@@ -160,15 +174,8 @@ void GameEngineRenderingPipeLine::SetOutputMergerBlend(const std::string& _Name)
 	}
 }
 
-void GameEngineRenderingPipeLine::Rendering(bool IsInstancing /*= false*/)
+void GameEngineRenderingPipeLine::Rendering()
 {
-	if (true == IsInstancing)
-	{
-		// 데이터 수집을 한다.
-		InstancingDataCollect();
-		return;
-	}
-
 	InputAssembler1VertexBufferSetting();
 
 	VertexShaderSetting();
@@ -187,6 +194,26 @@ void GameEngineRenderingPipeLine::Rendering(bool IsInstancing /*= false*/)
 
 }
 
+void GameEngineRenderingPipeLine::RenderingInstancing(int _RenderingCount, class GameEngineInstancingBuffer* _Buffer)
+{
+	InputAssembler1InstancingVertexBufferSetting(_Buffer);
+
+	VertexShaderSetting();
+
+	InputAssembler2IndexBufferSetting();
+
+	RasterizerSetting();
+
+	PixelShaderSetting();
+
+	OutputMergerBlendSetting();
+
+	OutputMergerDepthStencilSetting();
+
+	InstancingDraw(_RenderingCount);
+
+}
+
 void GameEngineRenderingPipeLine::InstancingDataCollect()
 {
 	// InstancingDraw();
@@ -196,11 +223,30 @@ void GameEngineRenderingPipeLine::InstancingDataCollect()
 
 void GameEngineRenderingPipeLine::InputAssembler1VertexBufferSetting()
 {
+	InputLayOut->Setting();
+
+	VertexBuffer->Setting();
+}
+
+void GameEngineRenderingPipeLine::InputAssembler1InstancingVertexBufferSetting(GameEngineInstancingBuffer* _Buffer)
+{
 	// 그래픽리소스에 Setting이라는 함수가 존재한다면
-	// 그건 이제부터 그 설정으로 랜더링 파이프라인이 돌아가게 된다는 뜻이 됩니다.
+// 그건 이제부터 그 설정으로 랜더링 파이프라인이 돌아가게 된다는 뜻이 됩니다.
 	InputLayOut->Setting();
 	// 버텍스 버퍼는 세팅할게 없다.
-	VertexBuffer->Setting();
+	// VertexBuffer->Setting();
+
+	// 2번째는 인스턴싱 버퍼의 
+
+	// GameEngineVertexBuffer* InstancingBuffer;
+
+	ID3D11Buffer* ArrBuffer[2] = { VertexBuffer->GetBuffer(), _Buffer->GetBuffer() };
+	UINT ArrVertexSize[2] = { VertexBuffer->GetVertexSize(), _Buffer->GetDataSize()};
+	UINT ArrOffset[2] = { 0, 0 };
+
+	GameEngineDevice::GetContext()->IASetVertexBuffers(
+		0, // 버텍스 버퍼를 이중포인터로 세팅해줬을대의 사용시작 인덱스
+		2, ArrBuffer, ArrVertexSize, ArrOffset);
 }
 
 void GameEngineRenderingPipeLine::VertexShaderSetting() 
@@ -243,7 +289,7 @@ void GameEngineRenderingPipeLine::Draw()
 	GameEngineDevice::GetContext()->DrawIndexed(IndexBuffer->GetIndexCount(), 0, 0);
 }
 
-void GameEngineRenderingPipeLine::InstancingDraw()
+void GameEngineRenderingPipeLine::InstancingDraw(int _RenderingCount)
 {
 	//[in] IndexCountPerInstance 유형 : UINT
 	//각 인스턴스에 대해 인덱스 버퍼에서 읽은 인덱스 수입니다.
@@ -262,7 +308,7 @@ void GameEngineRenderingPipeLine::InstancingDraw()
 	//정점 버퍼에서 인스턴스별 데이터를 읽기 전에 각 인덱스에 추가된 값입니다.
 
 	// 그냥 4가 들어간다.
-	GameEngineDevice::GetContext()->DrawIndexedInstanced(IndexBuffer->GetIndexCount(), 100, 0, 0, 0);
+	GameEngineDevice::GetContext()->DrawIndexedInstanced(IndexBuffer->GetIndexCount(), _RenderingCount, 0, 0, 0);
 }
 
 void GameEngineRenderingPipeLine::Copy(GameEngineRenderingPipeLine* _Original)

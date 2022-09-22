@@ -20,21 +20,32 @@ public:
 	GameEngineInstancingBuffer& operator=(const GameEngineInstancingBuffer& _Other) = delete;
 	GameEngineInstancingBuffer& operator=(GameEngineInstancingBuffer&& _Other) noexcept = delete;
 
-	static GameEngineInstancingBuffer* Create(int _Count, int Size);
+	static GameEngineInstancingBuffer* Create(unsigned int _Count, unsigned int _Size);
 
-	int GetBufferCount()
+	ID3D11Buffer* GetBuffer()
+	{
+		return Buffer;
+	}
+
+	unsigned int GetBufferCount()
 	{
 		return BufferCount;
 	}
 
-	void BufferCreate(int _Count, int _Size);
+	unsigned int GetDataSize()
+	{
+		return Size;
+	}
+
+	void BufferCreate(unsigned int _Count, unsigned int _Size);
 
 protected:
 
 private:
 	D3D11_BUFFER_DESC BufferDesc;
 	ID3D11Buffer* Buffer;
-	int BufferCount;
+	unsigned int BufferCount;
+	unsigned int Size;
 
 	void BufferRelease();
 

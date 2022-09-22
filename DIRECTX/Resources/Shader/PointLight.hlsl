@@ -41,7 +41,7 @@ float4 PointLight_PS(Output _Input) : SV_Target0
     
     float2 TexPos = _Input.Tex.xy;
     float2 SVPos = _Input.Pos;
-    float4 Color;
+    float4 Color = float4(0, 0, 0, 0);
  
     
     

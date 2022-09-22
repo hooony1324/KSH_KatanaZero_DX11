@@ -47,6 +47,7 @@ void EngineInputLayOut()
 
 	// 인스턴싱 데이터용을 넣어줍니다.
 	GameEngineVertex::LayOut.AddInputLayOut("ROWINDEX", DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 1, D3D11_INPUT_PER_INSTANCE_DATA, 1); // 48
+	// GameEngineVertex::LayOut.AddInputLayOut("MYPOS", DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_INPUT_PER_INSTANCE_DATA, 1); // 48
 }
 
 void EngineSubSetting()

@@ -340,3 +340,19 @@ void GameEngineShaderResourcesHelper::BindSampler(GameEngineSamplerSetter& _Sett
 		break;
 	}
 }
+
+
+
+void GameEngineShaderResourcesHelper::AllConstantBufferNew()
+{
+	std::multimap<std::string, GameEngineConstantBufferSetter>::iterator Start = ConstantBufferSettingMap.begin();
+	std::multimap<std::string, GameEngineConstantBufferSetter>::iterator End = ConstantBufferSettingMap.end();
+
+	for (; Start != End; ++Start)
+	{
+		int Buffersize = Start->second.Res->GetBufferDesc().ByteWidth;
+		Start->second.OriginalData.resize(Buffersize);
+		Start->second.SetData = &Start->second.OriginalData[0];
+		Start->second.Size = Buffersize;
+	}
+}

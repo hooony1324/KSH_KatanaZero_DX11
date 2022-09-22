@@ -426,3 +426,8 @@ bool GameEngineTextureRenderer::IsCurAnimationPause()
 {
 	return CurAni->Pause;
 }
+
+void GameEngineTextureRenderer::InstancingDataSetting()
+{
+	Camera->PushInstancingIndex(GetPipeLine());
+}

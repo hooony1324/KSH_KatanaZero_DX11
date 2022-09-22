@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <GameEngineBase/GameEngineWindow.h>
 #include "GameEngineCamera.h"
+#include "GameEngineInstancing.h"
 
 
 #include "GameEngineRenderingPipeLine.h"
@@ -42,12 +43,24 @@ void GameEngineRenderer::PushRendererToUICamera()
 	GetActor()->GetLevel()->PushRendererToUICamera(this);
 }
 
-GameEngineRenderingPipeLine* GameEngineRenderer::GetClonePipeLine(GameEngineRenderingPipeLine* _Rendering)
+GameEngineRenderingPipeLine* GameEngineRenderer::ClonePipeLine(GameEngineRenderingPipeLine* _Rendering)
 {
 	// 이름없는 녀석으로 만든다.
 	GameEngineRenderingPipeLine* Clone = GameEngineRenderingPipeLine::Create();
 	Clone->Copy(_Rendering);
 	return Clone;
+}
+
+bool GameEngineRenderer::IsInstancing(GameEngineRenderingPipeLine* _Rendering)
+{
+	std::unordered_map<GameEngineRenderingPipeLine*, GameEngineInstancing>::iterator InstancingIter = Camera->InstancingMap.find(_Rendering);
+
+	if (InstancingIter == Camera->InstancingMap.end())
+	{
+		return false;
+	}
+
+	return true == IsInstancing_ && GameEngineInstancing::MinInstancingCount <= InstancingIter->second.Count;
 }
 
 //void GameEngineRenderer::Render(float _DeltaTime)

@@ -33,7 +33,12 @@ public:
 
 	bool IsInstancing() 
 	{
-		return InstancingShaderPtr != nullptr;
+		return InstancingVertexShader->ShaderPtr != nullptr;
+	}
+
+	GameEngineVertexShader* GetInstancingShader() 
+	{
+		return InstancingVertexShader;
 	}
 
 protected:
@@ -45,8 +50,10 @@ protected:
 private:
 	ID3D11VertexShader* ShaderPtr;
 
-	ID3D11VertexShader* InstancingShaderPtr;
-	ID3DBlob* InstancingBinaryPtr;
+	// ID3D11VertexShader* InstancingShaderPtr;
 
+	GameEngineVertexShader* InstancingVertexShader;
+
+	// ID3DBlob* InstancingBinaryPtr;
 };
 

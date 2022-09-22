@@ -10,33 +10,11 @@ enum class CAMERAPROJECTIONMODE
 	Orthographic,
 };
 
-class RenderingInstancing
-{
-public:
-	static int MinInstancingCount;
-	static int StartInstancingCount;
-
-public:
-	RenderingInstancing() 
-		: Buffer(nullptr)
-		, Count(0)
-	{
-	}
-
-
-public:
-	int DataInsert;
-	std::vector<char> DataBuffer;
-
-	int Size;
-	int Count;
-	GameEngineInstancingBuffer* Buffer;
-
-};
 
 // 설명 :
 class GameEngineLevel;
 class GameEngineCamera;
+class GameEngineInstancing;
 class GameEngineRenderTarget;
 class GameEngineRenderingPipeLine;
 class GameEngineCamera : public GameEngineTransformComponent
@@ -105,8 +83,12 @@ public:
 	}
 
 	//                  개수
+
+	GameEngineInstancing* GetInstancing(const std::string& _Name);
+	GameEngineInstancing* GetInstancing(GameEngineRenderingPipeLine* _Pipe);
 	void PushInstancing(GameEngineRenderingPipeLine* _Pipe, int Count);
 	void PushInstancingData(GameEngineRenderingPipeLine* _Pipe, void* _DataPtr, int _Size);
+	void PushInstancingIndex(GameEngineRenderingPipeLine* _Pipe);
 
 protected:
 	void Start();
@@ -130,7 +112,7 @@ private:
 
 	std::map<int, std::list<class GameEngineRenderer*>> AllRenderer_;
 
-	std::unordered_map<GameEngineRenderingPipeLine*, RenderingInstancing> InstancingMap;
+	std::unordered_map<GameEngineRenderingPipeLine*, GameEngineInstancing> InstancingMap;
 
 	float4x4 View; // 바라보는것
 	float4x4 Projection;

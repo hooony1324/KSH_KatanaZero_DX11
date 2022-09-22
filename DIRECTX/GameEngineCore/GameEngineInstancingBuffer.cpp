@@ -21,7 +21,7 @@ void GameEngineInstancingBuffer::BufferRelease()
 }
 
 
-GameEngineInstancingBuffer* GameEngineInstancingBuffer::Create(int _Count, int _Size)
+GameEngineInstancingBuffer* GameEngineInstancingBuffer::Create(unsigned int _Count, unsigned int _Size)
 {
 	GameEngineInstancingBuffer* Buffer = CreateResUnName();
 
@@ -30,12 +30,12 @@ GameEngineInstancingBuffer* GameEngineInstancingBuffer::Create(int _Count, int _
 	return Buffer;
 }
 
-void GameEngineInstancingBuffer::BufferCreate(int _Count, int Size) 
+void GameEngineInstancingBuffer::BufferCreate(unsigned int _Count, unsigned int _Size)
 {
 	BufferRelease();
 
 	BufferCount = _Count;
-
+	Size = _Size;
 	BufferDesc = {};
 	BufferDesc.ByteWidth = _Count * Size;
 	BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;

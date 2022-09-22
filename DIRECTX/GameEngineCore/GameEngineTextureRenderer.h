@@ -294,6 +294,8 @@ protected:
 
 	void Update(float _Delta) override;
 
+	void InstancingDataSetting() override;
+
 private:
 	PIVOTMODE PivotMode;
 	SCALEMODE ScaleMode;

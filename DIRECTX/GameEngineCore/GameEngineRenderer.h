@@ -38,7 +38,7 @@ public:
 	// float4x4 ViewPort;
 	void ChangeCamera(CAMERAORDER _Order);
 
-    GameEngineRenderingPipeLine* GetClonePipeLine(GameEngineRenderingPipeLine* _Rendering);
+    GameEngineRenderingPipeLine* ClonePipeLine(GameEngineRenderingPipeLine* _Rendering);
 
     inline int GetRenderingOrder() 
     {
@@ -52,10 +52,7 @@ public:
 		IsInstancing_ = true;
 	};
 
-	bool IsInstancing() 
-	{
-		return IsInstancing_;
-	}
+	bool IsInstancing(GameEngineRenderingPipeLine* _Rendering);
 
 protected:
 	virtual void Start();

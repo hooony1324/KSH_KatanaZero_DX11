@@ -123,6 +123,11 @@ public:
 
 	void PSSetting(int _BindPoint);
 
+	D3D11_BUFFER_DESC& GetBufferDesc() 
+	{
+		return BufferDesc;
+	}
+
 protected:
 
 private:

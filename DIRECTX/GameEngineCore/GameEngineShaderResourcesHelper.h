@@ -1,5 +1,6 @@
 #pragma once
 #include "GameEngineRenderingPipeLine.h"
+#include "GameEngineConstantBuffer.h"
 #include "GameEngineShader.h"
 
 // 설명 :
@@ -47,6 +48,34 @@ public:
 		SetConstantBufferNew(_Name, &Data, sizeof(Res));
 	}
 
+	template<typename Res>
+	Res* GetConstantBufferNewData(const std::string& _Name)
+	{
+		std::string UpperName = GameEngineString::ToUpperReturn(_Name);
+
+
+		std::multimap<std::string, GameEngineConstantBufferSetter>::iterator FindIter = ConstantBufferSettingMap.find(UpperName);
+
+		if (FindIter == ConstantBufferSettingMap.end())
+		{
+			return nullptr;
+		}
+		int TypeSize = sizeof(Res);
+
+		if (TypeSize != FindIter->second.Res->GetBufferDesc().ByteWidth)
+		{
+			MsgBoxAssert("상수버퍼의 데이터를 다른 크기의 데이터로 가져오려고 했습니다.");
+		}
+
+		// FindIter->second.OriginalData[0] SetData
+
+		// Res* Data = reinterpret_cast<Res*>(&FindIter->second.OriginalData[0]);
+		Res* Data = reinterpret_cast<Res*>(&FindIter->second.OriginalData[0]);
+
+		return Data;
+	}
+
+
 	void SetConstantBufferNew(const std::string& _Name, const void* Data, UINT _Size);
 
 	// 텍스처 계열
@@ -61,6 +90,9 @@ public:
 	GameEngineSampler* SetSampler(const std::string& _Name, const std::string& _TextureName);
 
 	GameEngineSampler* SetSampler(const std::string& _Name, GameEngineSampler* _SamplerName);
+
+	// 인스턴싱을 하려고 하는데 그 쉐이더에서 상수버퍼를 사용했을때.
+	void AllConstantBufferNew();
 
 
 protected:

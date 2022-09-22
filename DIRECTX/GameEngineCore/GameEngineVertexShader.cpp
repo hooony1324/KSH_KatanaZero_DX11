@@ -4,22 +4,27 @@
 
 GameEngineVertexShader::GameEngineVertexShader() 
 	: ShaderPtr(nullptr)
-	, InstancingShaderPtr(nullptr)
+	// , InstancingShaderPtr(nullptr)
 {
 	ShaderSettingType = ShaderType::Vertex;
 }
 
 GameEngineVertexShader::~GameEngineVertexShader() 
 {
-	if (nullptr != InstancingShaderPtr)
+	//if (nullptr != InstancingShaderPtr)
+	//{
+	//	InstancingShaderPtr->Release();
+	//	InstancingShaderPtr = nullptr;
+	//}
+	//if (nullptr != InstancingShaderPtr)
+	//{
+	//	InstancingBinaryPtr->Release();
+	//	InstancingBinaryPtr = nullptr;
+	//}
+
+	if (nullptr != InstancingVertexShader)
 	{
-		InstancingShaderPtr->Release();
-		InstancingShaderPtr = nullptr;
-	}
-	if (nullptr != InstancingShaderPtr)
-	{
-		InstancingBinaryPtr->Release();
-		InstancingBinaryPtr = nullptr;
+		delete InstancingVertexShader;
 	}
 
 	if (nullptr != ShaderPtr)
@@ -144,6 +149,8 @@ void GameEngineVertexShader::InstancingShaderCompile(std::string _Path, std::str
 	// 0010
 	// 0001
 
+	InstancingVertexShader = new GameEngineVertexShader();
+	InstancingVertexShader->SetName(_EntryPoint);
 
 	Flag |= D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
 
@@ -160,7 +167,7 @@ void GameEngineVertexShader::InstancingShaderCompile(std::string _Path, std::str
 		Version.c_str(),  // vs_5_0
 		Flag,
 		0,
-		&InstancingBinaryPtr,
+		&InstancingVertexShader->BinaryPtr,
 		&Error)
 		)
 	{
@@ -171,13 +178,14 @@ void GameEngineVertexShader::InstancingShaderCompile(std::string _Path, std::str
 
 	// 이미 다 컴파일된 쉐이더 코드의 바이너리를 넣어줘서 생성하는 방식이 됙ㅂ니다.
 	if (S_OK != GameEngineDevice::GetDevice()->CreateVertexShader(
-		InstancingBinaryPtr->GetBufferPointer(),
-		InstancingBinaryPtr->GetBufferSize(),
+		InstancingVertexShader->BinaryPtr->GetBufferPointer(),
+		InstancingVertexShader->BinaryPtr->GetBufferSize(),
 		nullptr,
-		&InstancingShaderPtr))
+		&InstancingVertexShader->ShaderPtr))
 	{
 		MsgBoxAssert("버텍스 쉐이더 핸들 생성에 실패했습니다.");
 	}
 
-	ShaderResCheck();
+	InstancingVertexShader->ShaderResCheck();
+
 }
