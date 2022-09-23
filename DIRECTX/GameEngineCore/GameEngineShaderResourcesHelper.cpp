@@ -5,6 +5,7 @@
 #include "GameEngineConstantBuffer.h"
 #include "GameEngineTexture.h"
 #include "GameEngineSampler.h"
+#include "GameEngineStructuredBuffer.h"
 
 GameEngineShaderResourcesHelper::GameEngineShaderResourcesHelper() 
 {
@@ -30,7 +31,14 @@ void GameEngineShaderResourcesHelper::AllResourcesSetting()
 	{
 		Setter.second.Setting();
 	}
+
+	for (const std::pair<std::string, GameEngineStructuredBufferSetter>& Setter : StructuredBufferSettingMap)
+	{
+		Setter.second.Setting();
+	}
+
 }
+
 
 void GameEngineShaderResourcesHelper::AllResourcesReset()
 {
@@ -81,7 +89,15 @@ void GameEngineShaderResourcesHelper::ShaderCheck(GameEngineShader* _Shader)
 		BindSampler(InsertIter->second, Data.second.Res);
 	}
 
-	
+
+	for (const std::pair<std::string, GameEngineStructuredBufferSetter>& Data : _Shader->StructuredBufferMap)
+	{
+		std::multimap<std::string, GameEngineStructuredBufferSetter>::iterator InsertIter =
+			StructuredBufferSettingMap.insert(std::make_pair(Data.first, Data.second));
+
+		BindStructuredBuffer(InsertIter->second, Data.second.Res);
+	}
+
 }
 
 bool GameEngineShaderResourcesHelper::IsConstantBuffer(const std::string& _Name)
@@ -94,6 +110,32 @@ bool GameEngineShaderResourcesHelper::IsConstantBuffer(const std::string& _Name)
 	}
 
 	return false;
+}
+
+bool GameEngineShaderResourcesHelper::IsStructuredBuffer(const std::string& _Name)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Name);
+
+	if (StructuredBufferSettingMap.end() != StructuredBufferSettingMap.find(Key))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+GameEngineStructuredBufferSetter* GameEngineShaderResourcesHelper::GetStructuredBuffer(const std::string& _Name)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Name);
+
+	std::multimap<std::string, GameEngineStructuredBufferSetter>::iterator Find = StructuredBufferSettingMap.find(Key);
+
+	if (StructuredBufferSettingMap.end() != Find)
+	{
+		return &Find->second;
+	}
+
+	return &Find->second;
 }
 
 void GameEngineShaderResourcesHelper::SetConstantBufferNew(const std::string& _Name, const void* _Data, UINT _Size)
@@ -335,6 +377,28 @@ void GameEngineShaderResourcesHelper::BindSampler(GameEngineSamplerSetter& _Sett
 		break;
 	case ShaderType::Pixel:
 		_Setter.SettingFunction = std::bind(&GameEngineSampler::PSSetting, _Setter.Res, _Setter.BindPoint);
+		break;
+	default:
+		break;
+	}
+}
+
+void GameEngineShaderResourcesHelper::BindStructuredBuffer(GameEngineStructuredBufferSetter& _Setter, GameEngineStructuredBuffer* _Res)
+{
+	_Setter.Res = _Res;
+
+	if (nullptr == _Res)
+	{
+		MsgBoxAssert("존재하지 않는 샘플러를 사용하려고 했습니다.");
+	}
+
+	switch (_Setter.ShaderType)
+	{
+	case ShaderType::Vertex:
+		_Setter.SettingFunction = std::bind(&GameEngineStructuredBuffer::VSSetting, _Setter.Res, _Setter.BindPoint);
+		break;
+	case ShaderType::Pixel:
+		_Setter.SettingFunction = std::bind(&GameEngineStructuredBuffer::PSSetting, _Setter.Res, _Setter.BindPoint);
 		break;
 	default:
 		break;

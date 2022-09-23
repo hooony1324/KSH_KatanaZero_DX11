@@ -9,6 +9,7 @@
 
 void GameEngineConstantBufferSetter::Setting() const
 {
+	// SetData는 Cpu에 있는 데이터의 포인터일 뿐이다.
 	Res->ChangeData(SetData, Size);
 	SettingFunction();
 }
@@ -27,6 +28,32 @@ void GameEngineSamplerSetter::Setting() const
 {
 	SettingFunction();
 }
+
+void GameEngineStructuredBufferSetter::Setting() const
+{
+	Res->ChangeData(&CpuDataBuffer[0], CpuDataBuffer.size());
+	SettingFunction();
+}
+
+int GameEngineStructuredBufferSetter::GetDataSize()
+{
+	return Res->GetDataSize();
+}
+
+void GameEngineStructuredBufferSetter::Resize(int _Count)
+{
+	Res->CreateResize(_Count, nullptr);
+	CpuDataBuffer.resize(Res->GetDataSize() * _Count);
+}
+
+void GameEngineStructuredBufferSetter::PushData(const void* Data, int _Count)
+{
+	int Count = Res->GetDataSize() * _Count;
+	memcpy_s(&CpuDataBuffer[Count], CpuDataBuffer.size(), Data, Res->GetDataSize());
+}
+
+
+
 
 void GameEngineShader::AutoCompile(const std::string& _Path)
 {

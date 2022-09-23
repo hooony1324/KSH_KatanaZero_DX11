@@ -113,23 +113,39 @@ public:
 
 	//void ChangeData(const void* _Data, size_t _Size) const;
 
-	//void VSSetting(int _BindPoint);
+	void VSReset(int _BindPoint);
+	void PSReset(int _BindPoint);
 
-	//void PSSetting(int _BindPoint);
+	void ChangeData(const void* _Data, size_t _Size);
+
+	void VSSetting(int _BindPoint);
+
+	void PSSetting(int _BindPoint);
+
+	void CreateResize(const D3D11_SHADER_BUFFER_DESC& _Desc, int Count, void* _StartData = nullptr);
+
+	void CreateResize(int DataSize, int Count, void* _StartData = nullptr);
+
+	void CreateResize(int Count, void* _StartData = nullptr);
+
+	inline int GetDataSize() 
+	{
+		return DataSize;
+	}
 
 protected:
+	void Release();
 
 private:
 	ID3D11Buffer* Buffer;
 	D3D11_BUFFER_DESC BufferDesc;
 	D3D11_SHADER_BUFFER_DESC ShaderDesc;
 	D3D11_MAPPED_SUBRESOURCE SettingResources;
-	ID3D11ShaderResourceView* SRV;
+	ID3D11ShaderResourceView* ShaderResourceView;
+	int DataSize;
 	int DataCount;
+	bool IsInit;
 
-	void CreateResize(const D3D11_SHADER_BUFFER_DESC& _Desc, int Count, void* _StartData = nullptr);
-
-	void Release();
 
 };
 

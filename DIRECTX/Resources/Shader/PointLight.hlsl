@@ -33,6 +33,8 @@ Output PointLight_VS(Input _Input)
 // 참고 : https://www.shadertoy.com/view/fttyz2
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
+#define SpinSpeed 2.0
+#define SpinRadius 5.0
 float4 PointLight_PS(Output _Input) : SV_Target0
 {
 
@@ -84,8 +86,10 @@ float4 PointLight_PS(Output _Input) : SV_Target0
     //// SV_Position : 좌상단 {0, 0} 우하단 {1280, 720} -> 스크린
     Color = Tex.Sample(Smp, TexPos);
     
-  
-    // 원 만들어보기
+    // 원 중심 돌리기
+    CenterPos += float2(cos(SumDeltaTime * SpinSpeed), sin(SumDeltaTime * SpinSpeed)) * SpinRadius;
+    
+    // 원 출력
     float Distance = length(Pos - CenterPos);
     
     float Ambient = Color.r + Color.g + Color.b; // 전체적인 밝기
@@ -107,6 +111,8 @@ float4 PointLight_PS(Output _Input) : SV_Target0
         }
 
     }
+    
+    
  
     return Color;
 }

@@ -20,7 +20,6 @@ void PointLight::Start()
 	//DRenderer->GetTransform().SetWorldPosition({ 400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4)});
 
 
-
 }
 
 void PointLight::Update(float _DeltaTime)

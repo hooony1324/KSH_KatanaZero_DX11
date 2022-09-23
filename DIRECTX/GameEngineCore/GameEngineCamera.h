@@ -87,8 +87,8 @@ public:
 	GameEngineInstancing* GetInstancing(const std::string& _Name);
 	GameEngineInstancing* GetInstancing(GameEngineRenderingPipeLine* _Pipe);
 	void PushInstancing(GameEngineRenderingPipeLine* _Pipe, int Count);
-	void PushInstancingData(GameEngineRenderingPipeLine* _Pipe, void* _DataPtr, int _Size);
-	void PushInstancingIndex(GameEngineRenderingPipeLine* _Pipe);
+	int PushInstancingData(GameEngineRenderingPipeLine* _Pipe, void* _DataPtr, int _Size);
+	int PushInstancingIndex(GameEngineRenderingPipeLine* _Pipe);
 
 protected:
 	void Start();

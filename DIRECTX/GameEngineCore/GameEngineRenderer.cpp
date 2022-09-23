@@ -28,6 +28,20 @@ void GameEngineRenderer::Start()
 {
 }
 
+void GameEngineRenderer::EngineShaderResourcesSetting(GameEngineShaderResourcesHelper* _ShaderResources)
+{
+	//// 랜더러 쪽으로 빠져야 한다.
+	if (true == _ShaderResources->IsConstantBuffer("TRANSFORMDATA"))
+	{
+		_ShaderResources->SetConstantBufferLink("TRANSFORMDATA", &GetTransformData(), sizeof(GetTransformData()));
+	}
+
+	if (true == _ShaderResources->IsConstantBuffer("RENDEROPTION"))
+	{
+		_ShaderResources->SetConstantBufferLink("RENDEROPTION", &renderOption, sizeof(renderOption));
+	}
+}
+
 void GameEngineRenderer::PushRendererToMainCamera()
 {
 	GetActor()->GetLevel()->PushRendererToMainCamera(this);	
@@ -62,6 +76,34 @@ bool GameEngineRenderer::IsInstancing(GameEngineRenderingPipeLine* _Rendering)
 
 	return true == IsInstancing_ && GameEngineInstancing::MinInstancingCount <= InstancingIter->second.Count;
 }
+
+// 우리 엔진에서 인스턴싱을 한다면 무조건 숫자하나만 인스턴싱을 했으니까. 이건 ok
+void GameEngineRenderer::InstancingDataSetting(GameEngineRenderingPipeLine* _Line)
+{
+	// 몇번째 순서인지 알려주고 있어요
+	int InstancingIndex = Camera->PushInstancingIndex(_Line);
+
+	GameEngineInstancing* Instancing = Camera->GetInstancing(_Line);
+
+	if (nullptr == Instancing)
+	{
+		MsgBoxAssert("인스턴싱이 켜져있지만 인스턴싱 정보는 없습니다.");
+	}
+
+	if (true == Instancing->ShaderResources.IsStructuredBuffer("AllInstancingTransformData"))
+	{
+		GameEngineStructuredBufferSetter* Setter = Instancing->ShaderResources.GetStructuredBuffer("AllInstancingTransformData");
+
+		Setter->Push(GetTransform().GetTransformData(), InstancingIndex);
+
+		
+
+		//Setter->Res
+
+		// GetTransform().GetTransformData()
+	}
+}
+
 
 //void GameEngineRenderer::Render(float _DeltaTime)
 //{

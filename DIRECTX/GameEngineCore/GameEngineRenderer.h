@@ -16,6 +16,7 @@ struct RenderOption
 // 강제 내 자식들을 하나의 인터페이스로 묶는 역할입니다.
 // 설명 :
 class GameEngineRenderingPipeLine;
+class GameEngineShaderResourcesHelper;
 class GameEngineRenderer : public GameEngineTransformComponent
 {
 	friend class GameEngineLevel;
@@ -54,6 +55,12 @@ public:
 
 	bool IsInstancing(GameEngineRenderingPipeLine* _Rendering);
 
+	void InstancingDataSetting(GameEngineRenderingPipeLine* _Line);
+
+	void EngineShaderResourcesSetting(GameEngineShaderResourcesHelper* _ShaderResources);
+
+
+	
 protected:
 	virtual void Start();
 	virtual void Update(float _DeltaTime) {}
@@ -63,6 +70,8 @@ protected:
 	void PushRendererToUICamera();
 
     class GameEngineCamera* Camera;
+
+
 
 private:
 	CAMERAORDER CameraOrder;

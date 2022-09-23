@@ -31,15 +31,7 @@ void GameEngineDefaultRenderer::SetPipeLine(const std::string& _Name)
 
 	ShaderResources.ResourcesCheck(PipeLine);
 
-	if (true == ShaderResources.IsConstantBuffer("TRANSFORMDATA"))
-	{
-		ShaderResources.SetConstantBufferLink("TRANSFORMDATA", &GetTransformData(), sizeof(GetTransformData()));
-	}
-
-	if (true == ShaderResources.IsConstantBuffer("RENDEROPTION"))
-	{
-		ShaderResources.SetConstantBufferLink("RENDEROPTION", &renderOption, sizeof(renderOption));
-	}
+	EngineShaderResourcesSetting(&ShaderResources);
 
 }
 
@@ -59,7 +51,7 @@ void GameEngineDefaultRenderer::Render(float _DeltaTime)
 	}
 	else 
 	{
-		InstancingDataSetting();
+		InstancingDataSetting(GetPipeLine());
 		// 여러분들이 새로운 랜더러를 만들고 인스턴싱을 하면
 		// 이 부분이 달라져야 합니다.
 		// 유저가 몇바이트짜리 인스턴
@@ -67,10 +59,6 @@ void GameEngineDefaultRenderer::Render(float _DeltaTime)
 	}
 }
 
-void GameEngineDefaultRenderer::InstancingDataSetting()
-{
-	MsgBoxAssert("인스턴싱 데이터처리를 InstancingDataSetting 재정의하지 않았습니다.");
-}
 
 
 GameEngineRenderingPipeLine* GameEngineDefaultRenderer::GetPipeLine()

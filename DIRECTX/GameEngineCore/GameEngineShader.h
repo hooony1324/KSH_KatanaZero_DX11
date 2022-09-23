@@ -88,8 +88,30 @@ class GameEngineStructuredBufferSetter : public ShaderResSetter
 public:
 	void Setting() const;
 
+	void Resize(int _Count);
+
+	template<typename DataType>
+	void Push(DataType& _Data, int _Count)
+	{
+		int LeftSize = sizeof(DataType);
+		int RightSize = GetDataSize();
+
+		if (LeftSize != RightSize)
+		{
+			MsgBoxAssert("구조화버퍼에 넣으려는 데이터 사이즈가 다릅니다.");
+		}
+
+		PushData(&_Data, _Count);
+	}
+
+	int GetDataSize();
+
+private:
+	void PushData(const void* Data, int _Count);
+
 public:
 	GameEngineStructuredBuffer* Res;
+	std::vector<char> CpuDataBuffer;
 };
 
 

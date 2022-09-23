@@ -45,7 +45,6 @@ void Effect_PointLight::EffectInit()
 
 	float4 LightWorldPos = { 400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f };
 	LightData.LightWorldPos = LightWorldPos;
-
 }
 
 void Effect_PointLight::Effect(GameEngineRenderTarget* _Target)
@@ -65,6 +64,11 @@ void Effect_PointLight::Effect(GameEngineRenderTarget* _Target)
 	Option.DeltaTime = DeltaTime;
 	Option.SumDeltaTime = SumDeltaTime;
 
+	// PointLight움직임
+	{
+	}
+
+	// PointLight위치 계산
 	{
 		float4 Pos = LightData.LightWorldPos;
 		Pos *= MainCam->GetView();

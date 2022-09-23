@@ -6,8 +6,8 @@
 class GameEngineInstancing
 {
 public:
-	static int MinInstancingCount;
-	static int StartInstancingCount;
+	static unsigned int MinInstancingCount;
+	static unsigned int StartInstancingCount;
 
 public:
 	// constrcuter destructer
@@ -36,7 +36,8 @@ public:
 	GameEngineShaderResourcesHelper ShaderResources;
 	GameEngineRenderingPipeLine* InstancingPipeLine;
 	int Size;
-	int Count;
+	unsigned int Count;
+	int MaxDataCount;
 	GameEngineInstancingBuffer* Buffer;
 
 protected:

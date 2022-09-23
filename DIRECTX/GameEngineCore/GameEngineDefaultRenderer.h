@@ -39,7 +39,6 @@ protected:
 	virtual void Start();
 	virtual void Update(float _DeltaTime) {}
 	virtual void End() {}
-	virtual void InstancingDataSetting();
 
 private:
 	// 공통적인 메모리 공유하는 메로리들을 들고 있고
