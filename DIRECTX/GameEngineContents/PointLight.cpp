@@ -2,7 +2,7 @@
 #include "PointLight.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-#include <GameEngineCore/GameEngineBlend.h>
+#include "GameContentsCustomRenderer.h"
 
 PointLight::PointLight() 
 {
@@ -14,15 +14,13 @@ PointLight::~PointLight()
 
 void PointLight::Start()
 {
-	// 위치 판별용
-	DRenderer = CreateComponent<GameEngineDefaultRenderer>();
-	DRenderer->GetTransform().SetLocalScale({ 300, 300, 1 });
+	//DRenderer = CreateComponent<GameContentsCustomRenderer>();
+	//
+	//DRenderer->SetPipeLine("PointLight");
+	//DRenderer->GetTransform().SetWorldPosition({ 400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4)});
 
-	// 포스트이펙트 이용해야됨
-	// Tex에 라이트 텍스쳐 세팅은 하지만 출력은 안함 -> 쉐이더에서 하면됨
-	// 쉐이더에 필요한 텍스쳐? 
-	DRenderer->SetPipeLine("PointLight");
-	
+
+
 }
 
 void PointLight::Update(float _DeltaTime)

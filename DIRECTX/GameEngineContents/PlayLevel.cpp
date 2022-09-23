@@ -142,7 +142,9 @@ void PlayLevel::LevelStartEvent()
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Wave>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_DistortionGlitch>();
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_Distortion>();
+
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_PointLight>();
+	Effect_PointLight::GetInst()->MainCam = GetMainCamera();
 
 	
 }

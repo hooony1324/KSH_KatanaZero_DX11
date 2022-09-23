@@ -25,7 +25,11 @@ protected:
 private:
 	GameEngineTextureRenderer* Renderer;
 	GameEngineDefaultRenderer* DRenderer;
+	GameContentsCustomRenderer* CRenderer;
 	GameContentsLightRenderer* LightRenderer;
 
+
+	AtlasData AtlasDataInst;
+	PixelData PixelDataInst;
 };
 

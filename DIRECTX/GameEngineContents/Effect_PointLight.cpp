@@ -33,14 +33,18 @@ void Effect_PointLight::EffectInit()
 		Option.OnOff = static_cast<int>(OnOffOption);
 	}
 
-	// ºû À§Ä¡ ÁöÁ¤
-	if (true == EffectSet.ShaderResources.IsConstantBuffer("LightData"))
+	if (true == EffectSet.ShaderResources.IsConstantBuffer("TRANSFORMDATA"))
 	{
-		EffectSet.ShaderResources.SetConstantBufferLink("LightData", &LightOption, sizeof(LightOption));
+		EffectSet.ShaderResources.SetConstantBufferLink("TRANSFORMDATA", &TData, sizeof(TData));
 	}
 
-	LightOption.Position = (320.0f, 560.0f);
-	//float2 CirclePos = float2(320.0f, 560.0f);
+	if (true == EffectSet.ShaderResources.IsConstantBuffer("PointLightData"))
+	{
+		EffectSet.ShaderResources.SetConstantBufferLink("PointLightData", &LightData, sizeof(LightData));
+	}
+
+	float4 LightWorldPos = { 400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f };
+	LightData.LightWorldPos = LightWorldPos;
 
 }
 
@@ -60,6 +64,24 @@ void Effect_PointLight::Effect(GameEngineRenderTarget* _Target)
 	SumDeltaTime += DeltaTime;
 	Option.DeltaTime = DeltaTime;
 	Option.SumDeltaTime = SumDeltaTime;
+
+	{
+		float4 Pos = LightData.LightWorldPos;
+		Pos *= MainCam->GetView();
+		Pos *= MainCam->GetProjectionMatrix();
+
+		float4x4 ViewPort;
+		float4 Size = GameEngineWindow::GetInst()->GetScale();
+		ViewPort.ViewPort(Size.x, Size.y, 0.0f, 0.0f, 0.0f, 1.0f);
+
+		Pos *= ViewPort;
+		LightData.LightScreenPos = Pos;
+		TData.WorldViewProjectionMatrix = MainCam->GetTransform().GetWorldViewProjection();
+	}
+
+
+
+
 	EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 
 	_Target->Clear();

@@ -1,9 +1,10 @@
 #pragma once
 #include "CustomPostEffect.h"
 
-struct LightInfo
+struct PointLightData
 {
-	float4 Position;
+	float4 LightWorldPos;
+	float4 LightScreenPos;
 };
 
 // 설명 :
@@ -21,6 +22,11 @@ public:
 		return Inst;
 	}
 
+	TransformData TData; // 카메라 MVP행렬 넣기 용도
+	GameEngineCamera* MainCam;
+
+	PointLightData LightData;
+
 public:
 	// constrcuter destructer
 	Effect_PointLight();
@@ -36,6 +42,5 @@ protected:
 	void EffectInit() override;
 	void Effect(GameEngineRenderTarget* _Target) override;
 
-	LightInfo LightOption;
 };
 

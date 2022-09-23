@@ -57,7 +57,7 @@ void Room_Factory1::Start()
 	
 	// ºû
 	PointLight* Light = GetLevel()->CreateActor<PointLight>();
-	Light->GetTransform().SetWorldPosition({ 220, -550, GetDepth(ACTOR_DEPTH::BACKGROUND_4) });
+	Light->GetTransform().SetWorldPosition({ 400, -600, GetDepth(ACTOR_DEPTH::BACKGROUND_4) });
 
 	// ¼¼ÆÃ ½Ã°£
 	TimeLimit = true;

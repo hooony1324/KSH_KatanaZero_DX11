@@ -10,20 +10,23 @@ struct Input
 struct Output
 {
     float4 Pos : SV_POSITION;
-    float4 PosLocal : POSITION;
     float4 Tex : TEXCOORD;
 };
 
-cbuffer LightData : register(b0)
+cbuffer PointLightData
 {
-    float4 LightPos; // LocalPosition
-}
+    float4 LightWorldPos;
+    float4 LightScreenPos;
+};
+
 
 Output PointLight_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0;
-    NewOutPut.Pos = _Input.Pos;
+    NewOutPut.Pos = mul(_Input.Pos, WorldViewProjection);
     NewOutPut.Tex = _Input.Tex;
+    
+
     return NewOutPut;
 }
 
@@ -40,8 +43,9 @@ float4 PointLight_PS(Output _Input) : SV_Target0
     }
     
     float2 TexPos = _Input.Tex.xy;
-    float2 SVPos = _Input.Pos;
-    float4 Color = float4(0, 0, 0, 0);
+    float2 Pos = _Input.Pos.xy;
+    float2 CenterPos = LightScreenPos.xy;
+    float4 Color;
  
     
     
@@ -78,32 +82,32 @@ float4 PointLight_PS(Output _Input) : SV_Target0
     
     
     //// SV_Position : 좌상단 {0, 0} 우하단 {1280, 720} -> 스크린
-    //Color = Tex.Sample(Smp, TexPos);
+    Color = Tex.Sample(Smp, TexPos);
     
-    //// 원 만들어보기
-    //float2 CirclePos = LightPos;
-    //float Distance = length(CirclePos - SVPos);
- 
-    //float Ambient = Color.r + Color.g + Color.b;    // 전체적인 밝기
-    //float Radius = 100.0f;                          // 원 크기
+  
+    // 원 만들어보기
+    float Distance = length(Pos - CenterPos);
     
-    //if (Distance <= Radius)
-    //{
-    //    // 어두운 픽셀중 원래 텍스쳐의 초록색 성향을 강화
-    //    if (Ambient <= 0.3f)
-    //    {
-    //        Color.g *= clamp(Distance / 60.0f, 1.5f, 4.0f);
-    //    }
+    float Ambient = Color.r + Color.g + Color.b; // 전체적인 밝기
+    float Radius = 100.0f; // 원 크기
+    
+    if (Distance <= Radius)
+    {
+        // 어두운 픽셀중 원래 텍스쳐의 초록색 성향을 강화
+        if (Ambient <= 0.3f)
+        {
+            Color.g *= clamp(Distance / 60.0f, 1.5f, 4.0f);
+        }
         
-    //    // 밝은 픽샐은 초록색으로
-    //    if (Ambient >= 1.0f)
-    //    {
-    //        Color.r *= clamp(Distance / 30.0f, 1.5f, 4.0f);
-    //        Color.b *= clamp(Distance / 30.0f, 1.5f, 4.0f);
-    //    }
+        // 밝은 픽샐은 초록색으로
+        if (Ambient >= 1.0f)
+        {
+            Color.r *= clamp(Distance / 30.0f, 1.5f, 4.0f);
+            Color.b *= clamp(Distance / 30.0f, 1.5f, 4.0f);
+        }
 
-    //}
-
+    }
+ 
     return Color;
 }
 

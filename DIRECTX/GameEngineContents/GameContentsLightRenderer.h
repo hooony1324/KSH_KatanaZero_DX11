@@ -2,7 +2,7 @@
 #include <GameEngineCore/GameEngineDefaultRenderer.h>
 
 // Ό³Έν :
-class GameContentsLightRenderer : public GameEngineDefaultRenderer
+class GameContentsLightRenderer : public GameEngineTextureRenderer
 {
 public:
 	// constrcuter destructer
