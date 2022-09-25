@@ -82,6 +82,11 @@ public:
 		return !IsFall;
 	}
 
+	GameEngineTextureRenderer* GetRenderer()
+	{
+		return Renderer_Character;
+	}
+
 private:
 	static bool CheatMode;
 
@@ -143,11 +148,15 @@ protected:
 	GameEngineTextureRenderer* Renderer_Slash;
 	GameEngineCollision* Collision_Slash;
 
+	GameEngineCollision* Collision_SlashingObject;
+	bool CamShake;
+
 	// È¿°ú
 	CollisionReturn IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
 	void CreateBrightShadow();
 
 	GameEngineTextureRenderer* Renderer_SlashLight;
+	class ParticleShooter* CloudShooter;
 
 
 	bool InputValid;

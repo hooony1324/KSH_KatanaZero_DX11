@@ -126,7 +126,6 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetPixelShader("Distortion.hlsl");
 	}
 
-	// 포스트 이펙트 파이프라인은 FullRect 사용
 	{
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("Wave");
 		NewPipe->SetVertexShader("Wave.hlsl");
@@ -135,7 +134,6 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
-	// 포스트 이펙트 파이프라인은 FullRect 사용
 	{
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("DistortionGlitch");
 		NewPipe->SetVertexShader("DistortionGlitch.hlsl");
@@ -144,7 +142,6 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
-	// 포스트 이펙트 파이프라인은 FullRect 사용
 	{
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("PointLight");
 		NewPipe->SetVertexShader("PointLight.hlsl");
@@ -153,6 +150,13 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("RimLight");
+		NewPipe->SetVertexShader("RimLight.hlsl");
+		NewPipe->SetPixelShader("RimLight.hlsl");
+		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
+		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
+	}
 
 }
 

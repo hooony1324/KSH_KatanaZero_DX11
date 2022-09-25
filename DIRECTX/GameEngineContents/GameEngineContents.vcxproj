@@ -273,7 +273,19 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="LandCloud.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="LiveActor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ParticleShooter.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -310,6 +322,10 @@
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="RollCloud.h">
+      <SubType>
+      </SubType>
     </ClInclude>
     <ClInclude Include="Room.h">
       <SubType>
@@ -517,7 +533,19 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="LandCloud.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="LiveActor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ParticleShooter.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -553,6 +581,10 @@
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="RollCloud.cpp">
+      <SubType>
+      </SubType>
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <SubType>

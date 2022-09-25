@@ -30,5 +30,8 @@
     <FxCompile Include="..\Resources\Shader\PointLight.hlsl">
       <Filter>Sahder</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\RimLight.hlsl">
+      <Filter>Sahder</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

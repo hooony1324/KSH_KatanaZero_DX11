@@ -86,6 +86,7 @@ void PlayerZero::Start()
 	FRenderer_FSMState->SetPositionMode(FontPositionMode::WORLD);
 	FRenderer_FSMState->SetSize(16);
 	FRenderer_FSMState->GetTransform().SetLocalPosition({ 0, 40, 0 });
+
 }
 
 void PlayerZero::Update(float _DeltaTime)
@@ -172,6 +173,20 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 {	
 	Velocity = MoveVec * MoveSpeed * _DeltaTime;
 
+
+	if (false == DoorBreaking)
+	{
+		Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
+			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+			{
+				DoorBreaking = true;
+				PlayerStateManager.ChangeState("DoorBreak");
+				Velocity.x = 0;
+				DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+				return CollisionReturn::Break;
+			});
+	}
+
 	// º® ¸·±â
 	switch (WallState)
 	{
@@ -179,6 +194,11 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	case CharacterActor::STATE_WALL::RIGHT:
 	{
+		if (true == DoorBreaking)
+		{
+			Velocity = float4::ZERO;
+			return;
+		}
 
 		if (!IsAttack && IsFall && MoveVec.x > 0 || IsFlip)
 		{
@@ -201,6 +221,11 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 	}
 	case CharacterActor::STATE_WALL::LEFT:
 	{
+		if (true == DoorBreaking)
+		{
+			Velocity = float4::ZERO;
+			return;
+		}
 
 		if (!IsAttack && IsFall && MoveVec.x < 0 || IsFlip)
 		{
@@ -277,18 +302,6 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		break;
 	}
 
-	if (false == DoorBreaking)
-	{
-		Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
-			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
-			{
-				DoorBreaking = true;
-				PlayerStateManager.ChangeState("DoorBreak");
-				Velocity.x = 0;
-				DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
-				return CollisionReturn::Break;
-			});
-	}
 
 
 

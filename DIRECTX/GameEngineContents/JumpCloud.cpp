@@ -13,9 +13,10 @@ JumpCloud::~JumpCloud()
 void JumpCloud::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
-	Renderer->GetTransform().SetLocalScale({ 48, 67, 1 });
+	Renderer->SetScaleModeImage();
+	Renderer->SetScaleRatio(2.0f);
 	Renderer->SetPivot(PIVOTMODE::BOT);
-	Renderer->CreateFrameAnimationFolder("player_jumpcloud", FrameAnimation_DESC{ "player_jumpcloud", 0.1f });
+	Renderer->CreateFrameAnimationFolder("player_jumpcloud", FrameAnimation_DESC{ "player_jumpcloud", 0.08f });
 	Renderer->ChangeFrameAnimation("player_jumpcloud");
 
 	Renderer->AnimationBindEnd("player_jumpcloud", [=](const FrameAnimation_DESC& _Info)

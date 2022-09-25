@@ -5,6 +5,7 @@
 #include "Door.h"
 #include "CharacterShadow.h"
 #include <GameEngineBase/magic_enum.hpp>
+#include "ParticleShooter.h"
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -20,6 +21,7 @@ CharacterActor::CharacterActor()
 	, InputDir(float4::ZERO)
 	, DoorBreaking(false)
 	, DoorPtr(nullptr)
+	, Collision_SlashingObject(nullptr)
 {
 
 }
@@ -48,7 +50,7 @@ void CharacterActor::OnEvent()
 	WallGrab = false;
 	DoorBreaking = false;
 	DoorPtr = nullptr;
-
+	Collision_SlashingObject = nullptr;
 
 	if (Pixels.size() == 0)
 	{
@@ -77,6 +79,10 @@ void CharacterActor::OnEvent()
 		//}
 	}
 
+	if (nullptr == CloudShooter)
+	{
+		CloudShooter = GetLevel()->CreateActor<ParticleShooter>();
+	}
 }
 
 void CharacterActor::OffEvent()
@@ -311,6 +317,13 @@ CollisionReturn CharacterActor::HitBullet(GameEngineCollision* _This, GameEngine
 // 같은 콜리전 계속 부딛히면 안됨
 CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
+	if (_Other == Collision_SlashingObject)
+	{
+		CamShake = false;
+		return CollisionReturn::ContinueCheck;
+	}
+
+	Collision_SlashingObject = _Other;
 
 	DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
 	if (nullptr != DoorPtr)
@@ -318,6 +331,7 @@ CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This
 		DoorPtr->Open();
 		DoorBreaking = true;
 		DoorPtr = nullptr;
+		CamShake = true;
 	}
 
 	else if (nullptr == DoorPtr)
@@ -331,35 +345,38 @@ CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This
 		SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
 		Fx->GetTransform().SetWorldPosition(OtherPos);
 		Fx->SetSlashLightDir(OtherPos - ThisPos);
+		CamShake = true;
 	}
 
 
-	return  CollisionReturn::Break;
+	return  CollisionReturn::ContinueCheck;
 }
 
 bool CharacterActor::RoomShakeActivate()
 {
+	bool SlashDoor, SlashEnemy, SlashBullet;
 
-	if (Collision_Slash->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_OBB2D,
-		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
+	SlashDoor = Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {IsActivateSlashEffect(_This, _Other); return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
+
+
+	SlashEnemy = Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY), CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) { IsActivateSlashEffect(_This, _Other); return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
+
+
+	SlashBullet = Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY_ATTACK), CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) { IsActivateSlashEffect(_This, _Other); return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
+
+	if (SlashDoor || SlashEnemy || SlashBullet)
 	{
-		return true;
+		return CamShake;
 	}
-
-
-	if (Collision_Slash->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY), CollisionType::CT_OBB2D,
-		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
-	{
-		return true;
-	}
-
-	if (Collision_Slash->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY_ATTACK), CollisionType::CT_OBB2D,
-		std::bind(&CharacterActor::IsActivateSlashEffect, this, std::placeholders::_1, std::placeholders::_2)))
-	{
-		return true;
-	}
-
-
 
 	return false;
 }

@@ -42,5 +42,13 @@ protected:
 	void EffectInit() override;
 	void Effect(GameEngineRenderTarget* _Target) override;
 
+	// Rim
+	GameEngineRenderTarget* RimTarget;
+	GameEngineRenderSet RimEffectSet;
+	GameEngineDefaultRenderer* RenderertoChromakey;
+private:
+	float4x4 ViewMatrix;
+	float4x4 ProjectionMatrix;
+	float4x4 ViewPortMatrix;
 };
 

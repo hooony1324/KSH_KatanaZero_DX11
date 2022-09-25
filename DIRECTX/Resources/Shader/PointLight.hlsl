@@ -93,21 +93,23 @@ float4 PointLight_PS(Output _Input) : SV_Target0
     float Distance = length(Pos - CenterPos);
     
     float Ambient = Color.r + Color.g + Color.b; // 전체적인 밝기
-    float Radius = 100.0f; // 원 크기
+    float Radius = 500.0f; // 원 크기
     
     if (Distance <= Radius)
     {
         // 어두운 픽셀중 원래 텍스쳐의 초록색 성향을 강화
         if (Ambient <= 0.3f)
         {
-            Color.g *= clamp(Distance / 60.0f, 1.5f, 4.0f);
+            Color.r *= clamp(Radius * 2 / Distance, 1.0f, 1.2f);
+            Color.g *= clamp(Radius * 2 / Distance, 1.0f, 1.8f);
+            Color.b *= clamp(Radius * 2 / Distance, 1.0f, 1.5f);
         }
         
-        // 밝은 픽샐은 초록색으로
+        // 밝은 픽샐은 원래대로
         if (Ambient >= 1.0f)
         {
-            Color.r *= clamp(Distance / 30.0f, 1.5f, 4.0f);
-            Color.b *= clamp(Distance / 30.0f, 1.5f, 4.0f);
+            //Color.r *= clamp(Distance / 30.0f, 1.5f, 4.0f);
+            //Color.b *= clamp(Distance / 30.0f, 1.5f, 4.0f);
         }
 
     }

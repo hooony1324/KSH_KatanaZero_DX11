@@ -94,7 +94,7 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 			// 이 충돌체와 충돌했다.
 			if (eCollisionMode == CollisionMode::Ex)
 			{
-				if (CollisionCheck.end() == CollisionCheck.find(Collision))
+				if (CollisionCheck.end() != CollisionCheck.find(Collision))
 				{
 					// 이 충돌체와는 처음 충돌했다.
 					CollisionCheck.insert(Collision);

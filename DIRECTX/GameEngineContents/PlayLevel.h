@@ -18,6 +18,8 @@ public:
 		return static_cast<int>(Rooms.size());
 	}
 
+	class CharacterActor* GetPlayer();
+
 public:
 	// constrcuter destructer
 	PlayLevel();

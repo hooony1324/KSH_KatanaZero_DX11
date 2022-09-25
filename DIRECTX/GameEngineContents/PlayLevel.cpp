@@ -25,7 +25,10 @@
 #include "DiamondTransition.h"
 #include "ChromakeyGreen.h"
 
-
+CharacterActor* PlayLevel::GetPlayer()
+{
+	return Player;
+}
 
 void PlayLevel::ChangeRoom(int _Index)
 {

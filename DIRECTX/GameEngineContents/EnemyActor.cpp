@@ -687,6 +687,7 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
+		GetTransform().SetWorldMove(float4::RIGHT);
 	}
 	// 오른쪽으로 돔
 	else if (PrevLookDir < 0)
@@ -694,6 +695,7 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		PrevLookDir = 1;
+		GetTransform().SetWorldMove(float4::LEFT);
 	}
 	Renderer_Character->ChangeFrameAnimation("turn");
 }
@@ -1058,10 +1060,11 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (false == DownStairArrived)
 	{
 		Collision_Character->IsCollisionExitBase(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::STAIR), CollisionType::CT_AABB2D,
-			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
+			[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; }
+			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; }
+			, [=](GameEngineCollision* _This, GameEngineCollision* _Other)
 			{
 				bool TargetStairArrived = CurDestStair == _Other->GetActor();
-
 
 				if (TargetStairArrived)
 				{
@@ -1098,9 +1101,7 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 				}
 
 				return CollisionReturn::ContinueCheck;
-			},
-			[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; }
-			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
+			});
 	}
 
 

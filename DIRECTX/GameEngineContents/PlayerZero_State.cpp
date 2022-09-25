@@ -6,8 +6,10 @@
 
 #include "Door.h"
 #include "JumpCloud.h"
+#include "LandCloud.h"
+#include "RollCloud.h"
 #include "GameContentsCustomRenderer.h"
-
+#include "ParticleShooter.h"
 
 const float AntiGravity = 5.2f;
 
@@ -21,6 +23,13 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 	WallGrab = false;
 	IsFlip = false;
 	IsAttack = false;
+
+	if (0 == _Info.PrevState.compare("Fall"))
+	{
+		// FX
+		LandCloud* Cloud = GetLevel()->CreateActor<LandCloud>();
+		Cloud->GetTransform().SetWorldPosition(GetTransform().GetWorldPosition() + float4{ 0, -35 });
+	}
 }
 
 void PlayerZero::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -543,6 +552,8 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (DT >= 0.2f)
 	{
+		float4 CloudDir{ 0, MoveVec.x * -1 };
+		CloudShooter->SetOneShot<RollCloud>(5, GetTransform().GetWorldPosition() + float4{0, -30}, CloudDir, 200);
 		PlayerStateManager.ChangeState("Run");
 		return;
 	}
