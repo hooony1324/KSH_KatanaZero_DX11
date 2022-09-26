@@ -4,6 +4,7 @@
 #include "GameEngineVertexShader.h"
 #include "GameEngineConstantBuffer.h"
 #include "GameEngineTexture.h"
+#include "GameEngineFolderTexture.h"
 #include "GameEngineSampler.h"
 #include "GameEngineStructuredBuffer.h"
 
@@ -237,6 +238,28 @@ GameEngineTexture* GameEngineShaderResourcesHelper::SetTexture(const std::string
 	std::string Name = GameEngineString::ToUpperReturn(_Name);
 
 	return SetTexture(_Name, GameEngineTexture::Find(_TextureName));
+}
+
+GameEngineTexture* GameEngineShaderResourcesHelper::SetTexture(const std::string& _Name, const std::string& _FolderTextureName, int _Index)
+{
+	if (false == IsTexture(_Name))
+	{
+		MsgBox("쉐이더에서 이러한 이름의 텍스처세팅를 사용한 적이 없습니다.");
+		return nullptr;
+	}
+
+	std::string Name = GameEngineString::ToUpperReturn(_Name);
+
+	std::string TextureName = GameEngineString::ToUpperReturn(_FolderTextureName);
+
+	GameEngineFolderTexture* Tex = GameEngineFolderTexture::Find(TextureName);
+
+	if (nullptr == Tex)
+	{
+		MsgBoxAssert("존재하지 않는 폴더 텍스처를 세팅하려고 했습니다.");
+	}
+
+	return SetTexture(_Name, Tex->GetTexture(_Index));
 }
 
 GameEngineTexture* GameEngineShaderResourcesHelper::SetTexture(const std::string& _Name, GameEngineTexture* _Texture)

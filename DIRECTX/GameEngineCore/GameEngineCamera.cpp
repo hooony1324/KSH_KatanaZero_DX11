@@ -128,11 +128,8 @@ void GameEngineCamera::Render(float _DeltaTime)
 			GameEngineRenderingPipeLine* Pipe = StartIter->first;
 			GameEngineInstancing& Instancing = StartIter->second;
 
+			Instancing.InstancingBufferChangeData();
 			Instancing.ShaderResources.AllResourcesSetting();
-			// Instancing.InstancingPipeLine->Rendering();
-
-			// Instancing.DataBuffer
-
 			Instancing.InstancingPipeLine->RenderingInstancing(Instancing.DataInsert, Instancing.Buffer);
 		}
 	}
@@ -260,6 +257,13 @@ void GameEngineCamera::PushInstancing(GameEngineRenderingPipeLine* _Pipe, int Co
 	}
 }
 
+int GameEngineCamera::PushInstancingIndex(GameEngineRenderingPipeLine* _Pipe)
+{
+	int InsertCount = InstancingMap[_Pipe].DataInsert;
+	return PushInstancingData(_Pipe, &InsertCount, sizeof(int));
+}
+
+
 int GameEngineCamera::PushInstancingData(GameEngineRenderingPipeLine* _Pipe, void* _DataPtr, int _Size)
 {
 	int DataOffset = InstancingMap[_Pipe].DataInsert * _Size;
@@ -279,11 +283,6 @@ int GameEngineCamera::PushInstancingData(GameEngineRenderingPipeLine* _Pipe, voi
 	return ResultIndex;
 }
 
-int GameEngineCamera::PushInstancingIndex(GameEngineRenderingPipeLine* _Pipe)
-{
-	int InsertCount = InstancingMap[_Pipe].DataInsert;
-	return PushInstancingData(_Pipe, &InsertCount, sizeof(int));
-}
 
 void GameEngineCamera::Release(float _DelataTime)
 {

@@ -81,6 +81,7 @@ bool GameEngineRenderer::IsInstancing(GameEngineRenderingPipeLine* _Rendering)
 void GameEngineRenderer::InstancingDataSetting(GameEngineRenderingPipeLine* _Line)
 {
 	// 몇번째 순서인지 알려주고 있어요
+	// 이녀석을 통해서 
 	int InstancingIndex = Camera->PushInstancingIndex(_Line);
 
 	GameEngineInstancing* Instancing = Camera->GetInstancing(_Line);

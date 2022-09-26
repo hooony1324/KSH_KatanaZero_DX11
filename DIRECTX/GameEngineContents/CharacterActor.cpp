@@ -2,10 +2,12 @@
 #include "CharacterActor.h"
 #include "Bullet.h"
 #include "SlashFX.h"
+#include "ReflectFX.h"
 #include "Door.h"
 #include "CharacterShadow.h"
 #include <GameEngineBase/magic_enum.hpp>
 #include "ParticleShooter.h"
+
 
 bool CharacterActor::CheatMode = false;
 const float FORCE_REACTION = 1.0f; // 반작용 강도
@@ -342,6 +344,13 @@ CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This
 		float4 ThisPos = _This->GetTransform().GetWorldPosition();
 		OtherPos.z = 0;
 		ThisPos.z = 0;
+
+		if (nullptr != dynamic_cast<Bullet*>(_Other->GetActor()))
+		{
+			ReflectFX* Reflect = GetLevel()->CreateActor<ReflectFX>();
+			Reflect->GetTransform().SetWorldPosition(OtherPos);
+		}
+
 
 		// 화면을 가로지르는 이펙트
 		SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);

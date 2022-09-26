@@ -19,3 +19,14 @@ GameEngineInstancing::~GameEngineInstancing()
 {
 }
 
+
+
+void GameEngineInstancing::InstancingBufferChangeData()
+{
+	if (nullptr == Buffer)
+	{
+		MsgBoxAssert("인스턴싱에 버퍼를 만들지 않았습니다. 않았습니다.")
+	}
+
+	Buffer->ChangeData(&DataBuffer[0], DataBuffer.size());
+}

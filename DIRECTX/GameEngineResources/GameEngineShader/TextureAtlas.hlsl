@@ -101,6 +101,12 @@ float4 TextureAtlas_PS(Output _Input) : SV_Target0
     
     float4 Result = (Tex.Sample(Smp, _Input.Tex.xy) * MulColor) + PlusColor;
     
+    if (1 <= Result.a)
+    {
+        Result.a = 1.0f;
+
+    }
+    
     // Result.a = 1.0f;
     
     return Result;

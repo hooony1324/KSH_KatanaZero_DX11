@@ -78,7 +78,10 @@ public:
 
 	GameEngineTexture* SetTexture(const std::string& _Name, const std::string& _TextureName);
 
+	GameEngineTexture* SetTexture(const std::string& _Name, const std::string& _FolderTextureName, int _Index);
+
 	GameEngineTexture* SetTexture(const std::string& _Name, GameEngineTexture* _TextureName);
+
 
 	GameEngineSampler* SetSampler(const std::string& _Name, const std::string& _TextureName);
 

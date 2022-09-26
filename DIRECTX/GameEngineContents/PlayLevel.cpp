@@ -349,11 +349,11 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 공격 성공시 화면 흔들림 효과
-	if (true == Player->RoomShakeActivate())
-	{
-		RoomStateManager.ChangeState("RoomShake");
-		return;
-	}
+	//if (true == Player->RoomShakeActivate())
+	//{
+	//	RoomStateManager.ChangeState("RoomShake");
+	//	return;
+	//}
 
 	// 슬로우 모드
 	if (true == GameEngineInput::GetInst()->IsPress("Shift") && GlobalValueManager::SlowEnergy > 0)
@@ -471,6 +471,7 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 	SlowDeltaTime += _DeltaTime;
 
 	Player->CreateUIShadow();
+
 
 	if (SlowDeltaTime >= 1.0f)
 	{

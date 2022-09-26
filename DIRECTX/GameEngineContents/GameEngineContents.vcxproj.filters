@@ -277,6 +277,9 @@
     <ClInclude Include="NoDirBlood.h">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect</Filter>
     </ClInclude>
+    <ClInclude Include="ReflectFX.h">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -477,6 +480,9 @@
     </ClCompile>
     <ClCompile Include="NoDirBlood.cpp">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectFX.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

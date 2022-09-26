@@ -43,6 +43,12 @@ void GameEngineBlend::Setting()
 		return;
 	}
 
+	// Pixel Shader                 RenderTarget         
+	// 1, 1, 1, 1  * (Src ÆåÅÍ) +  0, 0, 0, 0 * (Dest Factor)
+
+
+	// ¿¾³¯¿¡         0, 0, 1, 1
+
 	GameEngineDevice::GetContext()->OMSetBlendState(State, Factor.Arr1D, Mask);
 
 }

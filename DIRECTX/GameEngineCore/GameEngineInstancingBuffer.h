@@ -37,6 +37,8 @@ public:
 		return Size;
 	}
 
+	void ChangeData(const void* _Data, size_t _Size) const;
+
 	void BufferCreate(unsigned int _Count, unsigned int _Size);
 
 protected:

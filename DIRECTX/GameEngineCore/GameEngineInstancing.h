@@ -22,15 +22,6 @@ public:
 
 
 public:
-	//RenderingInstancing()
-	//	: Buffer(nullptr)
-	//	, Count(0)
-	//	, DataInsert(0)
-	//{
-	//}
-
-
-public:
 	int DataInsert;
 	std::vector<char> DataBuffer;
 	GameEngineShaderResourcesHelper ShaderResources;
@@ -39,6 +30,8 @@ public:
 	unsigned int Count;
 	int MaxDataCount;
 	GameEngineInstancingBuffer* Buffer;
+
+	void InstancingBufferChangeData();
 
 protected:
 
