@@ -26,7 +26,7 @@ void BossProjectile::Start()
 	Renderer->CreateFrameAnimationFolder("die", FrameAnimation_DESC{ "projectile_die", 0.12f, false });
 	Renderer->ChangeFrameAnimation("idle");
 	Renderer->Off();
-	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET));
+	Renderer->SetOrder(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE));
 
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 54, 48, GetDepth(ACTOR_DEPTH::COLLISION) });

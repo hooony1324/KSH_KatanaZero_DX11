@@ -3,7 +3,7 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 size_t NumX = 40;
-size_t NumY = 22;
+size_t NumY = 23;
 
 DiamondTransition::DiamondTransition() 
 	: ChangeBlack(false)
@@ -19,7 +19,7 @@ DiamondTransition::~DiamondTransition()
 void DiamondTransition::Start()
 {
 
-	Diamonds.resize(22);
+	Diamonds.resize(NumY);
 
 	Black = true;
 	for (size_t y = 0; y < NumY; y++)

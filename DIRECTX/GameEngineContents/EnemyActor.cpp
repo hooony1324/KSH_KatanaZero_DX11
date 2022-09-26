@@ -4,6 +4,7 @@
 #include <GameEngineBase/magic_enum.hpp>
 
 #include "CharacterActor.h"
+#include "SplattedBlood.h"
 
 bool TurnEnd;
 bool GroundAniEnd = false;
@@ -829,7 +830,7 @@ void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 	StateManager.ChangeState("Run");
 }
 
-
+bool BloodSplatted;
 void EnemyActor::HurtflyStart(const StateInfo& _Info)
 {
 	MoveSpeed = 150.0f;
@@ -842,11 +843,22 @@ void EnemyActor::HurtflyStart(const StateInfo& _Info)
 	MoveVec = FlyVec;
 	FlyRadian = float4::VectorXYtoRadian({ 0, 0 }, FlyVec);
 	MoveSpeed *= 4.0f;
+
+	BloodSplatted = false;
 }
 
 void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	float DT = _Info.StateTime;
+
+	if (DT > 0.25f && false == BloodSplatted)
+	{
+		float deg = float4::VectorXYtoDegree(float4::RIGHT, FlyVec);
+		BloodSplatted = true;
+		SplattedBlood* Blood = GetLevel()->CreateActor<SplattedBlood>(ACTORGROUP::BLOOD);
+		Blood->GetTransform().SetWorldPosition({ EnemyPos.x, EnemyPos.y, GetDepth(ACTOR_DEPTH::BACKGROUND_4) });
+		Blood->SpawnRandomBlood(deg);
+	}
 
 	// ³¯¶ó°¨
 	//MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;

@@ -31,8 +31,9 @@ enum class ACTORGROUP
 	CAMERA,
 	TIMEGROUP,			// 플레이어 등
 	TIMEGROUP_ENEMY,    // 총알이 반사될 때 적에게만 날라가도록
-	TIMEGROUP_BULLET,	// 룸 재시작 시 총알만 없애도록
+	TIMEGROUP_PARTICLE,	// 룸 재시작 시 총알만 없애도록
 	TIMEGROUP_FAN,
+	BLOOD,
 	NONE,
 };
 

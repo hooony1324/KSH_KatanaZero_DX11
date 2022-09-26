@@ -55,6 +55,9 @@
     <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\CharacterActor">
       <UniqueIdentifier>{2f5e0251-55a6-44a1-b50c-4615791a8354}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerCharacter">
+      <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\EnemyActor">
       <UniqueIdentifier>{5d9bd21d-4cd9-44ee-a132-5238976c547c}</UniqueIdentifier>
     </Filter>
@@ -70,11 +73,11 @@
     <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyCharacter">
       <UniqueIdentifier>{4134c514-bcc7-40cd-aeab-960eb8ae8b6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerCharacter">
-      <UniqueIdentifier>{4ebac99f-215d-48b4-8de0-931fc3b458d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect">
+    <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect">
       <UniqueIdentifier>{aa27dcd1-d37b-4ab4-9ddc-1bcc9bf8fd20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect">
+      <UniqueIdentifier>{a1ebc3bb-2537-4509-bb2c-4a4ab7493c42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -254,19 +257,25 @@
       <Filter>Levels\01.PlayLevel\Actor\LiveActor</Filter>
     </ClInclude>
     <ClInclude Include="CharacterShadow.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClInclude>
     <ClInclude Include="JumpCloud.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClInclude>
     <ClInclude Include="SlashFX.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClInclude>
     <ClInclude Include="LandCloud.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClInclude>
     <ClInclude Include="DustCloud.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="SplattedBlood.h">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="NoDirBlood.h">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -449,19 +458,25 @@
       <Filter>Levels\01.PlayLevel\Actor\LiveActor</Filter>
     </ClCompile>
     <ClCompile Include="CharacterShadow.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClCompile>
     <ClCompile Include="JumpCloud.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClCompile>
     <ClCompile Include="SlashFX.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClCompile>
     <ClCompile Include="LandCloud.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClCompile>
     <ClCompile Include="DustCloud.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SplattedBlood.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="NoDirBlood.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

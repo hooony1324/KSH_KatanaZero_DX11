@@ -92,7 +92,7 @@ void PlayLevel::Start()
 	SlowEffect->GetTransform().SetWorldPosition({0, 0, GetDepth(ACTOR_DEPTH::SLOWTRANSITON)});
 
 	Transition = CreateActor<DiamondTransition>();
-	Transition->GetTransform().SetWorldPosition({ -640, 328, GetDepth(ACTOR_DEPTH::TRANSITION) });
+	Transition->GetTransform().SetWorldPosition({ -640, 360, GetDepth(ACTOR_DEPTH::TRANSITION) });
 
 	RoomStateManager.CreateStateMember("RoomChange"
 		, std::bind(&PlayLevel::RoomChangeUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -250,6 +250,12 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	if (true == Transition->IsBlack())
 	{
 		Transition->ChangeState(DiamondTransition::STATE::CHANGEWHITE);
+	}
+
+	std::list<GameEngineActor*> Bloods = GetGroup(ACTORGROUP::BLOOD);
+	for (auto Blood : Bloods)
+	{
+		Blood->Death();
 	}
 }
 
@@ -505,7 +511,7 @@ void PlayLevel::RoomShakeStart(const StateInfo& _Info)
 
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 0.1f);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 0.1f);
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), 0.1f);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), 0.1f);
 
 }
 
@@ -522,7 +528,7 @@ void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1);
 		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1);
-		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_BULLET), 1);
+		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), 1);
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
 	}
@@ -583,7 +589,7 @@ void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 
 
 	// ÃÑ¾Ë
-	std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_BULLET);
+	std::list<GameEngineActor*> Bullets = GetGroup(ACTORGROUP::TIMEGROUP_PARTICLE);
 	for (auto Bullet : Bullets)
 	{
 		Bullet->Death();

@@ -4,8 +4,8 @@
 
 #include "EnemyCop.h"
 #include "EnemyGrunt.h"
-
 #include "Stair.h"
+#include "SplattedBlood.h"
 
 Room_Factory3::Room_Factory3() 
 {
@@ -57,6 +57,7 @@ void Room_Factory3::Start()
 
 	// °è´Ü
 	StairSetting();
+
 
 	Off();
 }
