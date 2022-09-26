@@ -229,14 +229,14 @@ void PlayLevel::CameraFollow(float _DeltaTime)
 }
 
 float RoomPlayTotalTime; // 방 1개 단위, 제한시간 비교용도
+float CurRoomTimeLimit;
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
 
 
 	CurRoom->On();
 
-	// 다음 방 세팅
-	//CurRoom->Setting();
+	// 방 세팅
 	CurRoom->PlayerSpawn(Player);
 	CurRoom->SetCameraClampArea(CamClamp_LeftTop, CamClamp_RightBottom);
 	GetMainCameraActor()->GetTransform().SetWorldPosition(CurRoom->CamClamp_Center);
@@ -246,6 +246,8 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	// UI
 	RoomPlayTotalTime = 0.0f;
 	UI->SetTimeBarLength(1);
+	CurRoomTimeLimit = CurRoom->GetTimeLimit();
+
 
 	if (true == Transition->IsBlack())
 	{
@@ -303,6 +305,7 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 float FrameCaptureTime = 0.016f; // 60FPS
 float SlowRecoverTime;
 float ShotFrameTime;
+
 void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 {
 	SlowRecoverTime = 0.0f;
@@ -316,8 +319,9 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-
-	FrameCaptureTime = GameEngineMath::LerpLimit(0.016f, 0.06f, RoomPlayTotalTime);
+	// 60Fps에서 15Fps까지 
+	
+	FrameCaptureTime = 0.0164f * RoomPlayTotalTime;
 
 	// 카메라 플레이어 따라다니기
 	CameraFollow(_DeltaTime);
@@ -349,11 +353,11 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 공격 성공시 화면 흔들림 효과
-	//if (true == Player->RoomShakeActivate())
-	//{
-	//	RoomStateManager.ChangeState("RoomShake");
-	//	return;
-	//}
+	if (true == Player->RoomShakeActivate())
+	{
+		RoomStateManager.ChangeState("RoomShake");
+		return;
+	}
 
 	// 슬로우 모드
 	if (true == GameEngineInput::GetInst()->IsPress("Shift") && GlobalValueManager::SlowEnergy > 0)
@@ -448,6 +452,7 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 }
 
 float SlowDeltaTime;
+bool CamShake;
 void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 {
 	// 배경 어둡게(총알, 플레이어보단 뒤에 있음)
@@ -461,10 +466,16 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 
 	CharacterShadow::SwitchShadowMode();
 
+	CamShake = false;
 }
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (true == Player->RoomShakeActivate())
+	{
+		CamShake = true;
+	}
+
 	CameraFollow(_DeltaTime);
 
 	RoomPlayTotalTime += _DeltaTime * 0.5f;
