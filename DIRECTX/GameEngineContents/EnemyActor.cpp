@@ -687,7 +687,7 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 		Collision_ChaseSensor->GetTransform().SetLocalPosition({ -ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
-		GetTransform().SetWorldMove(float4::RIGHT);
+		GetTransform().SetWorldMove(float4::LEFT);
 	}
 	// 오른쪽으로 돔
 	else if (PrevLookDir < 0)
@@ -695,7 +695,7 @@ void EnemyActor::PatrolTurnStart(const StateInfo& _Info)
 		Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 		Renderer_Character->GetTransform().PixLocalPositiveX();
 		PrevLookDir = 1;
-		GetTransform().SetWorldMove(float4::LEFT);
+		GetTransform().SetWorldMove(float4::RIGHT);
 	}
 	Renderer_Character->ChangeFrameAnimation("turn");
 }

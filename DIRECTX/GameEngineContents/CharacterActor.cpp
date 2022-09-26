@@ -83,6 +83,8 @@ void CharacterActor::OnEvent()
 	{
 		CloudShooter = GetLevel()->CreateActor<ParticleShooter>();
 	}
+
+	Renderer_Character->SetPivotToVector({ 0, 0 });
 }
 
 void CharacterActor::OffEvent()

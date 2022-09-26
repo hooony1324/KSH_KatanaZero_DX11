@@ -643,6 +643,7 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 		{
 			GroundAniStart = true;
 			Renderer_Character->ChangeFrameAnimation("hurtground");
+			Renderer_Character->SetPivotToVector({ 0, -5 });
 		}
 		MoveVec.y = 0;
 		MoveVec.x = GameEngineMath::LerpLimit(FlyVector.x, 0, DT);
@@ -661,6 +662,7 @@ void PlayerZero::DoorBreakStart(const StateInfo& _Info)
 {
 	MoveVec.x = 0;
 	Renderer_Character->ChangeFrameAnimation("doorbreak");
+	Renderer_Character->SetPivotToVector({ 0, 5 });
 
 
 	if (InputDir.x < 0)

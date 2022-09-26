@@ -446,6 +446,7 @@ void PlayerZero::CreateAllAnimation()
 			Collision_Slash->Off();
 		});
 
+
 	Renderer_Character->AnimationBindEnd("hurtground", [=](const FrameAnimation_DESC& _Info)
 		{
 			DeadAniend = true;
@@ -454,7 +455,7 @@ void PlayerZero::CreateAllAnimation()
 	// DoorBreak
 	Renderer_Character->AnimationBindStart("doorbreak", [=](const FrameAnimation_DESC& _Info)
 		{
-			Renderer_Character->SetPivotToVector({ 0, 5, 0 });
+			//Renderer_Character->SetPivotToVector({ 0, 5, 0 });
 		});
 
 	Renderer_Character->AnimationBindFrame("doorbreak", [=](const FrameAnimation_DESC& _Info)
@@ -472,7 +473,7 @@ void PlayerZero::CreateAllAnimation()
 		{ 
 			DoorBreaking = false;
 			PlayerStateManager.ChangeState("Idle");
-			Renderer_Character->SetPivotToVector(float4::ZERO);
+			Renderer_Character->SetPivotToVector({ 0, 0 });
 		});
 }
 
