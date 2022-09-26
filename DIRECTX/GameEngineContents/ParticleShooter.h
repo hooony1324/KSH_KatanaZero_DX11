@@ -1,14 +1,15 @@
 #pragma once
 #include <GameEngineCore/GameEngineActor.h>
-#include "Particle.h"
 #include <GameEngineBase/GameEngineRandom.h>
+#include "Particle.h"
+
 // 설명 :
 // 캐릭터 엑터이 붙어있음
 class ParticleShooter : public GameEngineActor
 {
 public:
 	template<typename ParticleType>
-	void SetOneShot(int _Num, float4 _SpawnPos, float4 _Dir, float _Speed)
+	void OneShot(int _Num, float4 _SpawnPos, float4 _Dir, float _Speed)
 	{
 		for (int i = 0; i < _Num; i++)
 		{
@@ -26,12 +27,7 @@ public:
 		}
 	}
 	
-	// SetRandomShot(구르기) 생성 개수, 생성방향, 방향랜덤 정도, 인터타임, 슛 스피드
 
-	// SetSprinklerShot(Blood) 
-
-
-	void Shooting();
 
 public:
 	// constrcuter destructer
@@ -64,4 +60,3 @@ private:
 	float4 FirstParticleDir;
 	bool Shootable;
 };
-

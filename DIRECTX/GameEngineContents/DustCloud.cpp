@@ -1,16 +1,16 @@
 #include "PreCompile.h"
-#include "RollCloud.h"
+#include "DustCloud.h"
 #include <GameEngineCore/CoreMinimal.h>
 
-RollCloud::RollCloud() 
+DustCloud::DustCloud() 
 {
 }
 
-RollCloud::~RollCloud() 
+DustCloud::~DustCloud() 
 {
 }
 
-void RollCloud::Start()
+void DustCloud::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->CreateFrameAnimationFolder("player_dustcloud", FrameAnimation_DESC{ "player_dustcloud", 0.08f });
@@ -24,12 +24,11 @@ void RollCloud::Start()
 		});
 }
 
-void RollCloud::Update(float _DeltaTime)
+void DustCloud::Update(float _DeltaTime)
 {
-	float4 pos = GetTransform().GetWorldPosition();
 	GetTransform().SetWorldMove(Dir * Speed * _DeltaTime);
 }
 
-void RollCloud::End()
+void DustCloud::End()
 {
 }

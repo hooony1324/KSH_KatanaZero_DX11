@@ -7,7 +7,7 @@
 #include "Door.h"
 #include "JumpCloud.h"
 #include "LandCloud.h"
-#include "RollCloud.h"
+#include "DustCloud.h"
 #include "GameContentsCustomRenderer.h"
 #include "ParticleShooter.h"
 
@@ -250,6 +250,8 @@ void PlayerZero::JumpUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
+float CloudSumTime;
+int CloudNum = 8;
 void PlayerZero::RollStart(const StateInfo& _Info)
 {
 	RollTimer->Activate();
@@ -261,11 +263,23 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 
 	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
 	RollSoundPlayer.Volume(0.05f);
+
+	CloudSumTime = 0.0f;
+
 }
 
 void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	CreateBrightShadow();
+
+	CloudSumTime += _DeltaTime;
+	if (CloudSumTime > 0.03f)
+	{
+		CloudSumTime = 0.0f;
+		float4 Dir = { MoveVec.x * -1, 0 };
+		CloudShooter->OneShot<DustCloud>(2, GetTransform().GetWorldPosition() + float4{0, -30}, Dir, 200);
+	}
+
 
 	if (true == Roll_AniEnd)
 	{
@@ -552,8 +566,8 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (DT >= 0.2f)
 	{
-		float4 CloudDir{ 0, MoveVec.x * -1 };
-		CloudShooter->SetOneShot<RollCloud>(5, GetTransform().GetWorldPosition() + float4{0, -30}, CloudDir, 200);
+		float4 CloudDir{ MoveVec.x * -1, 0};
+		CloudShooter->OneShot<DustCloud>(5, GetTransform().GetWorldPosition() + float4{0, -30}, CloudDir, 200);
 		PlayerStateManager.ChangeState("Run");
 		return;
 	}

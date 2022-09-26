@@ -4,10 +4,6 @@
 
 
 
-void ParticleShooter::Shooting()
-{
-	Shootable = true;
-}
 
 ParticleShooter::ParticleShooter()
 	: Shootable(false)

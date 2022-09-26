@@ -259,13 +259,13 @@
     <ClInclude Include="JumpCloud.h">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
     </ClInclude>
-    <ClInclude Include="RollCloud.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
-    </ClInclude>
     <ClInclude Include="SlashFX.h">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
     </ClInclude>
     <ClInclude Include="LandCloud.h">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="DustCloud.h">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
     </ClInclude>
   </ItemGroup>
@@ -454,13 +454,13 @@
     <ClCompile Include="JumpCloud.cpp">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
     </ClCompile>
-    <ClCompile Include="RollCloud.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
-    </ClCompile>
     <ClCompile Include="SlashFX.cpp">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
     </ClCompile>
     <ClCompile Include="LandCloud.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="DustCloud.cpp">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\CharacterEffect</Filter>
     </ClCompile>
   </ItemGroup>
