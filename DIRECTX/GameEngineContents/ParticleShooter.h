@@ -14,14 +14,26 @@ public:
 		for (int i = 0; i < _Num; i++)
 		{
 			Particle* Ptr = dynamic_cast<Particle*>(GetLevel()->CreateActor<ParticleType>());
-			if (nullptr == Ptr)
-			{
-				MsgBoxAssert("파티클이 아닌 오브젝트를 생성시도하였습니다");
-			}
 			float RandomDegree = GameEngineRandom::MainRandom.RandomFloat(-30.0f, 30.0f);
-
 			
 			Ptr->GetTransform().SetWorldPosition(_SpawnPos);
+			Ptr->Dir = _Dir.RotationToDegreeZ(RandomDegree);
+			Ptr->Speed = _Speed;
+		}
+	}
+
+	template<typename ParticleType>
+	void OneShotRandomPos(int _Num, float4 _SpawnPos, float4 _Dir, float _Speed)
+	{
+		for (int i = 0; i < _Num; i++)
+		{
+			Particle* Ptr = dynamic_cast<Particle*>(GetLevel()->CreateActor<ParticleType>());
+			float RandomDegree = GameEngineRandom::MainRandom.RandomFloat(-30.0f, 30.0f);
+
+			float RandomX = GameEngineRandom::MainRandom.RandomFloat(-20.0f, 20.0f);
+			float RandomY = GameEngineRandom::MainRandom.RandomFloat(-20.0f, 20.0f);
+
+			Ptr->GetTransform().SetWorldPosition(_SpawnPos + float4{RandomX, RandomY});
 			Ptr->Dir = _Dir.RotationToDegreeZ(RandomDegree);
 			Ptr->Speed = _Speed;
 		}

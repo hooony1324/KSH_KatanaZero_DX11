@@ -13,12 +13,21 @@ NoDirBlood::~NoDirBlood()
 void NoDirBlood::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
-	Renderer->CreateFrameAnimationFolder("player_dustcloud", FrameAnimation_DESC{ "player_dustcloud", 0.08f });
+	Renderer->CreateFrameAnimationFolder("Idle", FrameAnimation_DESC{ "spr_blood", 0.08f });
+	Renderer->SetScaleRatio(3.0f);
 	Renderer->SetScaleModeImage();
-	Renderer->SetScaleRatio(2.0f);
-	Renderer->ChangeFrameAnimation("player_dustcloud");
+	Renderer->SetSamplingModePoint();
+	Renderer->ChangeFrameAnimation("Idle");
 
-	Renderer->AnimationBindEnd("player_dustcloud", [=](const FrameAnimation_DESC& _Info)
+	//Renderer->AnimationBindFrame("Idle", [=](const FrameAnimation_DESC& _Info)
+	//	{
+	//		Renderer->GetPixelData().MulColor.r *= 0.8f;
+	//		Renderer->GetPixelData().MulColor.g *= 0.8f;
+	//		Renderer->GetPixelData().MulColor.b *= 0.8f;
+	//		Renderer->GetPixelData().MulColor.a *= 0.8f;
+	//	});
+
+	Renderer->AnimationBindEnd("Idle", [=](const FrameAnimation_DESC& _Info)
 		{
 			Death();
 		});

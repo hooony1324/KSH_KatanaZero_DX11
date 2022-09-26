@@ -5,6 +5,8 @@
 
 #include "CharacterActor.h"
 #include "SplattedBlood.h"
+#include "NoDirBlood.h"
+#include "ParticleShooter.h"
 
 bool TurnEnd;
 bool GroundAniEnd = false;
@@ -108,6 +110,8 @@ void EnemyActor::CreateRendererAndCollision()
 	FRenderer_FSMState->SetPositionMode(FontPositionMode::WORLD);
 	FRenderer_FSMState->SetSize(16);
 	FRenderer_FSMState->GetTransform().SetLocalPosition({ 0, 60, 0 });
+
+	BloodShooter = GetLevel()->CreateActor<ParticleShooter>();
 }
 
 void EnemyActor::CreateAllFolderAnimation()
@@ -373,7 +377,7 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 		FlyVec = Enemy - Attack;
 		// °¡±î¿ï¼ö·Ï Å« Èû, ¸Ö¼ö·Ï ÀÛÀºÈû
 		float len = FlyVec.Length();
-		FlyPower = 3 / (std::clamp(FlyVec.Length(), 1.0f, 3.0f));
+		FlyPower = 3 / (std::clamp(FlyVec.Length(), 1.0f, 2.6f));
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
 	}
@@ -831,6 +835,8 @@ void EnemyActor::ChaseTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 bool BloodSplatted;
+float BloodDegree;
+float SplattSumTime;
 void EnemyActor::HurtflyStart(const StateInfo& _Info)
 {
 	MoveSpeed = 150.0f;
@@ -845,20 +851,31 @@ void EnemyActor::HurtflyStart(const StateInfo& _Info)
 	MoveSpeed *= 4.0f;
 
 	BloodSplatted = false;
+	BloodDegree = float4::VectorXYtoDegree(float4::RIGHT, FlyVec);
+	SplattSumTime = 0.0f;
 }
 
 void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
+	if (SplattSumTime > 0.08f)
+	{
+		BloodShooter->OneShot<NoDirBlood>(2, { EnemyPos.x, EnemyPos.y, GetDepth(ACTOR_DEPTH::BLOOD) }, FlyVec, 50);
+		SplattSumTime = 0.0f;
+	}
+	SplattSumTime += _DeltaTime;
+
 	float DT = _Info.StateTime;
 
-	if (DT > 0.25f && false == BloodSplatted)
+	if (false == BloodSplatted && DT> 0.25f)
 	{
-		float deg = float4::VectorXYtoDegree(float4::RIGHT, FlyVec);
 		BloodSplatted = true;
 		SplattedBlood* Blood = GetLevel()->CreateActor<SplattedBlood>(ACTORGROUP::BLOOD);
 		Blood->GetTransform().SetWorldPosition({ EnemyPos.x, EnemyPos.y, GetDepth(ACTOR_DEPTH::BACKGROUND_4) });
-		Blood->SpawnRandomBlood(deg);
+		Blood->SpawnRandomBlood(BloodDegree);
 	}
+
+	
 
 	// ³¯¶ó°¨
 	//MoveVec.y = FlyVec.y * sinf(FlyRadian) - (9.8f * DT) / 6.0f;
@@ -899,12 +916,22 @@ void EnemyActor::HurtgroundStart(const StateInfo& _Info)
 {
 	MoveVec.y = 0;
 	Renderer_Character->ChangeFrameAnimation("hurtground");
+
+	SplattSumTime = 0.0f;
 }
 
 void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	// MoveVec.x -> 0À¸·Î
 	float DT = _Info.StateTime;
+
+	// ÇÇ Æ¢±è
+	if (SplattSumTime > 0.2f && DT <= 1.5f)
+	{
+		BloodShooter->OneShotRandomPos<NoDirBlood>(3, { EnemyPos.x, EnemyPos.y, GetDepth(ACTOR_DEPTH::BLOOD) }, float4::UP , 50);
+		SplattSumTime = 0.0f;
+	}
+	SplattSumTime += _DeltaTime;
+
 
 	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime * 3.0f);
 

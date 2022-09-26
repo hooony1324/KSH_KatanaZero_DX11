@@ -170,7 +170,7 @@ protected:
 	GameEngineCollision* Collision_Character;
 	GameEngineCollision* Collision_ChaseSensor;	
 	GameEngineCollision* Collision_Aim;
-
+	class ParticleShooter* BloodShooter;
 
 	float4 Velocity;
 	float4 MoveVec;
