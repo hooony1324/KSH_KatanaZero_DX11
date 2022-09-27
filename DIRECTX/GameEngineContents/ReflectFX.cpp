@@ -33,11 +33,7 @@ void ReflectFX::Start()
 
 void ReflectFX::Update(float _DeltaTime)
 {
-	if (TimeScale - GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP)) >= 0.1f)
-	{
-		TimeScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
-		SoundPlayer.PlaySpeed(TimeScale);
-	}
+
 }
 
 void ReflectFX::End()

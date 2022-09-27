@@ -207,7 +207,7 @@ protected:
 
 	// »ç¿îµå
 protected:
-	GameEngineSoundPlayer RollSoundPlayer;
+	GameEngineSoundPlayer MoveSoundPlayer;
 	GameEngineSoundPlayer SlashSoundPlayer;
 	GameEngineSoundPlayer ReflectSoundPlayer;
 

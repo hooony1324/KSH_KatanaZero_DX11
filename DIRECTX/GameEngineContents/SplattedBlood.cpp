@@ -10,7 +10,7 @@ void SplattedBlood::SpawnRandomBlood(float _Degree)
 	Renderer->ScaleToTexture();
 	Renderer->GetPixelData().MulColor.a = 0.6f;
 
-	Renderer->GetTransform().SetLocalRotation({ 0, 0, _Degree - 40.0f });
+	GetTransform().SetWorldRotation({ 0, 0, _Degree });
 }
 
 SplattedBlood::SplattedBlood()
@@ -29,6 +29,7 @@ void SplattedBlood::Start()
 	Renderer->SetScaleRatio(3.0f);
 	Renderer->ScaleToTexture();
 	Renderer->GetPixelData().MulColor.a = 0.6f;
+	Renderer->GetTransform().SetLocalRotation({ 0, 0, -45.0f });
 	
 }
 

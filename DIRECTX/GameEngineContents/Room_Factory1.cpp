@@ -120,7 +120,7 @@ void Room_Factory1::StairSetting()
 	Stair* Stair2 = GetLevel()->CreateActor<Stair>();
 
 	Stair1->Spawn({ 737, -645, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) }, Stair2, nullptr);
-	Stair2->Spawn({ 1130, -355,  GetDepth(ACTOR_DEPTH::COLLISION) }, nullptr, Stair1);
+	Stair2->Spawn({ 1100, -355,  GetDepth(ACTOR_DEPTH::COLLISION) }, nullptr, Stair1);
 		
 	Stair1->Off();
 	Stair2->Off();

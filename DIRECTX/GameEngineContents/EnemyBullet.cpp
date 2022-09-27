@@ -6,7 +6,7 @@
 
 EnemyBullet::EnemyBullet()
 {
-	MoveSpeed = 1000;
+	MoveSpeed = 1500;
 }
 
 EnemyBullet::~EnemyBullet() 
@@ -20,6 +20,11 @@ void EnemyBullet::Start()
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_bullet_0.png");
 	Renderer->ScaleToTexture();
+
+	Renderer->GetPixelData().MulColor.a = 0.7f;
+	Renderer->GetPixelData().MulColor.r = 2.5f;
+	Renderer->GetPixelData().MulColor.g = 2.5f;
+	Renderer->GetPixelData().MulColor.b = 1.5f;
 
 	float4 Scale = Renderer->GetTransform().GetLocalScale();
 	Collision = CreateComponent<GameEngineCollision>();

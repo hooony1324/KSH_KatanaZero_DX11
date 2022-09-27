@@ -366,7 +366,7 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 	}
 	// 플레이어가 반사한 총알공격이면 총알 없앰
 
-	float4 Enemy = _This->GetTransform().GetWorldPosition() + float4{ 0, 30 , 0 };
+	float4 Enemy = _This->GetTransform().GetWorldPosition();
 	Enemy.z = 0;
 	float4 Attack = _Other->GetTransform().GetWorldPosition();
 	Attack.z = 0;
@@ -379,9 +379,8 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 		_Other->GetActor()->Death();
 
 		FlyVec = Enemy - Attack;
-		// 가까울수록 큰 힘, 멀수록 작은힘
 		float len = FlyVec.Length();
-		FlyPower = 3 / (std::clamp(FlyVec.Length(), 1.0f, 2.6f));
+		FlyPower = 1.8f;
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
 	}
@@ -392,6 +391,7 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 		float4 Dir = float4::DegreeToDirection2D(SlashDegree);
 		FlyVec = Dir;
 		float Normalize = float4(Enemy - Attack).Length() / 30.0f;
+		// 가까울수록 큰 힘, 멀수록 작은힘
 		FlyPower = 3 / std::clamp(Normalize, 1.0f, 3.0f);
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");
@@ -721,7 +721,7 @@ void EnemyActor::PatrolTurnUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void EnemyActor::AlertStart(const StateInfo& _Info)
 {
-	MoveSpeed *= 2.0f;
+	MoveSpeed *= 3.0f;
 	Renderer_Alert->On();
 	Collision_ChaseSensor->Off();
 }
@@ -867,7 +867,7 @@ void EnemyActor::HurtflyStart(const StateInfo& _Info)
 	MoveSpeed *= 4.0f;
 
 	BloodSplatted = false;
-	BloodDegree = float4::VectorXYtoDegree(float4::RIGHT, FlyVec);
+	BloodDegree = float4::VectorXYtoDegree(float4::ZERO, FlyVec);
 	SplattSumTime = 0.0f;
 }
 
@@ -926,6 +926,14 @@ void EnemyActor::HurtflyUpdate(float _DeltaTime, const StateInfo& _Info)
 		MoveVec.y = 0;
 		StateManager.ChangeState("Hurtground");
 	}
+
+	// 문에 닿으면
+	if (true == Collision_Character->IsCollisionEnterBase(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; }))
+	{
+		MoveVec.x *= -0.5f;
+	}
+	
 }
 
 void EnemyActor::HurtgroundStart(const StateInfo& _Info)
@@ -961,6 +969,14 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		MoveVec.x *= -0.5f;
 	}
+
+
+	// 문에 닿으면
+	if (true == Collision_Character->IsCollisionEnterBase(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; }))
+	{
+		MoveVec.x *= -0.5f;
+	}
 	
 
 }
@@ -968,6 +984,7 @@ void EnemyActor::HurtgroundUpdate(float _DeltaTime, const StateInfo& _Info)
 bool UpStairArrived;
 void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 {
+
 	if (StairsToPlayer.size() > 0)
 	{
 		CurDestStair = StairsToPlayer.back();

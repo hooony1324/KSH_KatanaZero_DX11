@@ -276,7 +276,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			return;
 		}
 		
-		float NewVelocity = Velocity.x;
+		float NewVelocity = Velocity.x * 0.7f;
 		Velocity = float4{ NewVelocity, NewVelocity, 0 };
 		break;
 
@@ -294,7 +294,7 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 			return;
 		}
 
-		float NewVelocity = Velocity.x * 0.75f;
+		float NewVelocity = Velocity.x * 0.7f;
 		Velocity = float4{ NewVelocity, -NewVelocity, 0 };
 		break;
 	}

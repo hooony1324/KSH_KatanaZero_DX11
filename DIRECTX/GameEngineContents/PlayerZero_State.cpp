@@ -11,7 +11,7 @@
 #include "GameContentsCustomRenderer.h"
 #include "ParticleShooter.h"
 
-const float AntiGravity = 5.2f;
+const float AntiGravity = 4.5f;
 
 bool Flipable = false;
 bool GroundAniStart = true;
@@ -26,6 +26,10 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 
 	if (0 == _Info.PrevState.compare("Fall"))
 	{
+		// Sound
+		MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_land.wav");
+		MoveSoundPlayer.Volume(0.05f);
+
 		// FX
 		LandCloud* Cloud = GetLevel()->CreateActor<LandCloud>();
 		Cloud->GetTransform().SetWorldPosition(GetTransform().GetWorldPosition() + float4{ 0, -35 });
@@ -173,7 +177,7 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 	}
 
-	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity * 0.8f;
+	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity * 0.9f;
 	// 부유감 좀 있음
 	if (MoveVec.y <= -0.8f)
 	{
@@ -205,7 +209,7 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 void PlayerZero::JumpStart(const StateInfo& _Info)
 {
 	IsJump = true;
-	MoveSpeed = 700;
+	MoveSpeed = 800;
 	Renderer_Character->ChangeFrameAnimation("jump");
 	MoveVec = InputDir.NormalizeReturn();
 
@@ -224,6 +228,10 @@ void PlayerZero::JumpStart(const StateInfo& _Info)
 		MoveVec = float4::VectorRotationToDegreeZAxis(float4::RIGHT, 50).NormalizeReturn();
 		MoveVec.x *= -1.0f;
 	}
+
+	// Sound
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_jump.wav");
+	MoveSoundPlayer.Volume(0.05f);
 
 	// FX
 	JumpCloud* Cloud = GetLevel()->CreateActor<JumpCloud>();
@@ -261,8 +269,8 @@ void PlayerZero::RollStart(const StateInfo& _Info)
 	MoveSpeed = SPEED_PLAYER * 1.7f;
 	Invincible = true;
 
-	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
-	RollSoundPlayer.Volume(0.05f);
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
+	MoveSoundPlayer.Volume(0.05f);
 
 	CloudSumTime = 0.0f;
 
@@ -311,15 +319,41 @@ void PlayerZero::RollUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
+int RunSoundIndex;
+float RunSoundSumTime;
 void PlayerZero::RunStart(const StateInfo& _Info)
 {
 	MoveVec.x = InputDir.x;
 	MoveSpeed = SPEED_PLAYER;
 	Renderer_Character->ChangeFrameAnimation("run");
+
+	// Sound
+	RunSoundIndex = 1;
+	RunSoundSumTime = 0.0f;
+
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_jump.wav");
+	MoveSoundPlayer.Volume(0.01f);
+
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_running_" + std::to_string(RunSoundIndex++) + ".wav");
+	MoveSoundPlayer.Volume(0.01f);
 }
 
 void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
+	if (RunSoundSumTime >= 0.3f)
+	{
+		// Sound
+		MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_running_" + std::to_string(RunSoundIndex++) + ".wav");
+		MoveSoundPlayer.Volume(0.01f);
+		RunSoundSumTime = 0.0f;
+		if (RunSoundIndex > 4)
+		{
+			RunSoundIndex = 1;
+		}
+	}
+	RunSoundSumTime += _DeltaTime;
+
 	if (InputDir.y > 0)
 	{
 		PlayerStateManager.ChangeState("Jump");
@@ -416,21 +450,36 @@ void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 
 }
 
+float SlideSoundSumTime;
 void PlayerZero::WallSlideStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("wallslide");
 
 	FlyVector = { 0, MoveVec.y };
+
+	// Sound
+	SlideSoundSumTime = 0.0f;
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_wallslide.wav");
+	MoveSoundPlayer.Volume(0.01f);
 }
 
 void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
+	if (SlideSoundSumTime > 1.0f)
+	{
+		MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_wallslide.wav");
+		MoveSoundPlayer.Volume(0.01f);
+		SlideSoundSumTime = 0.0f;
+	}
+	SlideSoundSumTime += _DeltaTime;
 
 	float DT = _Info.StateTime;
 	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
 
 	if (false == IsFall)
 	{
+		MoveSoundPlayer.Stop();
 		MoveVec = float4::ZERO;
 		Velocity = float4::ZERO;
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
@@ -441,6 +490,7 @@ void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (GameEngineInput::GetInst()->IsDown("W"))
 	{
+		MoveSoundPlayer.Stop();
 		Renderer_Character->GetTransform().SetLocalPosition({ 0, 0, 0 });
 		PlayerStateManager.ChangeState("Flip");
 		WallGrab = false;
@@ -471,8 +521,8 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 	MoveVec.x = FlyVector.x;
 	MoveSpeed = 700;
 
-	RollSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
-	RollSoundPlayer.Volume(0.05f);
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
+	MoveSoundPlayer.Volume(0.05f);
 }
 
 void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -628,6 +678,10 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	Collision_Character->Off();
 
 	Renderer_Slash->Off();
+
+	// Sound
+	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_playerdie.wav");
+	MoveSoundPlayer.Volume(0.05f);
 }
 
 void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)

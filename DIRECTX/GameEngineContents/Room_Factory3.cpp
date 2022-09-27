@@ -58,7 +58,6 @@ void Room_Factory3::Start()
 	// °è´Ü
 	StairSetting();
 
-
 	Off();
 }
 
