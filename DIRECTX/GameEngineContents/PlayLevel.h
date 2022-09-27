@@ -11,6 +11,11 @@ public:
 	// ControlGUI¿ë
 	static PlayLevel* PlayLevelInst;
 
+	void ShakeRoom()
+	{
+		RoomStateManager.ChangeState("RoomShake");
+	}
+
 	void ChangeRoom(int _Index);
 
 	int GetRoomsSize()
@@ -103,5 +108,8 @@ private:
 	void RoomReverseStart(const StateInfo& _Info);
 	void RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info);
 	void RoomReverseEnd(const StateInfo& _Info);
+
+	void TimeGroupSlow();
+	void TimeGroupNormal();
 };
 

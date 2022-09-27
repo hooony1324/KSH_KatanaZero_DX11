@@ -2,6 +2,7 @@
 #include "EnemyBullet.h"
 #include "EnemyActor.h"
 
+#include "ReflectFX.h"
 
 EnemyBullet::EnemyBullet()
 {
@@ -69,13 +70,17 @@ void EnemyBullet::PlayerSlashCheck()
 				return CollisionReturn::Break;
 			}
 			
+
+			ReflectFX* Reflect = GetLevel()->CreateActor<ReflectFX>();
+			Reflect->GetTransform().SetWorldPosition(GetTransform().GetWorldPosition());
+
 			
 			Collision->ChangeOrder(COLLISIONGROUP::PLAYER_ATTACK);
 
 			std::list<GameEngineActor*> Enemies = GetLevel()->GetGroup(ACTORGROUP::TIMEGROUP_ENEMY);
 			EnemyActor* Enemy = nullptr;
-			float4 BulletVec = GetTransform().GetWorldPosition();
-			BulletVec.z = 0;
+			float4 BulletPos = GetTransform().GetWorldPosition();
+			BulletPos.z = 0;
 
 			// Hp > 0 Enemy선택
 			for (GameEngineActor* Ptr : Enemies)
@@ -93,7 +98,7 @@ void EnemyBullet::PlayerSlashCheck()
 				float4 EnemyVec = Enemy->GetTransform().GetWorldPosition() + float4{0, 30, 0};
 				EnemyVec.z = 0;
 
-				Dir = (EnemyVec - BulletVec).NormalizeReturn();
+				Dir = (EnemyVec - BulletPos).NormalizeReturn();
 			}
 			else
 			{
@@ -101,7 +106,8 @@ void EnemyBullet::PlayerSlashCheck()
 				float4 SlashVec = _Other->GetTransform().GetWorldPosition();
 				SlashVec.z = 0;
 
-				Dir = (BulletVec - SlashVec).NormalizeReturn();
+				Dir.x *= -1;
+				Dir.y *= -1;
 			}
 			// 회전
 			

@@ -10,6 +10,8 @@ GameEngineFontRenderer::GameEngineFontRenderer()
 	, FontSize(20.0f)
 	, Color(float4::WHITE)
 	, ScreenPostion(float4::ZERO)
+	, LR()
+	, TB()
 {
 }
 

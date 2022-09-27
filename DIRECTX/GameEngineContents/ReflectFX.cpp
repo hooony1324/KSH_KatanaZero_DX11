@@ -15,7 +15,8 @@ void ReflectFX::Start()
 {
 	SoundPlayer = GameEngineSound::SoundPlayControl("sound_slash_bullet.wav");
 	SoundPlayer.Volume(0.08f);
-	SoundPlayer.PlaySpeed(GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP)));
+	TimeScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+	SoundPlayer.PlaySpeed(TimeScale);
 
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->CreateFrameAnimationFolder("player_bulletreflect", FrameAnimation_DESC{ "player_bulletreflect", 0.1f, false });
@@ -32,6 +33,11 @@ void ReflectFX::Start()
 
 void ReflectFX::Update(float _DeltaTime)
 {
+	if (TimeScale - GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP)) >= 0.1f)
+	{
+		TimeScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP));
+		SoundPlayer.PlaySpeed(TimeScale);
+	}
 }
 
 void ReflectFX::End()

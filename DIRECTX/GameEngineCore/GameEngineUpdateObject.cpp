@@ -125,7 +125,8 @@ void GameEngineUpdateObject::AllOffEvent()
 }
 
 
-void GameEngineUpdateObject::ReleaseObject(std::list<GameEngineUpdateObject*>& _RelaseList)
+void GameEngineUpdateObject::ReleaseObject(
+	std::list<GameEngineUpdateObject*>& _RelaseList)
 {
 	if (true == IsDeath())
 	{

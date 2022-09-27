@@ -79,6 +79,18 @@ void EngineSubSetting()
 		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 
+		// Pixel Shader                RenderTarget         
+		// src color                   dest color
+		// 
+		//                                              내가 원하는 결과 값   0,0,0,0
+		// 0, 0, 0, 1  * (1, 1, 1, 1) +  0, 0, 0, 0 * (1-1, 1-1, 1-1, 1-1) => 0,0,0,0
+		// 0, 0, 0, 1  +  0, 0, 0, 0 => 0,0,0,1
+		// 1 + 0 = 1
+
+
+		// 옛날에         0, 0, 1, 1
+
+
 		GameEngineBlend::Create("AlphaBlend", Desc);
 	}
 
@@ -90,14 +102,26 @@ void EngineSubSetting()
 		Desc.AlphaToCoverageEnable = FALSE;
 		Desc.IndependentBlendEnable = FALSE;
 		Desc.RenderTarget[0].BlendEnable = true;
+		// Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED;
 		Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-		Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_MAX;
+		Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
 		Desc.RenderTarget[0].SrcBlend = D3D11_BLEND::D3D11_BLEND_ONE;
 		Desc.RenderTarget[0].DestBlend = D3D11_BLEND::D3D11_BLEND_ONE;
 		// Desc.RenderTarget[0].DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
 		Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
-		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
+		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
+
+		// Pixel Shader                RenderTarget         
+		// src color                   dest color
+		//                                              내가 원하는 결과 값   0,0,0,0
+		// 0, 0, 0, 1  * (1, 1, 1, 1) +  0, 0, 0, 0 * (1, 1, 1, 1) => 0,0,0,0
+		// 0, 0, 0, 1  +  0, 0, 0, 0 => 0,0,0,0
+		// 1 + 0 = 1
+
+
+		// 옛날에         0, 0, 1, 1
+
 
 		GameEngineBlend::Create("TransparentBlend", Desc);
 	}

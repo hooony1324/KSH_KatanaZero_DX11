@@ -198,8 +198,6 @@ GameEngineInstancing* GameEngineCamera::GetInstancing(GameEngineRenderingPipeLin
 			{
 				MsgBoxAssert("인스턴싱용 구조화 버퍼가 만들어지지 않았습니다.");
 			}
-
-
 		}
 
 
@@ -254,6 +252,21 @@ void GameEngineCamera::PushInstancing(GameEngineRenderingPipeLine* _Pipe, int Co
 		int NextBufferSize = static_cast<int>(Instancing.Count * 1.5);
 		Instancing.Buffer->BufferCreate(NextBufferSize, Buffer->GetLayOutDesc()->InstancingSize);
 		Instancing.DataBuffer.resize(NextBufferSize * Instancing.Size);
+
+		if (Instancing.ShaderResources.IsStructuredBuffer("AllInstancingTransformData"))
+		{
+			GameEngineStructuredBufferSetter* Setter = Instancing.ShaderResources.GetStructuredBuffer("AllInstancingTransformData");
+
+			if (nullptr != Setter->Res)
+			{
+				Setter->Resize(Instancing.MaxDataCount);
+			}
+			else
+			{
+				MsgBoxAssert("인스턴싱용 구조화 버퍼가 만들어지지 않았습니다.");
+			}
+		}
+
 	}
 }
 

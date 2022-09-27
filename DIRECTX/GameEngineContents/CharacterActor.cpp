@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "CharacterActor.h"
 #include "Bullet.h"
+#include "EnemyBullet.h"
 #include "SlashFX.h"
 #include "ReflectFX.h"
 #include "Door.h"
@@ -319,12 +320,11 @@ CollisionReturn CharacterActor::HitBullet(GameEngineCollision* _This, GameEngine
 
 
 // 같은 콜리전 계속 부딛히면 안됨
-CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
+bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngineCollision* _Other)
 {
 	if (_Other == Collision_SlashingObject)
 	{
-		CamShake = false;
-		return CollisionReturn::ContinueCheck;
+		return false;
 	}
 
 	Collision_SlashingObject = _Other;
@@ -335,7 +335,7 @@ CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This
 		DoorPtr->Open();
 		DoorBreaking = true;
 		DoorPtr = nullptr;
-		CamShake = true;
+		return true;
 	}
 
 	else if (nullptr == DoorPtr)
@@ -345,48 +345,29 @@ CollisionReturn CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This
 		OtherPos.z = 0;
 		ThisPos.z = 0;
 
-		if (nullptr != dynamic_cast<Bullet*>(_Other->GetActor()))
-		{
-			ReflectFX* Reflect = GetLevel()->CreateActor<ReflectFX>();
-			Reflect->GetTransform().SetWorldPosition(OtherPos);
-		}
-
-
 		// 화면을 가로지르는 이펙트
 		SlashFX* Fx = GetLevel()->CreateActor<SlashFX>(ACTORGROUP::NONE);
 		Fx->GetTransform().SetWorldPosition(OtherPos);
 		Fx->SetSlashLightDir(OtherPos - ThisPos);
-		CamShake = true;
+		return true;
 	}
 
 
-	return  CollisionReturn::ContinueCheck;
 }
 
 bool CharacterActor::RoomShakeActivate()
 {
-	bool SlashDoor, SlashEnemy, SlashBullet;
+	CamShake = false;
 
-	SlashDoor = Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_OBB2D,
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {IsActivateSlashEffect(_This, _Other); return CollisionReturn::ContinueCheck; },
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
+	Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::DOOR), CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {
+			CamShake = IsActivateSlashEffect(_This, _Other); return CollisionReturn::Break; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; },
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
 
-
-	SlashEnemy = Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY), CollisionType::CT_OBB2D,
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) { IsActivateSlashEffect(_This, _Other); return CollisionReturn::ContinueCheck; },
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
-
-
-	SlashBullet = Collision_Slash->IsCollision(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::ENEMY_ATTACK), CollisionType::CT_OBB2D,
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) { IsActivateSlashEffect(_This, _Other); return CollisionReturn::ContinueCheck; },
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; },
-		[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
-
-	if (SlashDoor || SlashEnemy || SlashBullet)
+	if (true == CamShake)
 	{
-		return CamShake;
+		return true;
 	}
 
 	return false;

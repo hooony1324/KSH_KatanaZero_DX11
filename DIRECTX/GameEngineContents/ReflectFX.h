@@ -23,5 +23,7 @@ protected:
 private:
 	GameEngineTextureRenderer* Renderer;
 	GameEngineSoundPlayer SoundPlayer;
+
+	float TimeScale;
 };
 

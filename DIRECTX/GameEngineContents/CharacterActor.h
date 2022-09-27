@@ -152,7 +152,7 @@ protected:
 	bool CamShake;
 
 	// È¿°ú
-	CollisionReturn IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
+	bool IsActivateSlashEffect(GameEngineCollision* _Left, GameEngineCollision* _Right);
 	void CreateBrightShadow();
 
 	GameEngineTextureRenderer* Renderer_SlashLight;

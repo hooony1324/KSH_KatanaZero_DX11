@@ -453,6 +453,7 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 
 float SlowDeltaTime;
 bool CamShake;
+float ShakeDT;
 void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 {
 	// 배경 어둡게(총알, 플레이어보단 뒤에 있음)
@@ -467,14 +468,33 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 	CharacterShadow::SwitchShadowMode();
 
 	CamShake = false;
+	ShakeDT = 0.0f;
 }
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == Player->RoomShakeActivate())
 	{
+		TimeGroupSlow();
 		CamShake = true;
+		ShakeDT = 0.0f;
 	}
+
+	// 카메라 흔들림
+	if (true == CamShake)
+	{
+		float ShakeX = sinf(ShakeDT * 10.0f) * powf(0.98f, ShakeDT * 80.0f);
+		float ShakeY = sinf(ShakeDT * 80.0f) * powf(0.97f, ShakeDT * 80.0f);
+		GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });
+		ShakeDT += _DeltaTime;
+	}
+
+	if (ShakeDT > 1.5f)
+	{
+		TimeGroupNormal();
+		CamShake = false;
+	}
+
 
 	CameraFollow(_DeltaTime);
 
@@ -518,29 +538,27 @@ void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 	CharacterShadow::SwitchShadowMode();
 }
 
+float OriginalDeltaTime;
 void PlayLevel::RoomShakeStart(const StateInfo& _Info)
 {
 
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 0.1f);
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 0.1f);
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), 0.1f);
-
+	TimeGroupSlow();
+	OriginalDeltaTime = 0.0f;
 }
 
 void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	float DT = _Info.StateTime * 80;
+	OriginalDeltaTime += _DeltaTime;
+	float DT = OriginalDeltaTime;
 	
 	// 카메라 흔들림
 	float ShakeX = sinf(DT * 10.0f) * powf(0.98f, DT);
-	float ShakeY = sinf(DT * 10.0f) * powf(0.97f, DT);
+	float ShakeY = sinf(DT * 80.0f) * powf(0.97f, DT * 80);
 	GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });
 
 	if (_Info.StateTime >= 0.4f)
 	{
-		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1);
-		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1);
-		GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), 1);
+		TimeGroupNormal();
 		RoomStateManager.ChangeState("RoomPlay");
 		return;
 	}
@@ -608,4 +626,18 @@ void PlayLevel::RoomReverseEnd(const StateInfo& _Info)
 	}
 
 	Effect_DistortionGlitch::GetInst()->EffectOn();
+}
+
+void PlayLevel::TimeGroupSlow()
+{
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 0.1f);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 0.1f);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), 0.1f);
+}
+
+void PlayLevel::TimeGroupNormal()
+{
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), 1);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), 1);
+	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), 1);
 }

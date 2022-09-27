@@ -7,6 +7,7 @@
 #include "SplattedBlood.h"
 #include "NoDirBlood.h"
 #include "ParticleShooter.h"
+#include "PlayLevel.h"
 
 bool TurnEnd;
 bool GroundAniEnd = false;
@@ -369,6 +370,9 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 	Enemy.z = 0;
 	float4 Attack = _Other->GetTransform().GetWorldPosition();
 	Attack.z = 0;
+
+	// 방 흔들기
+	PlayLevel::PlayLevelInst->ShakeRoom();
 
 	if (nullptr != dynamic_cast<EnemyBullet*>(_Other->GetActor()))
 	{
@@ -746,6 +750,18 @@ void EnemyActor::RunStart(const StateInfo& _Info)
 	Renderer_Character->ChangeFrameAnimation("run");
 	MoveVec.x = static_cast<float>(PlayerDir.x);
 	MoveVec.y = 0;
+
+	// 방향전환
+	if (MoveVec.x > 0)
+	{
+		Renderer_Character->GetTransform().PixLocalPositiveX();
+		PrevLookDir = 1;
+	}
+	else
+	{
+		Renderer_Character->GetTransform().PixLocalNegativeX();
+		PrevLookDir = -1;
+	}
 }
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -959,7 +975,7 @@ void EnemyActor::GoUpstairStart(const StateInfo& _Info)
 	}
 	else
 	{
-		StateManager.ChangeState("ChaseTurn");
+		StateManager.ChangeState("Run");
 		return;
 	}
 
@@ -1052,7 +1068,7 @@ void EnemyActor::GoUpstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (CurPlayerHereStair != Stair::PlayerNearestStair)
 	{
 		StairsToPlayer.clear();
-		StateManager.ChangeState("ChaseTurn");
+		StateManager.ChangeState("Run");
 		return;
 	}
 
@@ -1099,9 +1115,7 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (false == DownStairArrived)
 	{
 		Collision_Character->IsCollisionExitBase(CollisionType::CT_AABB2D, static_cast<int>(COLLISIONGROUP::STAIR), CollisionType::CT_AABB2D,
-			[=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; }
-			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; }
-			, [=](GameEngineCollision* _This, GameEngineCollision* _Other)
+			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
 			{
 				bool TargetStairArrived = CurDestStair == _Other->GetActor();
 
@@ -1140,7 +1154,9 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 				}
 
 				return CollisionReturn::ContinueCheck;
-			});
+			}
+			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; }
+			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::ContinueCheck; });
 	}
 
 
@@ -1148,7 +1164,7 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (CurPlayerHereStair != Stair::PlayerNearestStair)
 	{
 		StairsToPlayer.clear();
-		StateManager.ChangeState("ChaseTurn");
+		StateManager.ChangeState("Run");
 		return;
 	}
 

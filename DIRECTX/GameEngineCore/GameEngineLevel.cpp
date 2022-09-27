@@ -31,6 +31,14 @@ GameEngineLevel::GameEngineLevel()
 
 GameEngineLevel::~GameEngineLevel() 
 {
+	for (GameEngineUpdateObject* Object : DeleteObject)
+	{
+		Object->ReleaseHierarchy();
+	}
+
+	DeleteObject.clear();
+
+	// 게임이 끝나거나 이 레벨이 완전히 파괴되는 경우이기 때문에.
 	for (const std::pair<int, std::list<GameEngineActor*>>& Group : AllActors)
 	{
 		for (GameEngineActor* Actor : Group.second)
@@ -226,6 +234,8 @@ void GameEngineLevel::PushActor(GameEngineActor* _Actor, int _ObjectGroupIndex)
 
 void GameEngineLevel::Release(float _DelataTime)
 {
+	// std::shared_ptr <>
+
 	for (GameEngineUpdateObject* Object : DeleteObject)
 	{
 		Object->ReleaseHierarchy();
@@ -290,7 +300,6 @@ void GameEngineLevel::Release(float _DelataTime)
 			
 		}
 	}
-
 }
 
 void GameEngineLevel::LevelUpdate(float _DeltaTime)
