@@ -10,6 +10,9 @@ class PlayLevel : public GameEngineLevel
 public:
 	// ControlGUI¿ë
 	static PlayLevel* PlayLevelInst;
+	static bool MainBgmPlaying;
+	static bool BossBgmPlaying;
+	static GameEngineSoundPlayer BGMSoundPlayer;
 
 	void ShakeRoom()
 	{
@@ -42,7 +45,7 @@ protected:
 	void End() override;
 
 	virtual void LevelStartEvent() override;
-	virtual void LevelEndEvent() {};
+	virtual void LevelEndEvent() override;
 
 // ·ë
 private:
@@ -67,12 +70,13 @@ private:
 	Transition* Transition_DiamondChange;
 
 	class SlowMotion* SlowEffect;
-	class GameEngineSoundPlayer SlowInSound;
-	class GameEngineSoundPlayer SlowOutSound;
+	GameEngineSoundPlayer SlowInSound;
+	GameEngineSoundPlayer SlowOutSound;
 
 	class DiamondTransition* Transition;
 
 	// ¿ªÀç»ý
+	GameEngineSoundPlayer EffectSoundPlayer;
 	std::list<class LiveActor*> CaptureGroup;
 
 
@@ -83,6 +87,9 @@ private:
 	void RoomChangeStart(const StateInfo& _Info);
 	void RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info);
 	void RoomChangeEnd(const StateInfo& _Info);
+
+	void RoomInitialPlayStart(const StateInfo& _Info);
+	void RoomInitialPlayUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	void RoomPlayStart(const StateInfo& _Info);
 	void RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info);

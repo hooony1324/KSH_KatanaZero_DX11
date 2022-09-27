@@ -18,6 +18,8 @@ void Door::Close()
 
 void Door::Open()
 {
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_dooropen.wav");
+	SoundPlayer.Volume(0.1f);
 	Collision->Off();
 	Renderer->ChangeFrameAnimation("open");
 

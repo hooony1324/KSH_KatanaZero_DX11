@@ -7,6 +7,8 @@
 #include "Effect_Distortion.h"
 #include "Effect_Wave.h"
 
+#include "PlayLevel.h"
+
 Room_Boss::Room_Boss()
 	: Background_Mid(nullptr)
 	, Background_Floor(nullptr)
@@ -110,6 +112,8 @@ void Room_Boss::Start()
 // change room 때마다 호출
 void Room_Boss::OnEvent()
 {
+
+
 	// 맵 관련
 	GlobalValueManager::ColMap = Background_ColMap;
 
@@ -198,7 +202,15 @@ void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (_Info.StateTime < 1.5f)
 	{
+
 		return;
+	}
+
+	// Sound
+	if (true == PlayLevel::PlayLevelInst->MainBgmPlaying)
+	{
+		PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_monster.ogg");
+		PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.1f);
 	}
 
 	if (Background_FrontRed->GetPixelData().MulColor.a > 0.0f)
@@ -225,13 +237,14 @@ void Room_Boss::PlayStart(const StateInfo& _Info)
 		BossGiant->On();
 	}
 
-	// 브금 ON
 }
 
 void Room_Boss::PlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == BossGiant->IsDead())
 	{
+		PlayLevel::PlayLevelInst->BGMSoundPlayer.Stop();
+
 		DeadTime += _DeltaTime;
 		if (DeadTime > 2.0f)
 		{

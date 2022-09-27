@@ -25,6 +25,10 @@
 #include "DiamondTransition.h"
 #include "ChromakeyGreen.h"
 
+bool PlayLevel::MainBgmPlaying = false;
+bool PlayLevel::BossBgmPlaying = false;
+GameEngineSoundPlayer PlayLevel::BGMSoundPlayer;
+
 CharacterActor* PlayLevel::GetPlayer()
 {
 	return Player;
@@ -99,10 +103,16 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomChangeStart, this, std::placeholders::_1)
 		, std::bind(&PlayLevel::RoomChangeEnd, this, std::placeholders::_1));
 
+
+	RoomStateManager.CreateStateMember("RoomInitialPlay"
+		, std::bind(&PlayLevel::RoomInitialPlayUpdate, this, std::placeholders::_1, std::placeholders::_2)
+		, std::bind(&PlayLevel::RoomInitialPlayStart, this, std::placeholders::_1));
+
 	RoomStateManager.CreateStateMember("RoomPlay"
 		, std::bind(&PlayLevel::RoomPlayUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PlayLevel::RoomPlayStart, this, std::placeholders::_1)
 		, std::bind(&PlayLevel::RoomPlayEnd, this, std::placeholders::_1));
+
 
 	RoomStateManager.CreateStateMember("RoomExit"
 		, std::bind(&PlayLevel::RoomExitUpdate, this, std::placeholders::_1, std::placeholders::_2)
@@ -149,7 +159,12 @@ void PlayLevel::LevelStartEvent()
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_PointLight>();
 	Effect_PointLight::GetInst()->MainCam = GetMainCamera();
 
-	
+
+}
+
+void PlayLevel::LevelEndEvent()
+{
+	BGMSoundPlayer.Stop();
 }
 
 void PlayLevel::Update(float _DeltaTime)
@@ -233,7 +248,6 @@ float CurRoomTimeLimit;
 void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 {
 
-
 	CurRoom->On();
 
 	// 방 세팅
@@ -269,7 +283,14 @@ void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 추후 변환 효과
 	if (true == Transition->IsChangeWhiteEnd() && _Info.StateTime > 0.3f)
 	{
-		RoomStateManager.ChangeState("RoomPlay");
+		if (false == MainBgmPlaying)
+		{
+			RoomStateManager.ChangeState("RoomInitialPlay");
+		}
+		else
+		{
+			RoomStateManager.ChangeState("RoomPlay");
+		}
 		return;
 	}
 
@@ -299,7 +320,55 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 	Effect_Wave::GetInst()->EffectOff();
 	Effect_DistortionGlitch::GetInst()->EffectOff();
-	Player->SetInputValid(true);
+
+}
+
+bool GlitchStart;
+float GlitchSumTime;
+void PlayLevel::RoomInitialPlayStart(const StateInfo& _Info)
+{
+	UI->SetInitialUIOn();
+
+	GlitchSumTime = 0.0f;
+	GlitchStart = false;
+}
+
+void PlayLevel::RoomInitialPlayUpdate(float _DeltaTime, const StateInfo& _Info)
+{
+	if (_Info.StateTime <= 2.0f)
+	{
+		return;
+	}
+
+	// Sound
+	if (false == MainBgmPlaying)
+	{
+		BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_youwillneverknow.ogg");
+		BGMSoundPlayer.Volume(0.025f);
+		MainBgmPlaying = true;
+	}
+
+	// 클릭하면 디스토션 + Play로
+	if (true == GameEngineInput::GetInst()->IsDown("MouseLeft"))
+	{
+		UI->SetInitialUIOff();
+		GlitchStart = true;
+		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_level_start.wav");
+		EffectSoundPlayer.Volume(0.05f);
+		Effect_DistortionGlitch::GetInst()->EffectOn();
+	}
+
+	if (true == GlitchStart)
+	{
+		if (GlitchSumTime > 0.3f)
+		{
+			RoomStateManager.ChangeState("RoomPlay");
+			return;
+		}
+
+		GlitchSumTime += _DeltaTime;
+	}
+
 }
 
 float FrameCaptureTime = 0.016f; // 60FPS
@@ -313,12 +382,17 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	// 화면 녹화 시작 지점
 	ShotFrameTime = 0.0f;
 
+	Player->SetInputValid(true);
 
+	Effect_DistortionGlitch::GetInst()->EffectOff();
+	EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_tv_thump.wav");
+	EffectSoundPlayer.Volume(0.07f);
 }
 
 // @@@ 게임 플레이 @@@
 void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+
 	// 60Fps에서 15Fps까지 
 	
 	FrameCaptureTime = 0.0164f * RoomPlayTotalTime;
@@ -581,6 +655,9 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	FramePlaySpeed = 0.008f;
 
 	Effect_Wave::GetInst()->EffectOn();
+
+	// Sound
+
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)

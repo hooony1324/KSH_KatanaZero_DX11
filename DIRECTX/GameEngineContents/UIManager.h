@@ -22,6 +22,20 @@ public:
 		TimerBar->GetTransform().SetWorldScale({ NewX, ScaleTimerBar.y , ScaleTimerBar.z });
 	}
 
+	void SetInitialUIOn()
+	{
+		InitialUIUpdate = true;
+	}
+
+	void SetInitialUIOff()
+	{
+		InitialUIUpdate = false;
+		for (auto UI : InitalRoomUI)
+		{
+			UI->Off();
+		}
+	}
+
 public:
 	// constrcuter destructer
 	UIManager();
@@ -48,5 +62,38 @@ private:
 	
 	std::vector< GameEngineUIRenderer*> SlowBatteries;
 	int CurSlowBatteryIndex;
+
+	// ∑Î √÷√ Ω√¿€ UI
+	bool InitialUIUpdate;
+	std::vector<GameEngineUIRenderer*> InitalRoomUI;
+
+	GameEngineUIRenderer* MouseClick;
+	GameEngineUIRenderer* ClickToStart;
+	
+	GameEngineUIRenderer* SongTitleBG;
+	GameEngineUIRenderer* PlayingSongText;
+	GameEngineUIRenderer* PlayingSongTextBG;
+	GameEngineUIRenderer* PlayingSongTextUnderline;
+	GameEngineUIRenderer* SongTitleText;
+
+	GameEngineUIRenderer* StageName;
+	GameEngineUIRenderer* StageNameBG;
+
+	GameEngineStateManager InitialUIManager;
+
+	void SongTitleStart(const StateInfo& _Info);
+	void SongTitleUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void StageNameStart(const StateInfo& _Info);
+	void StageNameUpdate(float _DeltaTime, const StateInfo& _Info);
+
+	void Vibration(float _RendererSumTime, GameEngineUIRenderer& _Renderer);
+	//float ShakeX = sinf(ShakeDT * 10.0f) * powf(0.98f, ShakeDT * 80.0f);
+	//float ShakeY = sinf(ShakeDT * 80.0f) * powf(0.97f, ShakeDT * 80.0f);
+	//GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });
+	//ShakeDT += _DeltaTime;
+
+	AtlasData SongTitleBGData;
+	AtlasData SongUnderlineData;
 };
 

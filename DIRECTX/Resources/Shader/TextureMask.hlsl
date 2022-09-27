@@ -70,7 +70,10 @@ float4 TextureMask_PS(Output _Input) : SV_Target0
         clip(-1);
     }
     
-
+    if (_Input.Tex0.x < Slice.x)
+    {
+        clip(-1);
+    }
     
  
     

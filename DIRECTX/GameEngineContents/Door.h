@@ -32,6 +32,7 @@ protected:
 private:
 	GameEngineTextureRenderer* Renderer;
 	GameEngineCollision* Collision;
+	GameEngineSoundPlayer SoundPlayer;
 
 	// 역재생
 public:
@@ -41,5 +42,7 @@ public:
 	// 렌더러가 역재생 될 때, 기존 렌더러는 끄고 역재생용 렌더러는 킴
 	virtual void ReverseStartSetting() override;
 	virtual void ReverseEndSetting() override;
+
+
 };
 
