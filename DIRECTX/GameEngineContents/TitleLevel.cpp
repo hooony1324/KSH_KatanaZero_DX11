@@ -55,7 +55,7 @@ void TitleLevel::LevelStartEvent()
 	}
 
 	SoundPlayer_BGM = GameEngineSound::SoundPlayControl("song_rainonbrick.ogg");
-	SoundPlayer_BGM.Volume(0.5f);
+	SoundPlayer_BGM.Volume(0.1f);
 }
 
 void TitleLevel::Update(float _DeltaTime)
@@ -80,6 +80,7 @@ void TitleLevel::Update(float _DeltaTime)
 		if (false == Changing)
 		{
 			SoundPlayer_Transition = GameEngineSound::SoundPlayControl("sound_ui_transition_drone_01.wav");
+			SoundPlayer_Transition.Volume(0.1f);
 			Changing = true;
 			
 			for (auto Val : AllActors)

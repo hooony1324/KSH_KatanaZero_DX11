@@ -36,5 +36,8 @@ private:
 	GameEngineTextureRenderer* Renderer_OutLine;
 	bool IsOpend;
 	float LoopTime;
+
+	GameEngineSoundPlayer SoundPlayer;
+
 };
 

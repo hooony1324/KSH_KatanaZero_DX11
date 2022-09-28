@@ -3,6 +3,7 @@
 #include "EnemyActor.h"
 
 #include "ReflectFX.h"
+#include "BulletTrail.h"
 
 EnemyBullet::EnemyBullet()
 {
@@ -15,21 +16,17 @@ EnemyBullet::~EnemyBullet()
 
 GameEngineTextureRenderer* DebugD;
 
+float4 RendererScale;
 void EnemyBullet::Start()
 {
 	Renderer = CreateComponent<GameEngineTextureRenderer>();
 	Renderer->SetTexture("spr_bullet_0.png");
 	Renderer->ScaleToTexture();
 
-	Renderer->GetPixelData().MulColor.a = 0.7f;
-	Renderer->GetPixelData().MulColor.r = 2.5f;
-	Renderer->GetPixelData().MulColor.g = 2.5f;
-	Renderer->GetPixelData().MulColor.b = 1.5f;
-
-	float4 Scale = Renderer->GetTransform().GetLocalScale();
+	RendererScale = Renderer->GetTransform().GetLocalScale();
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 5, 5, GetDepth(ACTOR_DEPTH::FX) });
-	Collision->GetTransform().SetLocalPosition({ Scale.x * 0.5f, 0, 0 });
+	Collision->GetTransform().SetLocalPosition({ RendererScale.x * 0.5f, 0, 0 });
 	Collision->ChangeOrder(COLLISIONGROUP::ENEMY_ATTACK);
 	Collision->SetDebugSetting(CollisionType::CT_OBB2D, { 1, 1, 1, 0.5f });
 
@@ -38,6 +35,14 @@ void EnemyBullet::Start()
 
 void EnemyBullet::Update(float _DeltaTime)
 {
+	float TimeScale = GameEngineTime::GetInst()->GetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE));
+	float Ratio = std::clamp(TimeScale, 0.2f, 1.0f);
+	Renderer->GetTransform().SetLocalScale({ RendererScale.x * Ratio, RendererScale.y, RendererScale.z });
+
+	// Trail
+	BulletTrail* Trail = GetLevel()->CreateActor<BulletTrail>();
+	Trail->Spawn(GetTransform().GetWorldPosition(), Renderer->GetTransform().GetLocalScale(), 0.03f);
+
 	PlayerSlashCheck();
 
 	GetTransform().SetWorldMove(Dir * MoveSpeed * _DeltaTime);
@@ -48,6 +53,11 @@ void EnemyBullet::Update(float _DeltaTime)
 
 void EnemyBullet::End()
 {
+}
+
+void EnemyBullet::OnEvent()
+{
+	GetTransform().SetLocalScale({ 1, 1, 1 });
 }
 
 void EnemyBullet::PixelWallCheck()

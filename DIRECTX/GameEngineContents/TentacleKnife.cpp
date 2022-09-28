@@ -14,8 +14,8 @@ const float FollowSpeed = 5.0f;
 const float IdleSpeed = 8.0f;
 const float TakeOutSpeed = 6.0f;
 const float TakeInSpeed = 6.0f;
-const float LoadSpeed = 20.0f;
-const float StabSpeed = 25.0f;
+const float LoadSpeed = 30.0f;
+const float StabSpeed = 35.0f;
 
 void TentacleKnife::Idle()
 {
@@ -152,6 +152,9 @@ void TentacleKnife::TakeOutStart(const StateInfo& _Info)
 {
 	IsStab = false;
 	AttackEnd = false;
+
+	StabSound = GameEngineSound::SoundPlayControl("sound_boss_akirasyringe_appear_01.wav");
+	StabSound.Volume(0.1f);
 }
 
 void TentacleKnife::TakeOutUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -173,7 +176,7 @@ void TentacleKnife::LoadStart(const StateInfo& _Info)
 
 void TentacleKnife::LoadUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 0.5f)
+	if (_Info.StateTime > 0.3f)
 	{
 		StateManager.ChangeState("Stab");
 		return;
@@ -202,7 +205,7 @@ void TentacleKnife::StabUpdate(float _DeltaTime, const StateInfo& _Info)
 		{
 			int SoundIdx = GameEngineRandom::MainRandom.RandomInt(1, 2);
 			StabSound = GameEngineSound::SoundPlayControl("sound_boss_akirasyringe_stab_0" + std::to_string(SoundIdx) + ".wav");
-			StabSound.Volume(0.05f);
+			StabSound.Volume(0.1f);
 			StabSoundPlayed = true;
 		}
 		float ShakeX = sinf(DT * 10.0f * CamShakeSpeed) * powf(0.94f, DT * CamShakeSpeed);

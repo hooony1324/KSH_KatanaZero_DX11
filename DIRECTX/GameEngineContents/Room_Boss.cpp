@@ -113,6 +113,7 @@ void Room_Boss::Start()
 void Room_Boss::OnEvent()
 {
 
+	PlayLevel::PlayLevelInst->BGMSoundPlayer.Stop();
 
 	// 맵 관련
 	GlobalValueManager::ColMap = Background_ColMap;
@@ -170,6 +171,8 @@ void Room_Boss::CutSceneStart(const StateInfo& _Info)
 	CutScene_Back->On();
 	CutScene_Player->On();
 	CutScene_Boss->On();
+
+	CutSceneStateManager.ChangeState("SceneMutate");
 }
 
 void Room_Boss::CutSceneUpdate(float _Deltatime, const StateInfo& _Info)
@@ -177,7 +180,7 @@ void Room_Boss::CutSceneUpdate(float _Deltatime, const StateInfo& _Info)
 	CutSceneStateManager.Update(_Deltatime);
 }
 
-
+bool BossBgmPlayed;
 void Room_Boss::RoarStart(const StateInfo& _Info)
 {
 	Background->On();
@@ -188,34 +191,41 @@ void Room_Boss::RoarStart(const StateInfo& _Info)
 	Background_Floor->On();
 	BossGiant->On();
 
-
+	BossBgmPlayed = false;
 }
 
 void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (Background_FrontRed->GetPixelData().MulColor.a <= 0.000005f)
 	{
+
 		Background_FrontRed->Off();
 		StateManager.ChangeState("Play");
 		return;
 	}
 
-	if (_Info.StateTime < 1.5f)
+	if (_Info.StateTime < 0.5f)
 	{
-
 		return;
 	}
 
-	// Sound
-	if (true == PlayLevel::PlayLevelInst->MainBgmPlaying)
+	if (false == BossBgmPlayed && false == PlayLevel::PlayLevelInst->BossBgmPlaying)
 	{
-		PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_monster.ogg");
-		PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.1f);
+		BossBgmPlayed = true;
+		PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_monster.ogg", 100);
+		PlayLevel::PlayLevelInst->BossBgmPlaying = true;
+		PlayLevel::PlayLevelInst->MainBgmPlaying = false;
+		PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.05f);
+	}
+
+	if (_Info.StateTime < 4.5f)
+	{
+		return;
 	}
 
 	if (Background_FrontRed->GetPixelData().MulColor.a > 0.0f)
 	{
-		Background_FrontRed->GetPixelData().MulColor.a -= _DeltaTime;
+		Background_FrontRed->GetPixelData().MulColor.a -= _DeltaTime * 0.3f;
 		if (Background_FrontRed->GetPixelData().MulColor.a <= 0.000005f)
 		{
 			Background_FrontRed->GetPixelData().MulColor.a = 0.000001f;
@@ -358,7 +368,7 @@ void Room_Boss::CutSceneSetting()
 		, std::bind(&Room_Boss::SceneMutatedUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&Room_Boss::SceneMutatedStart, this, std::placeholders::_1));
 
-	CutSceneStateManager.ChangeState("SceneMutate");
+	CutSceneStateManager.ChangeState("SceneIdle");
 }
 
 void Room_Boss::SceneIdleUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -378,13 +388,15 @@ void Room_Boss::SceneMutateStart(const StateInfo& _Info)
 
 void Room_Boss::SceneMutateUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime < 2.0f)
+	if (_Info.StateTime < 3.0f)
 	{
 		return;
 	}
 
 	if (false == MutateStart)
 	{
+		PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_01.ogg");
+		PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.2f);
 		MutateStart = true;
 		CutScene_Boss->ChangeFrameAnimation("mutate");
 	}
@@ -429,8 +441,11 @@ void Room_Boss::SceneMutatedStart(const StateInfo& _Info)
 	Effect_Wave::GetInst()->EffectOn();
 	Effect_Wave::GetInst()->Option.Version = 0;
 
+	// 울부짖음 사운드
+	PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_02.ogg");
+	PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.1f);
 
-	// 월드 -> 뷰포트
+	// 월드 -> 뷰포트, 포스트 이펙트에서 제외용도
 	// MainCam이 플레이어 때문에 이동해 있음
 	GameEngineCamera* MainCam = GetLevel()->GetMainCamera();
 	float4 PlayerPos = CutScene_Player->GetTransform().GetWorldPosition();
@@ -451,7 +466,7 @@ void Room_Boss::SceneMutatedStart(const StateInfo& _Info)
 
 void Room_Boss::SceneMutatedUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 2.0f)
+	if (_Info.StateTime > 2.5f)
 	{
 		// 컷씬 종료
 		CutScene_Back->Off();
@@ -460,7 +475,7 @@ void Room_Boss::SceneMutatedUpdate(float _DeltaTime, const StateInfo& _Info)
 		Effect_Wave::GetInst()->EffectOff();
 		Effect_Wave::GetInst()->Option.Version = 1;
 		RoarSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_03.ogg");
-		RoarSoundPlayer.Volume(0.025f);
+		RoarSoundPlayer.Volume(0.1f);
 		StateManager.ChangeState("Roar");
 		return;
 	}

@@ -147,5 +147,7 @@ private:
 	int Hp;
 	bool IsSelectPattern; // 가만히 있는다 or 패턴 선택 시작
 	int AttackPatternCount;
+
+	GameEngineSoundPlayer SoundPlayer;
 };
 

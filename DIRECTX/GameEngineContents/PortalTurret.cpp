@@ -3,6 +3,7 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 #include "BossProjectile.h"
+#include "PlayLevel.h"
 
 void PortalTurret::Spawn(float4 _SpawnPos, float _FloatDis, float _WakeTime)
 {
@@ -120,6 +121,7 @@ void PortalTurret::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
 	{
+		PlayLevel::PlayLevelInst->ShakeRoom();
 		StateManager.ChangeState("Die");
 		return;
 	}

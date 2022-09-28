@@ -145,7 +145,6 @@ void EnemyGrunt::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	StateManager.ChangeState("Run");
 
-
 }
 
 

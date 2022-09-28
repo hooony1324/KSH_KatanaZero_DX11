@@ -9,16 +9,19 @@ public:
 	void EffectSwitch()
 	{
 		OnOffOption = !OnOffOption;
+		EffectSoundPlayed = false;
 	}
 
 	void EffectOff()
 	{
 		OnOffOption = 0;
+		EffectSoundPlayed = false;
 	}
 
 	void EffectOn()
 	{
 		OnOffOption = 1;
+		EffectSoundPlayed = false;
 	}
 
 public:
@@ -39,5 +42,6 @@ protected:
 protected:
 	bool OnOffOption;
 	float SumDeltaTime;
+	bool EffectSoundPlayed;
 };
 

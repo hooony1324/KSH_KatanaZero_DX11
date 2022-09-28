@@ -40,17 +40,41 @@ void Room_Factory3::Start()
 	PlayerSpawnPos = float4{ 220, -920, GetDepth(ACTOR_DEPTH::PLAYER) };
 
 
-	EnemyGrunt* Grunt;
-	Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
-	Grunt->SetSpawnPos({ 1500, -640, GetDepth(ACTOR_DEPTH::ENEMY) });
-	Grunt->Off();
-	Enemies.push_back(Grunt);
+	for (int i = 0; i < 2; i++)
+	{
+		EnemyGrunt* Grunt;
+		Grunt = GetLevel()->CreateActor<EnemyGrunt>(ACTORGROUP::TIMEGROUP_ENEMY);
+		Grunt->Off();
+		Enemies.push_back(Grunt);
+	}
 
-	//EnemyCop* Cop;
-	//Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
-	//Cop->SetSpawnPos({ 1500, -640, GetDepth(ACTOR_DEPTH::ENEMY) });
-	//Cop->Off();
-	//Enemies.push_back(Cop);
+
+	for (int i = 0; i < 5; i++)
+	{
+		EnemyCop* Cop;
+		Cop = GetLevel()->CreateActor<EnemyCop>(ACTORGROUP::TIMEGROUP_ENEMY);
+		Cop->Off();
+		Enemies.push_back(Cop);
+	}
+
+	Enemies[0]->SetSpawnPos({ 1500, -640, GetDepth(ACTOR_DEPTH::ENEMY) }); // Grunt
+	Enemies[1]->SetSpawnPos({ 1895, -380, GetDepth(ACTOR_DEPTH::ENEMY) }); // Grunt
+	Enemies[1]->SetChaseOff();
+
+	Enemies[2]->SetSpawnPos({ 1550, -640, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies[2]->SetChaseOn();
+
+	Enemies[3]->SetSpawnPos({ 655, -640, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies[3]->SetChaseOff();
+
+	Enemies[4]->SetSpawnPos({ 828, -380, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies[4]->SetChaseOn();
+
+	Enemies[5]->SetSpawnPos({ 1230, -380, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies[5]->SetChaseOff();
+
+	Enemies[6]->SetSpawnPos({ 1500, -380, GetDepth(ACTOR_DEPTH::ENEMY) });
+	Enemies[6]->SetChaseOn();
 
 
 	// 세팅 시간

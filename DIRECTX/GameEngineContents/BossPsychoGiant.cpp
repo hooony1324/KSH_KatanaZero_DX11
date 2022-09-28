@@ -273,7 +273,7 @@ void BossPsychoGiant::SpawnKnife1Update(float _DeltaTime, const StateInfo& _Info
 {
 	// 0 ~ 6 랜덤 시간차 생성..
 
-	if (_Info.StateTime > 7.0f)
+	if (_Info.StateTime > 6.0f)
 	{
 		BossStateManager.ChangeState("Idle");
 	}
@@ -287,7 +287,7 @@ void BossPsychoGiant::SpawnKnife2Start(const StateInfo& _Info)
 
 void BossPsychoGiant::SpawnKnife2Update(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 7.0f)
+	if (_Info.StateTime > 6.0f)
 	{
 		BossStateManager.ChangeState("Idle");
 	}
@@ -297,11 +297,14 @@ void BossPsychoGiant::SpawnTurretStart(const StateInfo& _Info)
 {
 	SpawnPortalsDown();
 	AttackPatternCount++;
+
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akiraportal_orb_01.wav");
+	SoundPlayer.Volume(0.1f);
 }
 
 void BossPsychoGiant::SpawnTurretUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 7.0f)
+	if (_Info.StateTime > 6.0f)
 	{
 		BossStateManager.ChangeState("Idle");
 	}
@@ -325,6 +328,9 @@ void BossPsychoGiant::SpawnPsychoStart(const StateInfo& _Info)
 	SmallBoss->Spawn();
 
 	AttackPatternCount = 0;
+
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akiraportal_orb_01.wav");
+	SoundPlayer.Volume(0.1f);
 }
 
 void BossPsychoGiant::SpawnPsychoUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -354,6 +360,9 @@ void BossPsychoGiant::HurtStart(const StateInfo& _Info)
 
 	Renderer_Face->ChangeFrameAnimation("face_hurt");
 	Hp--;
+
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akira_hurt_01.wav");
+	SoundPlayer.Volume(0.1f);
 }
 
 void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -401,6 +410,9 @@ void BossPsychoGiant::HurtUpdate(float _DeltaTime, const StateInfo& _Info)
 // 무기 생성
 void BossPsychoGiant::SpawnPortalsUp()
 {
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akiraportal_line_01.wav");
+	SoundPlayer.Volume(0.1f);
+
 	// 랜덤한 중복되지 않는 숫자 뽑기
 	std::vector<int> Indexs = { 0, 1, 2, 3, 4, 5, 6 };
 	std::shuffle(Indexs.begin(), Indexs.end(), GameEngineRandom::MainRandom.GetFunc());
@@ -423,6 +435,9 @@ void BossPsychoGiant::SpawnPortalsUp()
 
 void BossPsychoGiant::SpawnPortalsDown()
 {
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akiraportal_line_01.wav");
+	SoundPlayer.Volume(0.1f);
+
 	// 0번과 6번은 사용하지 않음(거리 멀어서)
 	int NotUseIndex = GameEngineRandom::MainRandom.RandomInt(1, 5);
 
@@ -451,6 +466,9 @@ float4 PortalVec = LeftDown - Origin;
 
 void BossPsychoGiant::SpawnPortalsRound()
 {
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akiraportal_wheel_01.wav");
+	SoundPlayer.Volume(0.1f);
+
 	int Dirs[3] = { 1, -1 , 2};
 	int Idx = GameEngineRandom::MainRandom.RandomInt(0, 2);
 	int Dir = Dirs[Idx];

@@ -332,10 +332,10 @@ void PlayerZero::RunStart(const StateInfo& _Info)
 	RunSoundSumTime = 0.0f;
 
 	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_jump.wav");
-	MoveSoundPlayer.Volume(0.01f);
+	MoveSoundPlayer.Volume(0.03f);
 
 	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_running_" + std::to_string(RunSoundIndex++) + ".wav");
-	MoveSoundPlayer.Volume(0.01f);
+	MoveSoundPlayer.Volume(0.03f);
 }
 
 void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -345,7 +345,7 @@ void PlayerZero::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 	{
 		// Sound
 		MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_running_" + std::to_string(RunSoundIndex++) + ".wav");
-		MoveSoundPlayer.Volume(0.01f);
+		MoveSoundPlayer.Volume(0.03f);
 		RunSoundSumTime = 0.0f;
 		if (RunSoundIndex > 4)
 		{

@@ -173,6 +173,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="BulletTrail.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="CharacterShadow.h">
       <SubType>
       </SubType>
@@ -442,6 +446,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="BulletTrail.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -30,5 +30,7 @@ public:
 	void EffectInit() override;
 	void Effect(GameEngineRenderTarget* _Target) override;
 
+private:
+	GameEngineSoundPlayer EffectSoundPlayer;
 };
 

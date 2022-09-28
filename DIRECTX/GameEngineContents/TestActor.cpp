@@ -22,7 +22,6 @@ void TestActor::Start()
 	BackGround->SetTexture("None.png");
 	BackGround->GetTransform().SetLocalScale({ 320, 180, 1 });
 	BackGround->GetTransform().SetWorldPosition({ -0, 0 });
-	BackGround->GetPixelData().PlusColor.r = 1;
 	BackGround->On();
 
 	// 마스크 애니메이션

@@ -53,5 +53,7 @@ private:
 
 	float4 Dir;
 	bool Reflected;
+
+	GameEngineSoundPlayer SoundPlayer;
 };
 

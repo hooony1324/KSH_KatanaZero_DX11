@@ -280,6 +280,9 @@
     <ClInclude Include="ReflectFX.h">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClInclude>
+    <ClInclude Include="BulletTrail.h">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -483,6 +486,9 @@
     </ClCompile>
     <ClCompile Include="ReflectFX.cpp">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletTrail.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

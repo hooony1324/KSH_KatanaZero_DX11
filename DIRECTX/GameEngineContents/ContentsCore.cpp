@@ -7,6 +7,7 @@
 #include "PlayLevel.h"
 #include "EndingLevel.h"
 #include "TestLevel.h"
+#include <GameEngineCore/GameEngineBlend.h>
 
 float4 ContentsCore::ContentsWindowSize;
 
@@ -35,7 +36,7 @@ void ContentsCore::Start()
 	CreateLevel<PlayLevel>("PlayLevel");
 	CreateLevel<EndingLevel>("EndingLevel");
 	CreateLevel<TestLevel>("TestLevel");
-	ChangeLevel("PlayLevel");
+	ChangeLevel("TitleLevel");
 
 	// Input Key
 	GameEngineInput::GetInst()->CreateKey("MouseLeft", VK_LBUTTON);
@@ -158,6 +159,26 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
+
+	// Blend Resource
+	{
+		D3D11_BLEND_DESC Desc = { 0 };
+
+		Desc.AlphaToCoverageEnable = FALSE;
+		Desc.IndependentBlendEnable = FALSE;
+		Desc.RenderTarget[0].BlendEnable = true;
+		Desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+		// 알파쪽만 따로 처리하는 옵션
+		Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+
+		GameEngineBlend::Create("NoBlackBlend", Desc);
+	}
 }
 
 void ContentsCore::TextureLoad()

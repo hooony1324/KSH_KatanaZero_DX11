@@ -24,7 +24,7 @@ bool Room::IsEnemyAllDead()
 
 	for (EnemyActor* Enemy : Enemies)
 	{
-		if (true == Enemy->IsUpdate())
+		if (false == Enemy->IsDead())
 		{
 			return false;
 		}

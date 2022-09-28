@@ -71,12 +71,13 @@ private:
 	GameEngineUIRenderer* ClickToStart;
 	
 	GameEngineUIRenderer* SongTitleBG;
-	GameEngineUIRenderer* PlayingSongText;
-	GameEngineUIRenderer* PlayingSongTextBG;
+	GameEngineUIRenderer* PlayingSongText1;
+	GameEngineUIRenderer* PlayingSongText2;
 	GameEngineUIRenderer* PlayingSongTextUnderline;
 	GameEngineUIRenderer* SongTitleText;
 
-	GameEngineUIRenderer* StageName;
+	GameEngineUIRenderer* StageName1;
+	GameEngineUIRenderer* StageName2;
 	GameEngineUIRenderer* StageNameBG;
 
 	GameEngineStateManager InitialUIManager;
@@ -87,7 +88,7 @@ private:
 	void StageNameStart(const StateInfo& _Info);
 	void StageNameUpdate(float _DeltaTime, const StateInfo& _Info);
 
-	void Vibration(float _RendererSumTime, GameEngineUIRenderer& _Renderer);
+	void Vibration(float _RendererSumTime, GameEngineUIRenderer* _Renderer);
 	//float ShakeX = sinf(ShakeDT * 10.0f) * powf(0.98f, ShakeDT * 80.0f);
 	//float ShakeY = sinf(ShakeDT * 80.0f) * powf(0.97f, ShakeDT * 80.0f);
 	//GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });

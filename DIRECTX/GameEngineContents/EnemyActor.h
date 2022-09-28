@@ -12,7 +12,14 @@ public:
 
 	bool IsDead()
 	{
-		return Hp <= 0;
+		if (Hp <= 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	void Respawn()
@@ -24,6 +31,16 @@ public:
 	void SetSpawnPos(float4 _Pos)
 	{
 		SpawnPos = _Pos;
+	}
+
+	void SetChaseOn()
+	{
+		IsChasingEnemy = true;
+	}
+
+	void SetChaseOff()
+	{
+		IsChasingEnemy = false;
 	}
 
 protected:

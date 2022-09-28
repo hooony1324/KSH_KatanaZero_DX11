@@ -52,6 +52,14 @@ void Effect_DistortionGlitch::Effect(GameEngineRenderTarget* _Target)
 
 	EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 
+
+	if (false == EffectSoundPlayed && SumDeltaTime > 0.25f)
+	{
+		EffectSoundPlayed = true;
+		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_tv_thump.wav");
+		EffectSoundPlayer.Volume(0.07f);
+	}
+
 	_Target->Clear();
 	_Target->Setting();
 	_Target->Effect(EffectSet);

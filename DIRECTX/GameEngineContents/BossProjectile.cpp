@@ -3,8 +3,9 @@
 #include <GameEngineCore/CoreMinimal.h>
 
 #include "PortalTurret.h"
+#include "PlayLevel.h"
 
-float ShootSpeed = 350.0f;
+float ShootSpeed = 850.0f;
 
 BossProjectile::BossProjectile() 
 	: Reflected(false)
@@ -100,6 +101,9 @@ void BossProjectile::ShootStart(const StateInfo& _Info)
 	float4 PlayerPos = GlobalValueManager::PlayerPos;
 	PlayerPos.z = 0;
 	Dir = (PlayerPos - CurPos).NormalizeReturn();
+
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akiraorb_shot_01.wav");
+	SoundPlayer.Volume(0.1f);
 }
 
 void BossProjectile::ShootUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -159,6 +163,9 @@ bool BossProjectile::CollisionCheck()
 
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
 	{
+		PlayLevel::PlayLevelInst->ShakeRoom();
+		SoundPlayer = GameEngineSound::SoundPlayControl("sound_slash_bullet.wav");
+		SoundPlayer.Volume(0.1f);
 		Reflected = true;
 		Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::PLAYER_BULLET));
 		return true;

@@ -43,11 +43,20 @@ void Effect_Distortion::Effect(GameEngineRenderTarget* _Target)
 		return;
 	}
 
+
+	if (false == EffectSoundPlayed)
+	{
+		EffectSoundPlayed = true;
+		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_ui_screen_glitch_02.wav");
+		EffectSoundPlayer.Volume(0.07f);
+	}
+
 	float DeltaTime = GameEngineTime::GetDeltaTime();
 	SumDeltaTime += DeltaTime;
 	Option.DeltaTime = DeltaTime;
 	Option.SumDeltaTime = SumDeltaTime;
 	Option.OnOff = static_cast<int>(OnOffOption);
+
 
 	EffectSet.ShaderResources.SetTexture("Tex", CopyTarget->GetRenderTargetTexture(0));
 	_Target->Clear();

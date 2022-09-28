@@ -58,5 +58,7 @@ private:
 	float4 Dir;
 	float MoveSpeed;
 	float WakeTime;
+
+	GameEngineSoundPlayer SoundPlayer;
 };
 

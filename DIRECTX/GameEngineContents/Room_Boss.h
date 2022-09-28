@@ -48,7 +48,6 @@ private:
 
 	// SOUND
 private:
-	GameEngineSoundPlayer BGMSoundPlayer;
 	GameEngineSoundPlayer RoarSoundPlayer;
 
 private:

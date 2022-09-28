@@ -2,10 +2,12 @@
 #include "PortalKnife.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include<GameEngineBase/GameEngineRandom.h>
+
 const float SpawnOutDis = 150;
-const float SpawnSpeed = 4.2f;
+const float SpawnSpeed = 5.2f;
 const float DrawInDis = 100;
-const float DrawInSpeed = 6.0f;
+const float DrawInSpeed = 7.0f;
 
 PortalKnife::PortalKnife() 
 	: Renderer(nullptr)
@@ -50,7 +52,7 @@ void PortalKnife::Start()
 		, std::bind(&PortalKnife::ShootUpdate, this, std::placeholders::_1, std::placeholders::_2)
 		, std::bind(&PortalKnife::ShootStart, this, std::placeholders::_1));
 
-	MoveSpeed = 1000;
+	MoveSpeed = 1500;
 	StateManager.ChangeState("Idle");
 }
 
@@ -143,6 +145,10 @@ void PortalKnife::DrawUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PortalKnife::ShootStart(const StateInfo& _Info)
 {
+	std::string Index = std::to_string(GameEngineRandom::MainRandom.RandomInt(1, 3));
+
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_akirasword_fly_0" + Index + ".wav");
+	SoundPlayer.Volume(0.1f);
 }
 
 void PortalKnife::ShootUpdate(float _DeltaTime, const StateInfo& _Info)

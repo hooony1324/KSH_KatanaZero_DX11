@@ -265,6 +265,8 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 
 	if (true == Transition->IsBlack())
 	{
+		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_transition_end.wav");
+		EffectSoundPlayer.Volume(0.1f);
 		Transition->ChangeState(DiamondTransition::STATE::CHANGEWHITE);
 	}
 
@@ -320,7 +322,6 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 	Effect_Wave::GetInst()->EffectOff();
 	Effect_DistortionGlitch::GetInst()->EffectOff();
-
 }
 
 bool GlitchStart;
@@ -343,7 +344,7 @@ void PlayLevel::RoomInitialPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 	// Sound
 	if (false == MainBgmPlaying)
 	{
-		BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_youwillneverknow.ogg");
+		BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_youwillneverknow.ogg", 100);
 		BGMSoundPlayer.Volume(0.025f);
 		MainBgmPlaying = true;
 	}
@@ -385,8 +386,6 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	Player->SetInputValid(true);
 
 	Effect_DistortionGlitch::GetInst()->EffectOff();
-	EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_tv_thump.wav");
-	EffectSoundPlayer.Volume(0.07f);
 }
 
 // @@@ 게임 플레이 @@@
@@ -499,6 +498,8 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == Transition->IsChangeBlackEnd())
 	{
+		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_transition_begin.wav");
+		EffectSoundPlayer.Volume(0.1f);
 		ChangeRoom(++Room::CurRoomIndex);
 	}
 }
@@ -520,8 +521,6 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 	{
 		UI->RestartUIOff();
 		RoomStateManager.ChangeState("RoomReverse");
-
-
 	}
 }
 
@@ -657,7 +656,8 @@ void PlayLevel::RoomReverseStart(const StateInfo& _Info)
 	Effect_Wave::GetInst()->EffectOn();
 
 	// Sound
-
+	EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_rewind.wav");
+	EffectSoundPlayer.Volume(0.1f);
 }
 
 void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)

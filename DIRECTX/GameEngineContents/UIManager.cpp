@@ -101,8 +101,10 @@ void UIManager::Start()
 	MouseClick->Off();
 
 	ClickToStart = CreateComponent<GameEngineUIRenderer>();
-	ClickToStart->SetTexture("spr_clicktostart.png");
-	ClickToStart->ScaleToTexture();
+	ClickToStart->CreateFrameAnimationFolder("clicktostart", FrameAnimation_DESC{ "clicktostart", 0.8f });
+	ClickToStart->SetScaleModeImage();
+	ClickToStart->SetSamplingModePoint();
+	ClickToStart->ChangeFrameAnimation("clicktostart");
 	ClickToStart->GetTransform().SetLocalPosition({ 0, -90, 0 });
 	ClickToStart->Off();
 
@@ -110,7 +112,7 @@ void UIManager::Start()
 	SongTitleBG = CreateComponent<GameEngineUIRenderer>();
 	SongTitleBG->SetTexture("spr_songtitleBG.png");
 	SongTitleBG->ScaleToTexture();
-	SongTitleBG->GetTransform().SetLocalPosition({ 400, -300 });
+	SongTitleBG->GetTransform().SetLocalPosition({ 400, -300, 10 });
 	SongTitleBG->Off();
 	SongTitleBG->ShaderResources.SetConstantBufferLink("AtlasData", SongTitleBGData);
 	SongTitleBGData.FrameData.PosX = 0.0f;
@@ -120,20 +122,21 @@ void UIManager::Start()
 	SongTitleBGData.PivotPos = float4::ZERO;
 
 
-	PlayingSongText = CreateComponent<GameEngineUIRenderer>();
-	PlayingSongText->SetTexture("spr_playingsongtext.png");
-	PlayingSongText->ScaleToTexture();
-	PlayingSongText->SetSamplingModePoint();
-	PlayingSongText->GetTransform().SetLocalPosition({ 400, -300 });
-	PlayingSongText->GetPixelData().MulColor.a = 0.0f;
-	PlayingSongText->Off();
+	PlayingSongText1 = CreateComponent<GameEngineUIRenderer>();
+	PlayingSongText1->SetTexture("spr_playingsong1.png");
+	PlayingSongText1->ScaleToTexture();
+	PlayingSongText1->SetSamplingModePoint();
+	PlayingSongText1->GetTransform().SetLocalPosition({ 440, -300 });
+	PlayingSongText1->GetPixelData().MulColor.a = 0.0f;
+	PlayingSongText1->Off();
 
-	PlayingSongTextBG = CreateComponent<GameEngineUIRenderer>();
-	PlayingSongTextBG->SetTexture("spr_playingsongtextshadow.png");
-	PlayingSongTextBG->ScaleToTexture();
-	PlayingSongTextBG->SetSamplingModePoint();
-	PlayingSongTextBG->GetTransform().SetLocalPosition({ 400, -300 });
-	PlayingSongTextBG->Off();
+	PlayingSongText2 = CreateComponent<GameEngineUIRenderer>();
+	PlayingSongText2->SetTexture("spr_playingsong2.png");
+	PlayingSongText2->ScaleToTexture();
+	PlayingSongText2->SetSamplingModePoint();
+	PlayingSongText2->GetTransform().SetLocalPosition({ 390, -300, 9});
+	PlayingSongText2->GetPixelData().MulColor.a = 0.0f;
+	PlayingSongText2->Off();
 
 	PlayingSongTextUnderline = CreateComponent<GameEngineUIRenderer>();
 	PlayingSongTextUnderline->SetTexture("spr_songunderline.png");
@@ -158,10 +161,17 @@ void UIManager::Start()
 	// ~ 재생중인 곡
 
 
-	StageName = CreateComponent<GameEngineUIRenderer>();
-	StageName->SetTexture("spr_stagename.png");
-	StageName->ScaleToTexture();
-	StageName->Off();
+	StageName1 = CreateComponent<GameEngineUIRenderer>();
+	StageName1->SetTexture("spr_stagename1.png");
+	StageName1->GetTransform().SetLocalPosition({ 200, 0, 0 });
+	StageName1->ScaleToTexture();
+	StageName1->Off();
+
+	StageName2 = CreateComponent<GameEngineUIRenderer>();
+	StageName2->SetTexture("spr_stagename2.png");
+	StageName2->GetTransform().SetLocalPosition({ -200, 0, 9 });
+	StageName2->ScaleToTexture();
+	StageName2->Off();
 
 	StageNameBG = CreateComponent<GameEngineUIRenderer>();
 	StageNameBG->SetTexture("None.png");
@@ -173,11 +183,12 @@ void UIManager::Start()
 	InitalRoomUI.push_back(MouseClick);
 	InitalRoomUI.push_back(ClickToStart);
 	InitalRoomUI.push_back(SongTitleBG);
-	InitalRoomUI.push_back(PlayingSongText);
-	InitalRoomUI.push_back(PlayingSongTextBG);
+	InitalRoomUI.push_back(PlayingSongText1);
+	InitalRoomUI.push_back(PlayingSongText2);
 	InitalRoomUI.push_back(PlayingSongTextUnderline);
 	InitalRoomUI.push_back(SongTitleText);
-	InitalRoomUI.push_back(StageName);
+	InitalRoomUI.push_back(StageName1);
+	InitalRoomUI.push_back(StageName2);
 	InitalRoomUI.push_back(StageNameBG);
 
 	InitialUIManager.CreateStateMember("SongTitle",
@@ -200,7 +211,15 @@ void UIManager::Update(float _DeltaTime)
 		InitialUIManager.Update(_DeltaTime);
 	}
 
+	if (RestartClickUI->IsUpdate())
+	{
+		RestartClickUI->GetPixelData().MulColor.a = 1.0f + sinf(GetAccTime() * 200);
+	}
 
+
+
+
+	// 슬로우 배터리
 	int NewTimeBatteryIndex = GlobalValueManager::SlowEnergy - 1;
 	
 	if (CurSlowBatteryIndex == NewTimeBatteryIndex)
@@ -227,6 +246,8 @@ void UIManager::Update(float _DeltaTime)
 			SlowBatteries[i]->GetPixelData().MulColor.b = 0.0f;
 		}
 	}
+	// ~슬로우 배터리
+
 }
 
 void UIManager::End()
@@ -236,7 +257,8 @@ void UIManager::End()
 void UIManager::SongTitleStart(const StateInfo& _Info)
 {
 	SongTitleBG->On();
-	PlayingSongText->On();
+	PlayingSongText1->On();
+	PlayingSongText2->On();
 	PlayingSongTextUnderline->On();
 	SongTitleText->On();
 
@@ -259,13 +281,20 @@ void UIManager::SongTitleUpdate(float _DeltaTime, const StateInfo& _Info)
 	// 재생 중인 곡 진하게
 	if (SongTitleBGData.FrameData.PosX <= 0.1f)
 	{
-		PlayingSongText->GetPixelData().MulColor.a = GameEngineMath::Lerp(PlayingSongText->GetPixelData().MulColor.a, 1.0f, _DeltaTime * 2.0f);
+		PlayingSongText1->GetPixelData().MulColor.a = GameEngineMath::Lerp(PlayingSongText1->GetPixelData().MulColor.a, 1.0f, _DeltaTime * 2.0f);
+		PlayingSongText1->GetTransform().SetLocalPosition(
+			float4::Lerp(PlayingSongText1->GetTransform().GetLocalPosition(), float4{ 400, -300 }, _DeltaTime * 2.0f));
+
+		PlayingSongText2->GetPixelData().MulColor.a = GameEngineMath::Lerp(PlayingSongText2->GetPixelData().MulColor.a, 1.0f, _DeltaTime * 2.0f);
+		PlayingSongText2->GetTransform().SetLocalPosition(
+			float4::Lerp(PlayingSongText2->GetTransform().GetLocalPosition(), float4{ 400, -300 }, _DeltaTime * 2.0f));
+
 	}
 
 	// 밑줄
-	if (PlayingSongText->GetPixelData().MulColor.a > 0.7f)
+	if (PlayingSongText1->GetPixelData().MulColor.a > 0.7f)
 	{
-		SongUnderlineData.FrameData.PosX = GameEngineMath::Lerp(SongUnderlineData.FrameData.PosX, 0.0f, _DeltaTime * 4.0f);
+		SongUnderlineData.FrameData.PosX = GameEngineMath::Lerp(SongUnderlineData.FrameData.PosX, 0.0f, _DeltaTime * 5.0f);
 		SongTitleText->GetPixelData().MulColor.a = GameEngineMath::Lerp(SongTitleText->GetPixelData().MulColor.a, 1.0f, _DeltaTime * 2.0f);
 	}
 
@@ -277,21 +306,39 @@ void UIManager::SongTitleUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 }
 
+float VibrationSumTime;
 void UIManager::StageNameStart(const StateInfo& _Info)
 {
-	StageName->On();
+	StageName1->On();
+	StageName2->On();
 	StageNameBG->On();
 	MouseClick->On();
 	ClickToStart->On();
-	// 점점 진하게
-	//StageNameBG->GetPixelData().MulColor.a = 0.1f;
+	
+	VibrationSumTime = 0.0f;
 }
 
 void UIManager::StageNameUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	StageNameBG->GetPixelData().MulColor.a = GameEngineMath::Lerp(StageNameBG->GetPixelData().MulColor.a, 0.7f, _DeltaTime * 3.0f);
+	
+	// 깜빡거림
+	PlayingSongText1->GetPixelData().MulColor.a = 1.0f + sinf(_Info.StateTime * 200.0f);
+
+	StageName1->GetTransform().SetLocalPosition(float4::Lerp(StageName1->GetTransform().GetLocalPosition(), {0,0,0}, _DeltaTime * 5.0f));
+	StageName2->GetTransform().SetLocalPosition(float4::Lerp(StageName2->GetTransform().GetLocalPosition(), { 0,0,9 }, _DeltaTime * 5.0f));
+
+	if (_Info.StateTime > 1.0f)
+	{
+		Vibration(VibrationSumTime, StageName1);
+		Vibration(VibrationSumTime, StageName2);
+
+		VibrationSumTime += _DeltaTime;
+	}
 }
 
-void UIManager::Vibration(float _RendererSumTime, GameEngineUIRenderer& _Renderer)
+void UIManager::Vibration(float _RendererSumTime, GameEngineUIRenderer* _Renderer)
 {
-
+	float ShakeX = sinf(_RendererSumTime * 150.0f);
+	_Renderer->GetTransform().SetWorldMove({ ShakeX * 1.0f, 0, 0 });
 }

@@ -2,6 +2,8 @@
 #include "DiamondTransition.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include "PlayLevel.h"
+
 size_t NumX = 40;
 size_t NumY = 23;
 
@@ -99,6 +101,7 @@ void DiamondTransition::ChangeBlackStart(const StateInfo& _Info)
 	ChangeBlack = true;
 	StartY = static_cast<int>(Diamonds.size()) - 1;
 	SumTime = 0.0f;
+
 }
 
 void DiamondTransition::ChangeBlackUpdate(float _DeltaTime, const StateInfo& _Info)
