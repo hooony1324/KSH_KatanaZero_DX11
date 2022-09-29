@@ -84,9 +84,6 @@ void Room_Factory3::Start()
 	// °è´Ü
 	StairSetting();
 
-	EnemyBullet* bullet = GetLevel()->CreateActor<EnemyBullet>();
-	bullet->GetTransform().SetWorldPosition({ 420, -920, GetDepth(ACTOR_DEPTH::PLAYER) });
-
 	Off();
 }
 

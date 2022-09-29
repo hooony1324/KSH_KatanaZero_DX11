@@ -62,7 +62,7 @@ void SlowMotion::Update(float _DeltaTime)
 	else
 	{
 		// 시간 느리게
-		TimeRatio = GameEngineMath::Lerp(0.2f, 1, _DeltaTime);
+		TimeRatio = 0.2f;
 		TimeRatio_Fan = GameEngineMath::Lerp(0.125f, 1, _DeltaTime);
 
 		// 배경 어둡게

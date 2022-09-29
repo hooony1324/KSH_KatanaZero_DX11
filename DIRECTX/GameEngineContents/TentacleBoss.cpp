@@ -2,6 +2,8 @@
 #include "TentacleBoss.h"
 #include <GameEngineCore/CoreMinimal.h>
 
+#include "PlayLevel.h"
+
 const float SpawnUpDis = 120.0f;
 
 void TentacleBoss::Spawn()
@@ -119,6 +121,8 @@ void TentacleBoss::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 	// Hurt
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
 	{
+		PlayLevel::PlayLevelInst->ShakeRoom(true);
+
 		Hurt = true;
 		StateManager.ChangeState("Hurt");
 		return;

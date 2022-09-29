@@ -163,7 +163,7 @@ bool BossProjectile::CollisionCheck()
 
 	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
 	{
-		PlayLevel::PlayLevelInst->ShakeRoom();
+		PlayLevel::PlayLevelInst->ShakeRoom(true);
 		SoundPlayer = GameEngineSound::SoundPlayControl("sound_slash_bullet.wav");
 		SoundPlayer.Volume(0.1f);
 		Reflected = true;

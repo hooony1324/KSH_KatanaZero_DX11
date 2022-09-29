@@ -10,6 +10,8 @@ std::list<Stair*> GlobalValueManager::Stairs;
 std::string GlobalValueManager::PlayerWallState;
 std::string GlobalValueManager::PlayerState;
 
+
+
 void GlobalValueManager::ClearStairs()
 {
 	for (Stair* Ptr : Stairs)
@@ -25,5 +27,5 @@ GlobalValueManager::~GlobalValueManager()
 	ColMap = nullptr;
 	Player = nullptr;
 }
-
-int GlobalValueManager::SlowEnergy = 11;
+int GlobalValueManager::SlowEnergyMax = 11;
+int GlobalValueManager::SlowEnergy = SlowEnergyMax;

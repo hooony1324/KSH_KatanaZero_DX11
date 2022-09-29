@@ -32,7 +32,8 @@ protected:
 
 	GameEngineStateManager AttackStateManager;
 	float4 AimDir;
-
+	float ShotDegree;
+	GameEngineSoundPlayer SoundPlayer;
 
 };
 

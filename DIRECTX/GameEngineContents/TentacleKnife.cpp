@@ -6,11 +6,11 @@
 
 const float IdleY = 300;
 const float TakeOutY = -20;
-const float LoadY = -20;
+const float LoadY = -100;
 const float StabY = -360;
 
 // LerpSpeed
-const float FollowSpeed = 5.0f;
+const float FollowSpeed = 6.0f;
 const float IdleSpeed = 8.0f;
 const float TakeOutSpeed = 6.0f;
 const float TakeInSpeed = 6.0f;
@@ -169,9 +169,12 @@ void TentacleKnife::TakeOutUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 
+float RandomLoadY;
 void TentacleKnife::LoadStart(const StateInfo& _Info)
 {
 	IsStab = false;
+
+	RandomLoadY = GameEngineRandom::MainRandom.RandomFloat(-20, -150);
 }
 
 void TentacleKnife::LoadUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -182,7 +185,7 @@ void TentacleKnife::LoadUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	Position.y = GameEngineMath::Lerp(Position.y, LoadY, _DeltaTime * LoadSpeed);
+	Position.y = GameEngineMath::Lerp(Position.y, RandomLoadY, _DeltaTime * LoadSpeed);
 
 }
 

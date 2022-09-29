@@ -14,10 +14,20 @@ public:
 	static bool BossBgmPlaying;
 	static GameEngineSoundPlayer BGMSoundPlayer;
 
-	void ShakeRoom()
+	void ShakeRoom(bool _Slow)
 	{
-		RoomStateManager.ChangeState("RoomShake");
+		RoomShake = true;
+
+		if (true == _Slow)
+		{
+			TimeGroupSlow();
+		}
+		else
+		{
+			TimeGroupNormal();
+		}
 	}
+	static bool RoomShake;
 
 	void ChangeRoom(int _Index);
 
@@ -106,10 +116,6 @@ private:
 	void RoomSlowStart(const StateInfo& _Info);
 	void RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info);
 	void RoomSlowEnd(const StateInfo& _Info);
-
-	// Áøµ¿
-	void RoomShakeStart(const StateInfo& _Info);
-	void RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info);
 
 	// REVERSE
 	void RoomReverseStart(const StateInfo& _Info);

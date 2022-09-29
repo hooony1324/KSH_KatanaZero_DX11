@@ -3,7 +3,7 @@
 #include "GameEngineTexture.h"
 #include "GameEngineFolderTexture.h"
 
-void FrameAnimation::PauseSwtich() 
+void FrameAnimation::PauseSwtich()
 {
 	Pause = !Pause;
 }
@@ -14,7 +14,7 @@ void FrameAnimation::Reset()
 	Info.CurFrame = 0;
 }
 
-void FrameAnimation::Update(float _Delta) 
+void FrameAnimation::Update(float _Delta)
 {
 	if (false == Pause)
 	{
@@ -47,6 +47,7 @@ void FrameAnimation::Update(float _Delta)
 				}
 				bOnceEnd = true;
 				bOnceStart = false;
+				return;
 			}
 
 			++Info.CurFrame;
@@ -113,7 +114,7 @@ void FrameAnimation::Update(float _Delta)
 
 }
 
-GameEngineTextureRenderer::GameEngineTextureRenderer() 
+GameEngineTextureRenderer::GameEngineTextureRenderer()
 	: CurAni(nullptr)
 	, CurTex(nullptr)
 	, PivotMode(PIVOTMODE::CUSTOM)
@@ -122,7 +123,7 @@ GameEngineTextureRenderer::GameEngineTextureRenderer()
 {
 }
 
-GameEngineTextureRenderer::~GameEngineTextureRenderer() 
+GameEngineTextureRenderer::~GameEngineTextureRenderer()
 {
 }
 
@@ -139,7 +140,7 @@ void GameEngineTextureRenderer::SetTextureRendererSetting()
 
 	ShaderResources.SetConstantBufferLink("AtlasData", AtlasDataInst);
 	ShaderResources.SetConstantBufferLink("PixelData", PixelDataInst);
-	
+
 }
 
 void GameEngineTextureRenderer::CurAnimationPauseSwitch()
@@ -147,7 +148,7 @@ void GameEngineTextureRenderer::CurAnimationPauseSwitch()
 	CurAni->PauseSwtich();
 }
 
-void GameEngineTextureRenderer::Start() 
+void GameEngineTextureRenderer::Start()
 {
 	GameEngineDefaultRenderer::Start();
 
@@ -211,7 +212,7 @@ void GameEngineTextureRenderer::SetPivot(PIVOTMODE _Mode)
 	PivotMode = _Mode;
 }
 
-void GameEngineTextureRenderer::SetPivotToVector(const float4& _Value) 
+void GameEngineTextureRenderer::SetPivotToVector(const float4& _Value)
 {
 	GetTransform().SetLocalPosition(_Value);
 }
@@ -339,7 +340,7 @@ void GameEngineTextureRenderer::ChangeFrameAnimation(const std::string& _Animati
 				ScaleToCutTexture(CurAni->Info.CurFrame);
 			}
 		}
-		else if(nullptr != CurAni->FolderTexture)
+		else if (nullptr != CurAni->FolderTexture)
 		{
 			SetTexture(CurAni->FolderTexture->GetTexture(CurAni->Info.Frames[CurAni->Info.CurFrame]));
 			if (ScaleMode == SCALEMODE::IMAGE)
@@ -352,7 +353,7 @@ void GameEngineTextureRenderer::ChangeFrameAnimation(const std::string& _Animati
 
 void GameEngineTextureRenderer::FrameDataReset()
 {
-	AtlasDataInst.FrameData = { 0.0f , 0.0f, 1.0f, 1.0f};
+	AtlasDataInst.FrameData = { 0.0f , 0.0f, 1.0f, 1.0f };
 }
 
 
@@ -412,17 +413,17 @@ void GameEngineTextureRenderer::CurAnimationSetStartPivotFrame(int SetFrame)
 	CurAni->Info.CurFrame = SetFrame;
 }
 
-void GameEngineTextureRenderer::CurAnimationPauseOn() 
+void GameEngineTextureRenderer::CurAnimationPauseOn()
 {
 	CurAni->Pause = true;
 }
 
-void GameEngineTextureRenderer::CurAnimationPauseOff() 
+void GameEngineTextureRenderer::CurAnimationPauseOff()
 {
 	CurAni->Pause = false;
 }
 
-bool GameEngineTextureRenderer::IsCurAnimationPause() 
+bool GameEngineTextureRenderer::IsCurAnimationPause()
 {
 	return CurAni->Pause;
 }

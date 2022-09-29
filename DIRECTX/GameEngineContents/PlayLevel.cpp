@@ -27,6 +27,7 @@
 
 bool PlayLevel::MainBgmPlaying = false;
 bool PlayLevel::BossBgmPlaying = false;
+bool PlayLevel::RoomShake = false;
 GameEngineSoundPlayer PlayLevel::BGMSoundPlayer;
 
 CharacterActor* PlayLevel::GetPlayer()
@@ -132,9 +133,6 @@ void PlayLevel::Start()
 		, std::bind(&PlayLevel::RoomSlowStart, this, std::placeholders::_1)
 		, std::bind(&PlayLevel::RoomSlowEnd, this, std::placeholders::_1));
 
-	RoomStateManager.CreateStateMember("RoomShake"
-		, std::bind(&PlayLevel::RoomShakeUpdate, this, std::placeholders::_1, std::placeholders::_2)
-		, std::bind(&PlayLevel::RoomShakeStart, this, std::placeholders::_1));
 
 	// Rim Light 용도
 	GameEngineActor* Chromakey = CreateActor<ChromakeyGreen>();
@@ -167,6 +165,7 @@ void PlayLevel::LevelEndEvent()
 	BGMSoundPlayer.Stop();
 }
 
+float ShakeDT = 0.0f;
 void PlayLevel::Update(float _DeltaTime)
 {
 	RoomStateManager.Update(_DeltaTime);
@@ -202,6 +201,31 @@ void PlayLevel::Update(float _DeltaTime)
 		GlobalValueManager::ColMap->OnOffSwitch();
 	}
 	
+	// 카메라 흔들림
+	if (true == Player->RoomShakeActivate())
+	{
+		RoomShake = true;
+		ShakeDT = 0.0f;
+	}
+
+	if (true == RoomShake)
+	{
+		float ShakeX = sinf(ShakeDT * 800.0f) * powf(0.98f, ShakeDT * 80.0f);
+		float ShakeY = sinf(ShakeDT * 800.0f) * powf(0.97f, ShakeDT * 80.0f);
+		GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 10, 0, 0 });
+		ShakeDT += _DeltaTime;
+	}
+
+	if (ShakeDT > 0.4f)
+	{
+		RoomShake = false;
+		ShakeDT = 0.0f;
+
+		if (0 != RoomStateManager.GetCurStateStateName().compare("RoomSlow"))
+		{
+			TimeGroupNormal();
+		}
+	}
 }
 
 void PlayLevel::End()
@@ -266,7 +290,7 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	if (true == Transition->IsBlack())
 	{
 		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_transition_end.wav");
-		EffectSoundPlayer.Volume(0.1f);
+		EffectSoundPlayer.Volume(0.05f);
 		Transition->ChangeState(DiamondTransition::STATE::CHANGEWHITE);
 	}
 
@@ -322,6 +346,8 @@ void PlayLevel::RoomChangeEnd(const StateInfo& _Info)
 
 	Effect_Wave::GetInst()->EffectOff();
 	Effect_DistortionGlitch::GetInst()->EffectOff();
+
+	GlobalValueManager::SlowEnergy = GlobalValueManager::SlowEnergyMax;
 }
 
 bool GlitchStart;
@@ -386,6 +412,7 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 	Player->SetInputValid(true);
 
 	Effect_DistortionGlitch::GetInst()->EffectOff();
+	Effect_Wave::GetInst()->EffectOff();
 }
 
 // @@@ 게임 플레이 @@@
@@ -423,13 +450,6 @@ void PlayLevel::RoomPlayUpdate(float _DeltaTime, const StateInfo& _Info)
 			GlobalValueManager::SlowEnergy++;
 			SlowRecoverTime = 0;
 		}
-	}
-
-	// 공격 성공시 화면 흔들림 효과
-	if (true == Player->RoomShakeActivate())
-	{
-		RoomStateManager.ChangeState("RoomShake");
-		return;
 	}
 
 	// 슬로우 모드
@@ -492,14 +512,14 @@ void PlayLevel::RoomPlayEnd(const StateInfo& _Info)
 void PlayLevel::RoomExitStart(const StateInfo& _Info)
 {
 	Transition->ChangeState(DiamondTransition::STATE::CHANGEBLACK);
+	EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_transition_begin.wav");
+	EffectSoundPlayer.Volume(0.1f);
 }
 
 void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	if (true == Transition->IsChangeBlackEnd())
 	{
-		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_transition_begin.wav");
-		EffectSoundPlayer.Volume(0.1f);
 		ChangeRoom(++Room::CurRoomIndex);
 	}
 }
@@ -525,8 +545,6 @@ void PlayLevel::RoomClickToRestartUpdate(float _DeltaTime, const StateInfo& _Inf
 }
 
 float SlowDeltaTime;
-bool CamShake;
-float ShakeDT;
 void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 {
 	// 배경 어둡게(총알, 플레이어보단 뒤에 있음)
@@ -540,35 +558,11 @@ void PlayLevel::RoomSlowStart(const StateInfo& _Info)
 
 	CharacterShadow::SwitchShadowMode();
 
-	CamShake = false;
-	ShakeDT = 0.0f;
+	TimeGroupSlow();
 }
 
 void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (true == Player->RoomShakeActivate())
-	{
-		TimeGroupSlow();
-		CamShake = true;
-		ShakeDT = 0.0f;
-	}
-
-	// 카메라 흔들림
-	if (true == CamShake)
-	{
-		float ShakeX = sinf(ShakeDT * 10.0f) * powf(0.98f, ShakeDT * 80.0f);
-		float ShakeY = sinf(ShakeDT * 80.0f) * powf(0.97f, ShakeDT * 80.0f);
-		GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });
-		ShakeDT += _DeltaTime;
-	}
-
-	if (ShakeDT > 1.5f)
-	{
-		TimeGroupNormal();
-		CamShake = false;
-	}
-
-
 	CameraFollow(_DeltaTime);
 
 	RoomPlayTotalTime += _DeltaTime * 0.5f;
@@ -601,41 +595,50 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 		SlowInSound.Stop();
 		SlowOutSound = GameEngineSound::SoundPlayControl("sound_slomo_disengage.wav");
 		SlowOutSound.Volume(0.1f);
-
 		return;
 	}
 }
 
 void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 {
+	TimeGroupNormal();
 	CharacterShadow::SwitchShadowMode();
 }
 
 float OriginalDeltaTime;
-void PlayLevel::RoomShakeStart(const StateInfo& _Info)
-{
-
-	TimeGroupSlow();
-	OriginalDeltaTime = 0.0f;
-}
-
-void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
-{
-	OriginalDeltaTime += _DeltaTime;
-	float DT = OriginalDeltaTime;
-	
-	// 카메라 흔들림
-	float ShakeX = sinf(DT * 10.0f) * powf(0.98f, DT);
-	float ShakeY = sinf(DT * 80.0f) * powf(0.97f, DT * 80);
-	GetMainCameraActor()->GetTransform().SetWorldMove({ 0, ShakeY * 10, 0 });
-
-	if (_Info.StateTime >= 0.4f)
-	{
-		TimeGroupNormal();
-		RoomStateManager.ChangeState("RoomPlay");
-		return;
-	}
-}
+//void PlayLevel::RoomShakeStart(const StateInfo& _Info)
+//{
+//	if (true == RoomShakeSlow)
+//	{
+//		TimeGroupSlow();
+//	}
+//	OriginalDeltaTime = 0.0f;
+//}
+//
+//void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
+//{
+//	CameraFollow(_DeltaTime);
+//
+//	OriginalDeltaTime += _DeltaTime;
+//	float DT = OriginalDeltaTime;
+//	
+//	// 카메라 흔들림
+//	float ShakeX = sinf(DT * 800.0f) * powf(0.97f, DT * 80);
+//	float ShakeY = sinf(DT * 800.0f) * powf(0.97f, DT * 80);
+//	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 5, 0, 0 });
+//
+//	if (_Info.StateTime >= 0.4f)
+//	{
+//		if (true == RoomShakeSlow)
+//		{
+//			TimeGroupNormal();
+//		}
+//
+//		RoomShakeSlow = true;
+//		RoomStateManager.ChangeState("RoomPlay");
+//		return;
+//	}
+//}
 
 // 되감기
 float ReverseDeltaTime;
@@ -681,6 +684,12 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (Player->IsReverseEnd())
 	{
+		if (Room::CurRoomIndex == Rooms.size() - 1)
+		{
+			RoomStateManager.ChangeState("RoomPlay");
+			return;
+		}
+
 		RoomStateManager.ChangeState("RoomChange");
 		return;
 	}

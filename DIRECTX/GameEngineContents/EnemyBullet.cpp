@@ -26,11 +26,11 @@ void EnemyBullet::Start()
 	RendererScale = Renderer->GetTransform().GetLocalScale();
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 5, 5, GetDepth(ACTOR_DEPTH::FX) });
-	Collision->GetTransform().SetLocalPosition({ RendererScale.x * 0.5f, 0, 0 });
 	Collision->ChangeOrder(COLLISIONGROUP::ENEMY_ATTACK);
 	Collision->SetDebugSetting(CollisionType::CT_OBB2D, { 1, 1, 1, 0.5f });
 
 	GetTransform().SetLocalScale({ 1, 1, 1 });
+
 }
 
 void EnemyBullet::Update(float _DeltaTime)
@@ -41,7 +41,7 @@ void EnemyBullet::Update(float _DeltaTime)
 
 	// Trail
 	BulletTrail* Trail = GetLevel()->CreateActor<BulletTrail>();
-	Trail->Spawn(GetTransform().GetWorldPosition(), Renderer->GetTransform().GetLocalScale(), 0.03f);
+	Trail->Spawn(GetTransform().GetWorldPosition(), Renderer->GetTransform().GetLocalScale(), 0.06f);
 
 	PlayerSlashCheck();
 

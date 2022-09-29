@@ -1,6 +1,7 @@
 #pragma once
 #include "Stair.h"
 
+
 class GlobalValueManager
 {
 public:
@@ -18,6 +19,7 @@ public:
 
 	// ½½·Î¿ì
 	static int SlowEnergy;
+	static int SlowEnergyMax;
 
 private:
 	// constrcuter destructer

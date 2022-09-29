@@ -372,7 +372,7 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 	Attack.z = 0;
 
 	// 방 흔들기
-	PlayLevel::PlayLevelInst->ShakeRoom();
+	PlayLevel::PlayLevelInst->ShakeRoom(true);
 
 	if (nullptr != dynamic_cast<EnemyBullet*>(_Other->GetActor()))
 	{
@@ -762,14 +762,16 @@ void EnemyActor::RunStart(const StateInfo& _Info)
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		PrevLookDir = -1;
 	}
+
+	// 같은층 체크
+
 }
 
 void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 
-
-	// *플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 ChaseTurn
-	if (MoveVec.x != PlayerDir.ix() && true == PlayerSameFloor)
+	// 플레이어 방향 확인(같은 층 인지도 고려)-> 반대면 ChaseTurn
+	if (MoveVec.ix() != PlayerDir.ix() && true == PlayerSameFloor)
 	{
 		StateManager.ChangeState("ChaseTurn");
 		return;
@@ -794,9 +796,8 @@ void EnemyActor::RunUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-
 	// 사거리 안에 들어오면 Attack
-	if (true == PlayerSameFloor && abs(PlayerPos.x - EnemyPos.x) < AttackRange)
+	if (true == PlayerSameFloor && (PlayerPos - EnemyPos).Length() <= AttackRange)
 	{
 		StateManager.ChangeState("Attack");
 		return;
@@ -1154,6 +1155,12 @@ void EnemyActor::GoDownstairUpdate(float _DeltaTime, const StateInfo& _Info)
 					}
 
 					// 다음계단 아래층이면 슬로프거쳐야됨 
+					if (nullptr == CurDestStair->DownStair)
+					{
+						StateManager.ChangeState("Run");
+						return  CollisionReturn::ContinueCheck;
+					}
+
 					float NextStairDirX = CurDestStair->GetTransform().GetWorldPosition().x
 						- CurDestStair->DownStair->GetTransform().GetWorldPosition().x > 0 ? -1.0f : 1.0f;
 					MoveVec.x = NextStairDirX;
@@ -1239,13 +1246,18 @@ void EnemyActor::SlopeRunUpdate(float _DeltaTime, const StateInfo& _Info)
 							return  CollisionReturn::ContinueCheck;
 						}
 					}
-		
 
 					CurDestStairArrived = true;
 				}
 				return CollisionReturn::ContinueCheck;
 			}, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; }
 			, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
+	}
+
+	if (nullptr == CurDestStair->DownStair && true == PlayerSameFloor)
+	{
+		StateManager.ChangeState("Run");
+		return;
 	}
 
 

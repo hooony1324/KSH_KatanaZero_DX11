@@ -8,7 +8,7 @@ bool (*GameEngineCollision::CollisionFunction[static_cast<int>(CollisionType::CT
 class GameEngineCollisionFunctionInit
 {
 public:
-	GameEngineCollisionFunctionInit() 
+	GameEngineCollisionFunctionInit()
 	{
 		memset(GameEngineCollision::CollisionFunction, 0, sizeof(GameEngineCollision::CollisionFunction));
 
@@ -21,7 +21,7 @@ public:
 		GameEngineCollision::CollisionFunction[static_cast<int>(CollisionType::CT_OBB2D)][static_cast<int>(CollisionType::CT_OBB2D)] = &GameEngineTransform::OBB2DToOBB2D;
 	}
 
-	~GameEngineCollisionFunctionInit() 
+	~GameEngineCollisionFunctionInit()
 	{
 
 	}
@@ -29,14 +29,14 @@ public:
 
 GameEngineCollisionFunctionInit Inst;
 
-GameEngineCollision::GameEngineCollision() 
+GameEngineCollision::GameEngineCollision()
 	: DebugType(CollisionType::CT_SPHERE)
 	, Color(1.0f, 0.0f, 0.0f, 0.5f)
 	, eCollisionMode(CollisionMode::Normal)
 {
 }
 
-GameEngineCollision::~GameEngineCollision() 
+GameEngineCollision::~GameEngineCollision()
 {
 }
 
@@ -83,6 +83,11 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 
 	for (GameEngineCollision* Collision : Collisions)
 	{
+		if (Collision == this)
+		{
+			continue;
+		}
+
 		if (false == Collision->IsUpdate())
 		{
 			continue;
@@ -105,7 +110,7 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 					}
 
 				}
-				else 
+				else
 				{
 					if (nullptr != _Update && CollisionReturn::Break == _Update(this, Collision))
 					{
@@ -129,7 +134,7 @@ bool GameEngineCollision::IsCollision(CollisionType _ThisType, int _GroupOrder
 				// return true; 이부분 잘못됐어요.
 			}
 		}
-		else 
+		else
 		{
 			if (eCollisionMode == CollisionMode::Ex)
 			{

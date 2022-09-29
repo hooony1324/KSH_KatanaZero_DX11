@@ -79,6 +79,9 @@
     <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\EnemyEffect">
       <UniqueIdentifier>{a1ebc3bb-2537-4509-bb2c-4a4ab7493c42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect">
+      <UniqueIdentifier>{3e776ba7-e769-44ae-a94a-f0a3554be6b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalValueManager.h">
@@ -281,7 +284,10 @@
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClInclude>
     <ClInclude Include="BulletTrail.h">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ShotSpark.h">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -488,7 +494,10 @@
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\CharacterActor\PlayerEffect</Filter>
     </ClCompile>
     <ClCompile Include="BulletTrail.cpp">
-      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet</Filter>
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ShotSpark.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

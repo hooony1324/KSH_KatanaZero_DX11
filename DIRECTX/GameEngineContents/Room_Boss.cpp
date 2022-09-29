@@ -388,7 +388,7 @@ void Room_Boss::SceneMutateStart(const StateInfo& _Info)
 
 void Room_Boss::SceneMutateUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime < 3.0f)
+	if (_Info.StateTime < 1.0f)
 	{
 		return;
 	}
@@ -443,7 +443,7 @@ void Room_Boss::SceneMutatedStart(const StateInfo& _Info)
 
 	// 울부짖음 사운드
 	PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("sound_boss_therapist_mutate_02.ogg");
-	PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.1f);
+	PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.2f);
 
 	// 월드 -> 뷰포트, 포스트 이펙트에서 제외용도
 	// MainCam이 플레이어 때문에 이동해 있음

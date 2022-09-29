@@ -2,6 +2,9 @@
 #include "EnemyCop.h"
 #include "EnemyBullet.h"
 
+#include "ShotSpark.h"
+#include "PlayLevel.h"
+
 EnemyCop::EnemyCop() 
 {
 	EnemyName = "cop";
@@ -28,7 +31,7 @@ void EnemyCop::Start()
 	// 기본 정보
 	Hp = 1;
 	MoveSpeed = 150.0f;
-	AttackRange = 500.0f;
+	AttackRange = 550.0f;
 	ChaseSensorPaddingX = 60.0f;
 	Collision_ChaseSensor->GetTransform().SetLocalPosition({ ChaseSensorPaddingX, 18 , 0 });
 	IsChasingEnemy = false;
@@ -122,7 +125,8 @@ void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	// 조준 
 	AimDir = (PlayerPos - EnemyPos).NormalizeReturn();
-	float Rot = float4::VectorXYtoDegree(EnemyPos, PlayerPos);
+	ShotDegree = float4::VectorXYtoDegree(EnemyPos, PlayerPos);
+	float GunDegree = ShotDegree;
 	if (AimDir.x > 0)
 	{
 		Renderer_Character->GetTransform().PixLocalPositiveX();
@@ -134,9 +138,10 @@ void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 		Renderer_Character->GetTransform().PixLocalNegativeX();
 		Renderer_GunArm->GetTransform().PixLocalNegativeX();
 
-		Rot -= 178.9f;
+		GunDegree -= 178.9f;
 	}
-	Renderer_GunArm->GetTransform().SetWorldRotation({ 0, 0, Rot });
+
+	Renderer_GunArm->GetTransform().SetWorldRotation({ 0, 0, GunDegree });
 	
 
 
@@ -154,11 +159,20 @@ void EnemyCop::AimUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void EnemyCop::ShootStart(const StateInfo& _Info)
 {
+	SoundPlayer = GameEngineSound::SoundPlayControl("sound_gun_fire_1.wav");
+	SoundPlayer.Volume(0.1f);
+
+	PlayLevel::PlayLevelInst->ShakeRoom(false);
+
 	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>(ACTORGROUP::TIMEGROUP_PARTICLE);
 	float4 GunPos = Renderer_GunArm->GetTransform().GetWorldPosition();
-	Blt->On();
-	Blt->Instance(GunPos + float4{ 0, 0, GetDepth(ACTOR_DEPTH::FX)}, AimDir);
 
+	float4 ShotPoint = GunPos + float4{ 0, 0, GetDepth(ACTOR_DEPTH::FX) } + AimDir * 70.0f;
+	Blt->Instance(ShotPoint, AimDir);
+
+	ShotSpark* Spark = GetLevel()->CreateActor<ShotSpark>();
+	Spark->GetTransform().SetWorldPosition(ShotPoint);
+	Spark->GetTransform().SetWorldRotation({ 0, 0, ShotDegree });
 
 	Renderer_GunArm->Off();
 	Renderer_Character->ChangeFrameAnimation("idle");

@@ -57,7 +57,7 @@ void Effect_DistortionGlitch::Effect(GameEngineRenderTarget* _Target)
 	{
 		EffectSoundPlayed = true;
 		EffectSoundPlayer = GameEngineSound::SoundPlayControl("sound_tv_thump.wav");
-		EffectSoundPlayer.Volume(0.07f);
+		EffectSoundPlayer.Volume(0.08f);
 	}
 
 	_Target->Clear();
