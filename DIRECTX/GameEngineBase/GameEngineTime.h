@@ -30,6 +30,12 @@ public:
 	void Reset();
 	void Update();
 
+	static inline int GetFPS()
+	{
+		return Inst_->FPS;
+	}
+
+
 	static inline float GetDeltaTime()
 	{
 		if (0.05f <= Inst_->DeltaTimef)
@@ -38,6 +44,13 @@ public:
 		}
 
 		return Inst_->DeltaTimef * Inst_->GlobalScale;
+	}
+
+	static inline void SetLimitFrame(unsigned int _Frame)
+	{
+		Inst_->FrameLimit = _Frame;
+		Inst_->FrameTime = 1.0f / Inst_->FrameLimit;
+		Inst_->CurFrameTime = 0.0f;
 	}
 
 	template<typename EnumType>
@@ -58,7 +71,7 @@ public:
 	}
 
 
-	void SetTimeScale(int _Key, float _TimeScale) 
+	void SetTimeScale(int _Key, float _TimeScale)
 	{
 		TimeScale_[_Key] = _TimeScale;
 	}
@@ -73,9 +86,14 @@ public:
 		return TimeScale_[_Key];
 	}
 
-	void SetGlobalScale(float _GlobalScale) 
+	void SetGlobalScale(float _GlobalScale)
 	{
 		GlobalScale = _GlobalScale;
+	}
+
+	static bool IsFrameCheck()
+	{
+		return Inst_->FrameUpdate;
 	}
 
 protected:
@@ -87,6 +105,16 @@ private:
 	float DeltaTimef;
 	std::map<int, float> TimeScale_;
 	float GlobalScale;
+
+	float FrameCheckTime;
+	int SumFPS;
+	int SumFPSCount;
+	int FPS;
+
+	int FrameLimit;
+	float FrameTime;
+	float CurFrameTime;
+	bool FrameUpdate;
 
 	GameEngineTime();
 	~GameEngineTime();

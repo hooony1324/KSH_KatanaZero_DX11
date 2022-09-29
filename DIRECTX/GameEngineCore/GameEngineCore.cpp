@@ -19,11 +19,11 @@ GameEngineLevel* GameEngineCore::NextLevel = nullptr;
 std::map<std::string, class GameEngineLevel*> GameEngineCore::AllLevels;
 
 
-GameEngineCore::GameEngineCore() 
+GameEngineCore::GameEngineCore()
 {
 }
 
-GameEngineCore::~GameEngineCore() 
+GameEngineCore::~GameEngineCore()
 {
 }
 
@@ -64,8 +64,8 @@ void GameEngineCore::CoreStart(GameEngineCore* _UserCore)
 
 	GameEngineDebug::Debug3DInitialize();
 
-// 엔진이 뭔가를 할겁니다.
-	// 준비를 먼저하고.
+	// 엔진이 뭔가를 할겁니다.
+		// 준비를 먼저하고.
 	_UserCore->Start();
 }
 
@@ -73,11 +73,6 @@ void GameEngineCore::CoreUpdate(GameEngineCore* _UserCore)
 {
 	if (nullptr != NextLevel)
 	{
-		Rectangle(GameEngineWindow::GetInst()->GetHDC()
-			, 0
-			, 0
-			, GameEngineWindow::GetInst()->GetScale().ix(), GameEngineWindow::GetInst()->GetScale().iy());
-
 		if (nullptr != CurrentLevel)
 		{
 			CurrentLevel->ActorLevelEndEvent();
@@ -105,20 +100,21 @@ void GameEngineCore::CoreUpdate(GameEngineCore* _UserCore)
 		MsgBoxAssert("레벨을 지정해주지 않으면 엔진을 시작할수가 업습니다.");
 	}
 
-	GameEngineTime::GetInst()->Update();
 	GameEngineSound::Update();
-
+	GameEngineTime::GetInst()->Update();
 	float DeltaTime = GameEngineTime::GetDeltaTime();
-
 	GameEngineInput::GetInst()->Update(DeltaTime);
-	// 엔진수준에서 유저가 하고 싶은일.
-	_UserCore->Update(DeltaTime);
 
-	CurrentLevel->LevelUpdate(DeltaTime);
+	if (true == GameEngineTime::IsFrameCheck())
+	{
+		// 엔진수준에서 유저가 하고 싶은일.
+		_UserCore->Update(DeltaTime);
+		CurrentLevel->LevelUpdate(DeltaTime);
+	}
 
 }
 
-void GameEngineCore::CoreEnd(GameEngineCore* _UserCore) 
+void GameEngineCore::CoreEnd(GameEngineCore* _UserCore)
 {
 	_UserCore->End();
 
@@ -181,7 +177,7 @@ void GameEngineCore::InitializeLevel(GameEngineLevel* _Level, const std::string 
 
 	_Level->Start();
 	_Level->SetName(_Name);
-	
+
 	// AllLevels.insert(std::map<std::string, GameEngineLevel*>::value_type(_Name, NewLevel));
 	AllLevels.insert(std::make_pair(_Name, _Level));
 }

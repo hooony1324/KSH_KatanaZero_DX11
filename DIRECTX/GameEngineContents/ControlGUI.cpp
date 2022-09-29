@@ -32,10 +32,8 @@ void ControlGUI::Initialize(GameEngineLevel* _Level)
 
 void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 {
-	int FPS = static_cast<int>(1.0f / _DeltaTime);
-	std::string Name = "FPS : " + std::to_string(FPS);
+	std::string Name = "FPS : " + std::to_string(GameEngineTime::GetFPS());
 	ImGui::Text(Name.c_str());
-
 	{
 		float4 Pos = Cursor::GetCursorScreenPosition();
 		std::string Name = "MouseScreenPosition : " + std::to_string(Pos.x) + " : " + std::to_string(Pos.y);
