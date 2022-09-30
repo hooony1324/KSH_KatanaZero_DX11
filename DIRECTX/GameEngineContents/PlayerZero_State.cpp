@@ -732,7 +732,7 @@ void PlayerZero::DoorBreakStart(const StateInfo& _Info)
 
 void PlayerZero::DoorBreakUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-
+	MoveVec.y = 0;
 }
 
 

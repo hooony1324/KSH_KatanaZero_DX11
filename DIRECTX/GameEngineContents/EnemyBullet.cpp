@@ -28,6 +28,7 @@ void EnemyBullet::Start()
 	Collision->GetTransform().SetLocalScale({ 5, 5, GetDepth(ACTOR_DEPTH::FX) });
 	Collision->ChangeOrder(COLLISIONGROUP::ENEMY_ATTACK);
 	Collision->SetDebugSetting(CollisionType::CT_OBB2D, { 1, 1, 1, 0.5f });
+	Collision->SetCollisionMode(CollisionMode::Ex);
 
 	GetTransform().SetLocalScale({ 1, 1, 1 });
 
@@ -76,7 +77,7 @@ void EnemyBullet::PixelWallCheck()
 
 void EnemyBullet::PlayerSlashCheck()
 {
-	Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D, 
+	Collision->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::PLAYER_ATTACK), CollisionType::CT_OBB2D, 
 		[=](GameEngineCollision* _This, GameEngineCollision* _Other) 
 		{
 			// ÃÑ¾Ë³¢¸® ºÎµúÈ÷¸é ¹«½Ã

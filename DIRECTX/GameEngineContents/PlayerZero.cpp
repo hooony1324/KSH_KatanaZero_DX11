@@ -179,13 +179,32 @@ void PlayerZero::PlayerMove(float _DeltaTime)
 		Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::DOOR, CollisionType::CT_AABB2D,
 			[=](GameEngineCollision* _This, GameEngineCollision* _Other)
 			{
-				DoorBreaking = true;
-				PlayerStateManager.ChangeState("DoorBreak");
-				Velocity.x = 0;
-				DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+				bool DoorIsLeft = (_Other->GetTransform().GetWorldPosition().x - _This->GetTransform().GetWorldPosition().x) < 0;
+				// 문에 닿았고 입력이 문 방향이면 연다
+				if (true == DoorIsLeft && (MoveVec.x < 0))
+				{
+					DoorBreaking = true;
+					PlayerStateManager.ChangeState("DoorBreak");
+					Velocity.x = 0;
+					DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+				}
+				else if (false == DoorIsLeft && (MoveVec.x > 0))
+				{
+					DoorBreaking = true;
+					PlayerStateManager.ChangeState("DoorBreak");
+					Velocity.x = 0;
+					DoorPtr = dynamic_cast<Door*>(_Other->GetActor());
+				}
+				// 문에 닿으면 + 입력 없으면 일단 밀어낸다
+				else
+				{
+					Velocity.x *= -1.5f;
+				}
 				return CollisionReturn::Break;
+
 			});
 	}
+
 
 	// 벽 막기
 	switch (WallState)
