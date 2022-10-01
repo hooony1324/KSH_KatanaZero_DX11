@@ -111,7 +111,11 @@ void PlayerZero::Update(float _DeltaTime)
 	GlobalValueManager::PlayerPos = GetTransform().GetWorldPosition();
 	EnemyAttackCheck();
 	WallCheck();
-	InputCheck();
+
+	if (Hp > 0)
+	{
+		InputCheck();
+	}
 
 	PlayerStateManager.Update(_DeltaTime);
 	FloatTimeCheck(_DeltaTime);

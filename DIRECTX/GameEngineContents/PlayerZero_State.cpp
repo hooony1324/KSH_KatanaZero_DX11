@@ -177,6 +177,11 @@ void PlayerZero::FallUpdate(float _DeltaTime, const StateInfo& _Info)
 		}
 	}
 
+	if (Right || Left)
+	{
+		MoveVec.x = 0;
+	}
+
 	MoveVec.y = static_cast<float>(sinf(FlyAngle)) - 9.8f * DT / AntiGravity * 0.9f;
 	// 부유감 좀 있음
 	if (MoveVec.y <= -0.8f)
@@ -519,7 +524,7 @@ void PlayerZero::FlipStart(const StateInfo& _Info)
 		FlyVector = float4{ -x, y }.NormalizeReturn();
 	}
 	MoveVec.x = FlyVector.x;
-	MoveSpeed = 700;
+	MoveSpeed = 800;
 
 	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_roll.wav");
 	MoveSoundPlayer.Volume(0.05f);
@@ -533,7 +538,7 @@ void PlayerZero::FlipUpdate(float _DeltaTime, const StateInfo& _Info)
 	MoveVec.y = FlyVector.y - 9.8f * DT / AntiGravity;
 	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime * 0.7f);
 
-	if (false == IsFall)
+	if (false == IsFall && Down_Left && Down_Right)
 	{
 		IsFlip = false;
 		MoveVec = float4::ZERO;
@@ -558,10 +563,18 @@ void PlayerZero::RunToIdleUpdate(float _DeltaTime, const StateInfo& _Info)
 	
 	MoveVec.x = GameEngineMath::Lerp(MoveVec.x, 0, _DeltaTime * 10.0f);
 
+
 	// Roll
 	if (abs(InputDir.x) >= 1.0f && InputDir.y <= -1.0f)
 	{
 		PlayerStateManager.ChangeState("Roll");
+		return;
+	}
+
+	if (true == IsFall)
+	{
+		Renderer_Character->ChangeFrameAnimation("fall");
+		PlayerStateManager.ChangeState("Fall");
 		return;
 	}
 
@@ -607,6 +620,13 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 	float MoveX = pow(DT, 3.0f) * 50; // 25 : 0.2초만에 0~1
 	MoveVec.x = MoveX * InputDir.x;
 
+	if (true == IsFall)
+	{
+		Renderer_Character->ChangeFrameAnimation("fall");
+		PlayerStateManager.ChangeState("Fall");
+		return;
+	}
+
 	// Roll
 	if (abs(InputDir.x) >= 1.0f && InputDir.y <= -1.0f)
 	{
@@ -635,12 +655,6 @@ void PlayerZero::IdleToRunUpdate(float _DeltaTime, const StateInfo& _Info)
 		GetTransform().SetWorldMove({ 0, -3, 0 });
 	}
 
-	if (true == IsFall)
-	{
-		Renderer_Character->ChangeFrameAnimation("fall");
-		PlayerStateManager.ChangeState("Fall");
-		return;
-	}
 
 	if (InputDir.y > 0)
 	{
@@ -703,12 +717,18 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 벽과 충돌 체크
-	if (UpLeft || UpRight)
+	if (!Up && (UpLeft || UpRight))
 	{
 		MoveVec.x *= -0.3f;
 	}
 
 	if (Up)
+	{
+		MoveVec.y = -0.0005f;
+	}
+
+	// 아무 외부영향 없이 시간제한으로 죽을때
+	if (abs(MoveVec.y) <= 0.0005f)
 	{
 		MoveVec.y = -0.0005f;
 	}

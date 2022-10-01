@@ -170,12 +170,12 @@ void CharacterActor::WallCheck()
 	}
 
 	// 왼쪽 오른쪽 벽
-	if (Left_Up && Left && UpLeft)
+	if (Left_Up && Left)
 	{
 		WallState = STATE_WALL::LEFT;
 		return;
 	}
-	if (Right_Up && Right && UpRight)
+	if (Right_Up && Right)
 	{
 		WallState = STATE_WALL::RIGHT;
 		return;

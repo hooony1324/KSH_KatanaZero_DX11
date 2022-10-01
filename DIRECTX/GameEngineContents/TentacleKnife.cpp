@@ -174,7 +174,7 @@ void TentacleKnife::LoadStart(const StateInfo& _Info)
 {
 	IsStab = false;
 
-	RandomLoadY = GameEngineRandom::MainRandom.RandomFloat(-20, -150);
+	RandomLoadY = GameEngineRandom::MainRandom.RandomFloat(20, 150) * -1.0f;
 }
 
 void TentacleKnife::LoadUpdate(float _DeltaTime, const StateInfo& _Info)
