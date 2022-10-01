@@ -390,8 +390,8 @@ CollisionReturn EnemyActor::Damaged(GameEngineCollision* _This, GameEngineCollis
 		float SlashDegree = _Other->GetTransform().GetLocalRotation().z;
 		float4 Dir = float4::DegreeToDirection2D(SlashDegree);
 		FlyVec = Dir;
-		float Normalize = float4(Enemy - Attack).Length() / 30.0f;
 		// 가까울수록 큰 힘, 멀수록 작은힘
+		float Normalize = float4(Enemy - Attack).Length() / 30.0f;
 		FlyPower = 3 / std::clamp(Normalize, 1.0f, 3.0f);
 		FlyVec.Normalize();
 		StateManager.ChangeState("Hurtfly");

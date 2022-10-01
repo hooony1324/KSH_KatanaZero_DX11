@@ -657,11 +657,10 @@ void PlayerZero::DeadStart(const StateInfo& _Info)
 	MoveSpeed = 150.0f;
 	Renderer_Character->ChangeFrameAnimation("hurtfly");
 
-	FlyVector.x *= 0.5f;
-	FlyVector.y *= 1.2f;
+
 	MoveVec = FlyVector;
 	FlyAngle = float4::VectorXYtoRadian({ 0, 0 }, FlyVector);
-	MoveSpeed *= 3.0f;
+	MoveSpeed *= FlyPower;
 
 	if (MoveVec.x > 0)
 	{
@@ -689,7 +688,7 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	float DT = _Info.StateTime;
 
 	
-	MoveVec.y = FlyVector.y * sinf(FlyAngle) - (9.8f * DT) / 6.0f;
+	MoveVec.y = MoveVec.y - 9.8f * _DeltaTime / AntiGravity * 0.8f;
 
 	if (MoveVec.y < 0 && false == IsFall)
 	{
@@ -704,12 +703,15 @@ void PlayerZero::DeadUpdate(float _DeltaTime, const StateInfo& _Info)
 	}
 
 	// 벽과 충돌 체크
-	if (WallState == STATE_WALL::LEFT || WallState == STATE_WALL::RIGHT)
+	if (UpLeft || UpRight)
 	{
 		MoveVec.x *= -0.3f;
 	}
 
-
+	if (Up)
+	{
+		MoveVec.y = -0.0005f;
+	}
 }
 
 void PlayerZero::DoorBreakStart(const StateInfo& _Info)

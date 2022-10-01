@@ -21,7 +21,7 @@ void EnemyCop::Start()
 	CreateAllState();
 
 	// Attack관련 오버라이드
-	Collision_ChaseSensor->GetTransform().SetLocalScale({ 250, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
+	Collision_ChaseSensor->GetTransform().SetLocalScale({ 450, 50, GetDepth(ACTOR_DEPTH::COLLISION) });
 
 	StateManager.CreateStateMember("Attack"
 		, std::bind(&EnemyCop::AttackUpdate, this, std::placeholders::_1, std::placeholders::_2)

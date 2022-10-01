@@ -48,7 +48,12 @@ void PlayLevel::ChangeRoom(int _Index)
 
 	Room::CurRoomIndex = _Index;
 	CurRoom = Rooms[_Index];
-	
+
+	// 마지막방(보스) 브금 변경
+	if (Room::CurRoomIndex == Rooms.size() - 1)
+	{
+		BGMSoundPlayer.Stop();
+	}
 
 	RoomStateManager.ChangeState("RoomChange");
 }
@@ -220,7 +225,7 @@ void PlayLevel::Update(float _DeltaTime)
 	{
 		RoomShake = false;
 		ShakeDT = 0.0f;
-
+		
 		if (0 != RoomStateManager.GetCurStateStateName().compare("RoomSlow"))
 		{
 			TimeGroupNormal();
@@ -299,6 +304,7 @@ void PlayLevel::RoomChangeStart(const StateInfo& _Info)
 	{
 		Blood->Death();
 	}
+
 }
 
 void PlayLevel::RoomChangeUpdate(float _DeltaTime, const StateInfo& _Info)
@@ -413,6 +419,7 @@ void PlayLevel::RoomPlayStart(const StateInfo& _Info)
 
 	Effect_DistortionGlitch::GetInst()->EffectOff();
 	Effect_Wave::GetInst()->EffectOff();
+
 }
 
 // @@@ 게임 플레이 @@@
@@ -526,7 +533,8 @@ void PlayLevel::RoomExitUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void PlayLevel::RoomExitEnd(const StateInfo& _Info)
 {
-	
+
+
 
 }
 
@@ -606,39 +614,6 @@ void PlayLevel::RoomSlowEnd(const StateInfo& _Info)
 }
 
 float OriginalDeltaTime;
-//void PlayLevel::RoomShakeStart(const StateInfo& _Info)
-//{
-//	if (true == RoomShakeSlow)
-//	{
-//		TimeGroupSlow();
-//	}
-//	OriginalDeltaTime = 0.0f;
-//}
-//
-//void PlayLevel::RoomShakeUpdate(float _DeltaTime, const StateInfo& _Info)
-//{
-//	CameraFollow(_DeltaTime);
-//
-//	OriginalDeltaTime += _DeltaTime;
-//	float DT = OriginalDeltaTime;
-//	
-//	// 카메라 흔들림
-//	float ShakeX = sinf(DT * 800.0f) * powf(0.97f, DT * 80);
-//	float ShakeY = sinf(DT * 800.0f) * powf(0.97f, DT * 80);
-//	GetMainCameraActor()->GetTransform().SetWorldMove({ ShakeX * 5, 0, 0 });
-//
-//	if (_Info.StateTime >= 0.4f)
-//	{
-//		if (true == RoomShakeSlow)
-//		{
-//			TimeGroupNormal();
-//		}
-//
-//		RoomShakeSlow = true;
-//		RoomStateManager.ChangeState("RoomPlay");
-//		return;
-//	}
-//}
 
 // 되감기
 float ReverseDeltaTime;
@@ -684,12 +659,6 @@ void PlayLevel::RoomReverseUpdate(float _DeltaTime, const StateInfo& _Info)
 
 	if (Player->IsReverseEnd())
 	{
-		if (Room::CurRoomIndex == Rooms.size() - 1)
-		{
-			RoomStateManager.ChangeState("RoomPlay");
-			return;
-		}
-
 		RoomStateManager.ChangeState("RoomChange");
 		return;
 	}

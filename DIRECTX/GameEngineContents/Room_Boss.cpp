@@ -113,8 +113,6 @@ void Room_Boss::Start()
 void Room_Boss::OnEvent()
 {
 
-	PlayLevel::PlayLevelInst->BGMSoundPlayer.Stop();
-
 	// ¸Ê °ü·Ã
 	GlobalValueManager::ColMap = Background_ColMap;
 
@@ -214,7 +212,7 @@ void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
 		BossBgmPlayed = true;
 		PlayLevel::PlayLevelInst->BGMSoundPlayer = GameEngineSound::SoundPlayControl("song_monster.ogg", 100);
 		PlayLevel::PlayLevelInst->BossBgmPlaying = true;
-		PlayLevel::PlayLevelInst->MainBgmPlaying = false;
+		PlayLevel::PlayLevelInst->MainBgmPlaying = true;
 		PlayLevel::PlayLevelInst->BGMSoundPlayer.Volume(0.05f);
 	}
 

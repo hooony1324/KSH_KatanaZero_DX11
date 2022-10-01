@@ -173,6 +173,8 @@ protected:
 	int PrevLookDir;
 
 	bool Up;
+	bool UpLeft;
+	bool UpRight;
 	bool MiddleDown;
 	bool Down;
 	bool DownBlue;
@@ -198,6 +200,7 @@ protected:
 	int Hp;
 	float FlyAngle;
 	float4 FlyVector;
+	float FlyPower;
 	bool IsDead;		// hurtground ani 끝에 true로 설정해줌
 	bool DeadAniend;
 	bool Invincible; // 구르는 동안 무적
@@ -226,6 +229,8 @@ private:
 	Pix DoubleDownPix = { 0, -35 };
 	Pix DoubleDownBluePix = { 0, -35 };
 	Pix UpPix = { 0, 34 };
+	Pix UpLeftPix = { -20, 34 };
+	Pix UpRightPix = { 20, 34 };
 	Pix Left_UpPix = { -20, -0 };
 	Pix Right_UpPix = { 20, -0 };
 	Pix Right_DownPix = { 20, -35 };

@@ -62,6 +62,8 @@ void CharacterActor::OnEvent()
 		Pixels.push_back(DoubleDownPix);
 		Pixels.push_back(DoubleDownBluePix);
 		Pixels.push_back(UpPix);
+		Pixels.push_back(UpLeftPix);
+		Pixels.push_back(UpRightPix);
 		Pixels.push_back(Left_UpPix);
 		Pixels.push_back(Right_UpPix);
 		Pixels.push_back(Right_DownPix);
@@ -113,6 +115,8 @@ void CharacterActor::PixelSetting()
 	DoubleDown = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + DoubleDownPix.x, -(CharacterPos.iy() + DoubleDownPix.y)).CompareInt3D(float4::GREEN);
 	DoubleDownBlue = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + DoubleDownBluePix.x, -(CharacterPos.iy() + DoubleDownBluePix.y)).CompareInt3D(float4::BLUE);
 	Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + UpPix.x, -(CharacterPos.iy() + UpPix.y)).CompareInt3D(float4::GREEN);
+	UpLeft = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + UpLeftPix.x, -(CharacterPos.iy() + UpLeftPix.y)).CompareInt3D(float4::GREEN);
+	UpRight = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + UpRightPix.x, -(CharacterPos.iy() + UpRightPix.y)).CompareInt3D(float4::GREEN);
 	Left_Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Left_UpPix.x, -(CharacterPos.iy() + Left_UpPix.y)).CompareInt3D(float4::GREEN);
 	Right_Up = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_UpPix.x, -(CharacterPos.iy() + Right_UpPix.y)).CompareInt3D(float4::GREEN);
 	Right_Down = CollisionMap->GetCurTexture()->GetPixelToFloat4(CharacterPos.ix() + Right_DownPix.x, -(CharacterPos.iy() + Right_DownPix.y)).CompareInt3D(float4::GREEN);
@@ -166,12 +170,12 @@ void CharacterActor::WallCheck()
 	}
 
 	// 왼쪽 오른쪽 벽
-	if (Left_Up && Left)
+	if (Left_Up && Left && UpLeft)
 	{
 		WallState = STATE_WALL::LEFT;
 		return;
 	}
-	if (Right_Up && Right)
+	if (Right_Up && Right && UpRight)
 	{
 		WallState = STATE_WALL::RIGHT;
 		return;
@@ -293,7 +297,15 @@ CollisionReturn CharacterActor::Damaged(GameEngineCollision* _This, GameEngineCo
 		float4 Other = _Other->GetActor()->GetTransform().GetWorldPosition();
 		Other.z = 0;
 		FlyVector = This - Other;
+		FlyVector.y *= 1.5f;
+
+
+		float Distance = FlyVector.Length();
+		float Normalize = Distance / 90.0f;
+		FlyPower = 5 / std::clamp(Normalize, 1.0f, 5.0f);
+
 		FlyVector.Normalize();
+		FlyVector *= 1.5f;
 		PlayerStateManager.ChangeState("Dead");
 	}
 
