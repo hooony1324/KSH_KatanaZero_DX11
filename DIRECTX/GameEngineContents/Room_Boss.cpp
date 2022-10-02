@@ -35,12 +35,23 @@ void Room_Boss::Start()
 	Background_ColMap->SetPivot(PIVOTMODE::LEFTTOP);
 	Background_ColMap->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
 	Background_ColMap->Off();
+	
 
 	// 배경 설정되고 카메라 클램프 영역 세팅
 	InitCameraClampArea();
 
 	// 스폰위치, 지형지물 등
 	PlayerSpawnPos = float4{ 640, -760, GetDepth(ACTOR_DEPTH::PLAYER) };
+
+	// 웨이브 배경
+	Background_Wave = CreateComponent<GameContentsEffectRenderer>();
+	Background_Wave->SetWaveEffect();
+
+	Background_Wave->SetTexture("spr_psychboss_backgroundx4.png");
+	Background_Wave->GetTransform().SetWorldScale({ 640, 436 });
+	Background_Wave->SetPivot(PIVOTMODE::CENTER);
+	Background_Wave->GetTransform().SetLocalMove({ 640, -300, GetDepth(ACTOR_DEPTH::BACKGROUND_1) });
+	Background_Wave->Off();
 
 	// bg > floor > fg
 	Background_Mid = CreateComponent<GameEngineTextureRenderer>();
@@ -141,6 +152,7 @@ void Room_Boss::OffEvent()
 	Background_Mid->Off();
 	Background_Front->Off();
 	Background_Floor->Off();
+	Background_Wave->Off();
 
 	// 보스
 	BossGiant->Off();
@@ -152,6 +164,7 @@ void Room_Boss::Update(float _DeltaTime)
 {
 	StateManager.Update(_DeltaTime);
 	
+	Background_Wave->GetCustomOption().SumDeltaTime += _DeltaTime;
 }
 
 void Room_Boss::End()
@@ -181,8 +194,9 @@ void Room_Boss::CutSceneUpdate(float _Deltatime, const StateInfo& _Info)
 bool BossBgmPlayed;
 void Room_Boss::RoarStart(const StateInfo& _Info)
 {
-	Background->On();
+	//Background->On();
 
+	Background_Wave->On();
 	Background_Mid->On();
 	Background_Front->On();
 	Background_FrontRed->On();
@@ -238,7 +252,7 @@ void Room_Boss::PlayStart(const StateInfo& _Info)
 	DeadTime = 0.0f;
 
 	{
-		Background->On();
+		Background_Wave->On();
 		Background_Mid->On();
 		Background_Front->On();
 		Background_Floor->On();

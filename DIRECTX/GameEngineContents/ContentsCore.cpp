@@ -65,6 +65,7 @@ void ContentsCore::Start()
 
 	//GameEngineGUI::CreateGUIWindow<GameEngineStatusWindow>("EngineStatus", nullptr);
 
+
 }
 
 void ContentsCore::Update(float _DeltaTime)
@@ -120,7 +121,6 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetPixelShader("TextureMask.hlsl");
 	}
 
-	// 포스트 이펙트 파이프라인은 FullRect 사용
 	{
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("Distortion");
 		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
@@ -157,6 +157,14 @@ void ContentsCore::PipelineLoad()
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("RimLight");
 		NewPipe->SetVertexShader("RimLight.hlsl");
 		NewPipe->SetPixelShader("RimLight.hlsl");
+		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
+		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
+	}
+
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("TextureWave");
+		NewPipe->SetVertexShader("TextureWave.hlsl");
+		NewPipe->SetPixelShader("TextureWave.hlsl");
 		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}

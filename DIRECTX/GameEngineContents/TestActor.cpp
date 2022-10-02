@@ -18,11 +18,13 @@ void TestActor::Start()
 {
 	//ShotRenderer = CreateComponent<GameEngineTextureRenderer>();
 	//ShotRenderer->SetSamplingModePoint();
-	BackGround = CreateComponent<GameEngineTextureRenderer>();
-	BackGround->SetTexture("None.png");
-	BackGround->GetTransform().SetLocalScale({ 320, 180, 1 });
+	BackGround = CreateComponent<GameContentsEffectRenderer>();
+	BackGround->SetWaveEffect();
+	BackGround->SetTexture("spr_psychboss_backgroundx4.png");
+	BackGround->GetTransform().SetWorldScale({ 160, 90, 1 });
 	BackGround->GetTransform().SetWorldPosition({ -0, 0 });
 	BackGround->On();
+
 
 	// 마스크 애니메이션
 	TestRenderer = CreateComponent<GameContentsCustomRenderer>();
@@ -70,6 +72,8 @@ void TestActor::Start()
 
 void TestActor::Update(float _DeltaTime)
 {
+	BackGround->GetCustomOption().SumDeltaTime += _DeltaTime;
+
 	if (GameEngineInput::GetInst()->IsPress("W"))
 	{
 		

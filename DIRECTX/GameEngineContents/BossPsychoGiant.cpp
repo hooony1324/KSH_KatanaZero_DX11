@@ -242,7 +242,7 @@ void BossPsychoGiant::StabAttackStart(const StateInfo& _Info)
 	Stabber->SetAttackEnd(false);
 	StabberAttackStart = false;
 
-	StabCount = GameEngineRandom::MainRandom.RandomInt(3, 4);
+	StabCount = GameEngineRandom::MainRandom.RandomInt(3, 5);
 	AttackPatternCount++;
 }
 

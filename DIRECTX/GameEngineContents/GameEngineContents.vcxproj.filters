@@ -289,6 +289,9 @@
     <ClInclude Include="ShotSpark.h">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="GameContentsEffectRenderer.h">
+      <Filter>ContentsRendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -498,6 +501,9 @@
     </ClCompile>
     <ClCompile Include="ShotSpark.cpp">
       <Filter>Levels\01.PlayLevel\Actor\LiveActor\EnemyActor\Bullet\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="GameContentsEffectRenderer.cpp">
+      <Filter>ContentsRendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

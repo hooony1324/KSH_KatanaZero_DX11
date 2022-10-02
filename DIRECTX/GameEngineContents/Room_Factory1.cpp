@@ -28,6 +28,7 @@ void Room_Factory1::Start()
 	Background_ColMap->ScaleToTexture();
 	Background_ColMap->SetPivot(PIVOTMODE::LEFTTOP);
 	Background_ColMap->GetTransform().SetLocalMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+	Background_ColMap->GetPixelData().MulColor.a = 0.5f;
 	Background_ColMap->Off();
 
 	// 배경 설정되고 카메라 클램프 영역 세팅

@@ -26,6 +26,7 @@ void Room_Factory2::Start()
 	Background_ColMap->ScaleToTexture();
 	Background_ColMap->SetPivot(PIVOTMODE::LEFTTOP);
 	Background_ColMap->GetTransform().SetWorldMove({ 0, 0, GetDepth(ACTOR_DEPTH::BACKGROUND_COL) });
+	Background_ColMap->GetPixelData().MulColor.a = 0.5f;
 	Background_ColMap->Off();
 
 	InitCameraClampArea();

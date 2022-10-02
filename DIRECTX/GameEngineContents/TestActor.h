@@ -32,7 +32,7 @@ protected:
 
 
 private:
-	class GameEngineTextureRenderer* BackGround;
+	class GameContentsEffectRenderer* BackGround;
 	class GameEngineTextureRenderer* ShotRenderer;
 	class GameContentsCustomRenderer* TestRenderer;
 	class GameContentsCustomRenderer* CameraRenderer;
@@ -40,6 +40,7 @@ private:
 	class GameContentsCustomRenderer* MaskedRenderer;
 
 	GameEngineCollision* Collision;
+	CustomRenderOption CustomOption;
 
 };
 

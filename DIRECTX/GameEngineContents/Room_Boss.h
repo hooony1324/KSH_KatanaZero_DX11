@@ -53,6 +53,7 @@ private:
 private:
 	class BossPsychoGiant* BossGiant;
 
+	GameContentsEffectRenderer* Background_Wave;
 	GameEngineTextureRenderer* Background_Mid;
 	GameEngineTextureRenderer* Background_Front;
 	GameEngineTextureRenderer* Background_FrontRed;

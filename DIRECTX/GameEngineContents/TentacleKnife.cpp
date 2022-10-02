@@ -6,7 +6,7 @@
 
 const float IdleY = 300;
 const float TakeOutY = -20;
-const float LoadY = -100;
+const float LoadY = -30;
 const float StabY = -360;
 
 // LerpSpeed
@@ -170,16 +170,18 @@ void TentacleKnife::TakeOutUpdate(float _DeltaTime, const StateInfo& _Info)
 
 
 float RandomLoadY;
+float RandomLoadTime;
 void TentacleKnife::LoadStart(const StateInfo& _Info)
 {
 	IsStab = false;
 
-	RandomLoadY = GameEngineRandom::MainRandom.RandomFloat(20, 150) * -1.0f;
+	RandomLoadY = GameEngineRandom::MainRandom.RandomFloat(40, 150) * -1.0f;
+	RandomLoadTime = GameEngineRandom::MainRandom.RandomFloat(0.18f, 0.3f);
 }
 
 void TentacleKnife::LoadUpdate(float _DeltaTime, const StateInfo& _Info)
 {
-	if (_Info.StateTime > 0.3f)
+	if (RandomLoadTime <= _Info.StateTime)
 	{
 		StateManager.ChangeState("Stab");
 		return;
