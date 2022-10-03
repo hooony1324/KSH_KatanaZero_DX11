@@ -64,7 +64,6 @@ void ControlGUI::OnGUI(GameEngineLevel* _Level, float _DeltaTime)
 		ImGui::Text(Name.c_str());
 	}
 
-
 	if (true == ImGui::Button("CollisionDebugSwtich"))
 	{
 		GEngine::CollisionDebugSwitch();

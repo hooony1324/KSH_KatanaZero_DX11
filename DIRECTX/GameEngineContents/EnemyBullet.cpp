@@ -5,9 +5,10 @@
 #include "ReflectFX.h"
 #include "BulletTrail.h"
 
+const float SPEED_BULLET = 1500.0f;
 EnemyBullet::EnemyBullet()
 {
-	MoveSpeed = 1500;
+	MoveSpeed = SPEED_BULLET;
 }
 
 EnemyBullet::~EnemyBullet() 
@@ -46,7 +47,7 @@ void EnemyBullet::Update(float _DeltaTime)
 
 	PlayerSlashCheck();
 
-	GetTransform().SetWorldMove(Dir * MoveSpeed * _DeltaTime);
+	GetTransform().SetWorldMove(Dir * MoveSpeed * _DeltaTime * TimeScale);
 
 	PixelWallCheck();
 	ScreenOutCheckToDestroy();

@@ -5,6 +5,7 @@ struct PointLightData
 {
 	float4 LightWorldPos;
 	float4 LightScreenPos;
+	float LightRadius;
 };
 
 // Ό³Έν :

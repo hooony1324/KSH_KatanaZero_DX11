@@ -77,9 +77,9 @@ void SlowMotion::Update(float _DeltaTime)
 	}
 	
 	// TimeRatio : 그룹별로 느려지는 정도를 다르게 하고 싶다면
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), TimeRatio);
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), TimeRatio);
-	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), TimeRatio);
+	//GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP), TimeRatio);
+	//GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), TimeRatio);
+	//GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), TimeRatio);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_FAN), TimeRatio_Fan);
 }
 

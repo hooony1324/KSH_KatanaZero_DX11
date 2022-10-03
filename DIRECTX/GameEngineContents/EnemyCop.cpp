@@ -164,7 +164,7 @@ void EnemyCop::ShootStart(const StateInfo& _Info)
 
 	PlayLevel::PlayLevelInst->ShakeRoom(false);
 
-	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>(ACTORGROUP::TIMEGROUP_PARTICLE);
+	Bullet* Blt = GetLevel()->CreateActor<EnemyBullet>(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE));
 	float4 GunPos = Renderer_GunArm->GetTransform().GetWorldPosition();
 
 	float4 ShotPoint = GunPos + float4{ 0, 0, GetDepth(ACTOR_DEPTH::FX) } + AimDir * 70.0f;

@@ -59,11 +59,20 @@ void Effect_PointLight::EffectInit()
 
 	float4 LightWorldPos = { 400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f };
 	LightData.LightWorldPos = LightWorldPos;
+	LightData.LightRadius = 200.0f;
 
 
 	// Rim Light (PointLigt의 위치 필요)
 	float4 Size = GameEngineWindow::GetInst()->GetScale();
 	ViewPortMatrix.ViewPort(Size.x, Size.y, 0.0f, 0.0f, 0.0f, 1.0f);
+
+
+	float4 Positions[4] = {
+		float4{400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f},
+		float4{400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f},
+		float4{400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f},
+		float4{400, -600 , GetDepth(ACTOR_DEPTH::BACKGROUND_4), 1.0f}
+	};
 
 }
 
