@@ -47,7 +47,7 @@ void EnemyBullet::Update(float _DeltaTime)
 
 	PlayerSlashCheck();
 
-	GetTransform().SetWorldMove(Dir * MoveSpeed * _DeltaTime * TimeScale);
+	GetTransform().SetWorldMove(Dir * MoveSpeed * _DeltaTime);
 
 	PixelWallCheck();
 	ScreenOutCheckToDestroy();
