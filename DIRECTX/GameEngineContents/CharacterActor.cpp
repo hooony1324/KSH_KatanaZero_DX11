@@ -364,7 +364,7 @@ bool CharacterActor::IsActivateSlashEffect(GameEngineCollision* _This, GameEngin
 		return true;
 	}
 
-
+	return false;
 }
 
 bool CharacterActor::RoomShakeActivate()

@@ -36,5 +36,8 @@
     <FxCompile Include="..\Resources\Shader\TextureWave.hlsl">
       <Filter>Sahder</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\TextureConcave.hlsl">
+      <Filter>Sahder</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

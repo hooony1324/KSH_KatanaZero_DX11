@@ -2,6 +2,8 @@
 #include <GameEngineCore/GameEngineDefaultRenderer.h>
 
 
+// 마스킹이 애니메이션인 경우 사용
+
 struct MaskData
 {
 	float4 MaskFrameData;

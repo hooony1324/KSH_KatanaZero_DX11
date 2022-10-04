@@ -244,9 +244,6 @@
     <ClInclude Include="Effect_PointLight.h">
       <Filter>ContentsRendering\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="GameContentsLightRenderer.h">
-      <Filter>ContentsRendering</Filter>
-    </ClInclude>
     <ClInclude Include="ChromakeyGreen.h">
       <Filter>ContentsRendering</Filter>
     </ClInclude>
@@ -459,9 +456,6 @@
     </ClCompile>
     <ClCompile Include="Effect_PointLight.cpp">
       <Filter>ContentsRendering\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="GameContentsLightRenderer.cpp">
-      <Filter>ContentsRendering</Filter>
     </ClCompile>
     <ClCompile Include="ChromakeyGreen.cpp">
       <Filter>ContentsRendering</Filter>

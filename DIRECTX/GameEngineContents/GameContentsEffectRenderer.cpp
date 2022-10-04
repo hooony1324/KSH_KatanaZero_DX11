@@ -37,6 +37,33 @@ void GameContentsEffectRenderer::SetWaveEffect()
 	CustomOption.Version = 0;
 }
 
+void GameContentsEffectRenderer::SetConcaveEffect()
+{
+	SetPipeLine("TextureConcave");
+
+	if (true == ShaderResources.IsConstantBuffer("CustomRenderOption"))
+	{
+		ShaderResources.SetConstantBufferLink("CustomRenderOption", &CustomOption, sizeof(CustomOption));
+	}
+
+	if (true == ShaderResources.IsConstantBuffer("AtlasData"))
+	{
+		ShaderResources.SetConstantBufferLink("AtlasData", &AtlasDataInst, sizeof(AtlasDataInst));
+	}
+
+	AtlasDataInst.FrameData.PosX = 0.0f;
+	AtlasDataInst.FrameData.PosY = 0.0f;
+	AtlasDataInst.FrameData.SizeX = 1.0f;
+	AtlasDataInst.FrameData.SizeY = 1.0f;
+	AtlasDataInst.PivotPos = float4::ZERO;
+
+
+	CustomOption.DeltaTime = 0.0f;
+	CustomOption.IsMask = 0;
+	CustomOption.SumDeltaTime = 0.0f;
+	CustomOption.Version = 0;
+}
+
 void GameContentsEffectRenderer::SetPivot(PIVOTMODE _Mode)
 {
 	switch (_Mode)

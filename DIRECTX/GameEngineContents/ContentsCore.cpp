@@ -169,6 +169,14 @@ void ContentsCore::PipelineLoad()
 		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
 	}
 
+	{
+		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("TextureConcave");
+		NewPipe->SetVertexShader("TextureConcave.hlsl");
+		NewPipe->SetPixelShader("TextureConcave.hlsl");
+		NewPipe->SetInputAssembler1VertexBuffer("FullRect");
+		NewPipe->SetInputAssembler2IndexBuffer("FullRect");
+	}
+
 
 	// Blend Resource
 	{

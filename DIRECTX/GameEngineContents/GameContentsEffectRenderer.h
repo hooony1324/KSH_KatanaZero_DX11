@@ -1,9 +1,12 @@
 #pragma once
 #include <GameEngineCore/GameEngineTextureRenderer.h>
 
-// 설명 :
 class GameContentsEffectRenderer : public GameEngineTextureRenderer
 {
+public:
+	void SetWaveEffect(); // 보스름 출렁이는 뒷배경
+	void SetConcaveEffect(); // 보스룸 바닥 오목함 연출
+
 public:
 	// constrcuter destructer
 	GameContentsEffectRenderer();
@@ -15,7 +18,6 @@ public:
 	GameContentsEffectRenderer& operator=(const GameContentsEffectRenderer& _Other) = delete;
 	GameContentsEffectRenderer& operator=(GameContentsEffectRenderer&& _Other) noexcept = delete;
 
-	void SetWaveEffect();
 	CustomRenderOption& GetCustomOption()
 	{
 		return CustomOption;
