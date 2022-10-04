@@ -20,7 +20,13 @@ cbuffer AtlasData : register(b1)
     float4 PivotPos;
 };
 
-Output TextureWave_VS(Input _Input)
+cbuffer ConcaveData : register(b2)
+{
+    float2 ConcaveByPlayerPos;
+    float2 ConcaveByBossPos;
+}
+
+Output TextureConcave_VS(Input _Input)
 {
     Output NewOutPut = (Output) 0; 
     NewOutPut.Pos = mul(_Input.Pos + PivotPos, WorldViewProjection);
@@ -33,41 +39,15 @@ Output TextureWave_VS(Input _Input)
 
 Texture2D Tex : register(t0);
 SamplerState Smp : register(s0);
-float4 TextureWave_PS(Output _Input) : SV_Target0
+float4 TextureConcave_PS(Output _Input) : SV_Target0
 {   
     float2 TexPos = _Input.Tex.xy;
     
-    // ¿þÀÌºê ver1
-    if (Version == 0)
+    if(ConcaveByPlayerPos.y >= TexPos.y && ConcaveByPlayerPos.y > -1.0f)
     {
-        float2 uv = (_Input.Pos.x / 1280.0f, _Input.Pos.y / 720.0f); // uv : 0 ~ 1
-        uv.x = (sin(uv.y * 10 + SumDeltaTime * 2.0f)) / 100.0f;
-        uv.y = fmod(-SumDeltaTime * 0.05f, 1.0f);
-        float newTexY = TexPos.y + uv.y;
-        if (newTexY < 0.0f)
-        {
-            newTexY = 1.0f + newTexY;
-        }
-        TexPos = float2(TexPos.x + uv.x, newTexY);
+        clip(-1);
     }
-    // ¿þÀÌºê ver2
-    else if (Version == 1)
-    {
-        float POWER = 0.04f; // ÁÂ¿ì Èçµé¸²
-        float VERTICAL_SPREAD = 5.0f; // vertically
-        float ANIM_SPEED = 0.4f;
-    
-        float y = (TexPos.y + SumDeltaTime * ANIM_SPEED) * VERTICAL_SPREAD;
-    
-        TexPos.x += (
-        //sin(y)                            // ¹è°æÂÊ Å« Èçµé¸²
-        +sin(y * 10.0f) * 0.2f
-        //+ sin(y * 50.0f) * 0.03f          // ÀÜ ÁÖ¸§
-        )
-        * POWER
-        * sin(TexPos.y * 3.14f);
-    }
-
+  
 
     float4 Color = Tex.Sample(Smp, TexPos);
     return Color;

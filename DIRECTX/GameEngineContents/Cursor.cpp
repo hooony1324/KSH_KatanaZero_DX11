@@ -26,10 +26,10 @@ void Cursor::Start()
 
 	Boundary = ContentsCore::GetContentsWindowSize();
 
-	//Collision = CreateComponent<GameEngineCollision>();
-	//Collision->GetTransform().SetLocalScale({ 10, 10, 10000 });
-	//Collision->ChangeOrder(COLLISIONGROUP::CURSOR);
-	//Collision->SetDebugSetting(CollisionType::CT_AABB2D, float4::YELLOW);
+	Collision = CreateComponent<GameEngineCollision>();
+	Collision->GetTransform().SetLocalScale({ 10, 10, 10000 });
+	Collision->ChangeOrder(COLLISIONGROUP::CURSOR);
+	Collision->SetDebugSetting(CollisionType::CT_AABB2D, float4::YELLOW);
 
 }
 
@@ -40,17 +40,10 @@ void Cursor::Update(float _DeltaTime)
 	WorldPositionToActor = GetLevel()->GetMainCamera()->GetMouseWorldPositionToActor();
 	GetTransform().SetWorldPosition({ WorldPosition.x, WorldPosition.y, GetDepth(ACTOR_DEPTH::CURSOR) });
 
-	//float4 Pos = GetTransform().GetWorldPosition();
-	//std::string Output = std::to_string(Pos.x) + " / " + std::to_string(Pos.y) + " / " + std::to_string(Pos.z);
-	//GameEngineDebug::OutPutString(Output);
+
 	CursorVisibleOutScreen();
 
-	//if (true == GameEngineInput::GetInst()->IsDown("MouseMid") &&
-	//	true == Collision->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::ENEMY, CollisionType::CT_AABB2D
-	//		, nullptr))
-	//{
-	//	
-	//}
+
 }
 
 void Cursor::End()

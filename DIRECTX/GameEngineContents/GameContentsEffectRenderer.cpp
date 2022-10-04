@@ -51,6 +51,11 @@ void GameContentsEffectRenderer::SetConcaveEffect()
 		ShaderResources.SetConstantBufferLink("AtlasData", &AtlasDataInst, sizeof(AtlasDataInst));
 	}
 
+	if (true == ShaderResources.IsConstantBuffer("ConcaveData"))
+	{
+		ShaderResources.SetConstantBufferLink("ConcaveData", &ConcaveDataInst, sizeof(ConcaveDataInst));
+	}
+
 	AtlasDataInst.FrameData.PosX = 0.0f;
 	AtlasDataInst.FrameData.PosY = 0.0f;
 	AtlasDataInst.FrameData.SizeX = 1.0f;
@@ -62,6 +67,8 @@ void GameContentsEffectRenderer::SetConcaveEffect()
 	CustomOption.IsMask = 0;
 	CustomOption.SumDeltaTime = 0.0f;
 	CustomOption.Version = 0;
+
+	ConcaveDataInst.ConcavePos = float4(-1.0f, -1.0f, -1.0f, -1.0f);
 }
 
 void GameContentsEffectRenderer::SetPivot(PIVOTMODE _Mode)

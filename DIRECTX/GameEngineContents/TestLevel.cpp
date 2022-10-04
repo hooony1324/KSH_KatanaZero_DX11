@@ -12,6 +12,9 @@
 
 #include "TestMonster.h"
 #include "BloodLeaf.h"
+#include "BossFloor.h"
+
+#include "Cursor.h"
 
 TestLevel::TestLevel() 
 {
@@ -32,8 +35,11 @@ void TestLevel::Start()
 
 	TestMonster* monster = CreateActor<TestMonster>();
 
+	Cursor* cursor = CreateActor<Cursor>();
 
 
+	BossFloor* Floor = CreateActor<BossFloor>();
+	Floor->GetTransform().SetWorldPosition({ 0, -200, -1500 });
 }
 
 

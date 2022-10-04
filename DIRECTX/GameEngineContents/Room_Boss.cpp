@@ -10,6 +10,7 @@
 
 #include "PlayLevel.h"
 #include "BloodLeaf.h"
+#include "BossFloor.h"
 
 Room_Boss::Room_Boss()
 	: Background_Mid(nullptr)
@@ -79,11 +80,15 @@ void Room_Boss::Start()
 	
 	Background_FrontRed->Off();
 
-	Background_Floor = CreateComponent<GameEngineTextureRenderer>();
-	Background_Floor->SetTexture("spr_psychboss_floor_0.png");
-	Background_Floor->GetTransform().SetLocalScale({1072, 140, 1});
-	Background_Floor->GetTransform().SetLocalMove({ 640, -852, GetDepth(ACTOR_DEPTH::BOSSFLOOR) });
-	Background_Floor->Off();
+	// ¹°··¹Ù´Ú
+	//Background_Floor = CreateComponent<GameEngineTextureRenderer>();
+	//Background_Floor->SetTexture("spr_psychboss_floor_0.png");
+	//Background_Floor->GetTransform().SetLocalScale({1072, 140, 1});
+	//Background_Floor->GetTransform().SetLocalMove({ 640, -852, GetDepth(ACTOR_DEPTH::BOSSFLOOR) });
+	//Background_Floor->Off();
+	Floor = GetLevel()->CreateActor<BossFloor>();
+	Floor->GetTransform().SetLocalMove({ 640, -852, GetDepth(ACTOR_DEPTH::BOSSFLOOR) });
+	Floor->Off();
 
 	// º¸½º
 	BossGiant = GetLevel()->CreateActor<BossPsychoGiant>();
@@ -155,7 +160,8 @@ void Room_Boss::OffEvent()
 
 	Background_Mid->Off();
 	Background_Front->Off();
-	Background_Floor->Off();
+	//Background_Floor->Off();
+	Floor->Off();
 	Background_Wave->Off();
 
 	// º¸½º
@@ -216,7 +222,8 @@ void Room_Boss::RoarStart(const StateInfo& _Info)
 	Background_Mid->On();
 	Background_Front->On();
 	Background_FrontRed->On();
-	Background_Floor->On();
+	//Background_Floor->On();
+	Floor->On();
 	BossGiant->On();
 
 	BossBgmPlayed = false;
@@ -276,7 +283,8 @@ void Room_Boss::PlayStart(const StateInfo& _Info)
 		Background_Wave->On();
 		Background_Mid->On();
 		Background_Front->On();
-		Background_Floor->On();
+		//Background_Floor->On();
+		Floor->On();
 		BossGiant->On();
 	}
 

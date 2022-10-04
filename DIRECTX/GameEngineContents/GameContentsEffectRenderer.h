@@ -1,6 +1,11 @@
 #pragma once
 #include <GameEngineCore/GameEngineTextureRenderer.h>
 
+struct ConcaveData
+{
+	float4 ConcavePos; // { PlayerX, PlayerY, BossX, BossY } -> TEXCOORD±‚¡ÿ(0~1)
+};
+
 class GameContentsEffectRenderer : public GameEngineTextureRenderer
 {
 public:
@@ -23,11 +28,17 @@ public:
 		return CustomOption;
 	}
 
+	ConcaveData& GetConcaveData()
+	{
+		return ConcaveDataInst;
+	}
+
 	void SetPivot(PIVOTMODE _Mode);
 
 private:
 
 	CustomRenderOption CustomOption;
 	AtlasData AtlasDataInst;
+	ConcaveData ConcaveDataInst;
 };
 

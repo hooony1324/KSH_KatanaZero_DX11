@@ -81,8 +81,12 @@ private:
 	bool WalkStart;
 	float RedTime;
 
-	// ÇÇ ³ª¹µÀÙ
+	// ±âÅ¸
 private:
+	// ÇÇ ³ª¹µÀÙ
 	std::vector<class BloodLeaf*> BloodLeaves;
+
+	// ¹°··¹Ù´Ú
+	class BossFloor* Floor;
 };
 
