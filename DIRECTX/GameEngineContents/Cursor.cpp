@@ -28,7 +28,7 @@ void Cursor::Start()
 
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 10, 10, 10000 });
-	Collision->ChangeOrder(COLLISIONGROUP::CURSOR);
+	Collision->ChangeOrder(COLLISIONGROUP::BOSSTENTACLE);
 	Collision->SetDebugSetting(CollisionType::CT_AABB2D, float4::YELLOW);
 
 }

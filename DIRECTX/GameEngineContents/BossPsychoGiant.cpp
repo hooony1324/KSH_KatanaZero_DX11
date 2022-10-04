@@ -13,6 +13,7 @@ BossPsychoGiant* BossPsychoGiant::GlobalInst = nullptr;
 
 BossPsychoGiant::BossPsychoGiant() 
 	: Hp(3)
+	, Stabber(nullptr)
 {
 	GlobalInst = this;
 	IsSelectPattern = false;
@@ -93,6 +94,9 @@ void BossPsychoGiant::Start()
 
 	GetTransform().SetWorldScale({ 2, 2, 1 });
 	Off();
+	
+	
+
 }
 
 void BossPsychoGiant::Update(float _DeltaTime)
@@ -115,7 +119,12 @@ void BossPsychoGiant::OnEvent()
 	Renderer_Face->On();
 	Renderer_Lilguy->On();
 
-	Stabber = GetLevel()->CreateActor<TentacleKnife>();
+	if (nullptr == Stabber)
+	{
+		Stabber = GetLevel()->CreateActor<TentacleKnife>();
+		Stabber->GetTransform().SetWorldPosition({ 640, 270, GetDepth(ACTOR_DEPTH::BOSSFLOOR) });
+	}
+	Stabber->On();
 
 	IsSelectPattern = false;
 	BossStateManager.ChangeState("Idle");

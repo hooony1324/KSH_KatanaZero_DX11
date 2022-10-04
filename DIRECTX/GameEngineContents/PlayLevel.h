@@ -24,7 +24,10 @@ public:
 		}
 		else
 		{
-			TimeGroupNormal();
+			if (0 != RoomStateManager.GetCurStateStateName().compare("RoomSlow"))
+			{
+				TimeGroupNormal();
+			}
 		}
 	}
 	static bool RoomShake;

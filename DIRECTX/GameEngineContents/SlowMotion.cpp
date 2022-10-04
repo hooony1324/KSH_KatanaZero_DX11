@@ -81,6 +81,8 @@ void SlowMotion::Update(float _DeltaTime)
 	//GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_ENEMY), TimeRatio);
 	//GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_PARTICLE), TimeRatio);
 	GameEngineTime::GetInst()->SetTimeScale(static_cast<int>(ACTORGROUP::TIMEGROUP_FAN), TimeRatio_Fan);
+
+
 }
 
 void SlowMotion::End()

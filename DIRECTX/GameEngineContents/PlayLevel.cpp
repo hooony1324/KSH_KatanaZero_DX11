@@ -575,7 +575,7 @@ void PlayLevel::RoomSlowUpdate(float _DeltaTime, const StateInfo& _Info)
 {
 	CameraFollow(_DeltaTime);
 
-	RoomPlayTotalTime += _DeltaTime * 0.5f;
+	RoomPlayTotalTime += _DeltaTime * GameEngineTime::GetInst()->GetTimeScale((int)ACTORGROUP::TIMEGROUP);
 	SlowDeltaTime += _DeltaTime;
 
 	Player->CreateUIShadow();

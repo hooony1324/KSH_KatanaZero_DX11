@@ -5,6 +5,9 @@
 class BossFloor : public GameEngineActor
 {
 public:
+	static float4 Pos;
+
+public:
 	// constrcuter destructer
 	BossFloor();
 	~BossFloor();
@@ -24,6 +27,7 @@ private:
 	GameContentsEffectRenderer* Renderer;
 	GameEngineCollision* Collision;
 
+	
 	float4 FloorScale;
 	float4 FloorLeftTop;
 };

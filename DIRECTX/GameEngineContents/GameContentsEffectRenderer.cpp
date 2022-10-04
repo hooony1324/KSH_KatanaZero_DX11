@@ -69,6 +69,7 @@ void GameContentsEffectRenderer::SetConcaveEffect()
 	CustomOption.Version = 0;
 
 	ConcaveDataInst.ConcavePos = float4(-1.0f, -1.0f, -1.0f, -1.0f);
+	ConcaveDataInst.ConcaveStrength = 1.0f;
 }
 
 void GameContentsEffectRenderer::SetPivot(PIVOTMODE _Mode)

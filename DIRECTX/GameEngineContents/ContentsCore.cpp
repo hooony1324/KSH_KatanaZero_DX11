@@ -70,7 +70,7 @@ void ContentsCore::Start()
 
 void ContentsCore::Update(float _DeltaTime)
 {
-	GameEngineTime::SetLimitFrame(144);
+	
 
 	// 디버그용 레벨 체인지
 	if (true == GameEngineInput::GetInst()->IsDown("Numpad1"))

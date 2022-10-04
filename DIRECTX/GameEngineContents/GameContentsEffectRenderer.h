@@ -4,6 +4,7 @@
 struct ConcaveData
 {
 	float4 ConcavePos; // { PlayerX, PlayerY, BossX, BossY } -> TEXCOORD±‚¡ÿ(0~1)
+	float ConcaveStrength;
 };
 
 class GameContentsEffectRenderer : public GameEngineTextureRenderer
