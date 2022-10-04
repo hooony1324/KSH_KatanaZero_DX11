@@ -161,6 +161,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BloodLeaf.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BossProjectile.h">
       <SubType>
       </SubType>
@@ -445,6 +449,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BloodLeaf.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="BossProjectile.cpp">
       <SubType>
       </SubType>

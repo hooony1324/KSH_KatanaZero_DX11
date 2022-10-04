@@ -292,6 +292,9 @@
     <ClInclude Include="GameContentsEffectRenderer.h">
       <Filter>ContentsRendering</Filter>
     </ClInclude>
+    <ClInclude Include="BloodLeaf.h">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlobalValueManager.cpp">
@@ -504,6 +507,9 @@
     </ClCompile>
     <ClCompile Include="GameContentsEffectRenderer.cpp">
       <Filter>ContentsRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="BloodLeaf.cpp">
+      <Filter>Levels\01.PlayLevel\Actor\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

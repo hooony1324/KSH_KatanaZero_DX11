@@ -164,7 +164,7 @@ void PlayLevel::LevelStartEvent()
 	GetMainCamera()->GetCameraRenderTarget()->AddEffect<Effect_PointLight>();
 	Effect_PointLight::GetInst()->MainCam = GetMainCamera();
 
-
+	Effect_PointLight::GetInst()->EffectOn();
 }
 
 void PlayLevel::LevelEndEvent()

@@ -126,7 +126,7 @@ void PortalTurret::SpawnUpdate(float _DeltaTime, const StateInfo& _Info)
 		return;
 	}
 
-	if (_Info.StateTime > 3.0f)
+	if (_Info.StateTime > 1.0f)
 	{
 		StateManager.ChangeState("Attack");
 	}
@@ -155,7 +155,6 @@ void PortalTurret::AttackUpdate(float _DeltaTime, const StateInfo& _Info)
 	if (_Info.StateTime > 2.0f)
 	{
 		StateManager.ChangeState("Die");
-		//StateManager.ChangeState("PortalIn");
 	}
 }
 

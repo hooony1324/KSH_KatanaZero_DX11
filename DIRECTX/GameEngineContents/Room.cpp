@@ -37,7 +37,7 @@ void Room::EmptyRoomInit()
 {
 	BackBackGround = CreateComponent<GameEngineTextureRenderer>();
 	BackBackGround->SetTexture("None.png");
-	BackBackGround->GetTransform().SetWorldScale({ 2000, 2000, 1 });
+	BackBackGround->GetTransform().SetWorldScale({ 3000, 2000, 1 });
 	
 	
 	Background = CreateComponent<GameEngineTextureRenderer>();

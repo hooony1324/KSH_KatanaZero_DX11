@@ -456,6 +456,7 @@ void PlayerZero::WallGrabUpdate(float _DeltaTime, const StateInfo& _Info)
 }
 
 float SlideSoundSumTime;
+float SlideCloudSumTime;
 void PlayerZero::WallSlideStart(const StateInfo& _Info)
 {
 	Renderer_Character->ChangeFrameAnimation("wallslide");
@@ -464,12 +465,19 @@ void PlayerZero::WallSlideStart(const StateInfo& _Info)
 
 	// Sound
 	SlideSoundSumTime = 0.0f;
+	SlideCloudSumTime = 0.0f;
 	MoveSoundPlayer = GameEngineSound::SoundPlayControl("sound_player_wallslide.wav");
 	MoveSoundPlayer.Volume(0.01f);
 }
 
 void PlayerZero::WallSlideUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (SlideCloudSumTime >= 0.05f)
+	{
+		SlideCloudSumTime = 0.0f;
+		CloudShooter->OneShot<DustCloud>(1, GetTransform().GetWorldPosition() + float4{ CurLookDir * 20.0f, 0.0f }, float4::UP , 100);
+	}
+	SlideCloudSumTime += _DeltaTime;
 
 	if (SlideSoundSumTime > 1.0f)
 	{

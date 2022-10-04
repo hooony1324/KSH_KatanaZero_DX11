@@ -80,5 +80,9 @@ private:
 
 	bool WalkStart;
 	float RedTime;
+
+	// ÇÇ ³ª¹µÀÙ
+private:
+	std::vector<class BloodLeaf*> BloodLeaves;
 };
 

@@ -52,8 +52,7 @@ private:
 	class PortalTurret* Turret;
 
 	float4 Dir;
-	bool Reflected;
-
+	bool CollisionResult;
 	GameEngineSoundPlayer SoundPlayer;
 };
 

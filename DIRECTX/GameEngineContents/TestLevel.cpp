@@ -11,6 +11,7 @@
 #include "Effect_PointLight.h"
 
 #include "TestMonster.h"
+#include "BloodLeaf.h"
 
 TestLevel::TestLevel() 
 {
@@ -30,6 +31,18 @@ void TestLevel::Start()
 	portal->Off();
 
 	TestMonster* monster = CreateActor<TestMonster>();
+
+	float4 LeftTopPos = { -200, 360 };
+	for (int y = 0; y < 3; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			BloodLeaf* Leaf = CreateActor<BloodLeaf>();
+			Leaf->SetStartPoint(LeftTopPos + float4{ x * 100.0f, y * 100.0f });
+		}
+	}
+
+
 }
 
 

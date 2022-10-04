@@ -8,7 +8,7 @@
 float ShootSpeed = 850.0f;
 
 BossProjectile::BossProjectile() 
-	: Reflected(false)
+	: CollisionResult(false)
 	, Renderer(nullptr)
 	, Collision(nullptr)
 {
@@ -33,6 +33,7 @@ void BossProjectile::Start()
 	Collision->GetTransform().SetLocalScale({ 54, 48, GetDepth(ACTOR_DEPTH::COLLISION) });
 	Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::ENEMY_ATTACK));
 	Collision->SetDebugSetting(CollisionType::CT_POINT2D, float4{1, 1, 1, 0.2f});
+	Collision->SetCollisionMode(CollisionMode::Ex);
 	Collision->Off();
 
 
@@ -73,10 +74,16 @@ void BossProjectile::IdleStart(const StateInfo& _Info)
 {
 	Renderer->On();
 	Renderer->ChangeFrameAnimation("idle");
+	Collision->On();
 }
 
 void BossProjectile::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 {
+	if (true == CollisionCheck())
+	{
+		int a = 0;
+	}
+
 	if (true == Turret->IsDeath())
 	{
 		StateManager.ChangeState("Die");
@@ -93,7 +100,7 @@ void BossProjectile::IdleUpdate(float _DeltaTime, const StateInfo& _Info)
 
 void BossProjectile::ShootStart(const StateInfo& _Info)
 {
-	Collision->On();
+	
 
 	// ¹æÇâ
 	float4 CurPos = GetTransform().GetWorldPosition();
@@ -156,12 +163,12 @@ bool BossProjectile::WallCheck()
 
 bool BossProjectile::CollisionCheck()
 {
-	if (true == Reflected)
+	/*if (true == Reflected)
 	{
 		return false;
 	}
 
-	if (true == Collision->IsCollision(CollisionType::CT_OBB2D, COLLISIONGROUP::PLAYER_ATTACK, CollisionType::CT_OBB2D))
+	if (true == Collision->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::PLAYER_ATTACK), CollisionType::CT_OBB2D))
 	{
 		PlayLevel::PlayLevelInst->ShakeRoom(true);
 		SoundPlayer = GameEngineSound::SoundPlayControl("sound_slash_bullet.wav");
@@ -169,8 +176,33 @@ bool BossProjectile::CollisionCheck()
 		Reflected = true;
 		Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::PLAYER_BULLET));
 		return true;
+	}*/
+	if (true == CollisionResult)
+	{
+		return false;
 	}
 
-	return false;
+	Collision->IsCollisionEnterBase(CollisionType::CT_OBB2D, static_cast<int>(COLLISIONGROUP::PLAYER_ATTACK), CollisionType::CT_OBB2D,
+		[=](GameEngineCollision* _This, GameEngineCollision* _Other) 
+		{ 
+			CollisionResult = true;
+			return CollisionReturn::Break;
+		}, [=](GameEngineCollision* _This, GameEngineCollision* _Other){return CollisionReturn::Break; }
+		, [=](GameEngineCollision* _This, GameEngineCollision* _Other) {return CollisionReturn::Break; });
+
+	if (true == CollisionResult)
+	{
+		PlayLevel::PlayLevelInst->ShakeRoom(true);
+
+		if (0 == StateManager.GetCurStateStateName().compare("Shoot"))
+		{
+			SoundPlayer = GameEngineSound::SoundPlayControl("sound_slash_bullet.wav");
+			SoundPlayer.Volume(0.1f);
+		}
+		Collision->ChangeOrder(static_cast<int>(COLLISIONGROUP::PLAYER_BULLET));
+		return CollisionResult;
+	}
+
+	return CollisionResult;
 
 }

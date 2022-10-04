@@ -6,8 +6,10 @@
 #include "CharacterActor.h"
 #include "Effect_Distortion.h"
 #include "Effect_Wave.h"
+#include "Effect_PointLight.h"
 
 #include "PlayLevel.h"
+#include "BloodLeaf.h"
 
 Room_Boss::Room_Boss()
 	: Background_Mid(nullptr)
@@ -117,6 +119,7 @@ void Room_Boss::Start()
 	// ÄÆ¾À
 	CutSceneSetting();
 
+
 }
 
 
@@ -137,6 +140,7 @@ void Room_Boss::OnEvent()
 		StateManager.ChangeState("CutScene");
 	}
 
+	Effect_PointLight::GetInst()->EffectOff();
 }
 
 void Room_Boss::OffEvent()
@@ -183,6 +187,18 @@ void Room_Boss::CutSceneStart(const StateInfo& _Info)
 	CutScene_Player->On();
 	CutScene_Boss->On();
 
+	// ÇÇ ³ª¹µÀÙ
+	float4 LeftTopPos = { -200, 360 };
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			BloodLeaf* Leaf = GetLevel()->CreateActor<BloodLeaf>();
+			Leaf->SetStartPoint(LeftTopPos + float4{ x * 100.0f, y * 100.0f });
+			BloodLeaves.push_back(Leaf);
+		}
+	}
+
 	CutSceneStateManager.ChangeState("SceneMutate");
 }
 
@@ -204,6 +220,11 @@ void Room_Boss::RoarStart(const StateInfo& _Info)
 	BossGiant->On();
 
 	BossBgmPlayed = false;
+
+	for (auto Leaf : BloodLeaves)
+	{
+		Leaf->SetLeafThick();
+	}
 }
 
 void Room_Boss::RoarUpdate(float _DeltaTime, const StateInfo& _Info)
