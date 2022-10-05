@@ -22,7 +22,7 @@ void Fan::Start()
 
 	Collision = CreateComponent<GameEngineCollision>();
 	Collision->GetTransform().SetLocalScale({ 72, 190, GetDepth(ACTOR_DEPTH::COLLISION) });
-	Collision->ChangeOrder(COLLISIONGROUP::ENEMY_ATTACK);
+	Collision->ChangeOrder(COLLISIONGROUP::FAN);
 	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 0, 0, 0.25f });
 
 	Renderer->AnimationBindFrame("spin", [=]

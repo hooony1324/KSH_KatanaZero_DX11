@@ -23,6 +23,7 @@ void PlayerZero::IdleStart(const StateInfo& _Info)
 	WallGrab = false;
 	IsFlip = false;
 	IsAttack = false;
+	Invincible = false;
 
 	if (0 == _Info.PrevState.compare("Fall"))
 	{

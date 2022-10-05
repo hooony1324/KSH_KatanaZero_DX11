@@ -43,6 +43,7 @@ void CharacterActor::OnEvent()
 
 	CollisionMap = GlobalValueManager::ColMap;
 
+	Invincible = false;
 	InputValid = false;
 	CurLookDir = 1;
 	FrameDataRenderer->Off();
@@ -283,6 +284,33 @@ void CharacterActor::EnemyAttackCheck()
 	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::ENEMY_ATTACK, CollisionType::CT_AABB2D,
 		std::bind(&CharacterActor::Damaged, this, std::placeholders::_1, std::placeholders::_2)
 	);
+
+	Collision_Character->IsCollision(CollisionType::CT_AABB2D, COLLISIONGROUP::FAN, CollisionType::CT_AABB2D,
+		[=](GameEngineCollision* This_, GameEngineCollision* Other_)
+		{
+			float4 FanPos = Other_->GetTransform().GetWorldPosition() + float4(0, -90);
+			float4 PlayerPos = GetTransform().GetWorldPosition();
+			FanPos.z = 0;
+			PlayerPos.z = 0;
+
+			Hp--;
+			if (Hp <= 0)
+			{
+				FlyVector = PlayerPos - FanPos;
+				FlyVector.y *= 1.5f;
+
+				FlyPower = 6.0f;
+
+				FlyVector.Normalize();
+				FlyVector *= 1.5f;
+				PlayerStateManager.ChangeState("Dead");
+
+
+				return CollisionReturn::ContinueCheck;
+			}
+		}
+	);
+
 
 }
 
