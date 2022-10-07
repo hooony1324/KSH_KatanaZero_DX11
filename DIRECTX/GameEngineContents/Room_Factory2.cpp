@@ -55,6 +55,8 @@ void Room_Factory2::Start()
 	SetCurTimeLimitSeconds(30.0f);
 
 	Off();
+
+	Stairs.resize(0);
 }
 
 void Room_Factory2::OnEvent()
