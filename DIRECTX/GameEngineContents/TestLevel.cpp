@@ -31,9 +31,8 @@ void TestLevel::Start()
 
 	portal = CreateActor<Portal>();
 	portal->GetTransform().SetWorldMove(float4::RIGHT * 100);
-	portal->Off();
 
-	TestMonster* monster = CreateActor<TestMonster>();
+	//TestMonster* monster = CreateActor<TestMonster>();
 
 	Cursor* cursor = CreateActor<Cursor>();
 

@@ -12,11 +12,11 @@ TestMonster::~TestMonster()
 
 void TestMonster::Start()
 {
-	Collision = CreateComponent<GameEngineCollision>();
-	Collision->GetTransform().SetLocalScale({ 100, 100, 10000 });
-	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 1, 0.5f });
-	Collision->ChangeOrder(COLLISIONGROUP::ENEMY);
-	Collision->SetCollisionMode(CollisionMode::Ex);
+	//Collision = CreateComponent<GameEngineCollision>();
+	//Collision->GetTransform().SetLocalScale({ 100, 100, 10000 });
+	//Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 1, 0.5f });
+	//Collision->ChangeOrder(COLLISIONGROUP::ENEMY);
+	//Collision->SetCollisionMode(CollisionMode::Ex);
 
 	GetTransform().SetWorldPosition({ 200, 100, 0 });
 }

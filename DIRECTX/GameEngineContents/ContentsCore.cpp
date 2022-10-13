@@ -173,6 +173,7 @@ void ContentsCore::PipelineLoad()
 		GameEngineRenderingPipeLine* NewPipe = GameEngineRenderingPipeLine::Create("TextureConcave");
 		NewPipe->SetVertexShader("TextureConcave.hlsl");
 		NewPipe->SetPixelShader("TextureConcave.hlsl");
+
 	}
 
 

@@ -63,11 +63,11 @@ void TestActor::Start()
 	KnifeRenderer->GetPixelData().Slice.x = 0;
 	TestRenderer->GetPixelData().Slice.x = 0;
 
-	Collision = CreateComponent<GameEngineCollision>();
-	Collision->GetTransform().SetLocalScale({ 100, 100, 10000 });
-	Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 1, 0.5f });
-	Collision->ChangeOrder(COLLISIONGROUP::PLAYER);
-	Collision->SetCollisionMode(CollisionMode::Ex);
+	//Collision = CreateComponent<GameEngineCollision>();
+	//Collision->GetTransform().SetLocalScale({ 100, 100, 10000 });
+	//Collision->SetDebugSetting(CollisionType::CT_AABB2D, { 1, 1, 1, 0.5f });
+	//Collision->ChangeOrder(COLLISIONGROUP::PLAYER);
+	//Collision->SetCollisionMode(CollisionMode::Ex);
 }
 
 void TestActor::Update(float _DeltaTime)
@@ -77,7 +77,7 @@ void TestActor::Update(float _DeltaTime)
 	if (GameEngineInput::GetInst()->IsPress("W"))
 	{
 		
-		KnifeRenderer->GetAtlasData().FrameData.x += 0.02f;
+		KnifeRenderer->GetAtlasData().FrameData.x += 0.002f;
 	}
 
 	if (GameEngineInput::GetInst()->IsPress("S"))
@@ -87,7 +87,7 @@ void TestActor::Update(float _DeltaTime)
 			KnifeRenderer->GetAtlasData().FrameData.x = 0.0f;
 			return;
 		}
-		KnifeRenderer->GetAtlasData().FrameData.x -= 0.1f;
+		KnifeRenderer->GetAtlasData().FrameData.x -= 0.002f;
 	}
 
 	if (GameEngineInput::GetInst()->IsPress("D"))
