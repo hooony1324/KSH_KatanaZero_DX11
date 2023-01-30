@@ -5,7 +5,7 @@
 < 조작법 ><br/>
 w/a/s/d(조작), spacebar(선택), 마우스 좌클릭, r(역재생)<br/>
 
-< ControlGUI >
+< ControlGUI ><br/>
 CollisionDebugSwitch : 충돌체 확인<br/>
 CollisioinMapSwitch : 충돌맵 확인<br/>
 WallStateDebug : 벽 부딪힘 상태 확인<br/>
