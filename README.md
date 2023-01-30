@@ -1,5 +1,9 @@
 # KSH_KatanaZero_DX11
 
+## 영상
+[![Video Label](https://i9.ytimg.com/vi/bF8dJTWS-kE/mqdefault.jpg?v=634b7042&sqp=CKjt3Z4G&rs=AOn4CLBoi26fCvMYDK3u1QywZd_impQElg)](https://www.youtube.com/watch?v=bF8dJTWS-kE&feature=youtu.be)
+
+
 ## 기본 정보
 
 < 조작법 ><br/>
