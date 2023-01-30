@@ -4,6 +4,7 @@
 #include <list>
 #include "GameEngineTransformBase.h"
 
+#include "GameEngineComponent.h"
 
 // 설명 : 화면에 등장하는 모든것을 표현하기 위한 클래스
 class GameEngineComponent;
